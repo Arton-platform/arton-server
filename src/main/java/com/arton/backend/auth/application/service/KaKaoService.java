@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -41,7 +43,8 @@ public class KaKaoService implements KaKaoUseCase {
 
     @Override
     public TokenDto kakaoLogin(String code) {
-        String accessToken = getAccessToken(code, redirectURL);
+        String accessToken = getAccessToken(code);
+        log.info("accessToken {}", accessToken);
         User register = register(accessToken);
         // token 발행 필요.
         return null;
@@ -51,17 +54,16 @@ public class KaKaoService implements KaKaoUseCase {
      * https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api
      * 토근 받기 참조
      * @param code
-     * @param uri
      * @return
      */
-    private String getAccessToken(String code, String uri) {
+    private String getAccessToken(String code) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant-type", "authorization_code");
-        body.add("client-id", clientId);
-        body.add("redirect_uri", uri);
+        body.add("grant_type", "authorization_code");
+        body.add("client_id", clientId);
+        body.add("redirect_uri", redirectURL);
         body.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, httpHeaders);
@@ -91,12 +93,13 @@ public class KaKaoService implements KaKaoUseCase {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange("https://kauth.kakao.com/v2/user/me",
-                HttpMethod.GET,
+        ResponseEntity<String> response = restTemplate.exchange("https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
                 request,
                 String.class);
 
         String responseBody = response.getBody();
+        log.info("responseBody for userInfo {}", responseBody);
         try {
             return objectMapper.readTree(responseBody);
         } catch (JsonProcessingException e) {

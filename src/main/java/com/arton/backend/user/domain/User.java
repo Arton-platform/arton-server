@@ -30,4 +30,7 @@ public class User extends BaseEntity {
     /** 연령대 */
     @Enumerated(EnumType.STRING)
     private AgeRange ageRange;
+    /** 권한 */
+    @Enumerated(EnumType.STRING)
+    private UserRole auth;
 }
