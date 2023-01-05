@@ -1,5 +1,6 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.SSLConnectionCover;
 import com.arton.backend.auth.application.port.in.KaKaoUseCase;
 import com.arton.backend.auth.application.port.in.TokenDto;
 import com.arton.backend.user.adapter.out.repository.UserRepository;
@@ -43,7 +44,8 @@ public class KaKaoService implements KaKaoUseCase {
 
     @Override
     public TokenDto kakaoLogin(String code) {
-        String accessToken = getAccessToken(code);
+//        String accessToken = getAccessToken(code);
+        String accessToken = SSLConnectionCover.getAccessToken(clientId, redirectURL, code);
         log.info("accessToken {}", accessToken);
         User register = register(accessToken);
         // token 발행 필요.
