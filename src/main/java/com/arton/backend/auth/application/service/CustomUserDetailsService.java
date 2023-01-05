@@ -4,6 +4,7 @@ import com.arton.backend.user.adapter.out.repository.UserRepository;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -26,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * email이 만약 변경 된다면..?
-     * 불변 보장되면 email로 하자
+     * 불변 보장되면 id 대신 email로 세팅해도 될듯
      * @param user
      * @return
      */

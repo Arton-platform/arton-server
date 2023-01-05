@@ -21,4 +21,9 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     public Optional<User> findByKakaoId(Long id) {
         return userRepository.findByKakaoId(id);
     }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }

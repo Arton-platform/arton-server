@@ -1,7 +1,7 @@
 package com.arton.backend;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.Scheme;
@@ -10,7 +10,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpParams;
-import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -94,5 +93,71 @@ public class SSLConnectionCover {
         } finally {
             httpClient.getConnectionManager().shutdown();
         }
+    }
+
+
+    public static JsonNode getUserInfo(String accessToken) {
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContext.getInstance("SSL");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        try {
+            X509TrustManager trustManager = new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(
+                        java.security.cert.X509Certificate[] arg0, String arg1)
+                        throws CertificateException {
+
+                }
+
+                @Override
+                public void checkServerTrusted(
+                        java.security.cert.X509Certificate[] arg0, String arg1)
+                        throws CertificateException {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+
+                    return null;
+                }
+            };
+
+            sslContext.init(null, new TrustManager[] { trustManager },
+                    new SecureRandom());
+            SSLSocketFactory socketFactory = new SSLSocketFactory(sslContext,
+                    SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            Scheme sch = new Scheme("https", 443, socketFactory);
+            httpClient.getConnectionManager().getSchemeRegistry().register(sch);
+
+            HttpParams httpParam = httpClient.getParams();
+            org.apache.http.params.HttpConnectionParams.setConnectionTimeout(httpParam, CONN_TIME_OUT);
+            org.apache.http.params.HttpConnectionParams.setSoTimeout(httpParam, CONN_TIME_OUT);
+
+            HttpPost http = null;
+            URL url = null;
+            try {
+                url = new URL("https://kapi.kakao.com/v2/user/me");
+                http = new HttpPost(url.toURI());
+                http.setHeader("Authorization", "Bearer "+accessToken);
+            } catch (Exception e) {
+                http = new HttpPost(url.toURI());
+            }
+
+            HttpResponse response = httpClient.execute(http);
+            String s = new BasicResponseHandler().handleResponse(response);
+            System.out.println("getUserInfo = " + s);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readTree(s);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
     }
 }
