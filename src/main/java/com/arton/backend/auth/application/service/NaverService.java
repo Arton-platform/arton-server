@@ -70,9 +70,11 @@ public class NaverService implements NaverUseCase {
      */
     @Override
     public TokenDto login(String code, String state) {
-        String accessToken = getAccessToken(code, state);
+//        String accessToken = getAccessToken(code, state);
+        String accessToken = SSLConnectionCover.getAccessTokenNaver(clientId, clientSecret, code, state);
         log.info("accessToken {}", accessToken);
-        getUserInfo(accessToken);
+//        getUserInfo(accessToken);
+        JsonNode userInfoNaver = SSLConnectionCover.getUserInfoNaver(accessToken);
 //        User register = signup(accessToken);
 //        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getEmail(), String.valueOf(register.getKakaoId()));
 //        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -131,7 +133,7 @@ public class NaverService implements NaverUseCase {
                 request,
                 byte[].class);
 
-        String responseBody = new String(response.getBody(), StandardCharsets.UTF_8)1;
+        String responseBody = new String(response.getBody());
         log.info("responseBody for userInfo {}", responseBody);
         try {
             return objectMapper.readTree(responseBody);
