@@ -8,5 +8,6 @@ public interface UserRepositoryPort {
     Optional<User> findByEmail(String email);
     Optional<User> findByKakaoId(Long id);
     Optional<User> findByNaverId(String id);
+    Optional<User> findById(Long id);
     User save(User user);
 }

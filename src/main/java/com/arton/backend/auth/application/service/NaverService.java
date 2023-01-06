@@ -76,7 +76,7 @@ public class NaverService implements NaverUseCase {
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
         // Generate ArtOn JWT
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getEmail(), register.getNaverId());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
@@ -153,7 +153,7 @@ public class NaverService implements NaverUseCase {
      */
     private User signup(String accessToken) {
 //        JsonNode userInfo = getUserInfo(accessToken).get("response");
-        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken).get("response");
+        JsonNode userInfo = SSLConnectionCover.getUserInfoNaver(accessToken).get("response");
         String id = userInfo.get("id").asText();
         User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {

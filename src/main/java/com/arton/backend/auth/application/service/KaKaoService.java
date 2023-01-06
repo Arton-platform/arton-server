@@ -73,7 +73,7 @@ public class KaKaoService implements KaKaoUseCase {
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
         // Generate ArtOn JWT
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getEmail(), String.valueOf(register.getKakaoId()));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), String.valueOf(register.getKakaoId()));
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
