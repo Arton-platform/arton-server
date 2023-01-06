@@ -2,7 +2,9 @@ package com.arton.backend;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.ssl.SSLSocketFactory;
@@ -14,7 +16,11 @@ import org.apache.http.params.HttpParams;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -278,21 +284,21 @@ public class SSLConnectionCover {
             org.apache.http.params.HttpConnectionParams.setConnectionTimeout(httpParam, CONN_TIME_OUT);
             org.apache.http.params.HttpConnectionParams.setSoTimeout(httpParam, CONN_TIME_OUT);
 
-            HttpPost http = null;
+            HttpGet http = null;
             URL url = null;
             try {
                 url = new URL("https://openapi.naver.com/v1/nid/me");
-                http = new HttpPost(url.toURI());
+                http = new HttpGet(url.toURI());
                 http.setHeader("Authorization", "Bearer "+accessToken);
+                http.setHeader("Content-type", "application/json;charset=UTF-8");
             } catch (Exception e) {
-                http = new HttpPost(url.toURI());
+                throw new RuntimeException(e);
             }
 
             HttpResponse response = httpClient.execute(http);
-            String s = new BasicResponseHandler().handleResponse(response);
-            System.out.println("getUserInfo = " + s);
+            String result = new BasicResponseHandler().handleResponse(response);
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readTree(s);
+            return mapper.readTree(result);
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
