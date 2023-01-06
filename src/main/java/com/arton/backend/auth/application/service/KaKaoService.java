@@ -58,23 +58,24 @@ public class KaKaoService implements KaKaoUseCase {
     private String refreshTokenPrefix;
 
 
+    /**
+     * token 발행
+     * email, password 로 만들거임
+     * 여기서 설정하는 값이 userdetails의 id password로 넘어감
+     * 원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
+     * @param code
+     * @return
+     */
     @Override
     public TokenDto login(String code) {
 //        String accessToken = getAccessToken(code);
         String accessToken = SSLConnectionCover.getAccessToken(clientId, redirectURL, code);
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
-        // token 발행
-        // email, password 로 만들거임
-        log.info("1");
-        // 여기서 설정하는 값이 userdetails의 id password로 넘어감
-        // 원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
+        // Generate ArtOn JWT
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getEmail(), String.valueOf(register.getKakaoId()));
-        log.info("2");
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        log.info("3");
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
-        log.info("4");
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
         return tokenDto;
     }

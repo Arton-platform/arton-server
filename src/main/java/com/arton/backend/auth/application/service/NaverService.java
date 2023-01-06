@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
@@ -73,14 +74,13 @@ public class NaverService implements NaverUseCase {
 //        String accessToken = getAccessToken(code, state);
         String accessToken = SSLConnectionCover.getAccessTokenNaver(clientId, clientSecret, code, state);
         log.info("accessToken {}", accessToken);
-//        getUserInfo(accessToken);
-        JsonNode userInfoNaver = SSLConnectionCover.getUserInfoNaver(accessToken);
-//        User register = signup(accessToken);
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getEmail(), String.valueOf(register.getKakaoId()));
-//        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-//        TokenDto tokenDto = tokenProvider.generateToken(authenticate);
-//        redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
-        return null;
+        User register = signup(accessToken);
+        // Generate ArtOn JWT
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getEmail(), register.getNaverId());
+        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        TokenDto tokenDto = tokenProvider.generateToken(authenticate);
+        redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
+        return tokenDto;
     }
 
     /**
@@ -144,33 +144,37 @@ public class NaverService implements NaverUseCase {
     }
 
     /**
-     * 카카오로 회원가입된 계정이 있으면 해당 유저 정보 return
+     * naver 회원가입된 계정이 있으면 해당 유저 정보 return
      * 아니면 회원가입 진행 + return
-     * kakao ageRange example
+     * naver ageRange example
      * 0~9, 10~14, 15~19, 20~29, ...
      * @param accessToken
      * @return
      */
     private User signup(String accessToken) {
-//        JsonNode userInfo = getUserInfo(accessToken);
-        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
-        long id = userInfo.get("id").asLong();
-        User user = userRepository.findByKakaoId(id).orElse(null);
+//        JsonNode userInfo = getUserInfo(accessToken).get("response");
+        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken).get("response");
+        String id = userInfo.get("id").asText();
+        User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
-            String nickName = userInfo.get("kakao_account").get("profile").get("nickname").asText();
+            String nickName = userInfo.get("nickname").asText();
+            String name = userInfo.get("name").asText();
             log.info("nickName {}", nickName);
-            String email = userInfo.get("kakao_account").get("email").asText();
+            String email = userInfo.get("email").asText();
             log.info("email {}", email);
-            String ageRange = userInfo.get("kakao_account").get("age_range").asText();
+            String ageRange = userInfo.get("age").asText();
             log.info("ageRange {}", ageRange);
+            String mobile = userInfo.get("mobile").asText();
+            log.info("mobile {}", mobile);
             int age = Integer.parseInt(ageRange.substring(0, 1));
-            String gender = userInfo.get("kakao_account").get("gender").asText();
-            /** password is user's own kakao id */
-            String password = userInfo.get("id").asText();
-            user = User.builder().email(email)
-                    .gender(Gender.get(gender.toUpperCase(Locale.ROOT)))
+            String gender = userInfo.get("gender").asText();
+            /** password is user's own naver id */
+            String password = id;
+            user = User.builder()
+                    .naverId(id)
+                    .email(email)
+                    .gender(getGender(gender))
                     .password(passwordEncoder.encode(password))
-                    .kakaoId(id)
                     .nickname(nickName)
                     .profileImageUrl(defaultImage)
                     .ageRange(AgeRange.get(age))
@@ -179,6 +183,14 @@ public class NaverService implements NaverUseCase {
             userRepository.save(user);
         }
         return user;
+    }
+
+    private Gender getGender(String gender){
+        if (gender.equals("M") || gender.equals("m"))
+            return Gender.MALE;
+        else if(gender.equals("F") || gender.equals("f"))
+            return Gender.FEMALE;
+        return Gender.ETC;
     }
 
 

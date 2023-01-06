@@ -23,6 +23,11 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
+    public Optional<User> findByNaverId(String id) {
+        return userRepository.findByNaverId(id);
+    }
+
+    @Override
     public User save(User user) {
         return userRepository.save(user);
     }
