@@ -6,7 +6,6 @@ import com.arton.backend.user.domain.SignupType;
 import com.arton.backend.user.domain.User;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotBlank;
 
@@ -35,7 +34,6 @@ public class SignupRequestDto {
     private String nickname;
     @NotBlank
     private String gender;
-    @NotBlank
     private int ageRange;
     @NotBlank
     private String marketingAgreement;

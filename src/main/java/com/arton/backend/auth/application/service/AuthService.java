@@ -40,6 +40,7 @@ public class AuthService implements AuthUseCase {
     /**
      * 회원가입
      * 이메일 중복, 패스워드 체크는 다음을 누르면 체크 API를 호출해서 처리해주자
+     * 우선 로컬에서 작업중이므로 안에서 처리
      * @param signupRequestDto
      * @param multipartFile
      */
@@ -48,7 +49,7 @@ public class AuthService implements AuthUseCase {
         if (checkEmailDup(signupRequestDto.getEmail())) {
             throw new CustomException(ErrorCode.EMAIL_IS_EXIST.getMessage(), ErrorCode.EMAIL_IS_EXIST);
         }
-        if (checkPassword(signupRequestDto.getPassword(), signupRequestDto.getCheckPassword())) {
+        if (!checkPassword(signupRequestDto.getPassword(), signupRequestDto.getCheckPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
         // 기본 이미지
