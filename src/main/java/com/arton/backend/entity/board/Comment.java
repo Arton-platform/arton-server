@@ -1,4 +1,4 @@
-package com.arton.backend.dto.board;
+package com.arton.backend.entity.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

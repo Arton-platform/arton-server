@@ -1,6 +1,6 @@
-package com.arton.backend.dto.board;
+package com.arton.backend.entity.board;
 
-import com.arton.backend.dto.performance.Performance;
+import com.arton.backend.entity.performance.Performance;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

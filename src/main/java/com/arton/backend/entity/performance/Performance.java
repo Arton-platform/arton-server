@@ -1,4 +1,4 @@
-package com.arton.backend.dto.image;
+package com.arton.backend.entity.performance;
 
 import com.arton.backend.infra.shared.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -12,12 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Getter
-public class Image extends BaseEntity {
+public class Performance extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long imageId;
+    private long performanceId;
+
 }
