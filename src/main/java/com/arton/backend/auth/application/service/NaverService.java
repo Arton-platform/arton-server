@@ -59,7 +59,6 @@ public class NaverService implements NaverUseCase {
     private String defaultImage;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
-
     /**
      *  token 발행
      *  email, password 로 만들거임
