@@ -1,13 +1,12 @@
-package com.arton.backend.dto.board;
+package com.arton.backend.entity.board;
 
-import com.arton.backend.dto.image.Image;
+import com.arton.backend.entity.image.Image;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.user.domain.User;
 import lombok.Getter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.List;
 
 @MappedSuperclass
 @EntityListeners(value = {AuditingEntityListener.class})
