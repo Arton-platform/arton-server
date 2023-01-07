@@ -14,8 +14,10 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    /** 카카오 회원 번호 */
+    /** 카카오 고유 회원 번호 */
     private Long kakaoId;
+    /** naver 고유 회원 번호 */
+    private String naverId;
     /** 이메일 */
     private String email;
     /** 비밀번호 */
@@ -30,4 +32,7 @@ public class User extends BaseEntity {
     /** 연령대 */
     @Enumerated(EnumType.STRING)
     private AgeRange ageRange;
+    /** 권한 */
+    @Enumerated(EnumType.STRING)
+    private UserRole auth;
 }

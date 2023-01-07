@@ -2,9 +2,9 @@ package com.arton.backend.auth.application.service;
 
 import com.arton.backend.SSLConnectionCover;
 import com.arton.backend.auth.application.port.in.KaKaoUseCase;
+import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.auth.application.port.in.TokenDto;
 import com.arton.backend.infra.jwt.TokenProvider;
-import com.arton.backend.user.adapter.out.repository.UserRepository;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.AgeRange;
 import com.arton.backend.user.domain.Gender;
@@ -17,10 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -31,16 +30,18 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class KaKaoService implements KaKaoUseCase {
+public class NaverService implements NaverUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
     private final TokenProvider tokenProvider;
@@ -48,57 +49,57 @@ public class KaKaoService implements KaKaoUseCase {
     private final RedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${kakao.client.id}")
+    @Value("${naver.client.id}")
     private String clientId;
-    @Value("${kakao.redirect.url}")
+    @Value("${naver.client.secret}")
+    private String clientSecret;
+    @Value("${naver.redirect.url}")
     private String redirectURL;
     @Value("${default.image}")
     private String defaultImage;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
-
-
     /**
-     * token 발행
-     * email, password 로 만들거임
-     * 여기서 설정하는 값이 userdetails의 id password로 넘어감
-     * 원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
+     *  token 발행
+     *  email, password 로 만들거임
+     *  여기서 설정하는 값이 userdetails의 id password로 넘어감
+     *  원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
      * @param code
      * @return
      */
     @Override
-    public TokenDto login(String code) {
-        String accessToken = getAccessToken(code);
-//        String accessToken = SSLConnectionCover.getAccessToken(clientId, redirectURL, code);
+    public TokenDto login(String code, String state) {
+        String accessToken = getAccessToken(code, state);
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
-        // Generate ArtOn JWT
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), String.valueOf(register.getKakaoId()));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
-        return tokenDto;
+        return null;
     }
 
     /**
-     * https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api
+     * https://developers.naver.com/docs/login/api/api.md
      * 토근 받기 참조
      * @param code
+     * @param state
      * @return
      */
-    private String getAccessToken(String code) {
+    private String getAccessToken(String code, String state) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", clientId);
-        body.add("redirect_uri", redirectURL);
+        body.add("client_secret", clientSecret);
         body.add("code", code);
+        body.add("state", state);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange("https://kauth.kakao.com/oauth/token",
+        ResponseEntity<String> response = restTemplate.exchange("https://nid.naver.com/oauth2.0/token",
                 HttpMethod.POST,
                 request,
                 String.class);
@@ -123,8 +124,8 @@ public class KaKaoService implements KaKaoUseCase {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange("https://kapi.kakao.com/v2/user/me",
-                HttpMethod.POST,
+        ResponseEntity<String> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me",
+                HttpMethod.GET,
                 request,
                 String.class);
 
@@ -147,25 +148,28 @@ public class KaKaoService implements KaKaoUseCase {
      * @return
      */
     private User signup(String accessToken) {
-        JsonNode userInfo = getUserInfo(accessToken);
+        JsonNode userInfo = getUserInfo(accessToken).get("response");
 //        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
-        long id = userInfo.get("id").asLong();
-        User user = userRepository.findByKakaoId(id).orElse(null);
+        String id = userInfo.get("id").asText();
+        User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
-            String nickName = userInfo.get("kakao_account").get("profile").get("nickname").asText();
+            String mobile = userInfo.get("mobile").asText();
+            log.info("mobile {}", mobile);
+            String nickName = userInfo.get("nickname").asText();
             log.info("nickName {}", nickName);
-            String email = userInfo.get("kakao_account").get("email").asText();
+            String email = userInfo.get("email").asText();
             log.info("email {}", email);
-            String ageRange = userInfo.get("kakao_account").get("age_range").asText();
+            String ageRange = userInfo.get("age").asText();
             log.info("ageRange {}", ageRange);
             int age = Integer.parseInt(ageRange.substring(0, 1));
-            String gender = userInfo.get("kakao_account").get("gender").asText();
+            String gender = userInfo.get("gender").asText();
+            log.info("gender {}", gender);
             /** password is user's own kakao id */
-            String password = userInfo.get("id").asText();
+            String password = id;
             user = User.builder().email(email)
-                    .gender(Gender.get(gender.toUpperCase(Locale.ROOT)))
+                    .gender(getGender(gender))
                     .password(passwordEncoder.encode(password))
-                    .kakaoId(id)
+                    .naverId(id)
                     .nickname(nickName)
                     .profileImageUrl(defaultImage)
                     .ageRange(AgeRange.get(age))
@@ -174,6 +178,14 @@ public class KaKaoService implements KaKaoUseCase {
             userRepository.save(user);
         }
         return user;
+    }
+
+    private Gender getGender(String gender){
+        if (gender.equals("M") || gender.equals("m"))
+            return Gender.MALE;
+        else if(gender.equals("F") || gender.equals("f"))
+            return Gender.FEMALE;
+        return Gender.ETC;
     }
 
 
