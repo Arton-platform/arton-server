@@ -1,6 +1,12 @@
 package com.arton.backend.auth.application.port.in;
 
+import com.arton.backend.user.domain.AgeRange;
+import com.arton.backend.user.domain.Gender;
+import com.arton.backend.user.domain.SignupType;
+import com.arton.backend.user.domain.User;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotBlank;
 
@@ -25,8 +31,25 @@ public class SignupRequestDto {
     @NotBlank
     private String checkPassword;
     private String profileImageUrl;
+    @NotBlank
     private String nickname;
+    @NotBlank
     private String gender;
+    @NotBlank
     private int ageRange;
+    @NotBlank
     private String marketingAgreement;
+
+    public static User toUser(SignupRequestDto signupRequestDto, PasswordEncoder passwordEncoder){
+        return User.builder()
+                .email(signupRequestDto.getEmail())
+                .password(passwordEncoder.encode(signupRequestDto.getPassword()))
+                .profileImageUrl(signupRequestDto.getProfileImageUrl())
+                .nickname(signupRequestDto.getNickname())
+                .gender(Gender.get(signupRequestDto.getGender()))
+                .ageRange(AgeRange.get(signupRequestDto.getAgeRange()/10))
+                .marketingAgreement(signupRequestDto.getMarketingAgreement())
+                .signupType(SignupType.ARTON)
+                .build();
+    }
 }

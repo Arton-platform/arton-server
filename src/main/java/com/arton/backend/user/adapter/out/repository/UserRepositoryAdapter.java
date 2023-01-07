@@ -1,6 +1,7 @@
 package com.arton.backend.user.adapter.out.repository;
 
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.domain.SignupType;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -30,6 +31,11 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Override
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public boolean checkEmailDup(String email) {
+        return userRepository.existsByEmailAndSignupType(email, SignupType.ARTON);
     }
 
     @Override

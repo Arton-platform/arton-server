@@ -7,11 +7,11 @@ import lombok.*;
  * refresh_token
  *
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class LoginResponseDto {
-    private String grantType;
     private String accessToken;
     private String refreshToken;
     private Long accessTokenExpiresIn;

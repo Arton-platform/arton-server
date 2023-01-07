@@ -41,4 +41,8 @@ public class User extends BaseEntity {
     /** 마케팅 동의 */
     @Column(length = 1)
     private String marketingAgreement;
+
+    public void setProfileImageUrl(String url){
+        this.profileImageUrl = url;
+    }
 }

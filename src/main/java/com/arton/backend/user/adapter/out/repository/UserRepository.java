@@ -1,5 +1,6 @@
 package com.arton.backend.user.adapter.out.repository;
 
+import com.arton.backend.user.domain.SignupType;
 import com.arton.backend.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +10,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByKakaoId(Long kakaoId);
     Optional<User> findByEmail(String email);
     Optional<User> findByNaverId(String naverId);
+    boolean existsByEmailAndSignupType(String email, SignupType signupType);
 }
