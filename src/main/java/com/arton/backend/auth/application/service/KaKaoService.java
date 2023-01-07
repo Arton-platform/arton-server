@@ -68,8 +68,8 @@ public class KaKaoService implements KaKaoUseCase {
      */
     @Override
     public TokenDto login(String code) {
-//        String accessToken = getAccessToken(code);
-        String accessToken = SSLConnectionCover.getAccessToken(clientId, redirectURL, code);
+        String accessToken = getAccessToken(code);
+//        String accessToken = SSLConnectionCover.getAccessToken(clientId, redirectURL, code);
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
         // Generate ArtOn JWT
@@ -147,8 +147,8 @@ public class KaKaoService implements KaKaoUseCase {
      * @return
      */
     private User signup(String accessToken) {
-//        JsonNode userInfo = getUserInfo(accessToken);
-        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
+        JsonNode userInfo = getUserInfo(accessToken);
+//        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         long id = userInfo.get("id").asLong();
         User user = userRepository.findByKakaoId(id).orElse(null);
         if (user == null) {

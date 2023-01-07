@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
@@ -71,16 +70,14 @@ public class NaverService implements NaverUseCase {
      */
     @Override
     public TokenDto login(String code, String state) {
-//        String accessToken = getAccessToken(code, state);
-        String accessToken = SSLConnectionCover.getAccessTokenNaver(clientId, clientSecret, code, state);
+        String accessToken = getAccessToken(code, state);
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
-        // Generate ArtOn JWT
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
-        return tokenDto;
+        return null;
     }
 
     /**
@@ -128,12 +125,12 @@ public class NaverService implements NaverUseCase {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<byte[]> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me",
+        ResponseEntity<String> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me",
                 HttpMethod.GET,
                 request,
-                byte[].class);
+                String.class);
 
-        String responseBody = new String(response.getBody());
+        String responseBody = response.getBody();
         log.info("responseBody for userInfo {}", responseBody);
         try {
             return objectMapper.readTree(responseBody);
@@ -144,37 +141,36 @@ public class NaverService implements NaverUseCase {
     }
 
     /**
-     * naver 회원가입된 계정이 있으면 해당 유저 정보 return
+     * 카카오로 회원가입된 계정이 있으면 해당 유저 정보 return
      * 아니면 회원가입 진행 + return
-     * naver ageRange example
+     * kakao ageRange example
      * 0~9, 10~14, 15~19, 20~29, ...
      * @param accessToken
      * @return
      */
     private User signup(String accessToken) {
-//        JsonNode userInfo = getUserInfo(accessToken).get("response");
-        JsonNode userInfo = SSLConnectionCover.getUserInfoNaver(accessToken).get("response");
+        JsonNode userInfo = getUserInfo(accessToken).get("response");
+//        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         String id = userInfo.get("id").asText();
         User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
+            String mobile = userInfo.get("mobile").asText();
+            log.info("mobile {}", mobile);
             String nickName = userInfo.get("nickname").asText();
-            String name = userInfo.get("name").asText();
             log.info("nickName {}", nickName);
             String email = userInfo.get("email").asText();
             log.info("email {}", email);
             String ageRange = userInfo.get("age").asText();
             log.info("ageRange {}", ageRange);
-            String mobile = userInfo.get("mobile").asText();
-            log.info("mobile {}", mobile);
             int age = Integer.parseInt(ageRange.substring(0, 1));
             String gender = userInfo.get("gender").asText();
-            /** password is user's own naver id */
+            log.info("gender {}", gender);
+            /** password is user's own kakao id */
             String password = id;
-            user = User.builder()
-                    .naverId(id)
-                    .email(email)
+            user = User.builder().email(email)
                     .gender(getGender(gender))
                     .password(passwordEncoder.encode(password))
+                    .naverId(id)
                     .nickname(nickName)
                     .profileImageUrl(defaultImage)
                     .ageRange(AgeRange.get(age))
