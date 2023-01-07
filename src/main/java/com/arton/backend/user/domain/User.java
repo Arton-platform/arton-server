@@ -40,7 +40,7 @@ public class User extends BaseEntity {
     private SignupType signupType;
     /** 마케팅 동의 */
     @Column(length = 1)
-    private String marketingAgreement;
+    private String termsAgree;
 
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;

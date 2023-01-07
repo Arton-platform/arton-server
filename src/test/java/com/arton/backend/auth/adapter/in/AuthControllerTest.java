@@ -33,7 +33,7 @@ class AuthControllerTest {
                 .email("abc123@naver.com")
                 .password("thskan11")
                 .checkPassword("thskan11")
-                .marketingAgreement("Y")
+                .termsAgree("Y")
                 .gender("MALE")
                 .nickname("nick")
                 .build();
@@ -54,7 +54,7 @@ class AuthControllerTest {
                 .email("abc123@naver.com")
                 .password("thskan11")
                 .checkPassword("thskan11")
-                .marketingAgreement("Y")
+                .termsAgree("Y")
                 .gender("MALE")
                 .nickname("nick")
                 .build();
@@ -77,7 +77,7 @@ class AuthControllerTest {
                 .email("abc123@naver.com")
                 .password("thskan11")
                 .checkPassword("thskan1221")
-                .marketingAgreement("Y")
+                .termsAgree("Y")
                 .gender("MALE")
                 .nickname("nick")
                 .build();
@@ -100,7 +100,7 @@ class AuthControllerTest {
                 .email("abc123@naver.com")
                 .password("thskan11")
                 .checkPassword("thskan11")
-                .marketingAgreement("Y")
+                .termsAgree("Y")
                 .gender("MALE")
                 .nickname("nick")
                 .build();
@@ -119,7 +119,7 @@ class AuthControllerTest {
                 .email("abc123@naver.com")
                 .password("aaa123")
                 .checkPassword("aaa123")
-                .marketingAgreement("Y")
+                .termsAgree("Y")
                 .gender("MALE")
                 .nickname("aaa")
                 .build();

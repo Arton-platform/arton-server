@@ -36,7 +36,7 @@ public class SignupRequestDto {
     private String gender;
     private int ageRange;
     @NotBlank
-    private String marketingAgreement;
+    private String termsAgree;
 
     public static User toUser(SignupRequestDto signupRequestDto, PasswordEncoder passwordEncoder){
         return User.builder()
@@ -46,7 +46,7 @@ public class SignupRequestDto {
                 .nickname(signupRequestDto.getNickname())
                 .gender(Gender.get(signupRequestDto.getGender()))
                 .ageRange(AgeRange.get(signupRequestDto.getAgeRange()/10))
-                .marketingAgreement(signupRequestDto.getMarketingAgreement())
+                .termsAgree(signupRequestDto.getTermsAgree())
                 .signupType(SignupType.ARTON)
                 .build();
     }
