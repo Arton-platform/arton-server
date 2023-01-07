@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
@@ -19,5 +16,7 @@ public class Comment extends Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commentId;
+    @ManyToOne
+    @JoinColumn(name = "reviewId")
     private Review review;
 }
