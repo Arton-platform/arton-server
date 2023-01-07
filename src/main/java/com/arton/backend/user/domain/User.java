@@ -38,4 +38,7 @@ public class User extends BaseEntity {
     /** 회원가입 수단 */
     @Enumerated(EnumType.STRING)
     private SignupType signupType;
+    /** 마케팅 동의 */
+    @Column(length = 1)
+    private String marketingAgreement;
 }
