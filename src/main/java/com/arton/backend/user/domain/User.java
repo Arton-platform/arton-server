@@ -35,4 +35,7 @@ public class User extends BaseEntity {
     /** 권한 */
     @Enumerated(EnumType.STRING)
     private UserRole auth;
+    /** 회원가입 수단 */
+    @Enumerated(EnumType.STRING)
+    private SignupType signupType;
 }
