@@ -13,9 +13,14 @@ import java.util.Optional;
 public class UserRepositoryAdapter implements UserRepositoryPort {
     private final UserRepository userRepository;
 
+    /**
+     * 카카오 네이버와 구분시켜야됨.
+     * @param email
+     * @return
+     */
     @Override
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailAndSignupType(email, SignupType.ARTON);
     }
 
     @Override

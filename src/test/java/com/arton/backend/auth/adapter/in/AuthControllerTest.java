@@ -1,6 +1,8 @@
 package com.arton.backend.auth.adapter.in;
 
+import com.arton.backend.auth.application.port.in.LoginRequestDto;
 import com.arton.backend.auth.application.port.in.SignupRequestDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,5 +134,38 @@ class AuthControllerTest {
                         .file(image2)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Description("로그인 성공 테스트")
+    @Test
+    void loginTest() throws Exception {
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
+                .ageRange(10)
+                .email("abc123@naver.com")
+                .password("thskan11")
+                .checkPassword("thskan11")
+                .termsAgree("Y")
+                .gender("MALE")
+                .nickname("nick")
+                .build();
+        String content = objectMapper.writeValueAsString(signupRequestDto);
+        System.out.println("content = " + content);
+        MockMultipartFile image = new MockMultipartFile("image", "static/image/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+                        .file(json)
+                        .file(image)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk());
+
+        LoginRequestDto loginRequestDto = LoginRequestDto.builder()
+                .email("abc123@naver.com")
+                .password("thskan11")
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                .content(objectMapper.writeValueAsString(loginRequestDto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

@@ -22,14 +22,14 @@ public class AuthController {
     private final AuthUseCase authUseCase;
 
     @GetMapping("/kakao")
-    public ResponseEntity<TokenDto> getCode(@RequestParam String code){
+    public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
         log.info("code {}", code);
         TokenDto tokenDto = kaKaoUseCase.login(code);
         return ResponseEntity.ok(tokenDto);
     }
 
     @GetMapping("/naver")
-    public ResponseEntity<TokenDto> loginWithNaver(@RequestParam String code, @RequestParam String state){
+    public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
         log.info("code {}", code);
         log.info("state {}", state);
         TokenDto login = naverUseCase.login(code, state);
@@ -48,5 +48,10 @@ public class AuthController {
         authUseCase.signup(signupRequestDto, multipartFile);
         CommonResponse commonResponse = CommonResponse.builder().message("회원가입에 성공하였습니다").status(HttpStatus.OK.value()).build();
         return ResponseEntity.ok(commonResponse);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
+        return ResponseEntity.ok(authUseCase.login(loginRequestDto));
     }
 }

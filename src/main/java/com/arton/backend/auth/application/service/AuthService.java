@@ -1,9 +1,6 @@
 package com.arton.backend.auth.application.service;
 
-import com.arton.backend.auth.application.port.in.AuthUseCase;
-import com.arton.backend.auth.application.port.in.LoginRequestDto;
-import com.arton.backend.auth.application.port.in.LoginResponseDto;
-import com.arton.backend.auth.application.port.in.SignupRequestDto;
+import com.arton.backend.auth.application.port.in.*;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.infra.file.FileUploadUtils;
@@ -15,11 +12,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -72,8 +73,18 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        return null;
+    public TokenDto login(LoginRequestDto loginRequestDto) {
+        // 패스워드, 이메일 일치여부 확인
+        User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        // password 불일치
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.LOGIN_INFO_NOT_MATCHED.getMessage(), ErrorCode.LOGIN_INFO_NOT_MATCHED);
+        }
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getId(), loginRequestDto.getPassword());
+        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        TokenDto tokenDto = tokenProvider.generateToken(authenticate);
+        redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
+        return tokenDto;
     }
 
     public boolean checkEmailDup(String email){

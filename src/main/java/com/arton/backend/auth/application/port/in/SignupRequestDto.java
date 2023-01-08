@@ -1,9 +1,6 @@
 package com.arton.backend.auth.application.port.in;
 
-import com.arton.backend.user.domain.AgeRange;
-import com.arton.backend.user.domain.Gender;
-import com.arton.backend.user.domain.SignupType;
-import com.arton.backend.user.domain.User;
+import com.arton.backend.user.domain.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -48,6 +45,7 @@ public class SignupRequestDto {
                 .ageRange(AgeRange.get(signupRequestDto.getAgeRange()/10))
                 .termsAgree(signupRequestDto.getTermsAgree())
                 .signupType(SignupType.ARTON)
+                .auth(UserRole.NORMAL)
                 .build();
     }
 }
