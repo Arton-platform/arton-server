@@ -1,6 +1,7 @@
 package com.arton.backend.auth.application.service;
 
 import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.infra.file.FileUploadUtils;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -85,6 +87,21 @@ public class AuthService implements AuthUseCase {
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
         return tokenDto;
+    }
+
+    @Override
+    public MailDto resetPassword(PasswordResetDto passwordResetDto) {
+        // 해당 정보의 유저가 존재하는지 확인
+        User user = userRepository.findUserForReset(passwordResetDto.getNickname(), passwordResetDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        // 비밀번호 변경
+        String newPassword = UUID.randomUUID().toString().substring(0, 8);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        // 메일 정보 전송
+        return MailDto.builder()
+                .messageBody("새로운 패스워드 : " + newPassword)
+                .receiver(user.getEmail())
+                .subject("공연문화 플랫폼 ArtOn 에서 새로운 패스워드 보내드립니다.")
+                .build();
     }
 
     public boolean checkEmailDup(String email){

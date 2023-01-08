@@ -1,6 +1,8 @@
 package com.arton.backend.auth.adapter.in;
 
 import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.infra.mail.EmailUseCase;
+import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ public class AuthController {
     private final KaKaoUseCase kaKaoUseCase;
     private final NaverUseCase naverUseCase;
     private final AuthUseCase authUseCase;
+    private final EmailUseCase emailUseCase;
 
     @GetMapping("/kakao")
     public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
@@ -53,5 +56,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(authUseCase.login(loginRequestDto));
+    }
+
+    @PutMapping("/reset/password")
+    public ResponseEntity<CommonResponse> resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
+        MailDto mailDto = authUseCase.resetPassword(passwordResetDto);
+        emailUseCase.sendMailOnlyText(mailDto);
+        CommonResponse commonResponse = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성공적으로 메일을 보냈습니다.")
+                .build();
+        return ResponseEntity.ok(commonResponse);
     }
 }

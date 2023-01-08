@@ -44,6 +44,11 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
+    public Optional<User> findUserForReset(String nickname, String email) {
+        return userRepository.findByNicknameAndEmailAndSignupType(nickname, email, SignupType.ARTON);
+    }
+
+    @Override
     public User save(User user) {
         return userRepository.save(user);
     }

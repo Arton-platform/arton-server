@@ -5,7 +5,6 @@ server:
   error:
     include-stacktrace: ON_PARAM
 
-
 # ETC
 spring:
   servlet:

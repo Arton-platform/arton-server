@@ -45,4 +45,7 @@ public class User extends BaseEntity {
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }
+    public void setPassword(String newPassword){
+        this.password = newPassword;
+    }
 }
