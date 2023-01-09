@@ -24,4 +24,14 @@ public class EmailController {
                 .build();
         return ResponseEntity.ok(build);
     }
+
+    @PostMapping("/send/html")
+    public ResponseEntity<CommonResponse> sendPasswordHtmlForm(@RequestBody MailDto mailDto) {
+        emailUseCase.sendMailByHTML(mailDto);
+        CommonResponse build = CommonResponse.builder()
+                .message("메일을 성공적으로 보냈습니다.")
+                .status(HttpStatus.OK.value())
+                .build();
+        return ResponseEntity.ok(build);
+    }
 }

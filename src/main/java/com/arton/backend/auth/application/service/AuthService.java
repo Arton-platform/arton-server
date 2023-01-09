@@ -89,6 +89,11 @@ public class AuthService implements AuthUseCase {
         return tokenDto;
     }
 
+    /**
+     * 비밀번호 재발급
+     * @param passwordResetDto
+     * @return
+     */
     @Override
     public MailDto resetPassword(PasswordResetDto passwordResetDto) {
         // 해당 정보의 유저가 존재하는지 확인
@@ -98,9 +103,9 @@ public class AuthService implements AuthUseCase {
         user.setPassword(passwordEncoder.encode(newPassword));
         // 메일 정보 전송
         return MailDto.builder()
-                .messageBody("새로운 패스워드 : " + newPassword)
+                .messageBody(newPassword)
                 .receiver(user.getEmail())
-                .subject("공연문화 플랫폼 ArtOn 에서 새로운 패스워드 보내드립니다.")
+                .subject("ArtOn - 임시 비밀번호 발급")
                 .build();
     }
 

@@ -6,5 +6,6 @@ package com.arton.backend.infra.mail;
  */
 public interface EmailUseCase {
     void sendMailOnlyText(MailDto details);
+    void sendMailByHTML(MailDto details);
     void sendMailWithAttachment(MailDto details);
 }
