@@ -1,22 +1,23 @@
-package com.arton.backend.musical.domain;
+package com.arton.backend.performance.domain;
 
+import com.arton.backend.artist.domain.Artist;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * price, artist 추가 필요
+ * price 추가 필요
+ * 대개 xxxToOne은 Fetch LAZY로
+ * batch_size나 fetch join으로 N+1 해결하자
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Entity
-public class Musical {
+@ToString
+public class Performance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,4 +49,11 @@ public class Musical {
     private String etc;
     /** 이미지 링크 */
     private String imageUrl;
+    /** 뮤지컬 or 콘서트 */
+    private PerformanceType performanceType;
+    /** 아티스트 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artist_id")
+    @ToString.Exclude
+    private Artist artist;
 }
