@@ -10,7 +10,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 @Getter
 public enum Gender {
-    MALE("남자"), FEMALE("여자"), ETC("기타"),
+    MALE("남성"), FEMALE("여성"), ETC("기타"),
     ;
     private String value;
 

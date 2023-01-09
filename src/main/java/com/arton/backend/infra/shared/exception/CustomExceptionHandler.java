@@ -1,4 +1,4 @@
-package com.arton.backend.exception;
+package com.arton.backend.infra.shared.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
