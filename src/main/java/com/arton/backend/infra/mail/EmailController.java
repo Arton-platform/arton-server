@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     private final EmailUseCase emailUseCase;
 
-    @PostMapping("/reset/password")
+    @PostMapping("/send")
     public ResponseEntity<CommonResponse> sendPassword(@RequestBody MailDto mailDto) {
         emailUseCase.sendMailOnlyText(mailDto);
         CommonResponse build = CommonResponse.builder()
