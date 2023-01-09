@@ -6,10 +6,7 @@ import com.arton.backend.auth.application.port.in.TokenDto;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.user.adapter.out.repository.UserRepository;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
-import com.arton.backend.user.domain.AgeRange;
-import com.arton.backend.user.domain.Gender;
-import com.arton.backend.user.domain.User;
-import com.arton.backend.user.domain.UserRole;
+import com.arton.backend.user.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -170,6 +167,7 @@ public class KaKaoService implements KaKaoUseCase {
                     .profileImageUrl(defaultImage)
                     .ageRange(AgeRange.get(age))
                     .auth(UserRole.NORMAL)
+                    .signupType(SignupType.KAKAO)
                     .build();
             userRepository.save(user);
         }

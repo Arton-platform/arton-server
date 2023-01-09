@@ -35,4 +35,17 @@ public class User extends BaseEntity {
     /** 권한 */
     @Enumerated(EnumType.STRING)
     private UserRole auth;
+    /** 회원가입 수단 */
+    @Enumerated(EnumType.STRING)
+    private SignupType signupType;
+    /** 마케팅 동의 */
+    @Column(length = 1)
+    private String termsAgree;
+
+    public void setProfileImageUrl(String url){
+        this.profileImageUrl = url;
+    }
+    public void setPassword(String newPassword){
+        this.password = newPassword;
+    }
 }

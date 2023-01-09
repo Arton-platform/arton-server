@@ -1,4 +1,4 @@
-package com.arton.backend.exception;
+package com.arton.backend.infra.shared.exception;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
