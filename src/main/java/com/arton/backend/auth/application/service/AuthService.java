@@ -75,6 +75,17 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    public boolean validateSignupRequest(SignupValidationDto signupValidationDto) {
+        if (checkEmailDup(signupValidationDto.getEmail())) {
+            throw new CustomException(ErrorCode.EMAIL_IS_EXIST.getMessage(), ErrorCode.EMAIL_IS_EXIST);
+        }
+        if (!checkPassword(signupValidationDto.getPassword(), signupValidationDto.getCheckPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
+        }
+        return true;
+    }
+
+    @Override
     public TokenDto login(LoginRequestDto loginRequestDto) {
         // 패스워드, 이메일 일치여부 확인
         User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
