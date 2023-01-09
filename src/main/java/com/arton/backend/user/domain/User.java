@@ -1,9 +1,12 @@
 package com.arton.backend.user.domain;
 
 import com.arton.backend.infra.shared.BaseEntity;
+import com.arton.backend.zzim.domain.Zzim;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -41,6 +44,10 @@ public class User extends BaseEntity {
     /** 마케팅 동의 */
     @Column(length = 1)
     private String termsAgree;
+    /** 찜 목록 유저는 찜을 여러개 할 수 있음*/
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    List<Zzim> zzims = new ArrayList<>();
 
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;

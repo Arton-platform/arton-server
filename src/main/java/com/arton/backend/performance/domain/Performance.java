@@ -1,13 +1,15 @@
 package com.arton.backend.performance.domain;
 
 import com.arton.backend.artist.domain.Artist;
+import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * price 추가 필요
  * 대개 xxxToOne은 Fetch LAZY로
  * batch_size나 fetch join으로 N+1 해결하자
  */
@@ -56,4 +58,8 @@ public class Performance {
     @JoinColumn(name = "artist_id")
     @ToString.Exclude
     private Artist artist;
+    /** 좌석 등급 가격 */
+    @OneToMany(mappedBy = "performance")
+    @ToString.Exclude
+    private List<PriceGrade> priceGradeList = new ArrayList<>();
 }
