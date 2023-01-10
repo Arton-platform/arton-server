@@ -26,3 +26,13 @@ server
 - Send request to DB
 - return DTO, or Entity
 - return value
+
+# 공연에 아티스트는 여러명이 출연 가능하다.
+한 공연에 여러 아티스트가 출연할 수 있다. 뮤지컬을 예를 들면 실제로 여러 출연자가 존재함.
+그런데 아티스트 또한 여러 공연에 출연할 수 있다. 그러면 다대다 관계가 되는데...
+JPA에서 ManyToMany는 중간에 숨겨진 테이블로 인해 예상치 못한 쿼리가 나가는등 문제가 발생한다.
+따라서 실무에서는 절대 사용하면 안된다. 그럼 어떻게 해결할까 하다가 
+수면에 숨겨져 만들어지는 중간 테이블을 수면위로 끌어올려 해결하면 된다고 함.
+Artist <---> Performer OnyToMany ManyToOne
+Performance <---> Performer OnyToMany ManyToOne
+이러면 Performer(출연자) 엔터티가 수면위에 떠오르기 때문에 숨겨진 버그를 예방할 수 있다.

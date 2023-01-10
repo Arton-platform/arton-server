@@ -1,6 +1,7 @@
 package com.arton.backend.performance.domain;
 
 import com.arton.backend.artist.domain.Artist;
+import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
@@ -53,11 +54,10 @@ public class Performance {
     private String imageUrl;
     /** 뮤지컬 or 콘서트 */
     private PerformanceType performanceType;
-    /** 아티스트 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id")
+    /** 공연의 출연자들 리스트 */
+    @OneToMany(mappedBy = "performance")
     @ToString.Exclude
-    private Artist artist;
+    private List<Performer> performers = new ArrayList<>();
     /** 좌석 등급 가격 */
     @OneToMany(mappedBy = "performance")
     @ToString.Exclude

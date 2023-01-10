@@ -1,6 +1,7 @@
 package com.arton.backend.artist.domain;
 
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.performer.domain.Performer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,5 @@ public class Artist {
     /** 아티스트의 musical or concert 작품 */
     @OneToMany(mappedBy = "artist")
     @ToString.Exclude
-    private List<Performance> performances = new ArrayList<>();
-
+    private List<Performer> performances = new ArrayList<>();
 }
