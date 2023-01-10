@@ -6,11 +6,13 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.domain.Performance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PerformanceService implements PerformanceUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
