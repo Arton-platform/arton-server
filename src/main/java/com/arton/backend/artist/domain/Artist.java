@@ -1,6 +1,5 @@
 package com.arton.backend.artist.domain;
 
-import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performer.domain.Performer;
 import lombok.*;
 
@@ -25,7 +24,7 @@ public class Artist {
     /** sns id */
     private String snsId;
     /** 아티스트의 musical or concert 작품 */
-    @OneToMany(mappedBy = "artist")
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<Performer> performances = new ArrayList<>();
 }

@@ -45,10 +45,9 @@ public class User extends BaseEntity {
     @Column(length = 1)
     private String termsAgree;
     /** 찜 목록 유저는 찜을 여러개 할 수 있음*/
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     List<Zzim> zzims = new ArrayList<>();
-
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }
