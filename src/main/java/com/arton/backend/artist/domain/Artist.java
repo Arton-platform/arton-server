@@ -23,6 +23,8 @@ public class Artist {
     private Integer age;
     /** sns id */
     private String snsId;
+    /** 아티스트 이미지 링크 */
+    private String profileImageUrl;
     /** 아티스트의 musical or concert 작품 */
     @OneToMany(mappedBy = "artist", cascade = CascadeType.REMOVE)
     @ToString.Exclude
