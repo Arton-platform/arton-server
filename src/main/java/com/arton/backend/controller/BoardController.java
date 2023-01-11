@@ -1,6 +1,6 @@
 package com.arton.backend.controller;
 
-import com.arton.backend.entity.board.FAQ;
+import com.arton.backend.faq.adapter.out.FAQEntity;
 import com.arton.backend.service.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 public class BoardController {
 
-    BoardService boardService;
-
-    @GetMapping("/faq")
-    public List<FAQ> faqList(){
-        log.info("[FAQ] : faqList");
-        return boardService.faqList();
-    }
+//    BoardService boardService;
+//
+//    @GetMapping("/faq")
+//    public ResponseEntity<List<FAQEntity>> faqList(){
+//        log.info("[FAQ] : faqList");
+//        return ResponseEntity.ok(boardService.faqList());
+//    }
 }

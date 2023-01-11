@@ -1,5 +1,6 @@
-package com.arton.backend.entity.board;
+package com.arton.backend.faq.adapter.out;
 
+import com.arton.backend.entity.board.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Builder
 @Getter
-public class FAQ extends Board{
+public class FAQEntity extends Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long faqId;
