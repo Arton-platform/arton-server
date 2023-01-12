@@ -1,7 +1,6 @@
 package com.arton.backend.board.adapter.in;
 
 import com.arton.backend.faq.adapter.out.FAQEntity;
-import com.arton.backend.service.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
