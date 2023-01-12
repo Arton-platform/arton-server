@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "review")
 public class ReviewEntity extends Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
