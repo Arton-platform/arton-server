@@ -1,4 +1,4 @@
-package com.arton.backend.board.adapter.out.persistence.comment;
+package com.arton.backend.comment.adapter.out.persistence;
 
 import com.arton.backend.common.entity.Board;
 import com.arton.backend.board.adapter.out.persistence.review.Review;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment extends Board {
+public class CommentEntity extends Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commentId;
@@ -24,10 +24,13 @@ public class Comment extends Board {
     @JoinColumn(name = "reviewId")
     private Review review;
 
+    private String content;
+
     @Builder
-    public Comment(long commentId, Review review, User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public CommentEntity(long commentId, Review review, String content, User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
         super(user, hit, image, createdDate, updateDate);
         this.commentId = commentId;
         this.review = review;
+        this.content = content;
     }
 }
