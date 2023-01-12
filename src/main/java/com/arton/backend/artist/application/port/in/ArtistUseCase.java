@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface ArtistUseCase {
     List<ArtistZzimDto> showArtistListForZzim(String type);
-    List<ArtistZzimDto> showArtistListForZzim();
     Artist save(Artist artist);
 }

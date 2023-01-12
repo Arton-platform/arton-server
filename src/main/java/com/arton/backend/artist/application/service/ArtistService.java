@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,13 +25,11 @@ public class ArtistService implements ArtistUseCase {
     @Override
     public List<ArtistZzimDto> showArtistListForZzim(String type) {
         PerformanceType performanceType = PerformanceType.get(type);
+        if (performanceType == null) {
+            return new ArrayList<>();
+        }
+        log.info("performanceType {}", performanceType.name());
         return artistRepositoryPort.findByPerformanceType(performanceType).stream()
-                .map(ArtistZzimDto::of).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ArtistZzimDto> showArtistListForZzim() {
-        return artistRepositoryPort.findAll().stream()
                 .map(ArtistZzimDto::of).collect(Collectors.toList());
     }
 
