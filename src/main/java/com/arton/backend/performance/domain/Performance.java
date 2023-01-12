@@ -22,4 +22,6 @@ public class Performance extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long performanceId;
+
+    private float starScore;
 }

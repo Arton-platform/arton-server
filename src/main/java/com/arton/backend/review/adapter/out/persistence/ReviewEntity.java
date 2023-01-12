@@ -1,4 +1,4 @@
-package com.arton.backend.board.adapter.out.persistence.review;
+package com.arton.backend.review.adapter.out.persistence;
 
 import com.arton.backend.common.entity.Board;
 import com.arton.backend.image.domain.Image;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review extends Board {
+public class ReviewEntity extends Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reviewId;
@@ -28,8 +28,9 @@ public class Review extends Board {
     private float starScore;
 
     @Builder
-    public Review(Performance performance, String content, float starScore, User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public ReviewEntity(long reviewId, Performance performance, String content, float starScore, User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
         super(user, hit, image, createdDate, updateDate);
+        this.reviewId = reviewId;
         this.performance = performance;
         this.content = content;
         this.starScore = starScore;

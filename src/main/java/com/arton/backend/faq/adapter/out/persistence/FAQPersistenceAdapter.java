@@ -12,8 +12,6 @@ import java.util.Optional;
 public class FAQPersistenceAdapter implements FAQListPort {
     // port.out 영속계층으로 향하는 포트의 구현 어뎁터
     private final FAQRepository faqRepository;
-    private final FAQMapper faqMapper;
-
 
     @Override
     public Optional<List<FAQEntity>> faqList() {
