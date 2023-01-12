@@ -1,4 +1,4 @@
-package com.arton.backend.faq.adapter.out;
+package com.arton.backend.faq.adapter.out.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

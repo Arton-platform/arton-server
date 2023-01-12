@@ -14,17 +14,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Announcement extends Board {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long announcementId;
     private String title;
     private String content;
 
     @Builder
-    public Announcement(User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
-        super(user, hit, image, createdDate, updateDate);
+    public Announcement(long announcementId, String title, String content, User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate){
+        super(user,hit,image,createdDate,updateDate);
+        this.announcementId = announcementId;
+        this.title = title;
+        this.content = content;
     }
 }

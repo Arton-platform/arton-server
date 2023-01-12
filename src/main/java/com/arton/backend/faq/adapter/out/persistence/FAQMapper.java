@@ -1,5 +1,6 @@
-package com.arton.backend.faq.adapter.out;
+package com.arton.backend.faq.adapter.out.persistence;
 
+import com.arton.backend.faq.adapter.out.persistence.FAQEntity;
 import com.arton.backend.faq.domain.FAQ;
 import org.springframework.stereotype.Component;
 

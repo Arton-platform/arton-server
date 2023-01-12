@@ -1,4 +1,4 @@
-package com.arton.backend.faq.adapter.out;
+package com.arton.backend.faq.adapter.out.persistence;
 
 import com.arton.backend.faq.application.port.out.FAQListPort;
 import lombok.RequiredArgsConstructor;

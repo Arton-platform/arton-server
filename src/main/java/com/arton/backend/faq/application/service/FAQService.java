@@ -1,6 +1,6 @@
 package com.arton.backend.faq.application.service;
 
-import com.arton.backend.faq.adapter.out.FAQMapper;
+import com.arton.backend.faq.adapter.out.persistence.FAQMapper;
 import com.arton.backend.faq.application.port.in.FAQListUseCase;
 import com.arton.backend.faq.application.port.out.FAQListPort;
 import com.arton.backend.faq.domain.FAQ;

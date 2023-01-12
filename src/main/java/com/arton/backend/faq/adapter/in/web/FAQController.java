@@ -1,11 +1,8 @@
-package com.arton.backend.faq.adapter.in;
+package com.arton.backend.faq.adapter.in.web;
 
-import com.arton.backend.faq.adapter.out.FAQEntity;
 import com.arton.backend.faq.application.port.in.FAQListUseCase;
 import com.arton.backend.faq.domain.FAQ;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
