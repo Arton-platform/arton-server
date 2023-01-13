@@ -30,6 +30,7 @@ server
 - return value
 
 
+
 # 20230110
 ## 공연에 아티스트는 여러명이 출연 가능하다.
 한 공연에 여러 아티스트가 출연할 수 있다. 뮤지컬을 예를 들면 실제로 여러 출연자가 존재함.
@@ -46,3 +47,23 @@ Performance <---> Performer OnyToMany ManyToOne
 
 ## 
 공연 리스트를 회원가입 찜 페이지에 보여주기. 하나 고르고 비슷한 애들을 보여주려면.. 공연의 종류라던지 이런것들이 있어야 추천이 가능할 것 같음.
+
+--------------------------------------------------
+객체 구성
+```
+entity
+├── board
+│   ├── Announcement.java // 공지사항
+│   ├── Board.java        // 게시판 공통    
+│   ├── Comment.java      // 댓글
+│   ├── FAQ.java          // FAQ
+│   └── Review.java       // 리뷰
+├── image
+│   └── Image.java        // 이미지
+└── performance
+    └── Performance.java  // 공연/콘서트 공통
+
+``` 
+
+
+

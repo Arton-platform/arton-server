@@ -4,6 +4,7 @@ import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
+import com.arton.backend.infra.shared.BaseEntity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
 @Builder
 @Entity
 @ToString
-public class Performance {
+public class Performance extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -62,4 +63,5 @@ public class Performance {
     @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<PriceGrade> priceGradeList = new ArrayList<>();
+    private float starScore;
 }
