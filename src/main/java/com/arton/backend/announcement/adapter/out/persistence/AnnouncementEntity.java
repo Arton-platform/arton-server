@@ -1,12 +1,10 @@
 package com.arton.backend.announcement.adapter.out.persistence;
 
-import com.arton.backend.common.entity.Board;
+import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.user.domain.User;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

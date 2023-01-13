@@ -1,6 +1,6 @@
 package com.arton.backend.announcement.domain;
 
-import com.arton.backend.common.entity.Board;
+import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.user.domain.User;
 import lombok.AllArgsConstructor;
@@ -8,10 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Getter

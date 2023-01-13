@@ -1,10 +1,11 @@
-package com.arton.backend.common.entity;
+package com.arton.backend.infra.shared;
 
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -21,7 +22,9 @@ public class Board {
     @ManyToOne(optional = true)
     @JoinColumn(name = "imageId")
     private Image image;
+    @CreatedDate
     private LocalDateTime createdDate;
+    @CreatedDate
     private LocalDateTime updateDate;
 
     public Board(User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {

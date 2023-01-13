@@ -1,6 +1,6 @@
 package com.arton.backend.review.adapter.out.persistence;
 
-import com.arton.backend.common.entity.Board;
+import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.domain.User;
