@@ -72,8 +72,8 @@ public class AuthService implements AuthUseCase {
         // 기본 이미지 지정
         user.setProfileImageUrl(defaultImage);
         User savedUser = userRepository.save(user);
-
         Long id = savedUser.getId();
+
         // 프로필 이미지 업로드
         if (multipartFile != null) {
             String filename = multipartFile.getOriginalFilename();
@@ -107,7 +107,6 @@ public class AuthService implements AuthUseCase {
             }
             zzimRepository.savePerformances(zzims);
         }
-
         return true;
     }
 
