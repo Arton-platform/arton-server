@@ -53,6 +53,23 @@ public class AuthController {
         return ResponseEntity.ok(commonResponse);
     }
 
+    /**
+     * 프론트에서 다음 버튼을 누를때 패스워드 이메일 유효성을 검증하는 기능
+     * @param signupValidationDto
+     * @return
+     */
+    @PostMapping(value = "/check/signup")
+    public ResponseEntity<CommonResponse> checkPasswordAndEmail(@RequestBody @Valid SignupValidationDto signupValidationDto) {
+        authUseCase.validateSignupRequest(signupValidationDto);
+        CommonResponse commonResponse = CommonResponse.builder().message("올바른 입력값입니다.").status(HttpStatus.OK.value()).build();
+        return ResponseEntity.ok(commonResponse);
+    }
+
+    /**
+     * 로그인
+     * @param loginRequestDto
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(authUseCase.login(loginRequestDto));
