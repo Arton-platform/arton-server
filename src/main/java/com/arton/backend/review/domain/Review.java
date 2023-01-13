@@ -1,6 +1,6 @@
 package com.arton.backend.review.domain;
 
-import com.arton.backend.common.entity.Board;
+import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.domain.User;
@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor

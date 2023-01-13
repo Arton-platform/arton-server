@@ -1,6 +1,6 @@
 package com.arton.backend.faq.domain;
 
-import com.arton.backend.common.entity.Board;
+import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.user.domain.User;
 import lombok.AllArgsConstructor;
