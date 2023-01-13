@@ -1,7 +1,7 @@
 package com.arton.backend.user.domain;
 
 import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.zzim.domain.Zzim;
+import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     /** 찜 목록 유저는 찜을 여러개 할 수 있음*/
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    List<Zzim> zzims = new ArrayList<>();
+    List<PerformanceZzim> zzims = new ArrayList<>();
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }

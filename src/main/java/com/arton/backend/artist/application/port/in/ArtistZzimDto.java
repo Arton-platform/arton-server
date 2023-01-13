@@ -3,6 +3,9 @@ package com.arton.backend.artist.application.port.in;
 import com.arton.backend.artist.domain.Artist;
 import lombok.*;
 
+/**
+ * 찜하기에 보여주는 용도
+ */
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

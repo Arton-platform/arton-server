@@ -19,6 +19,11 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort {
     }
 
     @Override
+    public List<Artist> findByIds(List<Long> ids) {
+        return artistRepository.findAllById(ids);
+    }
+
+    @Override
     public List<Artist> findByPerformanceType(PerformanceType performanceType) {
         return artistRepository.getArtistByPerformanceType(performanceType);
     }

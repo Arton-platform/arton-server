@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ArtistRepositoryPort {
     List<Artist> findAll();
+    List<Artist> findByIds(List<Long> ids);
     List<Artist> findByPerformanceType(PerformanceType performanceType);
     Artist save(Artist artist);
 }

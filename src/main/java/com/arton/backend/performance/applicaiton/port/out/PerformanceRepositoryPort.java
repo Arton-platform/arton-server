@@ -8,6 +8,7 @@ public interface PerformanceRepositoryPort {
     List<Performance> findAllPerformances();
     List<Performance> findAllMusicals();
     List<Performance> findAllConcerts();
+    List<Performance> findByIds(List<Long> ids);
     Performance save(Performance performance);
     void deletePerformance(Performance performance);
     void deleteById(Long id);

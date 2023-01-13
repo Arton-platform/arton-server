@@ -29,6 +29,11 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
     }
 
     @Override
+    public List<Performance> findByIds(List<Long> ids) {
+        return performanceRepository.findAllById(ids);
+    }
+
+    @Override
     public Performance save(Performance performance) {
         return performanceRepository.save(performance);
     }

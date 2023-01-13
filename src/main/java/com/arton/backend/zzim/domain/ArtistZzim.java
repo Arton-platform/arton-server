@@ -1,5 +1,6 @@
 package com.arton.backend.zzim.domain;
 
+import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.domain.User;
 import lombok.*;
@@ -12,13 +13,13 @@ import javax.persistence.*;
 @Builder
 @Entity
 @ToString
-public class Zzim {
+public class ArtistZzim {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "performance_id")
-    private Performance performance;
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
