@@ -14,7 +14,8 @@ public enum ErrorCode {
     USER_NOT_AUTHORITY(403, "COMMON-ERR-403", "권한이 없습니다."),
     REFRESH_TOKEN_INVALID(498, "TOKEN_ERR_498", "The Refresh Token is invalid"),
     TOKEN_INVALID(498, "TOKEN_ERR_498", "The Token is invalid"),
-    MAIL_SEND_ERROR(500, "MAIL_SEND_ERROR", "메일 발송에 실패하였습니다.");
+    MAIL_SEND_ERROR(500, "MAIL_SEND_ERROR", "메일 발송에 실패하였습니다."),
+    SELECT_ERROR(500, "SELECT_ERROR", "조회에 실패 했습니다.");
     private int status;
     private String errorCode;
     private String message;
