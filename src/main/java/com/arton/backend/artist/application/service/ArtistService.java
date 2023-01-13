@@ -1,7 +1,7 @@
 package com.arton.backend.artist.application.service;
 
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
-import com.arton.backend.artist.application.port.in.ArtistZzimDto;
+import com.arton.backend.artist.application.port.in.ArtistInterestDto;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performance.domain.PerformanceType;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +22,14 @@ public class ArtistService implements ArtistUseCase {
     private final ArtistRepositoryPort artistRepositoryPort;
 
     @Override
-    public List<ArtistZzimDto> showArtistListForZzim(String type) {
+    public List<ArtistInterestDto> showArtistListForZzim(String type) {
         PerformanceType performanceType = PerformanceType.get(type);
         if (performanceType == null) {
             return new ArrayList<>();
         }
         log.info("performanceType {}", performanceType.name());
         return artistRepositoryPort.findByPerformanceType(performanceType).stream()
-                .map(ArtistZzimDto::of).collect(Collectors.toList());
+                .map(ArtistInterestDto::of).collect(Collectors.toList());
     }
 
     @Override

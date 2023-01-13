@@ -1,8 +1,8 @@
 package com.arton.backend.artist.adapter.in;
 
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
-import com.arton.backend.artist.application.port.in.ArtistZzimDto;
-import com.arton.backend.artist.application.port.in.ListArtistZzimDto;
+import com.arton.backend.artist.application.port.in.ArtistInterestDto;
+import com.arton.backend.artist.application.port.in.ListArtistInterestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +21,9 @@ public class ArtistController {
      * Type: MUSICAL, CONCERT
      */
     @GetMapping("/zzim")
-    public ResponseEntity<ListArtistZzimDto> showAllArtistForZzim(@RequestParam(name = "performanceType", required = true) String performanceType) {
-        List<ArtistZzimDto> artistZzimDtos = artistUseCase.showArtistListForZzim(performanceType);
-        ListArtistZzimDto response = ListArtistZzimDto.builder()
+    public ResponseEntity<ListArtistInterestDto> showAllArtistForZzim(@RequestParam(name = "performanceType", required = true) String performanceType) {
+        List<ArtistInterestDto> artistZzimDtos = artistUseCase.showArtistListForZzim(performanceType);
+        ListArtistInterestDto response = ListArtistInterestDto.builder()
                 .artists(artistZzimDtos)
                 .build();
         return ResponseEntity.ok(response);

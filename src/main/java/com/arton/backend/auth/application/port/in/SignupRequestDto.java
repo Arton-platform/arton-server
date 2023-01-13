@@ -28,7 +28,6 @@ public class SignupRequestDto {
     /** 확인용 패스워드 */
     @NotBlank
     private String checkPassword;
-    private String profileImageUrl;
     @NotBlank
     private String nickname;
     @NotBlank
@@ -44,7 +43,6 @@ public class SignupRequestDto {
         return User.builder()
                 .email(signupRequestDto.getEmail())
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
-                .profileImageUrl(signupRequestDto.getProfileImageUrl())
                 .nickname(signupRequestDto.getNickname())
                 .gender(Gender.get(signupRequestDto.getGender()))
                 .ageRange(AgeRange.get(signupRequestDto.getAgeRange()/10))

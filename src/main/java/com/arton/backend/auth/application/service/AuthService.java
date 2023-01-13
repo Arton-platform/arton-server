@@ -1,14 +1,21 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
+import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.port.in.*;
-import com.arton.backend.infra.mail.MailDto;
-import com.arton.backend.infra.shared.exception.CustomException;
-import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.file.MD5Generator;
 import com.arton.backend.infra.jwt.TokenProvider;
+import com.arton.backend.infra.mail.MailDto;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
+import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
+import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
+import com.arton.backend.zzim.domain.ArtistZzim;
+import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +40,9 @@ import java.util.concurrent.TimeUnit;
 public class AuthService implements AuthUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
+    private final ArtistRepositoryPort artistRepository;
+    private final PerformanceRepositoryPort performanceRepository;
+    private final ZzimRepositoryPort zzimRepository;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
@@ -55,10 +67,10 @@ public class AuthService implements AuthUseCase {
         if (!checkPassword(signupRequestDto.getPassword(), signupRequestDto.getCheckPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
-        // 기본 이미지
-        signupRequestDto.setProfileImageUrl(defaultImage);
-        // 저장
+        // 회원가입
         User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
+        // 기본 이미지 지정
+        user.setProfileImageUrl(defaultImage);
         User savedUser = userRepository.save(user);
 
         Long id = savedUser.getId();
@@ -69,6 +81,31 @@ public class AuthService implements AuthUseCase {
             String newFileName = new MD5Generator(filename).toString() + "." + format; // 이미지 이름 해싱
             FileUploadUtils.saveFile("/image/profiles/"+id, newFileName, multipartFile); // 업로드
             savedUser.setProfileImageUrl("/" + id + "/" + newFileName);
+        }
+
+        // zzim artist
+        List<Long> artistIds = signupRequestDto.getArtists();
+        List<Artist> artists = artistRepository.findByIds(artistIds);
+        if (artists!=null) {
+            List<ArtistZzim> zzims = new ArrayList<>();
+            for (Artist artist : artists) {
+                ArtistZzim artistZzim = ArtistZzim.builder().artist(artist).user(savedUser).build();
+                artistZzim.setUser(savedUser);
+                zzims.add(artistZzim);
+            }
+            zzimRepository.saveArtists(zzims);
+        }
+        // zzim performance
+        List<Long> performanceIds = signupRequestDto.getPerformances();
+        List<Performance> performances = performanceRepository.findByIds(performanceIds);
+        if (performances!=null) {
+            List<PerformanceZzim> zzims = new ArrayList<>();
+            for (Performance performance : performances) {
+                PerformanceZzim performanceZzim = PerformanceZzim.builder().performance(performance).user(savedUser).build();
+                performanceZzim.setUser(savedUser);
+                zzims.add(performanceZzim);
+            }
+            zzimRepository.savePerformances(zzims);
         }
 
         return true;

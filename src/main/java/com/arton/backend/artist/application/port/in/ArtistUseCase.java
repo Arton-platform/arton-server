@@ -5,6 +5,6 @@ import com.arton.backend.artist.domain.Artist;
 import java.util.List;
 
 public interface ArtistUseCase {
-    List<ArtistZzimDto> showArtistListForZzim(String type);
+    List<ArtistInterestDto> showArtistListForZzim(String type);
     Artist save(Artist artist);
 }

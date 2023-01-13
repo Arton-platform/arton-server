@@ -1,6 +1,7 @@
 package com.arton.backend.artist.domain;
 
 import com.arton.backend.performer.domain.Performer;
+import com.arton.backend.zzim.domain.ArtistZzim;
 import lombok.*;
 
 import javax.persistence.*;
