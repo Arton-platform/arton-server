@@ -42,3 +42,20 @@ entity
     └── Performance.java  // 공연/콘서트 공통
 
 ``` 
+
+- 요청 접근 순서
+
+``` 
+    adapter - in - web => Controller
+    
+    application - port - in => UseCase
+    
+    application - service => Service
+    
+    application - port - out => Port
+    
+    adapter - out - persistence - PersistenceAdapter
+    domain
+    
+    // 어댑터 -> 어플리케이션 -> 어뎁터
+``` 
