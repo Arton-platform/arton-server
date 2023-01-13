@@ -4,6 +4,7 @@ import com.arton.backend.faq.domain.FAQ;
 
 import java.util.List;
 
-public interface FAQListUseCase {
+public interface FAQUseCase {
     List<FAQ> faqList();
+    FAQ getFaqById(long id);
 }
