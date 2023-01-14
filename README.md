@@ -42,8 +42,9 @@ Artist <---> Performer OnyToMany ManyToOne
 Performance <---> Performer OnyToMany ManyToOne
 이러면 Performer(출연자) 엔터티가 수면위에 떠오르기 때문에 숨겨진 버그를 예방할 수 있다.
 
-##
-테스트입니다.
+## 20230114
+JPA Entity와 domain 분리 
+
 
 ## 
 공연 리스트를 회원가입 찜 페이지에 보여주기. 하나 고르고 비슷한 애들을 보여주려면.. 공연의 종류라던지 이런것들이 있어야 추천이 가능할 것 같음.
