@@ -1,6 +1,8 @@
 package com.arton.backend.zzim.application.port.in;
 
+import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.domain.Artist;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.User;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import lombok.*;
@@ -14,10 +16,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ArtistZzimDto {
-    private Artist artist;
-    private User user;
+    private ArtistEntity artist;
+    private UserEntity user;
 
-    public static ArtistZzim of(Artist artist, User user) {
+    public static ArtistZzim of(ArtistEntity artist, UserEntity user) {
         return ArtistZzim.builder()
                 .artist(artist)
                 .user(user)

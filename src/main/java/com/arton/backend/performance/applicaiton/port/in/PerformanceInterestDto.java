@@ -1,5 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.in;
 
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import lombok.*;
 
@@ -15,7 +16,7 @@ public class PerformanceInterestDto {
     private String title;
     private String imageUrl;
 
-    public static PerformanceInterestDto of(Performance performance) {
+    public static PerformanceInterestDto of(PerformanceEntity performance) {
         return PerformanceInterestDto.builder()
                 .id(performance.getId())
                 .title(performance.getTitle())

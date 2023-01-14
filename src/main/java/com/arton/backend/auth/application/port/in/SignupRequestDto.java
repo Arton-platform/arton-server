@@ -1,5 +1,6 @@
 package com.arton.backend.auth.application.port.in;
 
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,8 +40,8 @@ public class SignupRequestDto {
     /** 아티스트 찜 */
     private List<Long> artists = new ArrayList<>();
 
-    public static User toUser(SignupRequestDto signupRequestDto, PasswordEncoder passwordEncoder){
-        return User.builder()
+    public static UserEntity toUser(SignupRequestDto signupRequestDto, PasswordEncoder passwordEncoder){
+        return UserEntity.builder()
                 .email(signupRequestDto.getEmail())
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
                 .nickname(signupRequestDto.getNickname())

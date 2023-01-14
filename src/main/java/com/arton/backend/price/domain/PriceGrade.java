@@ -1,5 +1,6 @@
 package com.arton.backend.price.domain;
 
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import lombok.*;
 
@@ -26,5 +27,5 @@ public class PriceGrade {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_id")
-    private Performance performance;
+    private PerformanceEntity performance;
 }

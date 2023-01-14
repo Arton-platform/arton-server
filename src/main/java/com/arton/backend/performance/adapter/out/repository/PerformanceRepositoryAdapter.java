@@ -14,32 +14,32 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
     private final PerformanceRepository performanceRepository;
 
     @Override
-    public List<Performance> findAllPerformances() {
+    public List<PerformanceEntity> findAllPerformances() {
         return performanceRepository.findAll();
     }
 
     @Override
-    public List<Performance> findAllMusicals() {
+    public List<PerformanceEntity> findAllMusicals() {
         return performanceRepository.findAllByPerformanceType(PerformanceType.MUSICAL);
     }
 
     @Override
-    public List<Performance> findAllConcerts() {
+    public List<PerformanceEntity> findAllConcerts() {
         return performanceRepository.findAllByPerformanceType(PerformanceType.CONCERT);
     }
 
     @Override
-    public List<Performance> findByIds(List<Long> ids) {
+    public List<PerformanceEntity> findByIds(List<Long> ids) {
         return performanceRepository.findAllById(ids);
     }
 
     @Override
-    public Performance save(Performance performance) {
+    public PerformanceEntity save(PerformanceEntity performance) {
         return performanceRepository.save(performance);
     }
 
     @Override
-    public void deletePerformance(Performance performance) {
+    public void deletePerformance(PerformanceEntity performance) {
         performanceRepository.delete(performance);
     }
 

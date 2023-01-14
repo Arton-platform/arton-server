@@ -1,5 +1,6 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.port.in.*;
@@ -9,10 +10,14 @@ import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
+import com.arton.backend.zzim.adapter.out.repository.ArtistZzimEntity;
+import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimEntity;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
@@ -68,10 +73,10 @@ public class AuthService implements AuthUseCase {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
         // 회원가입
-        User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
+        UserEntity user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
         // 기본 이미지 지정
         user.setProfileImageUrl(defaultImage);
-        User savedUser = userRepository.save(user);
+        UserEntity savedUser = userRepository.save(user);
         Long id = savedUser.getId();
 
         // 프로필 이미지 업로드
@@ -85,11 +90,11 @@ public class AuthService implements AuthUseCase {
 
         // zzim artist
         List<Long> artistIds = signupRequestDto.getArtists();
-        List<Artist> artists = artistRepository.findByIds(artistIds);
+        List<ArtistEntity> artists = artistRepository.findByIds(artistIds);
         if (artists!=null) {
-            List<ArtistZzim> zzims = new ArrayList<>();
-            for (Artist artist : artists) {
-                ArtistZzim artistZzim = ArtistZzim.builder().artist(artist).user(savedUser).build();
+            List<ArtistZzimEntity> zzims = new ArrayList<>();
+            for (ArtistEntity artist : artists) {
+                ArtistZzimEntity artistZzim = ArtistZzimEntity.builder().artist(artist).user(savedUser).build();
                 artistZzim.setUser(savedUser);
                 zzims.add(artistZzim);
             }
@@ -97,11 +102,11 @@ public class AuthService implements AuthUseCase {
         }
         // zzim performance
         List<Long> performanceIds = signupRequestDto.getPerformances();
-        List<Performance> performances = performanceRepository.findByIds(performanceIds);
+        List<PerformanceEntity> performances = performanceRepository.findByIds(performanceIds);
         if (performances!=null) {
-            List<PerformanceZzim> zzims = new ArrayList<>();
-            for (Performance performance : performances) {
-                PerformanceZzim performanceZzim = PerformanceZzim.builder().performance(performance).user(savedUser).build();
+            List<PerformanceZzimEntity> zzims = new ArrayList<>();
+            for (PerformanceEntity performance : performances) {
+                PerformanceZzimEntity performanceZzim = PerformanceZzimEntity.builder().performance(performance).user(savedUser).build();
                 performanceZzim.setUser(savedUser);
                 zzims.add(performanceZzim);
             }
@@ -124,7 +129,7 @@ public class AuthService implements AuthUseCase {
     @Override
     public TokenDto login(LoginRequestDto loginRequestDto) {
         // 패스워드, 이메일 일치여부 확인
-        User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        UserEntity user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
         // password 불일치
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.LOGIN_INFO_NOT_MATCHED.getMessage(), ErrorCode.LOGIN_INFO_NOT_MATCHED);
@@ -144,7 +149,7 @@ public class AuthService implements AuthUseCase {
     @Override
     public MailDto resetPassword(PasswordResetDto passwordResetDto) {
         // 해당 정보의 유저가 존재하는지 확인
-        User user = userRepository.findUserForReset(passwordResetDto.getNickname(), passwordResetDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        UserEntity user = userRepository.findUserForReset(passwordResetDto.getNickname(), passwordResetDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
         // 비밀번호 변경
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
         user.setPassword(passwordEncoder.encode(newPassword));

@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PerformanceRepository extends JpaRepository<Performance, Long> {
-    List<Performance> findAllByPerformanceType(PerformanceType performanceType);
+public interface PerformanceRepository extends JpaRepository<PerformanceEntity, Long> {
+    List<PerformanceEntity> findAllByPerformanceType(PerformanceType performanceType);
 }

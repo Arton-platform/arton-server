@@ -2,10 +2,12 @@ package com.arton.backend.infra.shared;
 
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.infra.shared.BaseEntity;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -17,17 +19,18 @@ import java.time.LocalDateTime;
 public class Board {
     @OneToOne
     @JoinColumn(name = "id")
-    private User user;
+    private UserEntity user;
     private int hit;
     @ManyToOne(optional = true)
     @JoinColumn(name = "imageId")
     private Image image;
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdDate;
-    @CreatedDate
+    @LastModifiedDate
     private LocalDateTime updateDate;
 
-    public Board(User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public Board(UserEntity user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
         this.user = user;
         this.hit = hit;
         this.image = image;

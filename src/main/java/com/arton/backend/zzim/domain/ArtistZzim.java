@@ -1,30 +1,17 @@
 package com.arton.backend.zzim.domain;
 
-import com.arton.backend.artist.domain.Artist;
-import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.User;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@Entity
 @ToString
 public class ArtistZzim {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    private ArtistEntity artist;
+    private UserEntity user;
 }

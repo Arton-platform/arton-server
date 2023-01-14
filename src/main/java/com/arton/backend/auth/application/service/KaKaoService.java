@@ -4,6 +4,7 @@ import com.arton.backend.SSLConnectionCover;
 import com.arton.backend.auth.application.port.in.KaKaoUseCase;
 import com.arton.backend.auth.application.port.in.TokenDto;
 import com.arton.backend.infra.jwt.TokenProvider;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.adapter.out.repository.UserRepository;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.*;
@@ -68,7 +69,7 @@ public class KaKaoService implements KaKaoUseCase {
         String accessToken = getAccessToken(code);
 //        String accessToken = SSLConnectionCover.getAccessToken(clientId, redirectURL, code);
         log.info("accessToken {}", accessToken);
-        User register = signup(accessToken);
+        UserEntity register = signup(accessToken);
         // Generate ArtOn JWT
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), String.valueOf(register.getKakaoId()));
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -143,11 +144,11 @@ public class KaKaoService implements KaKaoUseCase {
      * @param accessToken
      * @return
      */
-    private User signup(String accessToken) {
+    private UserEntity signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken);
 //        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         long id = userInfo.get("id").asLong();
-        User user = userRepository.findByKakaoId(id).orElse(null);
+        UserEntity user = userRepository.findByKakaoId(id).orElse(null);
         if (user == null) {
             String nickName = userInfo.get("kakao_account").get("profile").get("nickname").asText();
             log.info("nickName {}", nickName);
@@ -159,7 +160,7 @@ public class KaKaoService implements KaKaoUseCase {
             String gender = userInfo.get("kakao_account").get("gender").asText();
             /** password is user's own kakao id */
             String password = userInfo.get("id").asText();
-            user = User.builder().email(email)
+            user = UserEntity.builder().email(email)
                     .gender(Gender.get(gender.toUpperCase(Locale.ROOT)))
                     .password(passwordEncoder.encode(password))
                     .kakaoId(id)
