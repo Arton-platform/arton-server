@@ -5,6 +5,7 @@ import com.arton.backend.image.domain.Image;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +33,7 @@ public class CommentEntity extends Board {
     private String comment;
 
     @Builder
-    public CommentEntity(long commentId, ReviewEntity review, PerformanceEntity performance, String comment, User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate){
+    public CommentEntity(long commentId, ReviewEntity review, PerformanceEntity performance, String comment, UserEntity user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate){
         super(user,hit,image,createdDate,updateDate);
         this.commentId = commentId;
         this.review = review;

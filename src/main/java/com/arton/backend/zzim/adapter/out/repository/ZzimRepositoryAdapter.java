@@ -15,12 +15,12 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
     private final PerformanceZzimRepository performanceZzimRepository;
 
     @Override
-    public List<ArtistZzim> saveArtists(List<ArtistZzim> artistZzims) {
+    public List<ArtistZzimEntity> saveArtists(List<ArtistZzimEntity> artistZzims) {
         return artistZzimRepository.saveAll(artistZzims);
     }
 
     @Override
-    public List<PerformanceZzim> savePerformances(List<PerformanceZzim> performanceZzims) {
+    public List<PerformanceZzimEntity> savePerformances(List<PerformanceZzimEntity> performanceZzims) {
         return performanceZzimRepository.saveAll(performanceZzims);
     }
 }

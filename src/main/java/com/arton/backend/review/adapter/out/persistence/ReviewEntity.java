@@ -4,6 +4,7 @@ import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class ReviewEntity extends Board {
     private float starScore;
 
     @Builder
-    public ReviewEntity(long reviewId, PerformanceEntity performance, String content, float starScore, User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public ReviewEntity(long reviewId, PerformanceEntity performance, String content, float starScore, UserEntity user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
         super(user, hit, image, createdDate, updateDate);
         this.reviewId = reviewId;
         this.performance = performance;
