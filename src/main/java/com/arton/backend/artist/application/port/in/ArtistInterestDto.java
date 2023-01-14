@@ -1,5 +1,6 @@
 package com.arton.backend.artist.application.port.in;
 
+import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.domain.Artist;
 import lombok.*;
 
@@ -19,7 +20,7 @@ public class ArtistInterestDto {
     /** 아티스트 이름 */
     private String name;
 
-    public static ArtistInterestDto of(Artist artist) {
+    public static ArtistInterestDto of(ArtistEntity artist) {
         return ArtistInterestDto.builder()
                 .id(artist.getId())
                 .profileImageUrl(artist.getProfileImageUrl())

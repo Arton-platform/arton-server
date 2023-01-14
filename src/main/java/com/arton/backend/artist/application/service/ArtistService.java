@@ -1,5 +1,6 @@
 package com.arton.backend.artist.application.service;
 
+import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
 import com.arton.backend.artist.application.port.in.ArtistInterestDto;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
@@ -33,7 +34,7 @@ public class ArtistService implements ArtistUseCase {
     }
 
     @Override
-    public Artist save(Artist artist) {
+    public ArtistEntity save(ArtistEntity artist) {
         return artistRepositoryPort.save(artist);
     }
 }

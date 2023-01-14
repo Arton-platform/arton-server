@@ -8,7 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.arton.backend.artist.domain.QArtist.artist;
+import static com.arton.backend.artist.adapter.out.repository.QArtistEntity.*;
+
 
 @Transactional
 @RequiredArgsConstructor
@@ -21,9 +22,9 @@ public class CustomArtistRepositoryImpl implements CustomArtistRepository{
      * @return
      */
     @Override
-    public List<Artist> getArtistByPerformanceType(PerformanceType performanceType) {
-        return queryFactory.selectFrom(artist)
-                .where(artist.performances.any().performance.performanceType.eq(performanceType))
+    public List<ArtistEntity> getArtistByPerformanceType(PerformanceType performanceType) {
+        return queryFactory.selectFrom(artistEntity)
+                .where(artistEntity.performances.any().performance.performanceType.eq(performanceType))
                 .fetch();
     }
 }

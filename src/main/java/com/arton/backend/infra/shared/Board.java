@@ -6,6 +6,7 @@ import com.arton.backend.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -23,8 +24,9 @@ public class Board {
     @JoinColumn(name = "imageId")
     private Image image;
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdDate;
-    @CreatedDate
+    @LastModifiedDate
     private LocalDateTime updateDate;
 
     public Board(User user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {

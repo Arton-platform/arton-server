@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CustomArtistRepository{
-    List<Artist> getArtistByPerformanceType(PerformanceType performanceType);
+    List<ArtistEntity> getArtistByPerformanceType(PerformanceType performanceType);
 }

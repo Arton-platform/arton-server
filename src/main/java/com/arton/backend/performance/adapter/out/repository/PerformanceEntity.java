@@ -1,28 +1,26 @@
-package com.arton.backend.performance.domain;
+package com.arton.backend.performance.adapter.out.repository;
 
+import com.arton.backend.infra.shared.BaseEntity;
+import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
-import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
-import com.arton.backend.infra.shared.BaseEntity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 대개 xxxToOne은 Fetch LAZY로
- * batch_size나 fetch join으로 N+1 해결하자
- * CASCADE REMOVE 통해 주 엔터티 삭제시 외래키 연관된 값도 삭제
- */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Entity
 @ToString
-public class Performance extends BaseEntity {
-    private Long performanceId;
+public class PerformanceEntity extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     /** 제목 */
     private String title;
     /** 설명 */
@@ -54,9 +52,11 @@ public class Performance extends BaseEntity {
     /** 뮤지컬 or 콘서트 */
     private PerformanceType performanceType;
     /** 공연의 출연자들 리스트 */
+    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<PerformerEntity> performers = new ArrayList<>();
     /** 좌석 등급 가격 */
+    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<PriceGrade> priceGradeList = new ArrayList<>();
     private float starScore;

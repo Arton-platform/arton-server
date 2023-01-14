@@ -1,5 +1,6 @@
 package com.arton.backend.performance.applicaiton.service;
 
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
@@ -18,7 +19,7 @@ public class PerformanceService implements PerformanceUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
 
     @Override
-    public List<Performance> getAllPerformances() {
+    public List<PerformanceEntity> getAllPerformances() {
         return performanceRepositoryPort.findAllPerformances();
     }
 
@@ -28,22 +29,22 @@ public class PerformanceService implements PerformanceUseCase {
     }
 
     @Override
-    public List<Performance> getMusicals() {
+    public List<PerformanceEntity> getMusicals() {
         return performanceRepositoryPort.findAllMusicals();
     }
 
     @Override
-    public List<Performance> getConcerts() {
+    public List<PerformanceEntity> getConcerts() {
         return performanceRepositoryPort.findAllConcerts();
     }
 
     @Override
-    public Performance save(Performance performance) {
+    public PerformanceEntity save(PerformanceEntity performance) {
         return performanceRepositoryPort.save(performance);
     }
 
     @Override
-    public void deletePerformance(Performance performance) {
+    public void deletePerformance(PerformanceEntity performance) {
         performanceRepositoryPort.deletePerformance(performance);
     }
 

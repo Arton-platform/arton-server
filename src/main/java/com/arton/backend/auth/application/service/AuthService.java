@@ -1,5 +1,6 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.port.in.*;
@@ -9,6 +10,7 @@ import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
@@ -85,10 +87,10 @@ public class AuthService implements AuthUseCase {
 
         // zzim artist
         List<Long> artistIds = signupRequestDto.getArtists();
-        List<Artist> artists = artistRepository.findByIds(artistIds);
+        List<ArtistEntity> artists = artistRepository.findByIds(artistIds);
         if (artists!=null) {
             List<ArtistZzim> zzims = new ArrayList<>();
-            for (Artist artist : artists) {
+            for (ArtistEntity artist : artists) {
                 ArtistZzim artistZzim = ArtistZzim.builder().artist(artist).user(savedUser).build();
                 artistZzim.setUser(savedUser);
                 zzims.add(artistZzim);
@@ -97,10 +99,10 @@ public class AuthService implements AuthUseCase {
         }
         // zzim performance
         List<Long> performanceIds = signupRequestDto.getPerformances();
-        List<Performance> performances = performanceRepository.findByIds(performanceIds);
+        List<PerformanceEntity> performances = performanceRepository.findByIds(performanceIds);
         if (performances!=null) {
             List<PerformanceZzim> zzims = new ArrayList<>();
-            for (Performance performance : performances) {
+            for (PerformanceEntity performance : performances) {
                 PerformanceZzim performanceZzim = PerformanceZzim.builder().performance(performance).user(savedUser).build();
                 performanceZzim.setUser(savedUser);
                 zzims.add(performanceZzim);
