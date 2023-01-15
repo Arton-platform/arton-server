@@ -12,6 +12,7 @@ import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
+import com.arton.backend.performance.adapter.out.repository.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
@@ -105,11 +106,11 @@ public class AuthService implements AuthUseCase {
         }
         // zzim performance
         List<Long> performanceIds = signupRequestDto.getPerformances();
-        List<PerformanceEntity> performances = performanceRepository.findByIds(performanceIds);
+        List<Performance> performances = performanceRepository.findByIds(performanceIds);
         if (performances!=null) {
             List<PerformanceZzimEntity> zzims = new ArrayList<>();
-            for (PerformanceEntity performance : performances) {
-                PerformanceZzimEntity performanceZzim = PerformanceZzimEntity.builder().performance(performance).user(UserMapper.toEntity(savedUser)).build();
+            for (Performance performance : performances) {
+                PerformanceZzimEntity performanceZzim = PerformanceZzimEntity.builder().performance(PerformanceMapper.toEntity(performance)).user(UserMapper.toEntity(savedUser)).build();
                 performanceZzim.setUser(UserMapper.toEntity(savedUser));
                 zzims.add(performanceZzim);
             }
