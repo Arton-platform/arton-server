@@ -8,6 +8,7 @@ import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User extends BaseEntity {
+public class User {
     private Long id;
     /** 카카오 고유 회원 번호 */
     private Long kakaoId;
@@ -39,9 +40,36 @@ public class User extends BaseEntity {
     private SignupType signupType;
     /** 마케팅 동의 */
     private String termsAgree;
+    /** 가입일 */
+    private LocalDateTime createdDate;
+    /** 업데이트일 */
+    private LocalDateTime updateDate;
     /** 찜 목록 유저는 찜을 여러개 할 수 있음*/
     @ToString.Exclude
-    List<PerformanceZzimEntity> performanceZzims = new ArrayList<>();
+    List<PerformanceZzim> performanceZzims = new ArrayList<>();
     @ToString.Exclude
-    List<ArtistZzimEntity> artistZzims = new ArrayList<>();
+    List<ArtistZzim> artistZzims = new ArrayList<>();
+
+    public void setProfileImageUrl(String url){
+        this.profileImageUrl = url;
+    }
+    /**
+     * 아티스트를 찜한다
+     * @param artistZzim
+     */
+    public void zzimArtist(ArtistZzim artistZzim) {
+        artistZzims.add(artistZzim);
+        artistZzim.setUser(this);
+    }
+    /**
+     * 공연을 찜한다
+     * @param performanceZzim
+     */
+    public void zzimPerformance(PerformanceZzim performanceZzim) {
+        performanceZzims.add(performanceZzim);
+        performanceZzim.setUser(this);
+    }
+    public void setPassword(String newPassword){
+        this.password = newPassword;
+    }
 }

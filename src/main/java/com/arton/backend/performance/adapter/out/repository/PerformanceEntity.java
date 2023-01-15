@@ -50,6 +50,7 @@ public class PerformanceEntity extends BaseEntity {
     /** 이미지 링크 */
     private String imageUrl;
     /** 뮤지컬 or 콘서트 */
+    @Enumerated(EnumType.STRING)
     private PerformanceType performanceType;
     /** 공연의 출연자들 리스트 */
     @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)

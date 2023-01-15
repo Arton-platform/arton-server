@@ -59,8 +59,6 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     List<ArtistZzimEntity> artistZzims = new ArrayList<>();
-
-
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }

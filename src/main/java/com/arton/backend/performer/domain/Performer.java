@@ -1,13 +1,10 @@
 package com.arton.backend.performer.domain;
 
-import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
 import lombok.*;
 
-import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * 출연자
@@ -16,9 +13,17 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Performer extends BaseEntity {
+public class Performer{
+    private Long id;
     /** 아티스트 */
-    private ArtistEntity artist;
+    private Artist artist;
     /** 공연 */
-    private PerformerEntity performance;
+    private Performer performance;
+    /** 가입일 */
+    private LocalDateTime createdDate;
+    /** 업데이트일 */
+    private LocalDateTime updateDate;
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+    }
 }
