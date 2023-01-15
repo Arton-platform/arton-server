@@ -19,7 +19,7 @@ public class PerformanceService implements PerformanceUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
 
     @Override
-    public List<PerformanceEntity> getAllPerformances() {
+    public List<Performance> getAllPerformances() {
         return performanceRepositoryPort.findAllPerformances();
     }
 
@@ -29,22 +29,22 @@ public class PerformanceService implements PerformanceUseCase {
     }
 
     @Override
-    public List<PerformanceEntity> getMusicals() {
+    public List<Performance> getMusicals() {
         return performanceRepositoryPort.findAllMusicals();
     }
 
     @Override
-    public List<PerformanceEntity> getConcerts() {
+    public List<Performance> getConcerts() {
         return performanceRepositoryPort.findAllConcerts();
     }
 
     @Override
-    public PerformanceEntity save(PerformanceEntity performance) {
+    public Performance save(Performance performance) {
         return performanceRepositoryPort.save(performance);
     }
 
     @Override
-    public void deletePerformance(PerformanceEntity performance) {
+    public void deletePerformance(Performance performance) {
         performanceRepositoryPort.deletePerformance(performance);
     }
 

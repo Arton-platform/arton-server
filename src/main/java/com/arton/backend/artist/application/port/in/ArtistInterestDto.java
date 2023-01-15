@@ -20,7 +20,7 @@ public class ArtistInterestDto {
     /** 아티스트 이름 */
     private String name;
 
-    public static ArtistInterestDto of(ArtistEntity artist) {
+    public static ArtistInterestDto of(Artist artist) {
         return ArtistInterestDto.builder()
                 .id(artist.getId())
                 .profileImageUrl(artist.getProfileImageUrl())

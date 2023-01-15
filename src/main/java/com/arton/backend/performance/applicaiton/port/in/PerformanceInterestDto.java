@@ -16,9 +16,9 @@ public class PerformanceInterestDto {
     private String title;
     private String imageUrl;
 
-    public static PerformanceInterestDto of(PerformanceEntity performance) {
+    public static PerformanceInterestDto of(Performance performance) {
         return PerformanceInterestDto.builder()
-                .id(performance.getId())
+                .id(performance.getPerformanceId())
                 .title(performance.getTitle())
                 .imageUrl(performance.getImageUrl())
                 .build();

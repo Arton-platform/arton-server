@@ -7,12 +7,13 @@ import com.arton.backend.user.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 @Entity
+@Table(name = "Performance_Zzim")
 @ToString
 public class PerformanceZzimEntity extends BaseEntity {
     @Id
@@ -26,6 +27,14 @@ public class PerformanceZzimEntity extends BaseEntity {
     private UserEntity user;
 
     public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    @Builder
+    public PerformanceZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, PerformanceEntity performance, UserEntity user) {
+        super(createdDate, updateDate);
+        this.id = id;
+        this.performance = performance;
         this.user = user;
     }
 }

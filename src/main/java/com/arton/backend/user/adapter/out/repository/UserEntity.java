@@ -13,14 +13,14 @@ import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "User")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,8 +59,6 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     List<ArtistZzimEntity> artistZzims = new ArrayList<>();
-
-
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }
@@ -84,4 +82,22 @@ public class UserEntity extends BaseEntity {
         this.password = newPassword;
     }
 
+    @Builder
+    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate) {
+        super(createdDate, updatedDate);
+        this.id = id;
+        this.kakaoId = kakaoId;
+        this.naverId = naverId;
+        this.email = email;
+        this.password = password;
+        this.profileImageUrl = profileImageUrl;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.ageRange = ageRange;
+        this.auth = auth;
+        this.signupType = signupType;
+        this.termsAgree = termsAgree;
+        this.performanceZzims = performanceZzims;
+        this.artistZzims = artistZzims;
+    }
 }
