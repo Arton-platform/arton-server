@@ -1,6 +1,7 @@
 package com.arton.backend.auth.application.service;
 
 import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
+import com.arton.backend.artist.adapter.out.repository.ArtistMapper;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.port.in.*;
@@ -92,11 +93,11 @@ public class AuthService implements AuthUseCase {
 
         // zzim artist
         List<Long> artistIds = signupRequestDto.getArtists();
-        List<ArtistEntity> artists = artistRepository.findByIds(artistIds);
+        List<Artist> artists = artistRepository.findByIds(artistIds);
         if (artists!=null) {
             List<ArtistZzimEntity> zzims = new ArrayList<>();
-            for (ArtistEntity artist : artists) {
-                ArtistZzimEntity artistZzim = ArtistZzimEntity.builder().artist(artist).user(UserMapper.toEntity(savedUser)).build();
+            for (Artist artist : artists) {
+                ArtistZzimEntity artistZzim = ArtistZzimEntity.builder().artist(ArtistMapper.toEntity(artist)).user(UserMapper.toEntity(savedUser)).build();
                 artistZzim.setUser(UserMapper.toEntity(savedUser));
                 zzims.add(artistZzim);
             }

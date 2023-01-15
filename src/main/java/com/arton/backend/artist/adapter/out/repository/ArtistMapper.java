@@ -3,7 +3,8 @@ package com.arton.backend.artist.adapter.out.repository;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performer.adapter.out.repository.PerformerMapper;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ArtistMapper {
@@ -15,7 +16,7 @@ public class ArtistMapper {
                 .age(artist.getAge())
                 .name(artist.getName())
                 .profileImageUrl(artist.getProfileImageUrl())
-                .performances(artist.getPerformances() == null ? new ArrayList<>() : artist.getPerformances().stream().map(PerformerMapper::toDomain).collect(Collectors.toList()))
+                .performances(Optional.ofNullable(artist.getPerformances()).orElseGet(Collections::emptyList).stream().map(PerformerMapper::toDomain).collect(Collectors.toList()))
                 .snsId(artist.getSnsId())
                 .id(artist.getId())
                 .build();
@@ -28,7 +29,7 @@ public class ArtistMapper {
                 .age(artist.getAge())
                 .name(artist.getName())
                 .profileImageUrl(artist.getProfileImageUrl())
-                .performances(artist.getPerformances() == null ? new ArrayList<>() : artist.getPerformances().stream().map(PerformerMapper::toEntity).collect(Collectors.toList()))
+                .performances(Optional.ofNullable(artist.getPerformances()).orElseGet(Collections::emptyList).stream().map(PerformerMapper::toEntity).collect(Collectors.toList()))
                 .snsId(artist.getSnsId())
                 .id(artist.getId())
                 .build();

@@ -1,9 +1,7 @@
 package com.arton.backend.zzim.adapter.out.repository;
 
-import com.arton.backend.artist.adapter.out.repository.ArtistMapper;
 import com.arton.backend.performance.adapter.out.repository.PerformanceMapper;
 import com.arton.backend.user.adapter.out.repository.UserMapper;
-import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 
 public class PerformanceZzimMapper {
