@@ -116,6 +116,24 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    public boolean logout(LogoutRequestDto logoutRequestDto) {
+        // token 검증
+        if (!tokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
+            throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
+        }
+        // get user id
+        Authentication authentication = tokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
+        // 유저 토큰 확인후 존재하면 삭제
+        if (redisTemplate.opsForValue().get(refreshTokenPrefix + authentication.getName()) != null) {
+            redisTemplate.delete(refreshTokenPrefix+authentication.getName());
+        }
+        // 해당 토큰 블랙리스트 저장
+        Long expiration = tokenProvider.getExpiration(logoutRequestDto.getAccessToken());
+        redisTemplate.opsForValue().set(logoutRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+        return true;
+    }
+
+    @Override
     public boolean validateSignupRequest(SignupValidationDto signupValidationDto) {
         if (checkEmailDup(signupValidationDto.getEmail())) {
             throw new CustomException(ErrorCode.EMAIL_IS_EXIST.getMessage(), ErrorCode.EMAIL_IS_EXIST);
