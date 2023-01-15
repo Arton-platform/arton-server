@@ -14,6 +14,7 @@ import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
+import com.arton.backend.user.adapter.out.repository.UserMapper;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import com.arton.backend.zzim.adapter.out.repository.ArtistZzimEntity;
@@ -73,10 +74,11 @@ public class AuthService implements AuthUseCase {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
         // 회원가입
-        UserEntity user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
+        User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
         // 기본 이미지 지정
         user.setProfileImageUrl(defaultImage);
-        UserEntity savedUser = userRepository.save(user);
+        System.out.println("user = " + user);
+        User savedUser = userRepository.save(user);
         Long id = savedUser.getId();
 
         // 프로필 이미지 업로드
@@ -94,8 +96,8 @@ public class AuthService implements AuthUseCase {
         if (artists!=null) {
             List<ArtistZzimEntity> zzims = new ArrayList<>();
             for (ArtistEntity artist : artists) {
-                ArtistZzimEntity artistZzim = ArtistZzimEntity.builder().artist(artist).user(savedUser).build();
-                artistZzim.setUser(savedUser);
+                ArtistZzimEntity artistZzim = ArtistZzimEntity.builder().artist(artist).user(UserMapper.toEntity(savedUser)).build();
+                artistZzim.setUser(UserMapper.toEntity(savedUser));
                 zzims.add(artistZzim);
             }
             zzimRepository.saveArtists(zzims);
@@ -106,12 +108,14 @@ public class AuthService implements AuthUseCase {
         if (performances!=null) {
             List<PerformanceZzimEntity> zzims = new ArrayList<>();
             for (PerformanceEntity performance : performances) {
-                PerformanceZzimEntity performanceZzim = PerformanceZzimEntity.builder().performance(performance).user(savedUser).build();
-                performanceZzim.setUser(savedUser);
+                PerformanceZzimEntity performanceZzim = PerformanceZzimEntity.builder().performance(performance).user(UserMapper.toEntity(savedUser)).build();
+                performanceZzim.setUser(UserMapper.toEntity(savedUser));
                 zzims.add(performanceZzim);
             }
             zzimRepository.savePerformances(zzims);
         }
+
+        userRepository.save(savedUser);
         return true;
     }
 
@@ -147,7 +151,7 @@ public class AuthService implements AuthUseCase {
     @Override
     public TokenDto login(LoginRequestDto loginRequestDto) {
         // 패스워드, 이메일 일치여부 확인
-        UserEntity user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
         // password 불일치
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.LOGIN_INFO_NOT_MATCHED.getMessage(), ErrorCode.LOGIN_INFO_NOT_MATCHED);
@@ -167,10 +171,11 @@ public class AuthService implements AuthUseCase {
     @Override
     public MailDto resetPassword(PasswordResetDto passwordResetDto) {
         // 해당 정보의 유저가 존재하는지 확인
-        UserEntity user = userRepository.findUserForReset(passwordResetDto.getNickname(), passwordResetDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findUserForReset(passwordResetDto.getNickname(), passwordResetDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
         // 비밀번호 변경
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
         user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
         // 메일 정보 전송
         return MailDto.builder()
                 .messageBody(newPassword)

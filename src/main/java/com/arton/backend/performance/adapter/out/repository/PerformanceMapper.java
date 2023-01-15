@@ -3,6 +3,7 @@ package com.arton.backend.performance.adapter.out.repository;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performer.adapter.out.repository.PerformerMapper;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class PerformanceMapper {
@@ -18,7 +19,7 @@ public class PerformanceMapper {
                 .performanceType(performance.getPerformanceType())
                 .interMission(performance.getInterMission())
                 .limitAge(performance.getLimitAge())
-                .performers(performance.getPerformers().stream().map(PerformerMapper::toDomain).collect(Collectors.toList()))
+                .performers(performance.getPerformers() == null ? new ArrayList<>() : performance.getPerformers().stream().map(PerformerMapper::toDomain).collect(Collectors.toList()))
                 .limitTime(performance.getLimitTime())
                 .link(performance.getLink())
                 .musicalDateTime(performance.getMusicalDateTime())
@@ -44,7 +45,7 @@ public class PerformanceMapper {
                 .performanceType(performance.getPerformanceType())
                 .interMission(performance.getInterMission())
                 .limitAge(performance.getLimitAge())
-                .performers(performance.getPerformers().stream().map(PerformerMapper::toEntity).collect(Collectors.toList()))
+                .performers(performance.getPerformers() == null ? new ArrayList<>() : performance.getPerformers().stream().map(PerformerMapper::toEntity).collect(Collectors.toList()))
                 .limitTime(performance.getLimitTime())
                 .link(performance.getLink())
                 .musicalDateTime(performance.getMusicalDateTime())

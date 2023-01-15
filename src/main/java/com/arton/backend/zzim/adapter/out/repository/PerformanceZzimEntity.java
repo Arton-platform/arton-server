@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
+@Table(name = "Performance_Zzim")
 @ToString
 public class PerformanceZzimEntity extends BaseEntity {
     @Id

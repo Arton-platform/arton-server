@@ -1,6 +1,5 @@
 package com.arton.backend.artist.adapter.out.repository;
 
-import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
 import lombok.*;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "Artist")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString

@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "Performance")
 @ToString
 public class PerformanceEntity extends BaseEntity {
     @Id

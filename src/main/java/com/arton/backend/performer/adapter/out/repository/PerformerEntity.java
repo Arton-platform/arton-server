@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "Performer")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PerformerEntity extends BaseEntity {

@@ -69,7 +69,7 @@ public class NaverService implements NaverUseCase {
     public TokenDto login(String code, String state) {
         String accessToken = getAccessToken(code, state);
         log.info("accessToken {}", accessToken);
-        UserEntity register = signup(accessToken);
+        User register = signup(accessToken);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
@@ -145,11 +145,11 @@ public class NaverService implements NaverUseCase {
      * @param accessToken
      * @return
      */
-    private UserEntity signup(String accessToken) {
+    private User signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken).get("response");
 //        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         String id = userInfo.get("id").asText();
-        UserEntity user = userRepository.findByNaverId(id).orElse(null);
+        User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
             String mobile = userInfo.get("mobile").asText();
             log.info("mobile {}", mobile);
@@ -164,7 +164,7 @@ public class NaverService implements NaverUseCase {
             log.info("gender {}", gender);
             /** password is user's own kakao id */
             String password = id;
-            user = UserEntity.builder().email(email)
+            user = User.builder().email(email)
                     .gender(getGender(gender))
                     .password(passwordEncoder.encode(password))
                     .naverId(id)
