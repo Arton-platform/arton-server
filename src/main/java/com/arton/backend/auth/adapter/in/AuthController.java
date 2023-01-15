@@ -85,4 +85,12 @@ public class AuthController {
                 .build();
         return ResponseEntity.ok(commonResponse);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<CommonResponse> logout(@RequestBody LogoutRequestDto logoutRequestDto) {
+        authUseCase.logout(logoutRequestDto);
+        CommonResponse response = CommonResponse.builder().message("로그아웃 하였습니다.").status(HttpStatus.OK.value()).build();
+        return ResponseEntity.ok(response);
+    }
+
 }
