@@ -13,8 +13,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Entity
 @ToString
 public class PerformanceEntity extends BaseEntity {
@@ -61,4 +59,28 @@ public class PerformanceEntity extends BaseEntity {
     @ToString.Exclude
     private List<PriceGrade> priceGradeList = new ArrayList<>();
     private float starScore;
+
+    @Builder
+    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGrade> priceGradeList, float starScore) {
+        super(createdDate, updateDate);
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.hit = hit;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.musicalDateTime = musicalDateTime;
+        this.place = place;
+        this.runningTime = runningTime;
+        this.interMission = interMission;
+        this.limitTime = limitTime;
+        this.limitAge = limitAge;
+        this.link = link;
+        this.etc = etc;
+        this.imageUrl = imageUrl;
+        this.performanceType = performanceType;
+        this.performers = performers;
+        this.priceGradeList = priceGradeList;
+        this.starScore = starScore;
+    }
 }

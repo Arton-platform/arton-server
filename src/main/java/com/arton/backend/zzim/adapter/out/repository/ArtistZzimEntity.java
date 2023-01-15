@@ -8,11 +8,11 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 @Entity
 @ToString
 public class ArtistZzimEntity extends BaseEntity {
@@ -27,6 +27,14 @@ public class ArtistZzimEntity extends BaseEntity {
     private UserEntity user;
 
     public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    @Builder
+    public ArtistZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, ArtistEntity artist, UserEntity user) {
+        super(createdDate, updateDate);
+        this.id = id;
+        this.artist = artist;
         this.user = user;
     }
 }

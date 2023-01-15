@@ -8,12 +8,11 @@ import com.arton.backend.performer.domain.Performer;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class PerformerEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +28,13 @@ public class PerformerEntity extends BaseEntity {
 
     public void setArtist(ArtistEntity artist) {
         this.artist = artist;
+    }
+
+    @Builder
+    public PerformerEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, ArtistEntity artist, PerformanceEntity performance) {
+        super(createdDate, updateDate);
+        this.id = id;
+        this.artist = artist;
+        this.performance = performance;
     }
 }

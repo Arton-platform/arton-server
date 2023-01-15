@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @ToString
 public class PerformanceZzim {
     private Long id;
@@ -21,5 +19,14 @@ public class PerformanceZzim {
     private LocalDateTime updateDate;
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Builder
+    public PerformanceZzim(Long id, Performance performance, User user, LocalDateTime createdDate, LocalDateTime updateDate) {
+        this.id = id;
+        this.performance = performance;
+        this.user = user;
+        this.createdDate = createdDate;
+        this.updateDate = updateDate;
     }
 }

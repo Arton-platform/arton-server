@@ -10,10 +10,9 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @ToString
 public class Artist {
+    private Long id;
     /** 아티스트 이름 */
     private String name;
     /** 나이 */
@@ -32,5 +31,17 @@ public class Artist {
     public void addPerformer(Performer performer) {
         performances.add(performer);
         performer.setArtist(this);
+    }
+
+    @Builder
+    public Artist(Long id, String name, Integer age, String snsId, String profileImageUrl, LocalDateTime createdDate, LocalDateTime updateDate, List<Performer> performances) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.snsId = snsId;
+        this.profileImageUrl = profileImageUrl;
+        this.createdDate = createdDate;
+        this.updateDate = updateDate;
+        this.performances = performances;
     }
 }
