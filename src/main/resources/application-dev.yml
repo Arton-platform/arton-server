@@ -5,6 +5,7 @@ server:
   error:
     include-stacktrace: ON_PARAM
 
+
 # ETC
 spring:
   servlet:
@@ -35,6 +36,18 @@ spring:
   redis:
     host: localhost
     port: 6379
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: qhrehfdk77@gmail.com
+    password: jvcplvyogytleaey
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 logging:
   level:

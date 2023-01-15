@@ -1,7 +1,6 @@
 package com.arton.backend.comment.adapter.out.persistence;
 
 import com.arton.backend.comment.application.port.out.CommentListPort;
-import com.arton.backend.performance.domain.QPerformance;
 import com.arton.backend.review.adapter.out.persistence.QReviewEntity;
 import com.arton.backend.review.domain.Review;
 import com.querydsl.core.QueryFactory;

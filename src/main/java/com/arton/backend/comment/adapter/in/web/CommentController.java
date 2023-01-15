@@ -2,6 +2,7 @@ package com.arton.backend.comment.adapter.in.web;
 
 import com.arton.backend.comment.application.port.in.CommentListUseCase;
 import com.arton.backend.comment.domain.Comment;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.domain.Review;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class CommentController {
 
     @GetMapping("/list/{performanceId}/{reviewId}")
     public List<Comment> commentList(@PathVariable("performanceId") Long performanceId, @PathVariable("reviewId") Long reviewId){
-        Performance performance = Performance.builder()
-                .performanceId(performanceId)
+        PerformanceEntity performance = PerformanceEntity.builder()
+                .id(performanceId)
                 .build();
 
         Review review = Review.builder()

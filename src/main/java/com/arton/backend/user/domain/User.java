@@ -1,18 +1,21 @@
 package com.arton.backend.user.domain;
 
 import com.arton.backend.infra.shared.BaseEntity;
+import com.arton.backend.zzim.adapter.out.repository.ArtistZzimEntity;
+import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimEntity;
+import com.arton.backend.zzim.domain.ArtistZzim;
+import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     /** 카카오 고유 회원 번호 */
     private Long kakaoId;
@@ -27,25 +30,18 @@ public class User extends BaseEntity {
     /** 닉네임 */
     private String nickname;
     /** 성별 */
-    @Enumerated(EnumType.STRING)
     private Gender gender;
     /** 연령대 */
-    @Enumerated(EnumType.STRING)
     private AgeRange ageRange;
     /** 권한 */
-    @Enumerated(EnumType.STRING)
     private UserRole auth;
     /** 회원가입 수단 */
-    @Enumerated(EnumType.STRING)
     private SignupType signupType;
     /** 마케팅 동의 */
-    @Column(length = 1)
     private String termsAgree;
-
-    public void setProfileImageUrl(String url){
-        this.profileImageUrl = url;
-    }
-    public void setPassword(String newPassword){
-        this.password = newPassword;
-    }
+    /** 찜 목록 유저는 찜을 여러개 할 수 있음*/
+    @ToString.Exclude
+    List<PerformanceZzimEntity> performanceZzims = new ArrayList<>();
+    @ToString.Exclude
+    List<ArtistZzimEntity> artistZzims = new ArrayList<>();
 }

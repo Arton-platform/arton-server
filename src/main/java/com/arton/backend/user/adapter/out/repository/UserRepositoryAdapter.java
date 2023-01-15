@@ -19,22 +19,22 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
      * @return
      */
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<UserEntity> findByEmail(String email) {
         return userRepository.findByEmailAndSignupType(email, SignupType.ARTON);
     }
 
     @Override
-    public Optional<User> findByKakaoId(Long id) {
+    public Optional<UserEntity> findByKakaoId(Long id) {
         return userRepository.findByKakaoId(id);
     }
 
     @Override
-    public Optional<User> findByNaverId(String id) {
+    public Optional<UserEntity> findByNaverId(String id) {
         return userRepository.findByNaverId(id);
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public Optional<UserEntity> findById(Long id) {
         return userRepository.findById(id);
     }
 
@@ -44,12 +44,12 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public Optional<User> findUserForReset(String nickname, String email) {
+    public Optional<UserEntity> findUserForReset(String nickname, String email) {
         return userRepository.findByNicknameAndEmailAndSignupType(nickname, email, SignupType.ARTON);
     }
 
     @Override
-    public User save(User user) {
+    public UserEntity save(UserEntity user) {
         return userRepository.save(user);
     }
 }

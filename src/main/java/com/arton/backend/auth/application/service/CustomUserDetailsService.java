@@ -1,5 +1,6 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.adapter.out.repository.UserRepository;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
@@ -32,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @param user
      * @return
      */
-    private UserDetails createUserDetails(User user) {
+    private UserDetails createUserDetails(UserEntity user) {
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getAuth().toString());
         return new org.springframework.security.core.userdetails.User(String.valueOf(user.getId()),
                 user.getPassword(),

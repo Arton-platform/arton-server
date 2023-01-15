@@ -1,22 +1,23 @@
-package com.arton.backend.musical.domain;
+package com.arton.backend.performance.adapter.out.repository;
 
+import com.arton.backend.infra.shared.BaseEntity;
+import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
+import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * price, artist 추가 필요
- */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Entity
-public class Musical {
+@ToString
+public class PerformanceEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,4 +49,15 @@ public class Musical {
     private String etc;
     /** 이미지 링크 */
     private String imageUrl;
+    /** 뮤지컬 or 콘서트 */
+    private PerformanceType performanceType;
+    /** 공연의 출연자들 리스트 */
+    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private List<PerformerEntity> performers = new ArrayList<>();
+    /** 좌석 등급 가격 */
+    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private List<PriceGrade> priceGradeList = new ArrayList<>();
+    private float starScore;
 }

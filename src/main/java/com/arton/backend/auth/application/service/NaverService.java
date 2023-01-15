@@ -5,6 +5,7 @@ import com.arton.backend.auth.application.port.in.KaKaoUseCase;
 import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.auth.application.port.in.TokenDto;
 import com.arton.backend.infra.jwt.TokenProvider;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -68,7 +69,7 @@ public class NaverService implements NaverUseCase {
     public TokenDto login(String code, String state) {
         String accessToken = getAccessToken(code, state);
         log.info("accessToken {}", accessToken);
-        User register = signup(accessToken);
+        UserEntity register = signup(accessToken);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
@@ -144,11 +145,11 @@ public class NaverService implements NaverUseCase {
      * @param accessToken
      * @return
      */
-    private User signup(String accessToken) {
+    private UserEntity signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken).get("response");
 //        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         String id = userInfo.get("id").asText();
-        User user = userRepository.findByNaverId(id).orElse(null);
+        UserEntity user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
             String mobile = userInfo.get("mobile").asText();
             log.info("mobile {}", mobile);
@@ -163,7 +164,7 @@ public class NaverService implements NaverUseCase {
             log.info("gender {}", gender);
             /** password is user's own kakao id */
             String password = id;
-            user = User.builder().email(email)
+            user = UserEntity.builder().email(email)
                     .gender(getGender(gender))
                     .password(passwordEncoder.encode(password))
                     .naverId(id)

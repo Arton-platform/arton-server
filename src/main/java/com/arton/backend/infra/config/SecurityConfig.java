@@ -32,7 +32,8 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/h2-console/**", "/favicon.ico", "/css/**", "/js/**", "/img/**", "/lib/**");
+        return (web) -> web.ignoring()
+                .antMatchers("/h2-console/**", "/favicon.ico", "/css/**", "/js/**", "/img/**", "/lib/**","/swagger-ui/**","/api-docs/**");
     }
 
     /**
@@ -72,7 +73,8 @@ public class SecurityConfig {
                 .sameOrigin()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/auth/signup", "/auth/login", "/auth/reissue", "/auth/kakao", "/auth/naver", "/faq/**", "/announcement/**", "/review/**").permitAll()
+                .authorizeRequests().antMatchers("/auth/signup", "/auth/login", "/auth/reissue", "/auth/kakao", "/auth/naver", "/faq/**", "/announcement/**", "/review/**",
+                "/auth/reset/password", "/auth/check/signup", "/artist/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfig(tokenProvider, redisTemplate));
