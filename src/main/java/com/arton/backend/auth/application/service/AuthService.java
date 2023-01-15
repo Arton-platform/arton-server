@@ -79,7 +79,6 @@ public class AuthService implements AuthUseCase {
         User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
         // 기본 이미지 지정
         user.setProfileImageUrl(defaultImage);
-        System.out.println("user = " + user);
         User savedUser = userRepository.save(user);
         Long id = savedUser.getId();
 
@@ -96,10 +95,10 @@ public class AuthService implements AuthUseCase {
         List<Long> artistIds = signupRequestDto.getArtists();
         List<Artist> artists = artistRepository.findByIds(artistIds);
         if (artists!=null) {
-            List<ArtistZzimEntity> zzims = new ArrayList<>();
+            List<ArtistZzim> zzims = new ArrayList<>();
             for (Artist artist : artists) {
-                ArtistZzimEntity artistZzim = ArtistZzimEntity.builder().artist(ArtistMapper.toEntity(artist)).user(UserMapper.toEntity(savedUser)).build();
-                artistZzim.setUser(UserMapper.toEntity(savedUser));
+                ArtistZzim artistZzim = ArtistZzim.builder().artist(artist).user(savedUser).build();
+                artistZzim.setUser(savedUser);
                 zzims.add(artistZzim);
             }
             zzimRepository.saveArtists(zzims);
@@ -108,10 +107,10 @@ public class AuthService implements AuthUseCase {
         List<Long> performanceIds = signupRequestDto.getPerformances();
         List<Performance> performances = performanceRepository.findByIds(performanceIds);
         if (performances!=null) {
-            List<PerformanceZzimEntity> zzims = new ArrayList<>();
+            List<PerformanceZzim> zzims = new ArrayList<>();
             for (Performance performance : performances) {
-                PerformanceZzimEntity performanceZzim = PerformanceZzimEntity.builder().performance(PerformanceMapper.toEntity(performance)).user(UserMapper.toEntity(savedUser)).build();
-                performanceZzim.setUser(UserMapper.toEntity(savedUser));
+                PerformanceZzim performanceZzim = PerformanceZzim.builder().performance(performance).user(savedUser).build();
+                performanceZzim.setUser(savedUser);
                 zzims.add(performanceZzim);
             }
             zzimRepository.savePerformances(zzims);
