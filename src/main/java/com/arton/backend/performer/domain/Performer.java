@@ -15,19 +15,19 @@ import java.time.LocalDateTime;
 public class Performer{
     private Long id;
     /** 아티스트 */
-    private Artist artist;
+    private Long artist;
     /** 공연 */
-    private Performance performance;
+    private Long performance;
     /** 가입일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
     private LocalDateTime updateDate;
-    public void setArtist(Artist artist) {
+    public void setArtist(Long artist) {
         this.artist = artist;
     }
 
     @Builder
-    public Performer(Long id, Artist artist, Performance performance, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public Performer(Long id, Long artist, Long performance, LocalDateTime createdDate, LocalDateTime updateDate) {
         this.id = id;
         this.artist = artist;
         this.performance = performance;

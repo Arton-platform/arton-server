@@ -31,7 +31,7 @@ public class Artist {
 
     public void addPerformer(Performer performer) {
         performances.add(performer);
-        performer.setArtist(this);
+        performer.setArtist(this.getId());
     }
 
     @Builder
