@@ -29,7 +29,7 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long TOKEN_EXPIRE_TIME = 1000 * 60  * 60 * 24; // 테스트 용 만료 1일
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 30; // 테스트 용 만료 1달
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 60; // 테스트 용 만료 1달
 
     private static final String SECRET_KEY = "YXJ0b24tc2VydmVyCg=="; // arton-server
 
@@ -45,7 +45,9 @@ public class TokenProvider {
         long now = (new Date()).getTime();
         // expiration time
         Date exp = new Date(now + TOKEN_EXPIRE_TIME);
+        log.info("exp {}", exp.getTime());
         Date refreshExp = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+        log.info("refreshExp {}", refreshExp.getTime());
         // create access token
         String accessToken = Jwts.builder().setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)

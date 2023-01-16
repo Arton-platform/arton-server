@@ -26,6 +26,7 @@ public class Artist {
     /** 업데이트일 */
     private LocalDateTime updateDate;
     /** 아티스트의 musical or concert 작품 */
+    @ToString.Exclude
     private List<Performer> performances = new ArrayList<>();
 
     public void addPerformer(Performer performer) {

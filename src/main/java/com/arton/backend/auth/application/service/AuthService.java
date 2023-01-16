@@ -97,8 +97,8 @@ public class AuthService implements AuthUseCase {
         if (artists!=null) {
             List<ArtistZzim> zzims = new ArrayList<>();
             for (Artist artist : artists) {
-                ArtistZzim artistZzim = ArtistZzim.builder().artist(artist).user(savedUser).build();
-                artistZzim.setUser(savedUser);
+                ArtistZzim artistZzim = ArtistZzim.builder().artist(artist.getId()).user(savedUser.getId()).build();
+                artistZzim.setUser(savedUser.getId());
                 zzims.add(artistZzim);
             }
             zzimRepository.saveArtists(zzims);
@@ -109,8 +109,8 @@ public class AuthService implements AuthUseCase {
         if (performances!=null) {
             List<PerformanceZzim> zzims = new ArrayList<>();
             for (Performance performance : performances) {
-                PerformanceZzim performanceZzim = PerformanceZzim.builder().performance(performance).user(savedUser).build();
-                performanceZzim.setUser(savedUser);
+                PerformanceZzim performanceZzim = PerformanceZzim.builder().performanceId(performance.getPerformanceId()).userId(savedUser.getId()).build();
+                performanceZzim.setUser(savedUser.getId());
                 zzims.add(performanceZzim);
             }
             zzimRepository.savePerformances(zzims);
@@ -149,9 +149,31 @@ public class AuthService implements AuthUseCase {
         return true;
     }
 
+    /**
+     * 리프레쉬 토큰의 유효값을 체크하여 로그인 체크를 하자
+     * 유효하면 메인
+     * 유효하지 않다면 로그인 페이지로
+     * @param tokenReissueDto
+     * @return
+     */
     @Override
     public TokenDto reissue(TokenReissueDto tokenReissueDto) {
-        return null;
+        // 유효하지 않음 알림
+        if (!tokenProvider.validateToken(tokenReissueDto.getRefreshToken())) {
+            throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
+        }
+        Authentication authentication = tokenProvider.getAuthentication(tokenReissueDto.getAccessToken());
+        // 캐시에서 토큰 가져옴
+        String refreshToken = (String) redisTemplate.opsForValue().get(refreshTokenPrefix + authentication.getName());
+        // 일치여부 확인
+        if (refreshToken == null || !refreshToken.equals(tokenReissueDto.getRefreshToken())) {
+            throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
+        }
+        // generate new Token
+        TokenDto tokenDto = tokenProvider.generateToken(authentication);
+        // update cache
+        redisTemplate.opsForValue().set(refreshTokenPrefix+authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
+        return tokenDto;
     }
 
     @Override
