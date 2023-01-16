@@ -8,6 +8,7 @@ public interface AuthUseCase {
     boolean signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile);
     boolean logout(LogoutRequestDto logoutRequestDto);
     boolean validateSignupRequest(SignupValidationDto signupValidationDto);
+    TokenDto reissue(TokenReissueDto tokenReissueDto);
     TokenDto login(LoginRequestDto loginRequestDto);
     MailDto resetPassword(PasswordResetDto passwordResetDto);
 }
