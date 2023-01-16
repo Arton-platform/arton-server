@@ -21,21 +21,20 @@ public class ArtistZzimEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id")
-    private ArtistEntity artist;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     public void setUser(UserEntity user) {
         this.user = user;
+        if (!user.getArtistZzims().contains(this)) {
+            user.getArtistZzims().add(this);
+        }
     }
 
     @Builder
-    public ArtistZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, ArtistEntity artist, UserEntity user) {
+    public ArtistZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, UserEntity user) {
         super(createdDate, updateDate);
         this.id = id;
-        this.artist = artist;
         this.user = user;
     }
 }

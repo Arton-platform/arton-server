@@ -1,20 +1,16 @@
 package com.arton.backend.user.domain;
 
-import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.zzim.adapter.out.repository.ArtistZzimEntity;
-import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimEntity;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class User {
     private Long id;
     /** 카카오 고유 회원 번호 */
@@ -58,7 +54,7 @@ public class User {
      */
     public void zzimArtist(ArtistZzim artistZzim) {
         artistZzims.add(artistZzim);
-        artistZzim.setUser(this);
+        artistZzim.setUser(this.getId());
     }
     /**
      * 공연을 찜한다
@@ -66,7 +62,7 @@ public class User {
      */
     public void zzimPerformance(PerformanceZzim performanceZzim) {
         performanceZzims.add(performanceZzim);
-        performanceZzim.setUser(this);
+        performanceZzim.setUser(this.id);
     }
     public void setPassword(String newPassword){
         this.password = newPassword;

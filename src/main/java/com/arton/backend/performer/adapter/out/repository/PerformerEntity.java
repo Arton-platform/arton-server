@@ -29,6 +29,16 @@ public class PerformerEntity extends BaseEntity {
 
     public void setArtist(ArtistEntity artist) {
         this.artist = artist;
+        if (!artist.getPerformances().contains(this)) {
+            artist.getPerformances().add(this);
+        }
+    }
+
+    public void setPerformance(PerformanceEntity performance) {
+        this.performance = performance;
+        if (!performance.getPerformers().contains(this)) {
+            performance.getPerformers().add(this);
+        }
     }
 
     @Builder
