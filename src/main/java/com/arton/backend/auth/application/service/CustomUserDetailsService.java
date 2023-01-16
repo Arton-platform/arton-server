@@ -1,6 +1,7 @@
 package com.arton.backend.auth.application.service;
 
 import com.arton.backend.user.adapter.out.repository.UserEntity;
+import com.arton.backend.user.adapter.out.repository.UserMapper;
 import com.arton.backend.user.adapter.out.repository.UserRepository;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
@@ -24,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findById(Long.parseLong(username)).map(this::createUserDetails).orElseThrow(()-> new UsernameNotFoundException(username + " -> not exist!"));
+        return userRepository.findById(Long.parseLong(username)).map(UserMapper::toEntity).map(this::createUserDetails).orElseThrow(()-> new UsernameNotFoundException(username + " -> not exist!"));
     }
 
     /**

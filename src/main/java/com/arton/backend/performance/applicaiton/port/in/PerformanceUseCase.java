@@ -6,11 +6,11 @@ import com.arton.backend.performance.domain.Performance;
 import java.util.List;
 
 public interface PerformanceUseCase {
-    List<PerformanceEntity> getAllPerformances();
+    List<Performance> getAllPerformances();
     List<PerformanceInterestDto> getZzimList();
-    List<PerformanceEntity> getMusicals();
-    List<PerformanceEntity> getConcerts();
-    PerformanceEntity save(PerformanceEntity performance);
-    void deletePerformance(PerformanceEntity performance);
+    List<Performance> getMusicals();
+    List<Performance> getConcerts();
+    Performance save(Performance performance);
+    void deletePerformance(Performance performance);
     void deletePerformance(Long id);
 }

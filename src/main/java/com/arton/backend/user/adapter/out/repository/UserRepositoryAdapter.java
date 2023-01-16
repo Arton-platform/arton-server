@@ -8,34 +8,51 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import static com.arton.backend.user.adapter.out.repository.UserMapper.toDomain;
+import static com.arton.backend.user.adapter.out.repository.UserMapper.toEntity;
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryAdapter implements UserRepositoryPort {
     private final UserRepository userRepository;
-
     /**
      * 카카오 네이버와 구분시켜야됨.
      * @param email
      * @return
      */
     @Override
-    public Optional<UserEntity> findByEmail(String email) {
-        return userRepository.findByEmailAndSignupType(email, SignupType.ARTON);
+    public Optional<User> findByEmail(String email) {
+        Optional<UserEntity> response = userRepository.findByEmailAndSignupType(email, SignupType.ARTON);
+        if (response.isPresent()) {
+            return Optional.ofNullable(toDomain(response.get()));
+        }
+        return Optional.ofNullable(null);
     }
 
     @Override
-    public Optional<UserEntity> findByKakaoId(Long id) {
-        return userRepository.findByKakaoId(id);
+    public Optional<User> findByKakaoId(Long id) {
+        Optional<UserEntity> response = userRepository.findByKakaoId(id);
+        if (response.isPresent()) {
+            return Optional.ofNullable(toDomain(response.get()));
+        }
+        return Optional.ofNullable(null);
     }
 
     @Override
-    public Optional<UserEntity> findByNaverId(String id) {
-        return userRepository.findByNaverId(id);
+    public Optional<User> findByNaverId(String id) {
+        Optional<UserEntity> response = userRepository.findByNaverId(id); if (response.isPresent()) {
+            return Optional.ofNullable(toDomain(response.get()));
+        }
+        return Optional.ofNullable(null);
     }
 
     @Override
-    public Optional<UserEntity> findById(Long id) {
-        return userRepository.findById(id);
+    public Optional<User> findById(Long id) {
+        Optional<UserEntity> response = userRepository.findById(id);
+        if (response.isPresent()) {
+            return Optional.ofNullable(toDomain(response.get()));
+        }
+        return Optional.ofNullable(null);
     }
 
     @Override
@@ -44,12 +61,16 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public Optional<UserEntity> findUserForReset(String nickname, String email) {
-        return userRepository.findByNicknameAndEmailAndSignupType(nickname, email, SignupType.ARTON);
+    public Optional<User> findUserForReset(String nickname, String email) {
+        Optional<UserEntity> response = userRepository.findByNicknameAndEmailAndSignupType(nickname, email, SignupType.ARTON);
+        if (response.isPresent()) {
+            return Optional.ofNullable(toDomain(response.get()));
+        }
+        return Optional.ofNullable(null);
     }
 
     @Override
-    public UserEntity save(UserEntity user) {
-        return userRepository.save(user);
+    public User save(User user) {
+        return toDomain(userRepository.save(toEntity(user)));
     }
 }

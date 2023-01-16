@@ -40,8 +40,8 @@ public class SignupRequestDto {
     /** 아티스트 찜 */
     private List<Long> artists = new ArrayList<>();
 
-    public static UserEntity toUser(SignupRequestDto signupRequestDto, PasswordEncoder passwordEncoder){
-        return UserEntity.builder()
+    public static User toUser(SignupRequestDto signupRequestDto, PasswordEncoder passwordEncoder){
+        return User.builder()
                 .email(signupRequestDto.getEmail())
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
                 .nickname(signupRequestDto.getNickname())

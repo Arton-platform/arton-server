@@ -1,17 +1,18 @@
 package com.arton.backend.artist.domain;
 
 import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
+import com.arton.backend.performer.domain.Performer;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @ToString
 public class Artist {
+    private Long id;
     /** 아티스트 이름 */
     private String name;
     /** 나이 */
@@ -20,6 +21,27 @@ public class Artist {
     private String snsId;
     /** 아티스트 이미지 링크 */
     private String profileImageUrl;
+    /** 가입일 */
+    private LocalDateTime createdDate;
+    /** 업데이트일 */
+    private LocalDateTime updateDate;
     /** 아티스트의 musical or concert 작품 */
-    private List<PerformerEntity> performances = new ArrayList<>();
+    private List<Performer> performances = new ArrayList<>();
+
+    public void addPerformer(Performer performer) {
+        performances.add(performer);
+        performer.setArtist(this);
+    }
+
+    @Builder
+    public Artist(Long id, String name, Integer age, String snsId, String profileImageUrl, LocalDateTime createdDate, LocalDateTime updateDate, List<Performer> performances) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.snsId = snsId;
+        this.profileImageUrl = profileImageUrl;
+        this.createdDate = createdDate;
+        this.updateDate = updateDate;
+        this.performances = performances;
+    }
 }

@@ -18,10 +18,8 @@ import java.util.List;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @ToString
-public class Performance extends BaseEntity {
+public class Performance {
     private Long performanceId;
     /** 제목 */
     private String title;
@@ -52,13 +50,42 @@ public class Performance extends BaseEntity {
     /** 이미지 링크 */
     private String imageUrl;
     /** 뮤지컬 or 콘서트 */
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private PerformanceType performanceType;
     /** 공연의 출연자들 리스트 */
     @ToString.Exclude
-    private List<PerformerEntity> performers = new ArrayList<>();
+    private List<Performer> performers = new ArrayList<>();
     /** 좌석 등급 가격 */
     @ToString.Exclude
     private List<PriceGrade> priceGradeList = new ArrayList<>();
     private float starScore;
+    /** 가입일 */
+    private LocalDateTime createdDate;
+    /** 업데이트일 */
+    private LocalDateTime updateDate;
+
+    @Builder
+    public Performance(Long performanceId, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<Performer> performers, List<PriceGrade> priceGradeList, float starScore, LocalDateTime createdDate, LocalDateTime updateDate) {
+        this.performanceId = performanceId;
+        this.title = title;
+        this.description = description;
+        this.hit = hit;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.musicalDateTime = musicalDateTime;
+        this.place = place;
+        this.runningTime = runningTime;
+        this.interMission = interMission;
+        this.limitTime = limitTime;
+        this.limitAge = limitAge;
+        this.link = link;
+        this.etc = etc;
+        this.imageUrl = imageUrl;
+        this.performanceType = performanceType;
+        this.performers = performers;
+        this.priceGradeList = priceGradeList;
+        this.starScore = starScore;
+        this.createdDate = createdDate;
+        this.updateDate = updateDate;
+    }
 }

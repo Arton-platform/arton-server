@@ -6,7 +6,12 @@ import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.arton.backend.performance.adapter.out.repository.PerformanceMapper.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,33 +19,33 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
     private final PerformanceRepository performanceRepository;
 
     @Override
-    public List<PerformanceEntity> findAllPerformances() {
-        return performanceRepository.findAll();
+    public List<Performance> findAllPerformances() {
+        return Optional.ofNullable(performanceRepository.findAll()).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
-    public List<PerformanceEntity> findAllMusicals() {
-        return performanceRepository.findAllByPerformanceType(PerformanceType.MUSICAL);
+    public List<Performance> findAllMusicals() {
+        return Optional.ofNullable(performanceRepository.findAllByPerformanceType(PerformanceType.MUSICAL)).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
-    public List<PerformanceEntity> findAllConcerts() {
-        return performanceRepository.findAllByPerformanceType(PerformanceType.CONCERT);
+    public List<Performance> findAllConcerts() {
+        return Optional.ofNullable(performanceRepository.findAllByPerformanceType(PerformanceType.CONCERT)).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
-    public List<PerformanceEntity> findByIds(List<Long> ids) {
-        return performanceRepository.findAllById(ids);
+    public List<Performance> findByIds(List<Long> ids) {
+        return Optional.ofNullable(performanceRepository.findAllById(ids)).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
-    public PerformanceEntity save(PerformanceEntity performance) {
-        return performanceRepository.save(performance);
+    public Performance save(Performance performance) {
+        return toDomain(performanceRepository.save(toEntity(performance)));
     }
 
     @Override
-    public void deletePerformance(PerformanceEntity performance) {
-        performanceRepository.delete(performance);
+    public void deletePerformance(Performance performance) {
+        performanceRepository.delete(toEntity(performance));
     }
 
     @Override

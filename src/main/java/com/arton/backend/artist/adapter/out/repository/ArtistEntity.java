@@ -1,19 +1,18 @@
 package com.arton.backend.artist.adapter.out.repository;
 
-import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "Artist")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @ToString
 public class ArtistEntity extends BaseEntity {
     @Id
@@ -37,4 +36,14 @@ public class ArtistEntity extends BaseEntity {
         performer.setArtist(this);
     }
 
+    @Builder
+    public ArtistEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String name, Integer age, String snsId, String profileImageUrl, List<PerformerEntity> performances) {
+        super(createdDate, updateDate);
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.snsId = snsId;
+        this.profileImageUrl = profileImageUrl;
+        this.performances = performances;
+    }
 }
