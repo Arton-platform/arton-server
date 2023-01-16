@@ -2,10 +2,9 @@ package com.arton.backend.review.adapter.out.persistence;
 
 import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
-import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
-import com.arton.backend.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "review")
-public class ReviewEntity extends Board {
+public class ReviewEntity<R extends CommonResponse> extends Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reviewId;
