@@ -1,12 +1,11 @@
 package com.arton.backend.performance.domain;
 
-import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
 import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
-import com.arton.backend.infra.shared.BaseEntity;
-import javax.persistence.*;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
