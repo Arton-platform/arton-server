@@ -73,7 +73,7 @@ public class TermsController {
         List<String> collect = new ArrayList<>();
         try {
             collect = Arrays.stream(resourceLoader.getResource("classpath:templates/terms").getFile().listFiles()).filter(file -> !file.isDirectory()).map(File::getName).collect(Collectors.toList());
-            if (collect.stream().anyMatch(name -> name.equals(termsName))) {
+            if (collect.stream().anyMatch(name -> name.substring(0,name.lastIndexOf(".")).equals(termsName))) {
                 return "/terms/" + termsName;
             }
         } catch (IOException e) {
