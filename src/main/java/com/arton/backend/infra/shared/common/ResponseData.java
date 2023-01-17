@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 public class ResponseData<T> extends CommonResponse {
     private T data;
 
-    public ResponseData(String message, int status, T data){
+    public ResponseData(String message, int status, T data) {
         super(message, status);
         this.data = data;
+    }
+
+    public ResponseData(String message, int status) {
+        super(message, status);
     }
 }
