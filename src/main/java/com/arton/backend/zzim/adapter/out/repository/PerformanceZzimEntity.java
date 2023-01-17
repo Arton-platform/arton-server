@@ -20,21 +20,20 @@ public class PerformanceZzimEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "performance_id")
-    private PerformanceEntity performance;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     public void setUser(UserEntity user) {
         this.user = user;
+        if (!user.getPerformanceZzims().contains(this)) {
+            user.getPerformanceZzims().add(this);
+        }
     }
 
     @Builder
-    public PerformanceZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, PerformanceEntity performance, UserEntity user) {
+    public PerformanceZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, UserEntity user) {
         super(createdDate, updateDate);
         this.id = id;
-        this.performance = performance;
         this.user = user;
     }
 }

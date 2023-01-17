@@ -4,6 +4,7 @@ import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PerformanceRepositoryPort {
     List<Performance> findAllPerformances();
@@ -13,4 +14,5 @@ public interface PerformanceRepositoryPort {
     Performance save(Performance performance);
     void deletePerformance(Performance performance);
     void deleteById(Long id);
+    Optional<PerformanceEntity> findById(Long id);
 }

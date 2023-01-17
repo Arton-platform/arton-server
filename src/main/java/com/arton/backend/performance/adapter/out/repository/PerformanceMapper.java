@@ -2,11 +2,13 @@ package com.arton.backend.performance.adapter.out.repository;
 
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performer.adapter.out.repository.PerformerMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Component
 public class PerformanceMapper {
 
     public static Performance toDomain(PerformanceEntity performance) {

@@ -1,12 +1,13 @@
 package com.arton.backend.review.adapter.out.persistence;
 
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.review.domain.Review;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReviewMapper {
 
-    public Review toDomain(ReviewEntity entity){
+    public Review toDomain(ReviewEntity<CommonResponse> entity){
         return Review.builder()
                 .reviewId(entity.getReviewId())
                 .content(entity.getContent())
@@ -20,7 +21,7 @@ public class ReviewMapper {
                 .build();
     }
 
-    public ReviewEntity toEntity(Review review){
+    public ReviewEntity<CommonResponse> toEntity(Review review){
         return ReviewEntity.builder()
                 .reviewId(review.getReviewId())
                 .content(review.getContent())

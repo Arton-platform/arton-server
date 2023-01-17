@@ -29,7 +29,7 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long TOKEN_EXPIRE_TIME = 1000 * 60  * 60 * 24; // 테스트 용 만료 1일
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 30; // 테스트 용 만료 1달
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 60; // 테스트 용 만료 1달
 
     private static final String SECRET_KEY = "YXJ0b24tc2VydmVyCg=="; // arton-server
 
@@ -40,19 +40,54 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(decode);
     }
 
-    public TokenDto generateToken(Authentication authentication) {
+
+    public TokenDto generateAccessToken(Authentication authentication, String refreshToken) {
         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
         long now = (new Date()).getTime();
         // expiration time
         Date exp = new Date(now + TOKEN_EXPIRE_TIME);
-        Date refreshExp = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+        log.info("exp {}", exp.getTime());
+        Date refreshExp = parseClaims(refreshToken).getExpiration();
+        log.info("refreshExp {}", refreshExp.getTime());
         // create access token
         String accessToken = Jwts.builder().setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(exp)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
-        String refreshToken = Jwts.builder().setExpiration(refreshExp).signWith(key, SignatureAlgorithm.HS512).compact();
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(exp.getTime())
+                .refreshToken(refreshToken)
+                .refreshTokenExpiresIn(refreshExp.getTime())
+                .build();
+    }
+
+    /**
+     * 리프레쉬 토큰과, 액세스 토큰을 함께 발행한다.
+     * @param authentication
+     * @return
+     */
+    public TokenDto generateToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+        long now = (new Date()).getTime();
+        // expiration time
+        Date exp = new Date(now + TOKEN_EXPIRE_TIME);
+        log.info("exp {}", exp.getTime());
+        Date refreshExp = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+        log.info("refreshExp {}", refreshExp.getTime());
+        // create access token
+        String accessToken = Jwts.builder().setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(exp)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+        String refreshToken = Jwts.builder().setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(refreshExp)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
@@ -77,6 +112,24 @@ public class TokenProvider {
 
         UserDetails principal = new User(claims.getSubject(), "", authorities);
 
+        return new UsernamePasswordAuthenticationToken(principal,"",authorities);
+    }
+
+    public Authentication getAuthenticationByRefreshToken(String refreshToken) {
+        // decode
+        Claims claims = parseClaims(refreshToken);
+
+        // no authority
+        if (claims.get(AUTHORITIES_KEY)==null){
+            throw new CustomException(ErrorCode.USER_NOT_AUTHORITY.getMessage(), ErrorCode.USER_NOT_AUTHORITY);
+        }
+
+        List<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        log.info("getAuthenticationByRefreshToken 1");
+        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        log.info("getAuthenticationByRefreshToken 2");
         return new UsernamePasswordAuthenticationToken(principal,"",authorities);
     }
 

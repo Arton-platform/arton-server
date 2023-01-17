@@ -52,4 +52,9 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
     public void deleteById(Long id) {
         performanceRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<PerformanceEntity> findById(Long id) {
+        return performanceRepository.findById(id);
+    }
 }

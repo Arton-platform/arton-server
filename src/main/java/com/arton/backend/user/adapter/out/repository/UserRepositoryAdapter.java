@@ -4,6 +4,7 @@ import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.SignupType;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import static com.arton.backend.user.adapter.out.repository.UserMapper.toDomain;
 import static com.arton.backend.user.adapter.out.repository.UserMapper.toEntity;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryAdapter implements UserRepositoryPort {
