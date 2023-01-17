@@ -13,4 +13,6 @@ public interface PerformanceUseCase {
     Performance save(Performance performance);
     void deletePerformance(Performance performance);
     void deletePerformance(Long id);
+
+    Performance getOne(Long id);
 }
