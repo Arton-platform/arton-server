@@ -15,6 +15,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_INVALID(498, "TOKEN_ERR_498", "The Refresh Token is invalid"),
     TOKEN_INVALID(498, "TOKEN_ERR_498", "The Token is invalid"),
     MAIL_SEND_ERROR(500, "MAIL_SEND_ERROR", "메일 발송에 실패하였습니다."),
+    INVALID_URI_REQUEST(400, "INVALID_URI_REQUEST", "잘못된 URI 요청입니다."),
     SELECT_ERROR(500, "SELECT_ERROR", "조회에 실패 했습니다.");
     private int status;
     private String errorCode;
