@@ -14,7 +14,7 @@ public enum ErrorCode {
     USER_NOT_AUTHORITY(403, "COMMON-ERR-403", "권한이 없습니다."),
     TOKEN_INVALID(401, "TOKEN_ERR", "유효하지 않은 토큰입니다."),
     MAIL_SEND_ERROR(500, "MAIL_SEND_ERROR", "메일 발송에 실패하였습니다."),
-    SELECT_ERROR(500, "SELECT_ERROR", "조회에 실패 했습니다.");
+    SELECT_ERROR(404, "SELECT_ERROR", "조회에 실패 했습니다.");
     private int status;
     private String errorCode;
     private String message;
