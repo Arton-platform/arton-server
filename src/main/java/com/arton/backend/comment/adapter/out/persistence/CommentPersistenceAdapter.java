@@ -1,6 +1,9 @@
 package com.arton.backend.comment.adapter.out.persistence;
 
 import com.arton.backend.comment.application.port.out.CommentListPort;
+import com.arton.backend.comment.application.port.out.CommentRegistPort;
+import com.arton.backend.comment.domain.Comment;
+import com.arton.backend.performance.adapter.out.repository.QPerformanceEntity;
 import com.arton.backend.review.adapter.out.persistence.QReviewEntity;
 import com.arton.backend.review.domain.Review;
 import com.querydsl.core.QueryFactory;
@@ -14,23 +17,28 @@ import java.util.List;
 import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
-public class CommentPersistenceAdapter implements CommentListPort {
+public class CommentPersistenceAdapter implements CommentListPort, CommentRegistPort {
     private final CommentRepository repository;
     private final EntityManager entityManager;
     @Override
     public Optional<List<CommentEntity>> findAllByReviewOrderByCreatedDateDesc(Review review) {
-//        QPerformance qPerformance = QPerformance.performance;
-//        QReviewEntity qReviewEntity = QReviewEntity.reviewEntity;
-//        QCommentEntity qCommentEntity = QCommentEntity.commentEntity;
-//        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QPerformanceEntity qPerformance = QPerformanceEntity.performanceEntity;
+        QReviewEntity qReviewEntity = QReviewEntity.reviewEntity;
+        QCommentEntity qCommentEntity = QCommentEntity.commentEntity;
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 
-//        return Optional.ofNullable(
-//                queryFactory.selectFrom(qCommentEntity)
-//                .where(qCommentEntity.review.eq(qReviewEntity).and(qCommentEntity.performance.eq(qPerformance)))
-//                .orderBy(qCommentEntity.createdDate.desc())
-//                .fetch()
-//        );
-        return null;
+        return Optional.ofNullable(
+                queryFactory.selectFrom(qCommentEntity)
+                .where(qCommentEntity.review.eq(qReviewEntity).and(qCommentEntity.performance.eq(qPerformance)))
+                .orderBy(qCommentEntity.createdDate.desc())
+                .fetch()
+        );
+//        return null;
 //        return repository.findAllByPerformanceAndReviewOrderByCreatedDateDesc(review);
+    }
+
+    @Override
+    public void regist(CommentEntity comment) {
+        repository.save(comment);
     }
 }
