@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -149,6 +150,7 @@ public class AuthService implements AuthUseCase {
         return true;
     }
 
+
     /**
      * 리프레쉬 토큰의 유효값을 체크하여 로그인 체크를 하자
      * 유효하면 메인
@@ -162,17 +164,25 @@ public class AuthService implements AuthUseCase {
         if (!tokenProvider.validateToken(tokenReissueDto.getRefreshToken())) {
             throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
         }
-        Authentication authentication = tokenProvider.getAuthentication(tokenReissueDto.getAccessToken());
+        // 인증 정보
+        Authentication authentication = tokenProvider.getAuthenticationByRefreshToken(tokenReissueDto.getRefreshToken());
         // 캐시에서 토큰 가져옴
         String refreshToken = (String) redisTemplate.opsForValue().get(refreshTokenPrefix + authentication.getName());
         // 일치여부 확인
         if (refreshToken == null || !refreshToken.equals(tokenReissueDto.getRefreshToken())) {
             throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
         }
-        // generate new Token
-        TokenDto tokenDto = tokenProvider.generateToken(authentication);
-        // update cache
-        redisTemplate.opsForValue().set(refreshTokenPrefix+authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
+        // 리프레쉬 토큰 만료기간 확인
+        long diffMinutes = tokenProvider.getExpiration(refreshToken) / 1000 / 60;
+        TokenDto tokenDto = null;
+        if (diffMinutes < 5) { // 5분 미만이면 리프레쉬 토큰도 재발급
+            // 리프레쉬 토큰 만료면 리프레쉬 토큰도 같이 발급 후 업데이트
+            tokenDto = tokenProvider.generateToken(authentication);
+            redisTemplate.opsForValue().set(refreshTokenPrefix + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
+        } else {
+            // 만료가 아니라면 액세스 토큰만 발급후 다시 현재 refresh token 저장후 발급.
+            tokenDto = tokenProvider.generateAccessToken(authentication, refreshToken);
+        }
         return tokenDto;
     }
 
