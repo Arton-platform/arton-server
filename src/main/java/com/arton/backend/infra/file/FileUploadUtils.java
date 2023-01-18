@@ -1,5 +1,7 @@
 package com.arton.backend.infra.file;
 
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 이미지 업로드 유틸
@@ -51,5 +57,23 @@ public class FileUploadUtils {
         } catch (IOException e) {
             log.error("Could not list directory: ", e);
         }
+    }
+
+    /**
+     * / + 폴더명 형식으로 지정한다.
+     * @param directory
+     * @return
+     */
+    public static List<String> getFileNameInDirectory(String directory) {
+        Stream<Path> stream = null;
+        try {
+            stream = Files.list(Paths.get(System.getProperty("user.dir")+directory));
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST);
+        }
+        return Optional.ofNullable(stream).orElseThrow(()->new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST)).filter(file -> !Files.isDirectory(file))
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .collect(Collectors.toList());
     }
 }
