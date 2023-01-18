@@ -187,11 +187,6 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-    public TokenDto reissue(TokenReissueDto tokenReissueDto) {
-        return null;
-    }
-
-    @Override
     public TokenDto login(LoginRequestDto loginRequestDto) {
         // 패스워드, 이메일 일치여부 확인
         User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));

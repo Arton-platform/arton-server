@@ -1,6 +1,5 @@
 package com.arton.backend.artist.adapter.out.repository;
 
-import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.arton.backend.artist.adapter.out.repository.QArtistEntity.*;
-
+import static com.arton.backend.artist.adapter.out.repository.QArtistEntity.artistEntity;
 
 @Transactional
 @RequiredArgsConstructor
