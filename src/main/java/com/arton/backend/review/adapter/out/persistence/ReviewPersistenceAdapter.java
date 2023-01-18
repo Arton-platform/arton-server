@@ -1,6 +1,7 @@
 package com.arton.backend.review.adapter.out.persistence;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.application.port.out.ReviewListPort;
 import com.arton.backend.review.application.port.out.ReviewRegistPort;
@@ -15,8 +16,8 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
 
     private final ReviewRepository repository;
     @Override
-    public Optional<List<ReviewEntity<CommonResponse>>> reviewList(Performance performance) {
-        return repository.findAllByPerformanceOrderByStarScoreDesc(performance);
+    public Optional<List<ReviewEntity<CommonResponse>>> reviewList(PerformanceEntity performanceEntity) {
+        return repository.findAllByPerformanceOrderByStarScoreDesc(performanceEntity);
     }
 
     @Override

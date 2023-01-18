@@ -1,10 +1,12 @@
 package com.arton.backend.review.adapter.in.web;
 
 import com.arton.backend.infra.shared.common.ResponseData;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.application.port.in.ReviewListUseCase;
 import com.arton.backend.review.application.port.in.ReviewRegistUseCase;
 import com.arton.backend.review.domain.Review;
+import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +23,10 @@ public class ReviewController {
     private final ReviewRegistUseCase reviewRegistUseCase;
     @GetMapping("/list/{id}")
     public ResponseEntity<ResponseData<List<Review>>> reviewList(@PathVariable(value = "id" ,required = true) Long id){
-        Performance performance = Performance.builder()
-                .performanceId(id)
-                .build();
         ResponseData<List<Review>> response = new ResponseData<>(
                 "SUCCESS",
                 HttpStatus.OK.value(),
-                reviewListUseCase.reviewList(performance)
+                reviewListUseCase.reviewList(id)
         );
         return ResponseEntity.ok().body(response);
     }
