@@ -1,7 +1,7 @@
 package com.arton.backend.performer.adapter.out.repository;
 
-import com.arton.backend.artist.adapter.out.repository.ArtistMapper;
-import com.arton.backend.performance.adapter.out.repository.PerformanceMapper;
+import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performer.domain.Performer;
 
 public class PerformerMapper {
@@ -9,8 +9,10 @@ public class PerformerMapper {
     public static Performer toDomain(PerformerEntity performer) {
         return Performer.builder()
                 .createdDate(performer.getCreatedDate())
-                .artist(ArtistMapper.toDomain(performer.getArtist()))
-                .performance(PerformanceMapper.toDomain(performer.getPerformance()))
+//                .artist(ArtistMapper.toDomain(performer.getArtist()))
+                .artist(performer.getArtist().getId())
+//                .performance(PerformanceMapper.toDomain(performer.getPerformance()))
+                .performance(performer.getPerformance().getId())
                 .id(performer.getId())
                 .updateDate(performer.getUpdateDate())
                 .build();
@@ -19,8 +21,10 @@ public class PerformerMapper {
     public static PerformerEntity toEntity(Performer performer) {
         return PerformerEntity.builder()
                 .createdDate(performer.getCreatedDate())
-                .artist(ArtistMapper.toEntity(performer.getArtist()))
-                .performance(PerformanceMapper.toEntity(performer.getPerformance()))
+//                .artist(ArtistMapper.toEntity(performer.getArtist()))
+                .artist(ArtistEntity.builder().id(performer.getArtist()).build())
+//                .performance(PerformanceMapper.toEntity(performer.getPerformance()))
+                .performance(PerformanceEntity.builder().id(performer.getPerformance()).build())
                 .id(performer.getId())
                 .updateDate(performer.getUpdateDate())
                 .build();

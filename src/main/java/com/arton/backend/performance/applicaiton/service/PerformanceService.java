@@ -1,6 +1,9 @@
 package com.arton.backend.performance.applicaiton.service;
 
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
+import com.arton.backend.performance.adapter.out.repository.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PerformanceService implements PerformanceUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
+    private final PerformanceMapper performanceMapper;
 
     @Override
     public List<Performance> getAllPerformances() {
@@ -51,5 +55,12 @@ public class PerformanceService implements PerformanceUseCase {
     @Override
     public void deletePerformance(Long id) {
         performanceRepositoryPort.deleteById(id);
+    }
+
+    @Override
+    public Performance getOne(Long id) {
+        return performanceRepositoryPort.findById(id)
+                .map(performanceEntity -> performanceMapper.toDomain(performanceEntity))
+                .orElseThrow(() -> new CustomException("데이터가 없습니다.", ErrorCode.SELECT_ERROR));
     }
 }

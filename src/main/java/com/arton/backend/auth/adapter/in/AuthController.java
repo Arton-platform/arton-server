@@ -24,6 +24,11 @@ public class AuthController {
     private final AuthUseCase authUseCase;
     private final EmailUseCase emailUseCase;
 
+    /**
+     * US-7
+     * @param code
+     * @return
+     */
     @GetMapping("/kakao")
     public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
         log.info("code {}", code);
@@ -31,6 +36,12 @@ public class AuthController {
         return ResponseEntity.ok(tokenDto);
     }
 
+    /**
+     * US-7
+     * @param code
+     * @param state
+     * @return
+     */
     @GetMapping("/naver")
     public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
         log.info("code {}", code);
@@ -40,6 +51,7 @@ public class AuthController {
     }
 
     /**
+     * US-8, 14
      * 회원가입
      * 200 성공
      * 400 패스워드 불일치
@@ -66,6 +78,7 @@ public class AuthController {
     }
 
     /**
+     * US-7
      * 로그인
      * @param loginRequestDto
      * @return
@@ -75,6 +88,11 @@ public class AuthController {
         return ResponseEntity.ok(authUseCase.login(loginRequestDto));
     }
 
+    /**
+     * US-15 패스워드 찾기
+     * @param passwordResetDto
+     * @return
+     */
     @PutMapping("/reset/password")
     public ResponseEntity<CommonResponse> resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
         MailDto mailDto = authUseCase.resetPassword(passwordResetDto);
@@ -86,6 +104,11 @@ public class AuthController {
         return ResponseEntity.ok(commonResponse);
     }
 
+    /**
+     * US-22 로그아웃
+     * @param logoutRequestDto
+     * @return
+     */
     @PostMapping("/logout")
     public ResponseEntity<CommonResponse> logout(@RequestBody LogoutRequestDto logoutRequestDto) {
         authUseCase.logout(logoutRequestDto);
@@ -93,4 +116,13 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 리프레쉬 토큰과, 액세스 토큰을 이용하여 사용자의 로그인 상태를 체크합니다.
+     * @param tokenReissueDto
+     * @return
+     */
+    @PostMapping("/check/login")
+    public ResponseEntity<TokenDto> checkStatus(@RequestBody TokenReissueDto tokenReissueDto) {
+        return ResponseEntity.ok(authUseCase.reissue(tokenReissueDto));
+    }
 }

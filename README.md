@@ -45,6 +45,10 @@ Performance <---> Performer OnyToMany ManyToOne
 ## 20230114
 JPA Entity와 domain 분리 
 
+## 20230117
+ManyToOne에 !contains 설정 꼭 해주자. 무한루프에 걸릴수있음.
+Entity 간 관계를 매핑할때는 entity, entity가 가능하다. 하지만 도메인 간 관계를 설정할때는 되도록 
+entity의 id를 쓰고 도메인은 사용을 자제하자. 무한루프에 걸릴 수 있다. 실제로 무한 루프 걸림...
 
 ## 
 공연 리스트를 회원가입 찜 페이지에 보여주기. 하나 고르고 비슷한 애들을 보여주려면.. 공연의 종류라던지 이런것들이 있어야 추천이 가능할 것 같음.
