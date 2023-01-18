@@ -3,6 +3,8 @@ package com.arton.backend.auth.application.service;
 import com.arton.backend.auth.application.port.in.KaKaoUseCase;
 import com.arton.backend.auth.application.port.in.TokenDto;
 import com.arton.backend.infra.jwt.TokenProvider;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -167,7 +169,7 @@ public class KaKaoService implements KaKaoUseCase {
                     .build();
             userRepository.save(user);
         }
-        return user;
+        return userRepository.findByKakaoId(id).orElseThrow(()->new CustomException(ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR));
     }
 
 

@@ -5,6 +5,8 @@ import com.arton.backend.auth.application.port.in.KaKaoUseCase;
 import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.auth.application.port.in.TokenDto;
 import com.arton.backend.infra.jwt.TokenProvider;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.*;
@@ -74,7 +76,7 @@ public class NaverService implements NaverUseCase {
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
-        return null;
+        return tokenDto;
     }
 
     /**
@@ -176,7 +178,7 @@ public class NaverService implements NaverUseCase {
                     .build();
             userRepository.save(user);
         }
-        return user;
+        return userRepository.findByNaverId(id).orElseThrow(() -> new CustomException(ErrorCode.NAVER_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.NAVER_SIMPLE_LOGIN_ERROR));
     }
 
     private Gender getGender(String gender){
