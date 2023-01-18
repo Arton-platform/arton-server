@@ -67,8 +67,9 @@ public class FileUploadUtils {
     public static List<String> getFileNameInDirectory(String directory) {
         Stream<Path> stream = null;
         try {
-            stream = Files.list(Paths.get(System.getProperty("user.dir")+directory));
+            stream = Files.list(Paths.get("/home/ubuntu/arton"+directory));
         } catch (IOException e) {
+            e.printStackTrace();
             throw new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST);
         }
         return Optional.ofNullable(stream).orElseThrow(()->new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST)).filter(file -> !Files.isDirectory(file))
