@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.arton.backend.infra.file.FileUploadUtils.*;
+
 @Slf4j
 @Controller
 @RequestMapping("/terms")
@@ -34,7 +36,7 @@ public class TermsController {
     @ResponseBody
     public ResponseData<List<TermsShowDto>> showTermList() {
         List<TermsShowDto> response = new ArrayList<>();
-        List<String> collect = FileUploadUtils.getFileNameInDirectory("/terms");
+        List<String> collect = getFileNameInDirectory("/terms");
         for (String s : collect) {
             String uri = s.substring(0, s.lastIndexOf("."));
             if (s.contains("mandatory")) {
@@ -61,12 +63,13 @@ public class TermsController {
      */
     @GetMapping("/{termsName}")
     public String getTerms(@PathVariable(name = "termsName") String termsName) {
-        List<String> collect = FileUploadUtils.getFileNameInDirectory("/terms");
-        if (collect.stream().anyMatch(name -> name.substring(0, name.lastIndexOf(".")).equals(termsName))) {
-            return "/terms/" + termsName;
-        } else {
-            throw new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST);
+        List<String> collect = getFileNameInDirectory("/terms");
+        for (String name : collect) {
+            if (name.substring(0, name.lastIndexOf(".")).equals(termsName)) {
+                return "terms/"+termsName;
+            }
         }
+        throw new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST);
     }
 
 }

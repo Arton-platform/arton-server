@@ -5,6 +5,7 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -23,7 +24,6 @@ import java.util.stream.Stream;
 public class FileUploadUtils {
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) {
         Path uploadPath = Paths.get(System.getProperty("user.dir") + uploadDir);
-
         if (!Files.exists(uploadPath)) {
             try {
                 Files.createDirectories(uploadPath);
@@ -65,9 +65,19 @@ public class FileUploadUtils {
      * @return
      */
     public static List<String> getFileNameInDirectory(String directory) {
+        Path termsPath = Paths.get(System.getProperty("user.dir") + directory);
+        log.info("path {}", termsPath.getFileName());
+        if (!Files.exists(termsPath)) {
+            try {
+                Files.createDirectories(termsPath);
+            } catch (IOException e) {
+                log.error("Could createDirectories: {}", e);
+            }
+        }
+
         Stream<Path> stream = null;
         try {
-            stream = Files.list(Paths.get("/home/ubuntu/arton"+directory));
+            stream = Files.list(termsPath);
         } catch (IOException e) {
             e.printStackTrace();
             throw new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST);
