@@ -1,6 +1,7 @@
 package com.arton.backend.review.application.service;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
@@ -23,8 +24,12 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase {
     private final ReviewRegistPort reviewRegistPort;
     private final ReviewMapper reviewMapper;
     @Override
-    public List<Review> reviewList(Performance performance) {
-        return reviewListPort.reviewList(performance).map(reviews -> reviews
+    public List<Review> reviewList(Long id) {
+        PerformanceEntity performanceEntity = PerformanceEntity.builder()
+                .id(id)
+                .build();
+
+        return reviewListPort.reviewList(performanceEntity).map(reviews -> reviews
                 .stream()
                 .map(review -> reviewMapper.toDomain(review))
                 .collect(Collectors.toList())
