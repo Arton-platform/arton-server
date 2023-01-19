@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface CustomPerformanceZzimRepository {
     List<PerformanceZzim> getUsersFavoritePerformances(Long userId);
+    long deleteUsersFavoritePerformances(Long userId, List<Long> ids);
 }

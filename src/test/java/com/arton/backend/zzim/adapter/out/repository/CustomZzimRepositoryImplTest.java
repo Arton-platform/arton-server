@@ -10,6 +10,7 @@ import com.arton.backend.user.adapter.out.repository.UserRepository;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -145,5 +147,60 @@ class CustomZzimRepositoryImplTest {
             System.out.println("usersFavoriteArtist = " + usersFavoriteArtist);
         }
     }
+
+    @Description("유저의 공연 + 아티스 찜 리스트 편집하기")
+    @Test
+    void deleteZzimTest() throws Exception {
+        List<Long> artistIds = artistRepository.findAll().stream().filter(artistEntity -> artistEntity.getId() % 2 == 0).map(ArtistEntity::getId).collect(Collectors.toList());
+        List<Long> ids = performanceRepository.findAll().stream().filter(performance -> performance.getId() % 2 == 0).map(PerformanceEntity::getId).collect(Collectors.toList());
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
+                .ageRange(10)
+                .email("abc123@naver.com")
+                .password("thskan11")
+                .checkPassword("thskan11")
+                .termsAgree("Y")
+                .gender("MALE")
+                .nickname("nick")
+                .performances(ids)
+                .artists(artistIds)
+                .build();
+        String content = objectMapper.writeValueAsString(signupRequestDto);
+        System.out.println("content = " + content);
+        MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+                        .file(json)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk()).andReturn();
+        String response = mvcResult.getResponse().getContentAsString();
+        System.out.println("response = " + response);
+
+        // 유저의 찜리스트
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+        List<PerformanceZzim> usersFavoritePerformances = performanceZzimRepository.getUsersFavoritePerformances(user.getId());
+        for (PerformanceZzim userFavoritePerformance : usersFavoritePerformances) {
+            System.out.println("userFavoritePerformance = " + userFavoritePerformance);
+        }
+        List<ArtistZzim> usersFavoriteArtists = artistZzimRepository.getUsersFavoriteArtists(user.getId());
+        for (ArtistZzim usersFavoriteArtist : usersFavoriteArtists) {
+            System.out.println("usersFavoriteArtist = " + usersFavoriteArtist);
+        }
+
+        // 아티스트 찜 편집
+        artistZzimRepository.deleteUsersFavoriteArtists(user.getId(), artistIds.subList(0, artistIds.size()/2));
+        List<ArtistZzim> afterUsersFavoriteArtists = artistZzimRepository.getUsersFavoriteArtists(user.getId());
+        for (ArtistZzim afterArtist : afterUsersFavoriteArtists) {
+            System.out.println("afterArtist = " + afterArtist);
+        }
+        // 공연 편집
+        performanceZzimRepository.deleteUsersFavoritePerformances(user.getId(), ids.subList(0, ids.size()/2));
+        List<PerformanceZzim> afterUsersFavoritePerformances = performanceZzimRepository.getUsersFavoritePerformances(user.getId());
+        for (PerformanceZzim afterPerformance : afterUsersFavoritePerformances) {
+            System.out.println("afterPerformance = " + afterPerformance);
+        }
+
+        assertThat(afterUsersFavoriteArtists.size()).isNotEqualTo(usersFavoriteArtists.size());
+        assertThat(afterUsersFavoritePerformances.size()).isNotEqualTo(usersFavoritePerformances.size());
+    }
+
 
 }

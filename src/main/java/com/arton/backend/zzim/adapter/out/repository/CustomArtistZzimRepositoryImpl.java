@@ -1,6 +1,7 @@
 package com.arton.backend.zzim.adapter.out.repository;
 
 import com.arton.backend.zzim.domain.ArtistZzim;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,9 @@ import static com.arton.backend.zzim.adapter.out.repository.QArtistZzimEntity.ar
 public class CustomArtistZzimRepositoryImpl implements CustomArtistZzimRepository{
     private final JPAQueryFactory queryFactory;
 
+    private BooleanExpression getEq(Long userId) {
+        return artistZzimEntity.user.id.eq(userId);
+    }
     /**
      * 유저의 아티스트 찜 리스트를 가져온다.
      * @param userId
@@ -25,9 +29,23 @@ public class CustomArtistZzimRepositoryImpl implements CustomArtistZzimRepositor
     @Override
     public List<ArtistZzim> getUsersFavoriteArtists(Long userId) {
         List<ArtistZzimEntity> result = queryFactory.selectFrom(artistZzimEntity)
-                .where(artistZzimEntity.user.id.eq(userId))
+                .where(getEq(userId))
                 .fetch();
         return Optional.ofNullable(result).orElseGet(Collections::emptyList)
                 .stream().map(ArtistZzimMapper::toDomain).collect(Collectors.toList());
+    }
+
+    /**
+     * 유저 찜목록 편집 기능
+     * @param userId
+     * @param ids
+     * @return
+     */
+    @Override
+    public long deleteUsersFavoriteArtists(Long userId, List<Long> ids) {
+        return queryFactory.delete(artistZzimEntity)
+                .where(getEq(userId),
+                        artistZzimEntity.id.in(ids))
+                .execute();
     }
 }

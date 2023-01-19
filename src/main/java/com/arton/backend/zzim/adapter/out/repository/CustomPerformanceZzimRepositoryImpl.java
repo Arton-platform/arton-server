@@ -31,4 +31,18 @@ public class CustomPerformanceZzimRepositoryImpl implements CustomPerformanceZzi
         return Optional.ofNullable(result).orElseGet(Collections::emptyList)
                 .stream().map(PerformanceZzimMapper::toDomain).collect(Collectors.toList());
     }
+
+    /**
+     * 유저의 공연찜 리스트 삭제
+     * @param userId
+     * @param ids
+     * @return
+     */
+    @Override
+    public long deleteUsersFavoritePerformances(Long userId, List<Long> ids) {
+        return queryFactory.delete(performanceZzimEntity)
+                .where(performanceZzimEntity.user.id.eq(userId),
+                        performanceZzimEntity.id.in(ids))
+                .execute();
+    }
 }
