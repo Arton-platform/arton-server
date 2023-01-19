@@ -1,5 +1,6 @@
 package com.arton.backend.zzim.adapter.out.repository;
 
+import com.arton.backend.zzim.application.port.in.ZzimDeleteDto;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
@@ -28,5 +29,40 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
         List<PerformanceZzimEntity> response = Optional.ofNullable(performanceZzims).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toEntity).collect(Collectors.toList());
         return Optional.ofNullable(performanceZzimRepository.saveAll(response)).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toDomain).collect(Collectors.toList());
 
+    }
+
+    /**
+     * @param userId user id
+     * @param ids artist zzim ids
+     * @return
+     */
+    @Override
+    public long deleteUserFavoriteArtists(Long userId, List<Long> ids) {
+        return artistZzimRepository.deleteUsersFavoriteArtists(userId, ids);
+    }
+
+    /**
+     * @param userId
+     * @param ids performance zzim ids
+     * @return
+     */
+    @Override
+    public long deleteUserFavoritePerformances(Long userId, List<Long> ids) {
+        return performanceZzimRepository.deleteUsersFavoritePerformances(userId, ids);
+    }
+
+    @Override
+    public void deleteAllFavoriteArtist(Long userId) {
+        artistZzimRepository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public void deleteAllFavoritePerformance(Long userId) {
+        performanceZzimRepository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public void deleteAllFavorites(Long userId) {
+        artistZzimRepository.deleteAllByUserId(userId);
     }
 }

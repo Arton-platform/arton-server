@@ -11,4 +11,9 @@ import java.util.List;
 public interface ZzimRepositoryPort {
     List<ArtistZzim> saveArtists(List<ArtistZzim> artistZzims);
     List<PerformanceZzim> savePerformances(List<PerformanceZzim> performanceZzims);
+    long deleteUserFavoriteArtists(Long userId, List<Long> ids);
+    long deleteUserFavoritePerformances(Long userId, List<Long> ids);
+    void deleteAllFavoriteArtist(Long userId);
+    void deleteAllFavoritePerformance(Long userId);
+    void deleteAllFavorites(Long userId);
 }

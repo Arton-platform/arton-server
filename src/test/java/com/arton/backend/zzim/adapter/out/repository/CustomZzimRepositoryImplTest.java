@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -200,6 +200,45 @@ class CustomZzimRepositoryImplTest {
 
         assertThat(afterUsersFavoriteArtists.size()).isNotEqualTo(usersFavoriteArtists.size());
         assertThat(afterUsersFavoritePerformances.size()).isNotEqualTo(usersFavoritePerformances.size());
+    }
+
+    @Description("유저의 아티스트 찜 초기화")
+    @Test
+    void deleteAllArtistZzimTest() throws Exception {
+        List<Long> artistIds = artistRepository.findAll().stream().filter(artistEntity -> artistEntity.getId() % 2 == 0).map(ArtistEntity::getId).collect(Collectors.toList());
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
+                .ageRange(10)
+                .email("abc123@naver.com")
+                .password("thskan11")
+                .checkPassword("thskan11")
+                .termsAgree("Y")
+                .gender("MALE")
+                .nickname("nick")
+                .performances(new ArrayList<>())
+                .artists(artistIds)
+                .build();
+        String content = objectMapper.writeValueAsString(signupRequestDto);
+        System.out.println("content = " + content);
+        MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+                        .file(json)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk()).andReturn();
+        String response = mvcResult.getResponse().getContentAsString();
+        System.out.println("response = " + response);
+
+        // 유저의 찜리스트
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+
+        List<ArtistZzim> usersFavoriteArtists = artistZzimRepository.getUsersFavoriteArtists(user.getId());
+        for (ArtistZzim usersFavoriteArtist : usersFavoriteArtists) {
+            System.out.println("usersFavoriteArtist = " + usersFavoriteArtist);
+        }
+
+        // 아티스트 찜 편집
+        artistZzimRepository.deleteAllByUserId(user.getId());
+        List<ArtistZzimEntity> allByUserId = artistZzimRepository.findAllByUserId(user.getId());
+        assertThat(allByUserId.size()).isEqualTo(0);
     }
 
 
