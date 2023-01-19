@@ -20,9 +20,13 @@ import org.springframework.context.annotation.Description;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
@@ -253,4 +257,49 @@ class CustomZzimRepositoryImplTest {
         List<ArtistZzimEntity> allByUserId = artistZzimRepository.findAllByUserId(user.getId());
         assertThat(allByUserId.size()).isEqualTo(0);
     }
+
+    @Transactional
+    @Commit
+    @Description("유저의 찜 삭제")
+    @Test
+    void deleteEditZzimTest() throws Exception {
+        // security apply
+        mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+
+        List<Long> ids = performanceRepository.findAll().stream().filter(performance -> performance.getId() % 2 == 0).map(PerformanceEntity::getId).collect(Collectors.toList());
+        List<Long> artistIds = artistRepository.findAll().stream().filter(artistEntity -> artistEntity.getId() % 2 == 0).map(ArtistEntity::getId).collect(Collectors.toList());
+        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
+                .ageRange(10)
+                .email("abc123@naver.com")
+                .password("thskan11")
+                .checkPassword("thskan11")
+                .termsAgree("Y")
+                .gender("MALE")
+                .nickname("nick")
+                .performances(ids)
+                .artists(artistIds)
+                .build();
+        String content = objectMapper.writeValueAsString(signupRequestDto);
+        MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
+        MvcResult mvcResult = mockMvc.perform(multipart("/auth/signup")
+                        .file(json)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk()).andReturn();
+        String response = mvcResult.getResponse().getContentAsString();
+
+        // 유저의 찜리스트
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(String.valueOf(user.getId()));
+
+        ZzimDeleteDto deleteDto = ZzimDeleteDto.builder().artists(artistIds.subList(0, artistIds.size() / 2))
+                .performances(ids.subList(0, ids.size()/2)).build();
+        mockMvc.perform(post("/zzim/cancel").with(SecurityMockMvcRequestPostProcessors.user(userDetails))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(deleteDto)))
+                .andExpect(status().isNoContent());
+    }
+
+
 }
