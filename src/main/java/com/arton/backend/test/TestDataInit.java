@@ -2,12 +2,8 @@ package com.arton.backend.test;
 
 import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.adapter.out.repository.ArtistRepository;
-import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
-import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
-import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
-import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -26,7 +22,6 @@ public class TestDataInit {
     private final ArtistRepository artistRepository;
     private final PerformanceRepository performanceRepository;
     private String defaultImage = "image/profiles/default.png";
-
 
     @Transactional
     @EventListener(ApplicationReadyEvent.class)

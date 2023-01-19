@@ -1,7 +1,5 @@
 package com.arton.backend.auth.application.service;
 
-import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
-import com.arton.backend.artist.adapter.out.repository.ArtistMapper;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.port.in.*;
@@ -11,16 +9,10 @@ import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
-import com.arton.backend.performance.adapter.out.repository.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.user.adapter.out.repository.UserEntity;
-import com.arton.backend.user.adapter.out.repository.UserMapper;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
-import com.arton.backend.zzim.adapter.out.repository.ArtistZzimEntity;
-import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimEntity;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
@@ -37,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -92,31 +83,34 @@ public class AuthService implements AuthUseCase {
             savedUser.setProfileImageUrl("/" + id + "/" + newFileName);
         }
 
-        // zzim artist
+        // 아티스트 찜하기
         List<Long> artistIds = signupRequestDto.getArtists();
-        List<Artist> artists = artistRepository.findByIds(artistIds);
-        if (artists!=null) {
-            List<ArtistZzim> zzims = new ArrayList<>();
-            for (Artist artist : artists) {
-                ArtistZzim artistZzim = ArtistZzim.builder().artist(artist.getId()).user(savedUser.getId()).build();
-                artistZzim.setUser(savedUser.getId());
-                zzims.add(artistZzim);
+        if (!artistIds.isEmpty()) {
+            List<Artist> artists = artistRepository.findByIds(artistIds);
+            if (artists!=null) {
+                List<ArtistZzim> zzims = new ArrayList<>();
+                for (Artist artist : artists) {
+                    ArtistZzim artistZzim = ArtistZzim.builder().artist(artist.getId()).user(savedUser.getId()).build();
+                    artistZzim.setUser(savedUser.getId());
+                    zzims.add(artistZzim);
+                }
+                zzimRepository.saveArtists(zzims);
             }
-            zzimRepository.saveArtists(zzims);
         }
-        // zzim performance
+        // 공연 찜하기
         List<Long> performanceIds = signupRequestDto.getPerformances();
-        List<Performance> performances = performanceRepository.findByIds(performanceIds);
-        if (performances!=null) {
-            List<PerformanceZzim> zzims = new ArrayList<>();
-            for (Performance performance : performances) {
-                PerformanceZzim performanceZzim = PerformanceZzim.builder().performanceId(performance.getPerformanceId()).userId(savedUser.getId()).build();
-                performanceZzim.setUser(savedUser.getId());
-                zzims.add(performanceZzim);
+        if (!performanceIds.isEmpty()) {
+            List<Performance> performances = performanceRepository.findByIds(performanceIds);
+            if (performances!=null) {
+                List<PerformanceZzim> zzims = new ArrayList<>();
+                for (Performance performance : performances) {
+                    PerformanceZzim performanceZzim = PerformanceZzim.builder().performanceId(performance.getPerformanceId()).userId(savedUser.getId()).build();
+                    performanceZzim.setUser(savedUser.getId());
+                    zzims.add(performanceZzim);
+                }
+                zzimRepository.savePerformances(zzims);
             }
-            zzimRepository.savePerformances(zzims);
         }
-
         userRepository.save(savedUser);
         return true;
     }
