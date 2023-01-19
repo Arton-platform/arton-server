@@ -8,13 +8,10 @@ import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.adapter.out.repository.UserRepository;
+import com.arton.backend.zzim.application.port.in.ZzimDeleteDto;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.lang.annotation.Before;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,15 +22,18 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -53,6 +53,9 @@ class CustomZzimRepositoryImplTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    WebApplicationContext context;
 
     UserDetails userDetails;
     @Autowired
@@ -76,7 +79,7 @@ class CustomZzimRepositoryImplTest {
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+        mockMvc.perform(multipart("/auth/signup")
                         .file(json)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk());
@@ -107,7 +110,7 @@ class CustomZzimRepositoryImplTest {
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+        mockMvc.perform(multipart("/auth/signup")
                         .file(json)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk());
@@ -139,7 +142,7 @@ class CustomZzimRepositoryImplTest {
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+        MvcResult mvcResult = mockMvc.perform(multipart("/auth/signup")
                         .file(json)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk()).andReturn();
@@ -177,7 +180,7 @@ class CustomZzimRepositoryImplTest {
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+        MvcResult mvcResult = mockMvc.perform(multipart("/auth/signup")
                         .file(json)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk()).andReturn();
@@ -230,7 +233,7 @@ class CustomZzimRepositoryImplTest {
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
+        MvcResult mvcResult = mockMvc.perform(multipart("/auth/signup")
                         .file(json)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk()).andReturn();
@@ -249,32 +252,5 @@ class CustomZzimRepositoryImplTest {
         artistZzimRepository.deleteAllByUserId(user.getId());
         List<ArtistZzimEntity> allByUserId = artistZzimRepository.findAllByUserId(user.getId());
         assertThat(allByUserId.size()).isEqualTo(0);
-    }
-
-    @Description("유저가 자신의 찜 목록을 선택하여 선택된 아이템을 삭제합니다.")
-    @Test
-    void deleteTest() throws Exception {
-        List<Long> artistIds = artistRepository.findAll().stream().filter(artistEntity -> artistEntity.getId() % 2 == 0).map(ArtistEntity::getId).collect(Collectors.toList());
-        List<Long> ids = performanceRepository.findAll().stream().filter(performance -> performance.getId() % 2 == 0).map(PerformanceEntity::getId).collect(Collectors.toList());
-        SignupRequestDto signupRequestDto = SignupRequestDto.builder()
-                .ageRange(10)
-                .email("abc123@naver.com")
-                .password("thskan11")
-                .checkPassword("thskan11")
-                .termsAgree("Y")
-                .gender("MALE")
-                .nickname("nick")
-                .performances(ids)
-                .artists(artistIds)
-                .build();
-        String content = objectMapper.writeValueAsString(signupRequestDto);
-        System.out.println("content = " + content);
-        MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
-                        .file(json)
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk()).andReturn();
-        String response = mvcResult.getResponse().getContentAsString();
-        System.out.println("response = " + response);
     }
 }
