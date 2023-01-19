@@ -1,6 +1,5 @@
 package com.arton.backend.artist.domain;
 
-import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
 import com.arton.backend.performer.domain.Performer;
 import lombok.*;
 

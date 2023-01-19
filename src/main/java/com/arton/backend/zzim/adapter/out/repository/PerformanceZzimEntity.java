@@ -22,6 +22,9 @@ public class PerformanceZzimEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "peformance_id")
+    private PerformanceEntity performance;
 
     public void setUser(UserEntity user) {
         this.user = user;
@@ -29,11 +32,11 @@ public class PerformanceZzimEntity extends BaseEntity {
             user.getPerformanceZzims().add(this);
         }
     }
-
     @Builder
-    public PerformanceZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, UserEntity user) {
+    public PerformanceZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, UserEntity user, PerformanceEntity performance) {
         super(createdDate, updateDate);
         this.id = id;
         this.user = user;
+        this.performance = performance;
     }
 }
