@@ -25,10 +25,20 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
     }
 
     @Override
+    public List<ArtistZzim> getArtistZzimByUserId(Long userId) {
+        return Optional.ofNullable(artistZzimRepository.findAllByUserId(userId)).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
     public List<PerformanceZzim> savePerformances(List<PerformanceZzim> performanceZzims) {
         List<PerformanceZzimEntity> response = Optional.ofNullable(performanceZzims).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toEntity).collect(Collectors.toList());
         return Optional.ofNullable(performanceZzimRepository.saveAll(response)).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toDomain).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<PerformanceZzim> getPerformanceZzimByUserId(Long userId) {
+        return Optional.ofNullable(performanceZzimRepository.findAllByUserId(userId)).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toDomain).collect(Collectors.toList());
     }
 
     /**

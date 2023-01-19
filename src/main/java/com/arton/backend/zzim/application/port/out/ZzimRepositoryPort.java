@@ -10,7 +10,9 @@ import java.util.List;
  */
 public interface ZzimRepositoryPort {
     List<ArtistZzim> saveArtists(List<ArtistZzim> artistZzims);
+    List<ArtistZzim> getArtistZzimByUserId(Long userId);
     List<PerformanceZzim> savePerformances(List<PerformanceZzim> performanceZzims);
+    List<PerformanceZzim> getPerformanceZzimByUserId(Long userId);
     long deleteUserFavoriteArtists(Long userId, List<Long> ids);
     long deleteUserFavoritePerformances(Long userId, List<Long> ids);
     void deleteAllFavoriteArtist(Long userId);
