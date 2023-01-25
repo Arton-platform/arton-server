@@ -45,6 +45,7 @@ public class User {
     @ToString.Exclude
     List<ArtistZzim> artistZzims = new ArrayList<>();
     private Boolean alertState;
+    private String selfDescription;
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }
@@ -70,8 +71,9 @@ public class User {
     public void changeAlertState(Boolean state) {
         this.alertState = state;
     }
+    public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
     @Builder
-    public User(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims) {
+    public User(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription) {
         this.id = id;
         this.kakaoId = kakaoId;
         this.naverId = naverId;
@@ -89,5 +91,6 @@ public class User {
         this.performanceZzims = performanceZzims;
         this.artistZzims = artistZzims;
         this.alertState = true;
+        this.selfDescription = selfDescription;
     }
 }

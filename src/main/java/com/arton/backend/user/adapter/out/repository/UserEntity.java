@@ -62,9 +62,13 @@ public class UserEntity extends BaseEntity {
 
     private Boolean alertState;
 
+    private String selfDescription;
+
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }
+
+
     /**
      * 아티스트를 찜한다
      * @param artistZzim
@@ -87,8 +91,12 @@ public class UserEntity extends BaseEntity {
     public void changeAlertState(Boolean state){
         this.alertState = state;
     }
+    public void setSelfDescription(String selfDescription) {
+        this.selfDescription = selfDescription;
+    }
+
     @Builder
-    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription) {
         super(createdDate, updatedDate);
         this.id = id;
         this.kakaoId = kakaoId;
@@ -105,5 +113,6 @@ public class UserEntity extends BaseEntity {
         this.performanceZzims = performanceZzims;
         this.artistZzims = artistZzims;
         this.alertState = true;
+        this.selfDescription = selfDescription;
     }
 }

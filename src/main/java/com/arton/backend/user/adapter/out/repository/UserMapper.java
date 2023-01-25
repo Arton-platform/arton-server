@@ -28,6 +28,7 @@ public class UserMapper {
                 .updateDate(user.getUpdateDate())
                 .performanceZzims(Optional.ofNullable(user.getPerformanceZzims()).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toDomain).collect(Collectors.toList()))
                 .artistZzims(Optional.ofNullable(user.getArtistZzims()).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toDomain).collect(Collectors.toList()))
+                .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))
                 .build();
     }
 
@@ -49,6 +50,7 @@ public class UserMapper {
                 .artistZzims(Optional.ofNullable(user.getArtistZzims()).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toEntity).collect(Collectors.toList()))
                 .createdDate(user.getCreatedDate())
                 .updatedDate(user.getUpdateDate())
+                .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))
                 .build();
     }
 
