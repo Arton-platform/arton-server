@@ -1,6 +1,7 @@
 package com.arton.backend.zzim.adapter.in;
 
-import com.arton.backend.infra.shared.common.CommonResponse;
+import com.arton.backend.infra.shared.common.ResponseData;
+import com.arton.backend.user.domain.User;
 import com.arton.backend.zzim.application.port.in.ZzimDeleteDto;
 import com.arton.backend.zzim.application.port.in.ZzimUseCase;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -37,4 +41,25 @@ public class ZzimController {
         return ResponseEntity.noContent().build();
     }
 
+
+    /**
+     * 유저를 기준으로 Artist, Performance 의 찜 목록을 호출한다.
+     * @param userDetails
+     * @return HashMap<String, Object>
+     */
+    @PostMapping("/list")
+    public ResponseEntity<ResponseData<Map>> zzimList(@AuthenticationPrincipal UserDetails userDetails){
+        long userId = Long.parseLong(userDetails.getUsername());
+        HashMap<String,Object> zzimMap = new HashMap<>();
+        zzimMap.put("performance", zzimService.performanceList(userId));
+        zzimMap.put("artist", zzimService.artistList(userId));
+
+
+        ResponseData response = new ResponseData(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                zzimMap
+        );
+        return ResponseEntity.ok(response);
+    }
 }
