@@ -1,5 +1,6 @@
 package com.arton.backend.user.domain;
 
+import com.arton.backend.user.application.port.in.UserProfileEditDto;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
@@ -7,6 +8,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -72,6 +74,20 @@ public class User {
         this.alertState = state;
     }
     public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
+
+    /**
+     * 프로필 업데이트
+     * @param userProfileEditDto
+     */
+    public void updateProfile(UserProfileEditDto userProfileEditDto) {
+        if (userProfileEditDto != null) {
+            // 컨트롤러에서 이미 검증이 됨.
+            String nickname = userProfileEditDto.getNickname();
+            this.nickname = nickname;
+            String selfDescription = Optional.ofNullable(userProfileEditDto.getSelfDescription()).orElse("");
+            this.selfDescription = selfDescription;
+        }
+    }
     @Builder
     public User(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription) {
         this.id = id;
