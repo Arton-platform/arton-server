@@ -23,7 +23,7 @@ public class PerformanceZzimEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "peformance_id")
+    @JoinColumn(name = "performance_id")
     private PerformanceEntity performance;
 
     public void setUser(UserEntity user) {
