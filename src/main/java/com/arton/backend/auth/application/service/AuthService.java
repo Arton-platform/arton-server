@@ -3,6 +3,7 @@ package com.arton.backend.auth.application.service;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.infra.file.FileUploadLocal;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.file.MD5Generator;
 import com.arton.backend.infra.jwt.TokenProvider;
@@ -46,9 +47,7 @@ public class AuthService implements AuthUseCase {
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
-
-    @Value("${default.image}")
-    private String defaultImage;
+    private final FileUploadUtils fileUploadUtils;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
 
@@ -70,17 +69,14 @@ public class AuthService implements AuthUseCase {
         // 회원가입
         User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
         // 기본 이미지 지정
-        user.setProfileImageUrl(defaultImage);
+        user.setProfileImageUrl(fileUploadUtils.getDefaultImageUrl());
         User savedUser = userRepository.save(user);
         Long id = savedUser.getId();
 
         // 프로필 이미지 업로드
         if (multipartFile != null) {
-            String filename = multipartFile.getOriginalFilename();
-            String format = filename.substring(filename.lastIndexOf(".") + 1); // 포맷
-            String newFileName = new MD5Generator(filename).toString() + "." + format; // 이미지 이름 해싱
-            FileUploadUtils.saveFile("/image/profiles/"+id, newFileName, multipartFile); // 업로드
-            savedUser.setProfileImageUrl("/" + id + "/" + newFileName);
+            String upload = fileUploadUtils.upload(multipartFile, "arton/image/profiles/" + id);
+            savedUser.setProfileImageUrl(upload);
         }
 
         // 아티스트 찜하기

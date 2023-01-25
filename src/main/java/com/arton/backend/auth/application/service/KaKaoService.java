@@ -47,7 +47,7 @@ public class KaKaoService implements KaKaoUseCase {
     private String clientId;
     @Value("${kakao.redirect.url}")
     private String redirectURL;
-    @Value("${default.image}")
+    @Value("${spring.default-image}")
     private String defaultImage;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;

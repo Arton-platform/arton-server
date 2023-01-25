@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class TermsShowDto {
-    private String mandatory;
+    private String type;
     private String title;
     private String uri;
 }
