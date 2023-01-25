@@ -59,6 +59,9 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     List<ArtistZzimEntity> artistZzims = new ArrayList<>();
+
+    private Boolean alertState;
+
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }
@@ -81,7 +84,9 @@ public class UserEntity extends BaseEntity {
     public void setPassword(String newPassword){
         this.password = newPassword;
     }
-
+    public void changeAlertState(Boolean state){
+        this.alertState = state;
+    }
     @Builder
     public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate) {
         super(createdDate, updatedDate);
@@ -99,5 +104,6 @@ public class UserEntity extends BaseEntity {
         this.termsAgree = termsAgree;
         this.performanceZzims = performanceZzims;
         this.artistZzims = artistZzims;
+        this.alertState = true;
     }
 }
