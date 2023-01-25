@@ -9,6 +9,7 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,14 +18,17 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
- * 이미지 업로드 유틸
+ * 이미지 업로드 유틸 S3
+ * s3에 올리려면 프로파일 추가하면 됨.
  */
 @Slf4j
+@Profile(value = {"aws"})
 @Service
 @RequiredArgsConstructor
-public class FileUploadS3 implements FileUpload{
+public class FileUploadS3 implements FileUploadUtils {
     @Value("${spring.bucket}")
     private String bucket;
     @Value("${spring.full-bucket}")
@@ -37,6 +41,11 @@ public class FileUploadS3 implements FileUpload{
     @Override
     public String getDefaultImageUrl() {
         return defaultImageUrl;
+    }
+
+    @Override
+    public List<String> getFileNameInDirectory(String directory) {
+        return null;
     }
 
     /**

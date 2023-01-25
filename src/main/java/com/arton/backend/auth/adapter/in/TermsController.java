@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.arton.backend.infra.file.FileUploadUtils.*;
-
 @Slf4j
 @Controller
 @RequestMapping("/terms")
@@ -27,6 +25,7 @@ import static com.arton.backend.infra.file.FileUploadUtils.*;
 public class TermsController {
 
     private final ResourceLoader resourceLoader;
+    private final FileUploadUtils fileUploadUtils;
 
     /**
      * 약관 리스트 보여주기
@@ -36,7 +35,7 @@ public class TermsController {
     @ResponseBody
     public ResponseData<List<TermsShowDto>> showTermList() {
         List<TermsShowDto> response = new ArrayList<>();
-        List<String> collect = getFileNameInDirectory("/terms");
+        List<String> collect = fileUploadUtils.getFileNameInDirectory("/terms");
         for (String s : collect) {
             String uri = s.substring(0, s.lastIndexOf("."));
             if (s.contains("mandatory")) {
@@ -63,7 +62,7 @@ public class TermsController {
      */
     @GetMapping("/{termsName}")
     public String getTerms(@PathVariable(name = "termsName") String termsName) {
-        List<String> collect = getFileNameInDirectory("/terms");
+        List<String> collect = fileUploadUtils.getFileNameInDirectory("/terms");
         for (String name : collect) {
             if (name.substring(0, name.lastIndexOf(".")).equals(termsName)) {
                 return "terms/"+termsName;
