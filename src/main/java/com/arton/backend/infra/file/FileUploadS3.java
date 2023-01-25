@@ -24,7 +24,7 @@ import java.util.List;
  * s3에 올리려면 프로파일 추가하면 됨.
  */
 @Slf4j
-@Profile(value = {"aws"})
+@Profile(value = {"aws", "local"})
 @Service
 @RequiredArgsConstructor
 public class FileUploadS3 implements FileUploadUtils {

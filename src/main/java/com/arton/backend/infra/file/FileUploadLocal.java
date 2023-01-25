@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * 이미지 업로드 유틸 로컬
  */
 @Slf4j
-@Profile(value = "!aws")
+@Profile(value = "dev")
 @Service
 @RequiredArgsConstructor
 public class FileUploadLocal implements FileUploadUtils{
