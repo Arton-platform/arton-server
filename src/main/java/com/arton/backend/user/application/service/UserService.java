@@ -39,4 +39,14 @@ public class UserService implements UserUseCase {
        return userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
     }
 
+    @Override
+    public Boolean alertState(long userId) {
+        return findUser(userId).getAlertState();
+    }
+
+    @Override
+    public void updateAlertState(long userId, Boolean state) {
+        User user = findUser(userId);
+        user.changeAlertState(state);
+    }
 }

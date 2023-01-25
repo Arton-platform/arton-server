@@ -44,7 +44,7 @@ public class User {
     List<PerformanceZzim> performanceZzims = new ArrayList<>();
     @ToString.Exclude
     List<ArtistZzim> artistZzims = new ArrayList<>();
-
+    private Boolean alertState;
     public void setProfileImageUrl(String url){
         this.profileImageUrl = url;
     }
@@ -67,7 +67,9 @@ public class User {
     public void setPassword(String newPassword){
         this.password = newPassword;
     }
-
+    public void changeAlertState(Boolean state) {
+        this.alertState = state;
+    }
     @Builder
     public User(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims) {
         this.id = id;
@@ -86,5 +88,6 @@ public class User {
         this.updateDate = updateDate;
         this.performanceZzims = performanceZzims;
         this.artistZzims = artistZzims;
+        this.alertState = true;
     }
 }
