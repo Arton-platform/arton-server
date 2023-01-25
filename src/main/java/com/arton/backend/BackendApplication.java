@@ -14,6 +14,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 public class BackendApplication {
 
+	/**
+	 * S3 지연 없애기
+	 */
+	static {
+		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}

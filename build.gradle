@@ -62,11 +62,6 @@ dependencies {
 
 	implementation 'com.google.code.gson:gson:2.8.7'
 
-	// for http
-	implementation('org.apache.httpcomponents:httpmime:4.2.4')
-	implementation('commons-dbcp:commons-dbcp:1.4')
-	implementation('org.apache.httpcomponents:httpclient:4.2.4')
-
 	// for mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
