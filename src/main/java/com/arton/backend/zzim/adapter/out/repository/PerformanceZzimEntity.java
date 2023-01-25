@@ -26,6 +26,11 @@ public class PerformanceZzimEntity extends BaseEntity {
     @JoinColumn(name = "performance_id")
     private PerformanceEntity performance;
 
+    /**
+     * User 에서도 performance zzim 기능이 있어서 가지고 있는지 한번 체크하고 넣어야 힘.
+     * 만약 그냥 넣으면 무한 루프 에러 날수도.
+     * @param user
+     */
     public void setUser(UserEntity user) {
         this.user = user;
         if (!user.getPerformanceZzims().contains(this)) {
