@@ -1,6 +1,7 @@
 package com.arton.backend.auth.adapter.in;
 
 import com.arton.backend.auth.application.port.in.TermsShowDto;
+import com.arton.backend.auth.application.port.in.TermsUseCase;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.CustomException;
@@ -23,52 +24,16 @@ import java.util.List;
 @RequestMapping("/terms")
 @RequiredArgsConstructor
 public class TermsController {
-
-    private final ResourceLoader resourceLoader;
-    private final FileUploadUtils fileUploadUtils;
-
+    private final TermsUseCase termsService;
     /**
      * 약관 리스트 보여주기
+     * 선택은 url webview로 넘겨주자.
      * @return
      */
     @GetMapping
     @ResponseBody
     public ResponseData<List<TermsShowDto>> showTermList() {
-        List<TermsShowDto> response = new ArrayList<>();
-        List<String> collect = fileUploadUtils.getFileNameInDirectory("/terms");
-        for (String s : collect) {
-            String uri = s.substring(0, s.lastIndexOf("."));
-            if (s.contains("mandatory")) {
-                response.add(TermsShowDto.builder()
-                        .mandatory("필수")
-                        .title(s)
-                        .uri("/terms/" + uri)
-                        .build());
-            } else {
-                response.add(TermsShowDto.builder()
-                        .mandatory("선택")
-                        .title(s)
-                        .uri("/terms/" + uri)
-                        .build());
-            }
-        }
+        List<TermsShowDto> response = termsService.getTerms();
         return new ResponseData<>("SUCCESS", HttpStatus.OK.value(), response);
     }
-
-    /**
-     * 약관 리스트 web view로 넘기기
-     * @param termsName
-     * @return
-     */
-    @GetMapping("/{termsName}")
-    public String getTerms(@PathVariable(name = "termsName") String termsName) {
-        List<String> collect = fileUploadUtils.getFileNameInDirectory("/terms");
-        for (String name : collect) {
-            if (name.substring(0, name.lastIndexOf(".")).equals(termsName)) {
-                return "terms/"+termsName;
-            }
-        }
-        throw new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST);
-    }
-
 }

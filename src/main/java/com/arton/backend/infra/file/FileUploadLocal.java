@@ -60,6 +60,7 @@ public class FileUploadLocal implements FileUploadUtils{
 
     @Override
     public String upload(MultipartFile multipartFile, String dirName) {
+        validateFile(multipartFile);
         String originalFilename = multipartFile.getOriginalFilename();
         String fileName = createStoreFileName(originalFilename);
         Path uploadPath = Paths.get(System.getProperty("user.dir") + "/" + dirName);
@@ -92,7 +93,7 @@ public class FileUploadLocal implements FileUploadUtils{
      */
     @Override
     public List<String> getFileNameInDirectory(String directory) {
-        Path termsPath = Paths.get(System.getProperty("user.dir") + directory);
+        Path termsPath = Paths.get(System.getProperty("user.dir") + "/" + directory);
         log.info("path {}", termsPath.getFileName());
         if (!Files.exists(termsPath)) {
             try {

@@ -1,9 +1,7 @@
 package com.arton.backend.infra.file;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +16,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,9 +42,34 @@ public class FileUploadS3 implements FileUploadUtils {
         return defaultImageUrl;
     }
 
+    /**
+     * arton/terms 로 넘어옴
+     * @param directory
+     * @return
+     */
     @Override
     public List<String> getFileNameInDirectory(String directory) {
-        return null;
+        List<String> fileNames = new ArrayList<>();
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest();
+        listObjectsRequest.setBucketName(bucket);
+        if (!directory.equals("")) {
+            listObjectsRequest.setPrefix(directory + "/");
+        }
+        listObjectsRequest.setDelimiter("/");
+        ObjectListing s3Objects;
+        do {
+            s3Objects = amazonS3Client.listObjects(listObjectsRequest);
+            // 파일 조회
+            for (S3ObjectSummary objectSummary : s3Objects.getObjectSummaries()) { // prefix 경로의 파일명이 있다면 조회
+                String key = objectSummary.getKey();
+                String[] split = key.split(directory + "/");
+                if (split.length >= 2) {
+                    fileNames.add(prefix + key);
+                }
+            }
+            listObjectsRequest.setMarker(s3Objects.getNextMarker()); // listObjects 1,000건만 조회
+        } while (s3Objects.isTruncated());
+        return fileNames;
     }
 
     /**
