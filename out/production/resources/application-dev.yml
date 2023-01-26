@@ -51,8 +51,12 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql: trace
+    org:
+      hibernate:
+        SQL: debug
+    type:
+      descriptor:
+        sql: trace
 
 default:
   image: /image/profiles/default.png

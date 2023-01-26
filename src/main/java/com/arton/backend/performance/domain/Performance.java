@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ public class Performance {
     private PerformanceType performanceType;
     /** 공연의 출연자들 리스트 */
     @ToString.Exclude
+    @OneToMany(mappedBy = "performance")
     private List<Performer> performers = new ArrayList<>();
     /** 좌석 등급 가격 */
     @ToString.Exclude
