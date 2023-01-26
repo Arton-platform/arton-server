@@ -11,5 +11,7 @@ public interface FollowRepositoryPort {
     Follow add(Follow follow);
     void delete(Follow follow);
     List<User> getFollowingList(Long userId);
+    List<User> getLatestFollowingList(Long userId);
     List<User> getFollowerList(Long userId);
+    List<User> getLatestFollowerList(Long userId);
 }

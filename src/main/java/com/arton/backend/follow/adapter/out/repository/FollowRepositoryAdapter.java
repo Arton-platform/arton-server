@@ -76,6 +76,20 @@ public class FollowRepositoryAdapter implements FollowRepositoryPort {
     }
 
     /**
+     * 자신의 팔로잉 리스트를 최신순으로 구한다.
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<User> getLatestFollowingList(Long userId) {
+        return Optional.ofNullable(followRepository.findAllByFromUserLatest(userId))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(UserMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 자신의 팔로워 리스트를 구한다.
      * @param userId
      * @return
@@ -83,6 +97,20 @@ public class FollowRepositoryAdapter implements FollowRepositoryPort {
     @Override
     public List<User> getFollowerList(Long userId) {
         return Optional.ofNullable(followRepository.findAllByToUser(userId))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(UserMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 자신의 팔로워 리스트를 최신순으로 구한다.
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<User> getLatestFollowerList(Long userId) {
+        return Optional.ofNullable(followRepository.findAllByToUserLatest(userId))
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(UserMapper::toDomain)
