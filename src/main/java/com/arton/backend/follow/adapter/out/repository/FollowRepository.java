@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface FollowRepository extends JpaRepository<FollowEntity, FollowEntity.PK> {
+public interface FollowRepository extends JpaRepository<FollowEntity, FollowEntity.PK>, CustomFollowRepository {
     /**
      * 자신을 따르는 팔로워의 수
      * @param toUser

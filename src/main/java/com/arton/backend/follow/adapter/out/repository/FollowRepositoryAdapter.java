@@ -1,5 +1,6 @@
 package com.arton.backend.follow.adapter.out.repository;
 
+import com.arton.backend.follow.applicaion.port.in.UserFollowSearchDto;
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
 import com.arton.backend.follow.domain.Follow;
 import com.arton.backend.user.adapter.out.repository.UserMapper;
@@ -61,11 +62,6 @@ public class FollowRepositoryAdapter implements FollowRepositoryPort {
         followRepository.delete(toEntity(follow));
     }
 
-    /**
-     * 자신의 팔로잉 리스트를 구한다.
-     * @param userId
-     * @return
-     */
     @Override
     public List<User> getFollowingList(Long userId) {
         return Optional.ofNullable(followRepository.findAllByFromUser(userId))
@@ -75,25 +71,6 @@ public class FollowRepositoryAdapter implements FollowRepositoryPort {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 자신의 팔로잉 리스트를 최신순으로 구한다.
-     * @param userId
-     * @return
-     */
-    @Override
-    public List<User> getLatestFollowingList(Long userId) {
-        return Optional.ofNullable(followRepository.findAllByFromUserLatest(userId))
-                .orElseGet(Collections::emptyList)
-                .stream()
-                .map(UserMapper::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 자신의 팔로워 리스트를 구한다.
-     * @param userId
-     * @return
-     */
     @Override
     public List<User> getFollowerList(Long userId) {
         return Optional.ofNullable(followRepository.findAllByToUser(userId))
@@ -103,14 +80,19 @@ public class FollowRepositoryAdapter implements FollowRepositoryPort {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 자신의 팔로워 리스트를 최신순으로 구한다.
-     * @param userId
-     * @return
-     */
     @Override
-    public List<User> getLatestFollowerList(Long userId) {
-        return Optional.ofNullable(followRepository.findAllByToUserLatest(userId))
+    public List<User> getFollowingList(Long userId, UserFollowSearchDto userFollowSearchDto) {
+        return Optional.ofNullable(followRepository.getFollowings(userId, userFollowSearchDto))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(UserMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<User> getFollowerList(Long userId, UserFollowSearchDto userFollowSearchDto) {
+        return Optional.ofNullable(followRepository.getFollowers(userId, userFollowSearchDto))
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(UserMapper::toDomain)
