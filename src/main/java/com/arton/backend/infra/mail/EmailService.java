@@ -83,8 +83,6 @@ public class EmailService implements EmailUseCase{
     private String setContext(String value, String type) {
         Context context = new Context();
         context.setVariable("password", value);
-        String process = springTemplateEngine.process(type, context);
-        System.out.println("mail process = " + process);
         return springTemplateEngine.process(type, context);
     }
 
