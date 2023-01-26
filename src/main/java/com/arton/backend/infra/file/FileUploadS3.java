@@ -2,6 +2,7 @@ package com.arton.backend.infra.file;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -41,6 +43,25 @@ public class FileUploadS3 implements FileUploadUtils {
     public String getDefaultImageUrl() {
         return defaultImageUrl;
     }
+
+    /**
+     * html 읽어서 raw value로 전환.
+     * @param directory
+     * @return
+     */
+    @Override
+    public String getFileContent(String directory) {
+        S3Object object = amazonS3Client.getObject(new GetObjectRequest(bucket, directory));
+        S3ObjectInputStream objectContent = object.getObjectContent();
+        try {
+            byte[] bytes = IOUtils.toByteArray(objectContent);
+            String response = new String(bytes, StandardCharsets.UTF_8);
+            return response;
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.INVALID_URI_REQUEST.getMessage(), ErrorCode.INVALID_URI_REQUEST);
+        }
+    }
+
 
     /**
      * arton/terms 로 넘어옴

@@ -86,6 +86,12 @@ public class FileUploadLocal implements FileUploadUtils{
     public String getDefaultImageUrl() {
         return defaultImageUrl;
     }
+
+    @Override
+    public String getFileContent(String directory) {
+        return "지원하지 않는 기능입니다...";
+    }
+
     /**
      * / + 폴더명 형식으로 지정한다.
      * @param directory
