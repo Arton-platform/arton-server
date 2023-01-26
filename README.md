@@ -1,3 +1,4 @@
+
 # arton-server
 server
 
@@ -53,47 +54,14 @@ entity의 id를 쓰고 도메인은 사용을 자제하자. 무한루프에 걸�
 ## 
 공연 리스트를 회원가입 찜 페이지에 보여주기. 하나 고르고 비슷한 애들을 보여주려면.. 공연의 종류라던지 이런것들이 있어야 추천이 가능할 것 같음.
 
---------------------------------------------------
-객체 구성
-```
-entity
-├── board
-│   ├── Announcement.java // 공지사항
-│   ├── Board.java        // 게시판 공통    
-│   ├── Comment.java      // 댓글
-│   ├── FAQ.java          // FAQ
-│   └── Review.java       // 리뷰
-├── image
-│   └── Image.java        // 이미지
-└── performance
-    └── Performance.java  // 공연/콘서트 공통
+## 20230126
 
-``` 
+### 티켓 오픈 날자 알림 기능 구현
 
-- 요청 접근 순서
+* 배치 프로그램으로 하루에 한번 브로드캐스팅하는 방식(SSE 사용)
 
-``` 
-    adapter - in - web => Controller
-    
-    application - port - in => UseCase
-    
-    application - service => Service
-    
-    application - port - out => Port
-    
-    adapter - out - persistence - PersistenceAdapter
-    domain
-    
-    // 어댑터 -> 어플리케이션 -> 어뎁터
-``` 
+접속중인 대상만으로 실시간 알림 기능을 제공하고 그외의 경우에는 특정 테이블을 사용
 
-- 작동 방식
-
-```
-도메인은 순수한 자바코드로 구성되어야함.
-도메인은 도메인끼리
-엔터티는 엔터티끼리
-
-서비스, 데이터베이스 포트 작동 도메인을 받고 리턴한다.
-내부에서 엔터티 호출하여 처리함.
-```
+알림 테이블을 통해 알람의 총개수 등등을 전달
+알림 테이블이 있어야 실시간 알림, 누적알림 둘다 가능하며 유지보수성 향상
+하루 한번 중계 테이블에 데이터를 삽입하고 브로드 캐스팅 하는 식으로 개발

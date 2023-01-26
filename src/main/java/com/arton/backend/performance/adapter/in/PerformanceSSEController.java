@@ -1,4 +1,4 @@
-package com.arton.backend.zzim.adapter.in;
+package com.arton.backend.performance.adapter.in;
 
 import com.arton.backend.zzim.domain.SseEmitters;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,19 +13,14 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 
-/**
- * SSE를 통해 티켓오픈날자 중계
- */
-
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/zzim-sse")
-public class ZzimSSEController {
-
+@RequestMapping("/performance-sse")
+public class PerformanceSSEController {
     private final SseEmitters sseEmitters;
 
-    @Operation(summary = "SSE 연결", description = "SSE를 이용하여 zzim 이벤트 수신 대기")
+    @Operation(summary = "SSE 연결", description = "SSE를 이용하여 performance 이벤트 수신 대기")
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> connect(){
         SseEmitter sseEmitter = new SseEmitter();
@@ -33,14 +28,13 @@ public class ZzimSSEController {
 
         try {
             sseEmitter.send(
-                SseEmitter.event()
-                    .name("connect")
-                    .data("connected!")
+                    SseEmitter.event()
+                            .name("connect")
+                            .data("connected!")
             );
         } catch (IOException e) {
-           throw new RuntimeException();
+            throw new RuntimeException();
         }
         return ResponseEntity.ok(sseEmitter);
     }
-
 }
