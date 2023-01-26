@@ -19,11 +19,11 @@ public class FollowEntity extends BaseEntity {
 
     /** 팔로워 즉 팔로잉을 하는 사람 */
     @Id
-    @Column(insertable = false, updatable = false)
+    @Column(name = "from_user", insertable = false, updatable = false)
     private Long fromUser;
     /** 팔로잉을 받는 사람 */
     @Id
-    @Column(insertable = false, updatable = false)
+    @Column(name = "to_user", insertable = false, updatable = false)
     private Long toUser;
 
     @Builder
