@@ -1,12 +1,7 @@
 package com.arton.backend.follow.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 /**
@@ -18,15 +13,19 @@ import java.time.LocalDateTime;
 @ToString
 public class Follow {
     /** 팔로워 즉 팔로잉을 하는 사람 */
-    @Id
-    @Column(insertable = false, updatable = false)
     private Long fromUser;
     /** 팔로잉을 받는 사람 */
-    @Id
-    @Column(insertable = false, updatable = false)
     private Long toUser;
     /** 추가일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
     private LocalDateTime updateDate;
+
+    @Builder
+    public Follow(Long fromUser, Long toUser, LocalDateTime createdDate, LocalDateTime updateDate) {
+        this.fromUser = fromUser;
+        this.toUser = toUser;
+        this.createdDate = createdDate;
+        this.updateDate = updateDate;
+    }
 }
