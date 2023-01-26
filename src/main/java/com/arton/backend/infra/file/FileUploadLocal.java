@@ -89,7 +89,7 @@ public class FileUploadLocal implements FileUploadUtils{
 
     @Override
     public String getFileContent(String directory) {
-        return "지원하지 않는 기능입니다.";
+        return "지원하지 않는 기능입니다...";
     }
 
     /**
