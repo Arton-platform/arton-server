@@ -5,6 +5,7 @@ import com.arton.backend.follow.applicaion.port.in.UserFollowDto;
 import com.arton.backend.follow.applicaion.port.in.UserFollowSearchDto;
 import com.arton.backend.follow.applicaion.port.in.UserShortDto;
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
+import com.arton.backend.follow.domain.Follow;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
@@ -51,7 +52,41 @@ public class FollowService implements FollowUseCase {
         return UserFollowDto.builder().id(userId).followers(followersCount).followings(followingsCount).users(shortResponse).build();
     }
 
-    private void findUser(Long userId) {
-        userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+    /**
+     * toUser로부터 Id가 fromUser인 팔로워를 제거한다.
+     * @param toUser
+     * @param fromUser
+     */
+    @Override
+    public void removeFollower(Long toUser, Long fromUser) {
+        // 팔로잉 대상
+        User to = findUser(toUser);
+        // 팔로워
+        User from = findUser(fromUser);
+        // 관계
+        Follow follow = Follow.builder().toUser(to.getId()).fromUser(from.getId()).build();
+        // 제거
+        followRepository.delete(follow);
+    }
+
+    /**
+     * fromUser가 toUser 팔로잉을 취소한다.
+     * @param fromUser
+     * @param toUser
+     */
+    @Override
+    public void unfollow(Long fromUser, Long toUser) {
+        // 팔로워
+        User from = findUser(fromUser);
+        // 팔로잉 대상
+        User to = findUser(toUser);
+        // 관계
+        Follow follow = Follow.builder().fromUser(from.getId()).toUser(to.getId()).build();
+        // 제거
+        followRepository.delete(follow);
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
     }
 }

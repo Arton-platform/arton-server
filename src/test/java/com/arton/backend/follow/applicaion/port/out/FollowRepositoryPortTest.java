@@ -12,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +21,6 @@ class FollowRepositoryPortTest {
     FollowRepositoryPort followRepository;
     @Autowired
     UserRepositoryPort userRepository;
-    @Autowired
-    EntityManager em;
 
     @Transactional
     @Commit
@@ -281,6 +277,53 @@ class FollowRepositoryPortTest {
         for (User user : followerList) {
             System.out.println("user = " + user);
         }
+    }
+
+    @Description("제거 테스트")
+    @Transactional
+    @Commit
+    @Test
+    void deleteTest() {
+        List<User> userList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            User user = User.builder()
+                    .email(i == 0 ? "j67310@gmail.com" : "tempaa"+i)
+                    .password("temp")
+                    .nickname("temp" + i)
+                    .gender(i % 2 == 0 ? Gender.MALE : Gender.FEMALE)
+                    .ageRange(AgeRange.Age10_19)
+                    .termsAgree(i % 2 == 0 ? "Y" : "N")
+                    .signupType(SignupType.ARTON)
+                    .auth(UserRole.NORMAL)
+                    .build();
+            userList.add(user);
+            userRepository.save(user);
+        }
+
+        User base = userRepository.findById(1L).get();
+        for (User user : userRepository.findAll()) {
+            if (user.getId().equals(base.getId())) {
+                continue;
+            }
+            Follow build = Follow.builder()
+                    .toUser(base.getId())
+                    .fromUser(user.getId())
+                    .build();
+            followRepository.add(build);
+        }
+
+        // user 1의 팔로워를 구하자
+        UserFollowSearchDto searchDto = UserFollowSearchDto.builder().build();
+        List<User> followerList = followRepository.getFollowerList(base.getId(), searchDto);
+        Assertions.assertThat(followerList.size()).isEqualTo(9);
+        Follow build = Follow.builder()
+                .fromUser(3L)
+                .toUser(base.getId()).build();
+        followRepository.delete(build);
+
+        followerList = followRepository.getFollowerList(base.getId(), searchDto);
+        Assertions.assertThat(followerList.size()).isEqualTo(8);
+
     }
 
 }
