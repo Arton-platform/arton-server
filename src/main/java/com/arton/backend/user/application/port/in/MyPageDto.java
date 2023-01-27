@@ -13,6 +13,9 @@ import java.util.List;
 public class MyPageDto {
     /** 현재 유저의 ID */
     private Long id;
+    private String nickname;
+    private String selfDescription;
+    private String profileImageUrl;
     /** 유저가 팔로잉 하는 사람의 수 */
     private Long followings;
     /** 유저의 팔로워 수 */

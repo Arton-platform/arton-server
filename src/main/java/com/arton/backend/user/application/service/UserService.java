@@ -5,10 +5,7 @@ import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
-import com.arton.backend.user.application.port.in.MyPageDto;
-import com.arton.backend.user.application.port.in.UserPasswordEditDto;
-import com.arton.backend.user.application.port.in.UserProfileEditDto;
-import com.arton.backend.user.application.port.in.UserUseCase;
+import com.arton.backend.user.application.port.in.*;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService implements UserUseCase {
+public class UserService implements UserUseCase, MyPageUseCase {
 
     private final UserRepositoryPort userRepository;
     private final ReviewCountPort reviewCountPort;
@@ -81,7 +78,9 @@ public class UserService implements UserUseCase {
 
     @Override
     public MyPageDto getMyPageInfo(long userId) {
-
+        Long followersCount = followRepositoryPort.getFollowersCount(userId);
+        Long followingsCount = followRepositoryPort.getFollowingsCount(userId);
+        Long userReviewCount = reviewCountPort.getUserReviewCount(userId);
 
 
 

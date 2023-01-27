@@ -7,5 +7,4 @@ public interface UserUseCase {
     Boolean alertState(long userId);
     void updateUserProfile(long userId, UserProfileEditDto userProfileEditDto, MultipartFile multipartFile);
     void updateAlertState(long userId, Boolean state);
-    MyPageDto getMyPageInfo(long userId);
 }
