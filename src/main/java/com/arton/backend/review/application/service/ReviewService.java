@@ -5,8 +5,10 @@ import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
+import com.arton.backend.review.application.port.in.ReviewCountUseCase;
 import com.arton.backend.review.application.port.in.ReviewListUseCase;
 import com.arton.backend.review.application.port.in.ReviewRegistUseCase;
+import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
 import com.arton.backend.review.application.port.out.ReviewRegistPort;
 import com.arton.backend.review.domain.Review;
@@ -19,9 +21,10 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase {
+public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, ReviewCountUseCase {
     private final ReviewListPort reviewListPort;
     private final ReviewRegistPort reviewRegistPort;
+    private final ReviewCountPort reviewCountPort;
     private final ReviewMapper reviewMapper;
     @Override
     public List<Review> reviewList(Long id) {
@@ -41,5 +44,10 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase {
         ReviewEntity<CommonResponse> entity = reviewMapper.toEntity(review);
         reviewRegistPort.regist(entity);
         return review;
+    }
+
+    @Override
+    public Long reviewCount(Long id) {
+        return reviewCountPort.getReviewCount(id);
     }
 }
