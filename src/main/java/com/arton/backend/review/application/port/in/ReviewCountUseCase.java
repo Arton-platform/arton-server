@@ -1,5 +1,6 @@
 package com.arton.backend.review.application.port.in;
 
 public interface ReviewCountUseCase {
-    Long reviewCount(Long id);
+    Long performanceReviewCount(Long id);
+    Long userReviewCount(Long id);
 }

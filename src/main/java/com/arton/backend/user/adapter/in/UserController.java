@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-public class UserAdapter {
+public class UserController {
     private final UserUseCase userService;
 
     @PatchMapping("/my/password")
@@ -76,4 +76,5 @@ public class UserAdapter {
                 .build();
         return ResponseEntity.ok(response);
     }
+
 }

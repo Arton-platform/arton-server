@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<ReviewEntity<CommonResponse>, Long> {
     Optional<List<ReviewEntity<CommonResponse>>> findAllByPerformanceOrderByStarScoreDesc(PerformanceEntity performanceEntity);
     Long countAllByUser_Id(Long userId);
+    Long countAllByPerformance_Id(Long performanceId);
 }

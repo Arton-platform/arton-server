@@ -27,7 +27,12 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     }
 
     @Override
-    public Long getReviewCount(Long userId) {
+    public Long getUserReviewCount(Long userId) {
         return repository.countAllByUser_Id(userId);
+    }
+
+    @Override
+    public Long getPerformanceReviewCount(Long performanceId) {
+        return repository.countAllByPerformance_Id(performanceId);
     }
 }

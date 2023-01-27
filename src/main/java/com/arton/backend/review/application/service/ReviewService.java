@@ -47,7 +47,12 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     }
 
     @Override
-    public Long reviewCount(Long id) {
-        return reviewCountPort.getReviewCount(id);
+    public Long performanceReviewCount(Long id) {
+        return reviewCountPort.getPerformanceReviewCount(id);
+    }
+
+    @Override
+    public Long userReviewCount(Long id) {
+        return reviewCountPort.getUserReviewCount(id);
     }
 }
