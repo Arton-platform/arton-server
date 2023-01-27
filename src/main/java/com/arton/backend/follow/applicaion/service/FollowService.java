@@ -58,7 +58,7 @@ public class FollowService implements FollowUseCase {
      * @param fromUser
      */
     @Override
-    public void removeFollower(Long toUser, Long fromUser) {
+    public Long removeFollower(Long toUser, Long fromUser) {
         // 팔로잉 대상
         User to = findUser(toUser);
         // 팔로워
@@ -67,6 +67,8 @@ public class FollowService implements FollowUseCase {
         Follow follow = Follow.builder().toUser(to.getId()).fromUser(from.getId()).build();
         // 제거
         followRepository.delete(follow);
+        // 제거한 회원 번호 return
+        return fromUser;
     }
 
     /**
@@ -75,7 +77,7 @@ public class FollowService implements FollowUseCase {
      * @param toUser
      */
     @Override
-    public void unfollow(Long fromUser, Long toUser) {
+    public Long unfollow(Long fromUser, Long toUser) {
         // 팔로워
         User from = findUser(fromUser);
         // 팔로잉 대상
@@ -84,6 +86,8 @@ public class FollowService implements FollowUseCase {
         Follow follow = Follow.builder().fromUser(from.getId()).toUser(to.getId()).build();
         // 제거
         followRepository.delete(follow);
+        // 팔로잉 취소한 회원 번호 return
+        return toUser;
     }
 
     private User findUser(Long userId) {

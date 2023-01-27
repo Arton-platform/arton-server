@@ -8,12 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class FollowAdapter {
+public class FollowController {
     private final FollowUseCase followService;
 
     /**
@@ -44,5 +46,37 @@ public class FollowAdapter {
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 followService.getFollowings(userId, userFollowSearchDto));
+    }
+
+    /**
+     * 팔로워 ID를 입력받아 해당 팔로워를 제거한다.
+     * @param userDetails
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/user/my/follower/{id}")
+    public ResponseData<Long> removeFollower(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
+        long userId = Long.parseLong(userDetails.getUsername());
+        return new ResponseData(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                followService.removeFollower(userId, id)
+        );
+    }
+
+    /**
+     * 팔로잉 ID를 입력받아 해당 팔로잉을 제거한다.
+     * @param userDetails
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/user/my/following/{id}")
+    public ResponseData<Long> removeFollowing(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
+        long userId = Long.parseLong(userDetails.getUsername());
+        return new ResponseData(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                followService.unfollow(userId, id)
+        );
     }
 }

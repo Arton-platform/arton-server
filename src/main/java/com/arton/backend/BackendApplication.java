@@ -1,8 +1,10 @@
 package com.arton.backend;
 
 import com.arton.backend.artist.adapter.out.repository.ArtistRepository;
+import com.arton.backend.follow.adapter.out.repository.FollowRepository;
 import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
 import com.arton.backend.test.TestDataInit;
+import com.arton.backend.user.adapter.out.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +28,8 @@ public class BackendApplication {
 	}
 
 	@Bean
-	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository) {
-		return new TestDataInit(artistRepository, performanceRepository);
+	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository, UserRepository userRepository, FollowRepository followRepository) {
+		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository);
 	}
 
 }
