@@ -2,9 +2,15 @@ package com.arton.backend.user.application.service;
 
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
 import com.arton.backend.infra.file.FileUploadUtils;
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
+import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
+import com.arton.backend.review.application.port.out.ReviewListPort;
+import com.arton.backend.review.domain.Review;
+import com.arton.backend.user.adapter.out.repository.UserMapper;
 import com.arton.backend.user.application.port.in.*;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
@@ -15,6 +21,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @Transactional
@@ -23,9 +35,11 @@ public class UserService implements UserUseCase, MyPageUseCase {
 
     private final UserRepositoryPort userRepository;
     private final ReviewCountPort reviewCountPort;
+    private final ReviewListPort reviewListPort;
     private final FollowRepositoryPort followRepositoryPort;
     private final PasswordEncoder passwordEncoder;
     private final FileUploadUtils fileUploadUtils;
+    private final ReviewMapper reviewMapper;
 
     @Override
     public void changePassword(Long userId, UserPasswordEditDto editDto) {
@@ -78,12 +92,17 @@ public class UserService implements UserUseCase, MyPageUseCase {
 
     @Override
     public MyPageDto getMyPageInfo(long userId) {
+        User user = findUser(userId);
+        String nickname = user.getNickname();
+        String selfDescription = user.getSelfDescription();
+        String profileImageUrl = user.getProfileImageUrl();
         Long followersCount = followRepositoryPort.getFollowersCount(userId);
         Long followingsCount = followRepositoryPort.getFollowingsCount(userId);
         Long userReviewCount = reviewCountPort.getUserReviewCount(userId);
 
-
-
+        List<Review> userReviews = reviewListPort.userReviewList(UserMapper.toEntity(user)).map(reviews ->
+                reviews.stream().map(review -> reviewMapper.toDomain(review))
+                        .collect(Collectors.toList())).orElseGet(Collections::emptyList);
         return null;
     }
 }

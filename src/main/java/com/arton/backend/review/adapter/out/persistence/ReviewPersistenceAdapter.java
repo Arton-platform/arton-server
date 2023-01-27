@@ -6,6 +6,7 @@ import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
 import com.arton.backend.review.application.port.out.ReviewRegistPort;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,11 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     @Override
     public Optional<List<ReviewEntity<CommonResponse>>> reviewList(PerformanceEntity performanceEntity) {
         return repository.findAllByPerformanceOrderByStarScoreDesc(performanceEntity);
+    }
+
+    @Override
+    public Optional<List<ReviewEntity<CommonResponse>>> userReviewList(UserEntity userEntity) {
+        return repository.findAllByUserOrderByCreatedDateDesc(userEntity);
     }
 
     @Override
