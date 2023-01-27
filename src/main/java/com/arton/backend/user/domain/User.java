@@ -4,6 +4,7 @@ import com.arton.backend.user.application.port.in.UserProfileEditDto;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -82,10 +83,12 @@ public class User {
     public void updateProfile(UserProfileEditDto userProfileEditDto) {
         if (userProfileEditDto != null) {
             // 컨트롤러에서 이미 검증이 됨.
-            String nickname = userProfileEditDto.getNickname();
-            this.nickname = nickname;
-            String selfDescription = Optional.ofNullable(userProfileEditDto.getSelfDescription()).orElse("");
-            this.selfDescription = selfDescription;
+            if (StringUtils.hasText(userProfileEditDto.getNickname())) {
+                this.nickname = userProfileEditDto.getNickname();
+            }
+            if (StringUtils.hasText(userProfileEditDto.getSelfDescription())) {
+                this.selfDescription = userProfileEditDto.getSelfDescription();
+            }
         }
     }
     @Builder

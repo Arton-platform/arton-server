@@ -7,7 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.arton.backend.user.adapter.out.repository.UserMapper.toDomain;
 import static com.arton.backend.user.adapter.out.repository.UserMapper.toEntity;
@@ -74,5 +77,13 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Override
     public User save(User user) {
         return toDomain(userRepository.save(toEntity(user)));
+    }
+
+    @Override
+    public List<User> findAll() {
+        return Optional.ofNullable(userRepository.findAll()).orElseGet(Collections::emptyList)
+                .stream()
+                .map(UserMapper::toDomain)
+                .collect(Collectors.toList());
     }
 }
