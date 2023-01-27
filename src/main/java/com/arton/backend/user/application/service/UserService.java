@@ -1,8 +1,11 @@
 package com.arton.backend.user.application.service;
 
+import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.review.application.port.out.ReviewCountPort;
+import com.arton.backend.user.application.port.in.MyPageDto;
 import com.arton.backend.user.application.port.in.UserPasswordEditDto;
 import com.arton.backend.user.application.port.in.UserProfileEditDto;
 import com.arton.backend.user.application.port.in.UserUseCase;
@@ -22,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserService implements UserUseCase {
 
     private final UserRepositoryPort userRepository;
+    private final ReviewCountPort reviewCountPort;
+    private final FollowRepositoryPort followRepositoryPort;
     private final PasswordEncoder passwordEncoder;
     private final FileUploadUtils fileUploadUtils;
 
@@ -72,5 +77,14 @@ public class UserService implements UserUseCase {
     public void updateAlertState(long userId, Boolean state) {
         User user = findUser(userId);
         user.changeAlertState(state);
+    }
+
+    @Override
+    public MyPageDto getMyPageInfo(long userId) {
+
+
+
+
+        return null;
     }
 }
