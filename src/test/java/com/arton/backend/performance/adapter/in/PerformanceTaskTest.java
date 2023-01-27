@@ -22,11 +22,6 @@ public class PerformanceTaskTest {
     @Transactional
     void testPerformanceSchedule() {
         performanceTask.performanceSchedule();
-//        performanceUseCase.getAllPerformances().stream().forEach(performance -> System.out.println(performance));
-//        performanceUseCase.getAllPerformances();
-//        service.getAllPerformances();
-        performanceTask.performanceSchedule();
-//        repository.findAll().stream().forEach(performanceEntity -> System.out.println(performanceEntity.toString()));
 
     }
 }

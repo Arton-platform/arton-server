@@ -26,15 +26,18 @@ public class PerformanceFeedEntity extends BaseEntity {
 
     private Boolean readStatus;
 
+    private int dDay;
+
     public void changeReadStatus(Boolean status) {
         this.readStatus = status;
     }
 
     @Builder
-    public PerformanceFeedEntity(Long id, UserEntity user, PerformanceEntity performanceEntity, Boolean readStatus) {
+    public PerformanceFeedEntity(Long id, UserEntity user, PerformanceEntity performanceEntity, Boolean readStatus, int dDay) {
         this.id = id;
         this.user = user;
         this.performance = performanceEntity;
         this.readStatus = readStatus;
+        this.dDay = dDay;
     }
 }

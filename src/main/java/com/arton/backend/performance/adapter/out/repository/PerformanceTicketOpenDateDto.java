@@ -12,6 +12,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class PerformanceTicketOpenDateDto {
-    private Long id;
+    private long id;
     private LocalDateTime ticketOpenDate;
 }

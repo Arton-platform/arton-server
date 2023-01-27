@@ -11,7 +11,7 @@ public class PerformanceFeedMapper {
                 .id(performanceFeedEntity.getId())
                 .readStatus(performanceFeedEntity.getReadStatus())
                 .user(performanceFeedEntity.getUser())
-                .performanceEntity(performanceFeedEntity.getPerformance())
+                .performance(performanceFeedEntity.getPerformance())
                 .build();
     }
 
