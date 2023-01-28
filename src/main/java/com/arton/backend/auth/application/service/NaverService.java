@@ -159,19 +159,18 @@ public class NaverService implements NaverUseCase {
             log.info("gender {}", gender);
             /** password is user's own kakao id */
             String password = id;
-            UserImage userImage = UserImage.builder().imageUrl(defaultImage).build();
-            userImage = userImageSaveRepository.save(userImage);
             user = User.builder().email(email)
                     .gender(getGender(gender))
                     .password(passwordEncoder.encode(password))
                     .naverId(id)
                     .nickname(nickName)
-                    .userImage(userImage)
                     .ageRange(AgeRange.get(age))
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.NAVER)
                     .build();
-            userRepository.save(user);
+            user = userRepository.save(user);
+            UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
+            userImage = userImageSaveRepository.save(userImage);
         }
         return userRepository.findByNaverId(id).orElseThrow(() -> new CustomException(ErrorCode.NAVER_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.NAVER_SIMPLE_LOGIN_ERROR));
     }

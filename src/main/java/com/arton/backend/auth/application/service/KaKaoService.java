@@ -160,19 +160,18 @@ public class KaKaoService implements KaKaoUseCase {
             String gender = userInfo.get("kakao_account").get("gender").asText();
             /** password is user's own kakao id */
             String password = userInfo.get("id").asText();
-            UserImage userImage = UserImage.builder().imageUrl(defaultImage).build();
-            userImage = userImageSaveRepository.save(userImage);
             user = User.builder().email(email)
                     .gender(Gender.get(gender.toUpperCase(Locale.ROOT)))
                     .password(passwordEncoder.encode(password))
                     .kakaoId(id)
                     .nickname(nickName)
-                    .userImage(userImage)
                     .ageRange(AgeRange.get(age))
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.KAKAO)
                     .build();
-            userRepository.save(user);
+            user = userRepository.save(user);
+            UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
+            userImageSaveRepository.save(userImage);
         }
         return userRepository.findByKakaoId(id).orElseThrow(()->new CustomException(ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR));
     }
