@@ -7,6 +7,7 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
+import com.arton.backend.review.application.port.in.MyPageReviewDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
 import com.arton.backend.review.domain.Review;
@@ -90,6 +91,11 @@ public class UserService implements UserUseCase, MyPageUseCase {
         user.changeAlertState(state);
     }
 
+    /**
+     * 마이페이지 화면 return
+     * @param userId
+     * @return
+     */
     @Override
     public MyPageDto getMyPageInfo(long userId) {
         User user = findUser(userId);
@@ -103,7 +109,19 @@ public class UserService implements UserUseCase, MyPageUseCase {
         List<Review> userReviews = reviewListPort.userReviewList(UserMapper.toEntity(user)).map(reviews ->
                 reviews.stream().map(review -> reviewMapper.toDomain(review))
                         .collect(Collectors.toList())).orElseGet(Collections::emptyList);
-
-        return null;
+        List<MyPageReviewDto> collect = userReviews.stream().map(MyPageReviewDto::to).collect(Collectors.toList());
+        for (MyPageReviewDto myPageReviewDto : collect) {
+            myPageReviewDto.setReviewCount(reviewCountPort.getPerformanceReviewCount(myPageReviewDto.getPerformanceId()));
+        }
+        return MyPageDto.builder()
+                .id(userId)
+                .nickname(nickname)
+                .selfDescription(selfDescription)
+                .profileImageUrl(profileImageUrl)
+                .followers(followersCount)
+                .followings(followingsCount)
+                .reviewCount(userReviewCount)
+                .reviews(collect)
+                .build();
     }
 }

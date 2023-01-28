@@ -24,5 +24,4 @@ public class MyPageDto {
     private Long reviewCount;
     /** 유저의 리뷰 목록 */
     private List<MyPageReviewDto> reviews = new ArrayList<>();
-
 }
