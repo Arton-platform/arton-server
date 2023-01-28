@@ -65,6 +65,9 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
         User to = findUser(toUser);
         // 팔로워
         User from = findUser(fromUser);
+        if (from.getId().equals(to.getId())) {
+            throw new CustomException(ErrorCode.UNFOLLOWING_INVALID.getMessage(), ErrorCode.UNFOLLOWING_INVALID);
+        }
         // 관계
         Follow follow = Follow.builder().toUser(to.getId()).fromUser(from.getId()).build();
         // 제거
@@ -84,6 +87,9 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
         User from = findUser(fromUser);
         // 팔로잉 대상
         User to = findUser(toUser);
+        if (from.getId().equals(to.getId())) {
+            throw new CustomException(ErrorCode.UNFOLLOWING_INVALID.getMessage(), ErrorCode.UNFOLLOWING_INVALID);
+        }
         // 관계
         Follow follow = Follow.builder().fromUser(from.getId()).toUser(to.getId()).build();
         // 제거
