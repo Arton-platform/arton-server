@@ -7,6 +7,7 @@ import com.arton.backend.user.domain.User;
 import java.util.List;
 
 public interface FollowRepositoryPort {
+    boolean isExist(Follow follow);
     Long getFollowersCount(Long userId);
     Long getFollowingsCount(Long userId);
     List<User> getFollowingList(Long userId);

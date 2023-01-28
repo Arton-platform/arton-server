@@ -7,6 +7,9 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
     EMAIL_IS_EXIST(409, "DUP_ERR_400", "해당 이메일은 사용중입니다."),
+    FOLLOWING_IS_EXIST(409, "DUP_ERR_400", "이미 팔로우중인 대상입니다."),
+    FOLLOWING_INVALID(400, "FOLLOWING_INVALID", "잘못된 팔로우 요청입니다."),
+    UNFOLLOWING_INVALID(400, "UNFOLLOWING_INVALID", "잘못된 언팔로우 요청입니다."),
     FILE_EMPTY(400, "FILE_EMPTY", "빈 파일입니다.."),
     FILE_UPLOAD_FAILED(500, "FILE_UPLOAD_FAILED", "파일 업로드에 실패하였습니다."),
     PARAMETER_NOT_VALID(400, "PARAMETER_ERR_400", "유효하지 않은 입력값입니다."),

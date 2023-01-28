@@ -53,4 +53,6 @@ public interface FollowRepository extends JpaRepository<FollowEntity, FollowEnti
      */
     @Query(value = "select u from FollowEntity f inner join UserEntity u on f.fromUser = u.id where f.toUser = :userId order by f.createdDate desc")
     List<UserEntity> findAllByToUserLatest(@Param("userId") Long userId);
+
+    boolean existsByFromUserAndToUser(Long fromUser, Long toUser);
 }

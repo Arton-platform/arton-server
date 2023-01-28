@@ -25,6 +25,11 @@ import static com.arton.backend.follow.adapter.out.repository.FollowMapper.toEnt
 public class FollowRepositoryAdapter implements FollowRepositoryPort, UnFollowRepositoryPort, FollowRegistRepositoryPort {
     private final FollowRepository followRepository;
 
+    @Override
+    public boolean isExist(Follow follow) {
+        return followRepository.existsByFromUserAndToUser(follow.getFromUser(), follow.getToUser());
+    }
+
     /**
      * toUser 즉 팔로잉의 대상이 되는 유저
      * @param userId
