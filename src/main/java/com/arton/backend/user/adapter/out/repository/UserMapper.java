@@ -1,5 +1,6 @@
 package com.arton.backend.user.adapter.out.repository;
 
+import com.arton.backend.image.adapter.out.repository.UserImageMapper;
 import com.arton.backend.user.domain.User;
 import com.arton.backend.zzim.adapter.out.repository.ArtistZzimMapper;
 import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimMapper;
@@ -14,7 +15,7 @@ public class UserMapper {
         return User.builder()
                 .auth(user.getAuth())
                 .signupType(user.getSignupType())
-                .profileImageUrl(user.getProfileImageUrl())
+                .userImage(UserImageMapper.toDomain(user.getUserImage()))
                 .nickname(user.getNickname())
                 .password(user.getPassword())
                 .ageRange(user.getAgeRange())
@@ -36,7 +37,7 @@ public class UserMapper {
         return UserEntity.builder()
                 .auth(user.getAuth())
                 .signupType(user.getSignupType())
-                .profileImageUrl(user.getProfileImageUrl())
+                .userImage(UserImageMapper.toEntity(user.getUserImage()))
                 .nickname(user.getNickname())
                 .password(user.getPassword())
                 .ageRange(user.getAgeRange())

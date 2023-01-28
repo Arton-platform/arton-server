@@ -1,5 +1,6 @@
 package com.arton.backend.user.domain;
 
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.user.application.port.in.UserProfileEditDto;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
@@ -24,8 +25,6 @@ public class User {
     private String email;
     /** 비밀번호 */
     private String password;
-    /** 프로필 이미지 링크 */
-    private String profileImageUrl;
     /** 닉네임 */
     private String nickname;
     /** 성별 */
@@ -49,8 +48,9 @@ public class User {
     List<ArtistZzim> artistZzims = new ArrayList<>();
     private Boolean alertState;
     private String selfDescription;
-    public void setProfileImageUrl(String url){
-        this.profileImageUrl = url;
+    private UserImage userImage;
+    public void setImage(UserImage userImage){
+        this.userImage = userImage;
     }
     /**
      * 아티스트를 찜한다
@@ -92,13 +92,12 @@ public class User {
         }
     }
     @Builder
-    public User(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription) {
+    public User(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription, UserImage userImage) {
         this.id = id;
         this.kakaoId = kakaoId;
         this.naverId = naverId;
         this.email = email;
         this.password = password;
-        this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.gender = gender;
         this.ageRange = ageRange;
@@ -111,5 +110,6 @@ public class User {
         this.artistZzims = artistZzims;
         this.alertState = true;
         this.selfDescription = selfDescription;
+        this.userImage = userImage;
     }
 }

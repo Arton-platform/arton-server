@@ -1,5 +1,6 @@
 package com.arton.backend.user.adapter.out.repository;
 
+import com.arton.backend.image.adapter.out.repository.UserImageEntity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.user.domain.AgeRange;
@@ -33,8 +34,6 @@ public class UserEntity extends BaseEntity {
     private String email;
     /** 비밀번호 */
     private String password;
-    /** 프로필 이미지 링크 */
-    private String profileImageUrl;
     /** 닉네임 */
     private String nickname;
     /** 성별 */
@@ -64,10 +63,17 @@ public class UserEntity extends BaseEntity {
 
     private String selfDescription;
 
-    public void setProfileImageUrl(String url){
-        this.profileImageUrl = url;
-    }
+    @OneToOne
+    @JoinColumn(name = "user_image_id")
+    private UserImageEntity userImage;
 
+    /**
+     * 이미지 세팅
+     * @param userImage
+     */
+    public void setImage(UserImageEntity userImage) {
+        this.userImage = userImage;
+    }
 
     /**
      * 아티스트를 찜한다
@@ -96,14 +102,13 @@ public class UserEntity extends BaseEntity {
     }
 
     @Builder
-    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription) {
+    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, UserImageEntity userImage) {
         super(createdDate, updatedDate);
         this.id = id;
         this.kakaoId = kakaoId;
         this.naverId = naverId;
         this.email = email;
         this.password = password;
-        this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.gender = gender;
         this.ageRange = ageRange;
@@ -114,5 +119,6 @@ public class UserEntity extends BaseEntity {
         this.artistZzims = artistZzims;
         this.alertState = true;
         this.selfDescription = selfDescription;
+        this.userImage = userImage;
     }
 }

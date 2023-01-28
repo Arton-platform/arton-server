@@ -2,6 +2,8 @@ package com.arton.backend.auth.application.service;
 
 import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.auth.application.port.in.TokenDto;
+import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
@@ -34,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class NaverService implements NaverUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
+    private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
@@ -156,12 +159,14 @@ public class NaverService implements NaverUseCase {
             log.info("gender {}", gender);
             /** password is user's own kakao id */
             String password = id;
+            UserImage userImage = UserImage.builder().imageUrl(defaultImage).build();
+            userImageSaveRepository.save(userImage);
             user = User.builder().email(email)
                     .gender(getGender(gender))
                     .password(passwordEncoder.encode(password))
                     .naverId(id)
                     .nickname(nickName)
-                    .profileImageUrl(defaultImage)
+                    .userImage(userImage)
                     .ageRange(AgeRange.get(age))
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.NAVER)

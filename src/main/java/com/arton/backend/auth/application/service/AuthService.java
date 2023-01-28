@@ -3,6 +3,8 @@ package com.arton.backend.auth.application.service;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.file.FileUploadLocal;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.file.MD5Generator;
@@ -41,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthService implements AuthUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
+    private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final ArtistRepositoryPort artistRepository;
     private final PerformanceRepositoryPort performanceRepository;
     private final ZzimRepositoryPort zzimRepository;
@@ -66,19 +69,22 @@ public class AuthService implements AuthUseCase {
         if (!checkPassword(signupRequestDto.getPassword(), signupRequestDto.getCheckPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
+        // 기본 이미지 지정후 image 저장
+        UserImage userImage = UserImage.builder().imageUrl(fileUploadUtils.getDefaultImageUrl()).build();
+        userImage = userImageSaveRepository.save(userImage);
+
         // 회원가입
         User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
-        // 기본 이미지 지정
-        user.setProfileImageUrl(fileUploadUtils.getDefaultImageUrl());
+        user.setImage(userImage);
         User savedUser = userRepository.save(user);
         Long id = savedUser.getId();
 
-        // 프로필 이미지 업로드
+        // 프로필 이미지 있다면 이미지 업데이트
         if (multipartFile != null) {
             String upload = fileUploadUtils.upload(multipartFile, "arton/image/profiles/" + id);
-            savedUser.setProfileImageUrl(upload);
+            userImage.updateImage(upload);
+            userImageSaveRepository.save(userImage);
         }
-
         // 아티스트 찜하기
         List<Long> artistIds = signupRequestDto.getArtists();
         if (!artistIds.isEmpty()) {

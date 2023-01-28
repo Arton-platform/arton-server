@@ -9,9 +9,7 @@ public class PerformerMapper {
     public static Performer toDomain(PerformerEntity performer) {
         return Performer.builder()
                 .createdDate(performer.getCreatedDate())
-//                .artist(ArtistMapper.toDomain(performer.getArtist()))
                 .artist(performer.getArtist().getId())
-//                .performance(PerformanceMapper.toDomain(performer.getPerformance()))
                 .performance(performer.getPerformance().getId())
                 .id(performer.getId())
                 .updateDate(performer.getUpdateDate())
@@ -21,9 +19,7 @@ public class PerformerMapper {
     public static PerformerEntity toEntity(Performer performer) {
         return PerformerEntity.builder()
                 .createdDate(performer.getCreatedDate())
-//                .artist(ArtistMapper.toEntity(performer.getArtist()))
                 .artist(ArtistEntity.builder().id(performer.getArtist()).build())
-//                .performance(PerformanceMapper.toEntity(performer.getPerformance()))
                 .performance(PerformanceEntity.builder().id(performer.getPerformance()).build())
                 .id(performer.getId())
                 .updateDate(performer.getUpdateDate())
