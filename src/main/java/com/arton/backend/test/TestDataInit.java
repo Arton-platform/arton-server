@@ -5,6 +5,8 @@ import com.arton.backend.artist.adapter.out.repository.ArtistRepository;
 import com.arton.backend.follow.adapter.out.repository.FollowEntity;
 import com.arton.backend.follow.adapter.out.repository.FollowRepository;
 import com.arton.backend.follow.domain.Follow;
+import com.arton.backend.image.adapter.out.repository.UserImageEntity;
+import com.arton.backend.image.adapter.out.repository.UserImageRepository;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
@@ -34,6 +36,7 @@ public class TestDataInit {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
     private final ReviewRepository reviewRepository;
+    private final UserImageRepository userImageRepository;
     private final PasswordEncoder passwordEncoder;
     private String defaultImage = "image/profiles/default.png";
 
@@ -48,6 +51,10 @@ public class TestDataInit {
         // user
         List<UserEntity> userList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
+            UserImageEntity build = UserImageEntity.builder().imageUrl(defaultImage).build();
+            userImageRepository.save(build);
+
+
             UserEntity user = UserEntity.builder()
                     .email(i == 0 ? "j67310@gmail.com" : "tempaa"+i)
                     .password(passwordEncoder.encode("temp"))
@@ -57,6 +64,7 @@ public class TestDataInit {
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
                     .auth(UserRole.NORMAL)
+                    .userImage(build)
                     .build();
             userList.add(user);
         }

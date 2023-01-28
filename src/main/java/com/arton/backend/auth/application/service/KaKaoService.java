@@ -161,7 +161,7 @@ public class KaKaoService implements KaKaoUseCase {
             /** password is user's own kakao id */
             String password = userInfo.get("id").asText();
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).build();
-            userImageSaveRepository.save(userImage);
+            userImage = userImageSaveRepository.save(userImage);
             user = User.builder().email(email)
                     .gender(Gender.get(gender.toUpperCase(Locale.ROOT)))
                     .password(passwordEncoder.encode(password))

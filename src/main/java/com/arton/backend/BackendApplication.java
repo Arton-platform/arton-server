@@ -2,6 +2,7 @@ package com.arton.backend;
 
 import com.arton.backend.artist.adapter.out.repository.ArtistRepository;
 import com.arton.backend.follow.adapter.out.repository.FollowRepository;
+import com.arton.backend.image.adapter.out.repository.UserImageRepository;
 import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
 import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
 import com.arton.backend.test.TestDataInit;
@@ -31,8 +32,8 @@ public class BackendApplication {
 
 	@Bean
 	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository, UserRepository userRepository, FollowRepository followRepository,
-									 ReviewRepository reviewRepository, PasswordEncoder passwordEncoder) {
-		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository, reviewRepository, passwordEncoder);
+									 ReviewRepository reviewRepository, UserImageRepository userImageRepository, PasswordEncoder passwordEncoder) {
+		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository, reviewRepository, userImageRepository, passwordEncoder);
 	}
 
 }

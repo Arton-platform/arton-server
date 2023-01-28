@@ -160,7 +160,7 @@ public class NaverService implements NaverUseCase {
             /** password is user's own kakao id */
             String password = id;
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).build();
-            userImageSaveRepository.save(userImage);
+            userImage = userImageSaveRepository.save(userImage);
             user = User.builder().email(email)
                     .gender(getGender(gender))
                     .password(passwordEncoder.encode(password))
