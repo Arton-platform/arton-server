@@ -39,18 +39,4 @@ public class MyPageReviewDto {
                 .reviewCount(0L)
                 .build();
     }
-
-    public static MyPageReviewDto to(Review review, Long reviewCount) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
-        return MyPageReviewDto.builder()
-                .performanceId(review.getPerformance().getId())
-                .title(review.getPerformance().getTitle())
-                .starScore(review.getStarScore())
-                .createdDate(review.getCreatedDate().format(formatter))
-                .content(review.getContent())
-                .images(new ArrayList<>())
-                .hit(Optional.ofNullable(review.getPerformance().getHit()).orElse(0L))
-                .reviewCount(reviewCount)
-                .build();
-    }
 }

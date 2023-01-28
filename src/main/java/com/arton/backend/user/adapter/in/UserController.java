@@ -56,6 +56,11 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 마이페이지
+     * @param userDetails
+     * @return
+     */
     @GetMapping("/my/profile")
     public ResponseEntity<ResponseData<MyPageDto>> getMyPage(@AuthenticationPrincipal UserDetails userDetails) {
         long userId = Long.parseLong(userDetails.getUsername());
@@ -63,6 +68,19 @@ public class UserController {
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 myPageService.getMyPageInfo(userId)
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 유저 누르면 해당 유저의 마이페이지로
+     */
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<ResponseData<MyPageDto>> getSpecificUserPage(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
+        ResponseData response = new ResponseData(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                myPageService.getMyPageInfo(id)
         );
         return ResponseEntity.ok(response);
     }
