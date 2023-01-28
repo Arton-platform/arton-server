@@ -1,24 +1,21 @@
 package com.arton.backend.follow.adapter.in;
 
-import com.arton.backend.follow.applicaion.port.in.FollowUseCase;
-import com.arton.backend.follow.applicaion.port.in.UnFollowUseCase;
-import com.arton.backend.follow.applicaion.port.in.UserFollowDto;
-import com.arton.backend.follow.applicaion.port.in.UserFollowSearchDto;
+import com.arton.backend.follow.applicaion.port.in.*;
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 public class FollowController {
     private final FollowUseCase followService;
     private final UnFollowUseCase unFollowService;
+    private final FollowRegisterUseCase followRegisterService;
 
     /**
      * query parameter를 받아 팔로워를 리턴한다.
@@ -27,12 +24,13 @@ public class FollowController {
      * @return
      */
     @GetMapping("/user/my/follower")
-    public ResponseData<UserFollowDto> getFollower(@AuthenticationPrincipal UserDetails userDetails, UserFollowSearchDto userFollowSearchDto) {
+    public ResponseEntity<ResponseData<UserFollowDto>> getFollower(@AuthenticationPrincipal UserDetails userDetails, UserFollowSearchDto userFollowSearchDto) {
         long userId = Long.parseLong(userDetails.getUsername());
-        return new ResponseData(
+        ResponseData response = new ResponseData(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 followService.getFollowers(userId, userFollowSearchDto));
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -42,12 +40,13 @@ public class FollowController {
      * @return
      */
     @GetMapping("/user/my/following")
-    public ResponseData<UserFollowDto> getFollowing(@AuthenticationPrincipal UserDetails userDetails, UserFollowSearchDto userFollowSearchDto) {
+    public ResponseEntity<ResponseData<UserFollowDto>> getFollowing(@AuthenticationPrincipal UserDetails userDetails, UserFollowSearchDto userFollowSearchDto) {
         long userId = Long.parseLong(userDetails.getUsername());
-        return new ResponseData(
+        ResponseData response = new ResponseData(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 followService.getFollowings(userId, userFollowSearchDto));
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -57,13 +56,14 @@ public class FollowController {
      * @return
      */
     @DeleteMapping("/user/my/follower/{id}")
-    public ResponseData<Long> removeFollower(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
+    public ResponseEntity<ResponseData<Long>> removeFollower(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
         long userId = Long.parseLong(userDetails.getUsername());
-        return new ResponseData(
+        ResponseData response = new ResponseData(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 unFollowService.removeFollower(userId, id)
         );
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -73,12 +73,29 @@ public class FollowController {
      * @return
      */
     @DeleteMapping("/user/my/following/{id}")
-    public ResponseData<Long> removeFollowing(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
+    public ResponseEntity<ResponseData<Long>> removeFollowing(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
         long userId = Long.parseLong(userDetails.getUsername());
-        return new ResponseData(
+        ResponseData response = new ResponseData(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 unFollowService.unfollow(userId, id)
         );
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 팔로잉하기
+     * @param userDetails
+     * @param postFollowDto
+     * @return
+     */
+    @PostMapping("/follow")
+    public ResponseEntity<CommonResponse> followingUser(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PostFollowDto postFollowDto) {
+        long userId = Long.parseLong(userDetails.getUsername());
+        followRegisterService.followUser(userId, postFollowDto);
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("SUCCESS").build();
+        return ResponseEntity.ok(response);
     }
 }

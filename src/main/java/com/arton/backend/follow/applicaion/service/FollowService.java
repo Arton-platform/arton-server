@@ -15,13 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class FollowService implements FollowUseCase, UnFollowUseCase {
+public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegisterUseCase {
     private final FollowRepositoryPort followRepository;
     private final FollowRegistRepositoryPort followRegistRepository;
     private final UnFollowRepositoryPort unFollowRepository;
@@ -95,4 +96,26 @@ public class FollowService implements FollowUseCase, UnFollowUseCase {
         return userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
     }
 
+    @Override
+    public Follow followUser(Long fromUser, PostFollowDto postFollowDto) {
+        User from = findUser(fromUser);
+        if (postFollowDto == null) {
+            throw new CustomException(ErrorCode.PARAMETER_NOT_VALID.getMessage(), ErrorCode.PARAMETER_NOT_VALID);
+        }
+        Long toUser = Optional.ofNullable(postFollowDto.getUser()).orElseThrow(() -> new CustomException(ErrorCode.PARAMETER_NOT_VALID.getMessage(), ErrorCode.PARAMETER_NOT_VALID));
+        if (from.getId().equals(toUser)) { // 본인이 본인을 팔로우 하는 잘못된 요청.
+            throw new CustomException(ErrorCode.FOLLOWING_INVALID.getMessage(), ErrorCode.FOLLOWING_INVALID);
+        }
+        User to = findUser(toUser);
+        Follow follow = Follow.builder()
+                .fromUser(from.getId())
+                .toUser(to.getId())
+                .build();
+        boolean exist = followRepository.isExist(follow);
+        if (exist) {
+            throw new CustomException(ErrorCode.FOLLOWING_IS_EXIST.getMessage(), ErrorCode.FOLLOWING_IS_EXIST);
+        }
+        followRegistRepository.add(follow);
+        return follow;
+    }
 }
