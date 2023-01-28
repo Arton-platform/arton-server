@@ -1,11 +1,18 @@
 package com.arton.backend.user.application.service;
 
+import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
 import com.arton.backend.infra.file.FileUploadUtils;
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.user.application.port.in.UserPasswordEditDto;
-import com.arton.backend.user.application.port.in.UserProfileEditDto;
-import com.arton.backend.user.application.port.in.UserUseCase;
+import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
+import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
+import com.arton.backend.review.application.port.in.MyPageReviewDto;
+import com.arton.backend.review.application.port.out.ReviewCountPort;
+import com.arton.backend.review.application.port.out.ReviewListPort;
+import com.arton.backend.review.domain.Review;
+import com.arton.backend.user.adapter.out.repository.UserMapper;
+import com.arton.backend.user.application.port.in.*;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -15,15 +22,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService implements UserUseCase {
+public class UserService implements UserUseCase, MyPageUseCase {
 
     private final UserRepositoryPort userRepository;
+    private final ReviewCountPort reviewCountPort;
+    private final ReviewListPort reviewListPort;
+    private final FollowRepositoryPort followRepositoryPort;
     private final PasswordEncoder passwordEncoder;
     private final FileUploadUtils fileUploadUtils;
+    private final ReviewMapper reviewMapper;
 
     @Override
     public void changePassword(Long userId, UserPasswordEditDto editDto) {
@@ -72,5 +89,39 @@ public class UserService implements UserUseCase {
     public void updateAlertState(long userId, Boolean state) {
         User user = findUser(userId);
         user.changeAlertState(state);
+    }
+
+    /**
+     * 마이페이지 화면 return
+     * @param userId
+     * @return
+     */
+    @Override
+    public MyPageDto getMyPageInfo(long userId) {
+        User user = findUser(userId);
+        String nickname = user.getNickname();
+        String selfDescription = user.getSelfDescription();
+        String profileImageUrl = user.getProfileImageUrl();
+        Long followersCount = followRepositoryPort.getFollowersCount(userId);
+        Long followingsCount = followRepositoryPort.getFollowingsCount(userId);
+        Long userReviewCount = reviewCountPort.getUserReviewCount(userId);
+
+        List<Review> userReviews = reviewListPort.userReviewList(UserMapper.toEntity(user)).map(reviews ->
+                reviews.stream().map(review -> reviewMapper.toDomain(review))
+                        .collect(Collectors.toList())).orElseGet(Collections::emptyList);
+        List<MyPageReviewDto> collect = userReviews.stream().map(MyPageReviewDto::to).collect(Collectors.toList());
+        for (MyPageReviewDto myPageReviewDto : collect) {
+            myPageReviewDto.setReviewCount(reviewCountPort.getPerformanceReviewCount(myPageReviewDto.getPerformanceId()));
+        }
+        return MyPageDto.builder()
+                .id(userId)
+                .nickname(nickname)
+                .selfDescription(selfDescription)
+                .profileImageUrl(profileImageUrl)
+                .followers(followersCount)
+                .followings(followingsCount)
+                .reviewCount(userReviewCount)
+                .reviews(collect)
+                .build();
     }
 }

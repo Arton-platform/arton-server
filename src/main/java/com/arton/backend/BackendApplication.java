@@ -3,6 +3,7 @@ package com.arton.backend;
 import com.arton.backend.artist.adapter.out.repository.ArtistRepository;
 import com.arton.backend.follow.adapter.out.repository.FollowRepository;
 import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
+import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
 import com.arton.backend.test.TestDataInit;
 import com.arton.backend.user.adapter.out.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableAsync
 @EnableJpaAuditing
@@ -28,8 +30,9 @@ public class BackendApplication {
 	}
 
 	@Bean
-	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository, UserRepository userRepository, FollowRepository followRepository) {
-		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository);
+	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository, UserRepository userRepository, FollowRepository followRepository,
+									 ReviewRepository reviewRepository, PasswordEncoder passwordEncoder) {
+		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository, reviewRepository, passwordEncoder);
 	}
 
 }

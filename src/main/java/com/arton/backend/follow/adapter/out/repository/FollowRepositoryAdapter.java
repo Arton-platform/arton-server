@@ -1,7 +1,9 @@
 package com.arton.backend.follow.adapter.out.repository;
 
 import com.arton.backend.follow.applicaion.port.in.UserFollowSearchDto;
+import com.arton.backend.follow.applicaion.port.out.FollowRegistRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
+import com.arton.backend.follow.applicaion.port.out.UnFollowRepositoryPort;
 import com.arton.backend.follow.domain.Follow;
 import com.arton.backend.user.adapter.out.repository.UserMapper;
 import com.arton.backend.user.domain.User;
@@ -20,7 +22,7 @@ import static com.arton.backend.follow.adapter.out.repository.FollowMapper.toEnt
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class FollowRepositoryAdapter implements FollowRepositoryPort {
+public class FollowRepositoryAdapter implements FollowRepositoryPort, UnFollowRepositoryPort, FollowRegistRepositoryPort {
     private final FollowRepository followRepository;
 
     /**
@@ -98,6 +100,5 @@ public class FollowRepositoryAdapter implements FollowRepositoryPort {
                 .map(UserMapper::toDomain)
                 .collect(Collectors.toList());
     }
-
 
 }

@@ -1,7 +1,5 @@
 package com.arton.backend.zzim.domain;
 
-import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.user.domain.User;
 import lombok.*;
 
 import java.time.LocalDateTime;

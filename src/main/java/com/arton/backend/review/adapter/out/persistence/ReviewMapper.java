@@ -32,6 +32,7 @@ public class ReviewMapper {
                 .updateDate(review.getUpdateDate())
                 .image(review.getImage())
                 .performance(review.getPerformance())
+                .user(review.getUser())
                 .build();
     }
 }

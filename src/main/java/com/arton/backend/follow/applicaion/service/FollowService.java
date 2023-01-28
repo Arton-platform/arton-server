@@ -1,10 +1,9 @@
 package com.arton.backend.follow.applicaion.service;
 
-import com.arton.backend.follow.applicaion.port.in.FollowUseCase;
-import com.arton.backend.follow.applicaion.port.in.UserFollowDto;
-import com.arton.backend.follow.applicaion.port.in.UserFollowSearchDto;
-import com.arton.backend.follow.applicaion.port.in.UserShortDto;
+import com.arton.backend.follow.applicaion.port.in.*;
+import com.arton.backend.follow.applicaion.port.out.FollowRegistRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
+import com.arton.backend.follow.applicaion.port.out.UnFollowRepositoryPort;
 import com.arton.backend.follow.domain.Follow;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
@@ -22,8 +21,10 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class FollowService implements FollowUseCase {
+public class FollowService implements FollowUseCase, UnFollowUseCase {
     private final FollowRepositoryPort followRepository;
+    private final FollowRegistRepositoryPort followRegistRepository;
+    private final UnFollowRepositoryPort unFollowRepository;
     private final UserRepositoryPort userRepository;
 
     @Override
@@ -66,7 +67,7 @@ public class FollowService implements FollowUseCase {
         // 관계
         Follow follow = Follow.builder().toUser(to.getId()).fromUser(from.getId()).build();
         // 제거
-        followRepository.delete(follow);
+        unFollowRepository.delete(follow);
         // 제거한 회원 번호 return
         return fromUser;
     }
@@ -85,7 +86,7 @@ public class FollowService implements FollowUseCase {
         // 관계
         Follow follow = Follow.builder().fromUser(from.getId()).toUser(to.getId()).build();
         // 제거
-        followRepository.delete(follow);
+        unFollowRepository.delete(follow);
         // 팔로잉 취소한 회원 번호 return
         return toUser;
     }
@@ -93,4 +94,5 @@ public class FollowService implements FollowUseCase {
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
     }
+
 }

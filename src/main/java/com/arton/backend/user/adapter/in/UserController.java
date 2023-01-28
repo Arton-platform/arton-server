@@ -2,9 +2,7 @@ package com.arton.backend.user.adapter.in;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
-import com.arton.backend.user.application.port.in.UserPasswordEditDto;
-import com.arton.backend.user.application.port.in.UserProfileEditDto;
-import com.arton.backend.user.application.port.in.UserUseCase;
+import com.arton.backend.user.application.port.in.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,8 +19,9 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-public class UserAdapter {
+public class UserController {
     private final UserUseCase userService;
+    private final MyPageUseCase myPageService;
 
     @PatchMapping("/my/password")
     public ResponseEntity<CommonResponse> changePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid UserPasswordEditDto userPasswordEditDto) {
@@ -58,6 +57,36 @@ public class UserAdapter {
     }
 
     /**
+     * 마이페이지
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/my/profile")
+    public ResponseEntity<ResponseData<MyPageDto>> getMyPage(@AuthenticationPrincipal UserDetails userDetails) {
+        long userId = Long.parseLong(userDetails.getUsername());
+        ResponseData response = new ResponseData(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                myPageService.getMyPageInfo(userId)
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 유저 누르면 해당 유저의 마이페이지로
+     */
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<ResponseData<MyPageDto>> getSpecificUserPage(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
+        ResponseData response = new ResponseData(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                myPageService.getMyPageInfo(id)
+        );
+        return ResponseEntity.ok(response);
+    }
+
+
+    /**
      * UserProfileEditDto 수정된 값이 없더라도 GET 한 값을 그대로 보내주세요.
      * 더 좋은 방안이 있다면 수정 필요.
      * @param userDetails
@@ -69,11 +98,12 @@ public class UserAdapter {
     public ResponseEntity<CommonResponse> updateUserProfile(@AuthenticationPrincipal UserDetails userDetails, @RequestPart(required = false, name = "data") @Valid UserProfileEditDto userProfileEditDto,
                                                             @RequestPart(required = false, name = "image")MultipartFile multipartFile){
         long userId = Long.parseLong(userDetails.getUsername());
-        userService.updateUserProfile(userId, userProfileEditDto, multipartFile);
+        myPageService.updateUserProfile(userId, userProfileEditDto, multipartFile);
         CommonResponse response = CommonResponse.builder()
                 .message("SUCCESS")
                 .status(HttpStatus.OK.value())
                 .build();
         return ResponseEntity.ok(response);
     }
+
 }

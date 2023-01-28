@@ -1,6 +1,7 @@
 package com.arton.backend.follow.adapter.in;
 
 import com.arton.backend.follow.applicaion.port.in.FollowUseCase;
+import com.arton.backend.follow.applicaion.port.in.UnFollowUseCase;
 import com.arton.backend.follow.applicaion.port.in.UserFollowDto;
 import com.arton.backend.follow.applicaion.port.in.UserFollowSearchDto;
 import com.arton.backend.infra.shared.common.ResponseData;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FollowController {
     private final FollowUseCase followService;
+    private final UnFollowUseCase unFollowService;
 
     /**
      * query parameter를 받아 팔로워를 리턴한다.
@@ -60,7 +62,7 @@ public class FollowController {
         return new ResponseData(
                 "SUCCESS",
                 HttpStatus.OK.value(),
-                followService.removeFollower(userId, id)
+                unFollowService.removeFollower(userId, id)
         );
     }
 
@@ -76,7 +78,7 @@ public class FollowController {
         return new ResponseData(
                 "SUCCESS",
                 HttpStatus.OK.value(),
-                followService.unfollow(userId, id)
+                unFollowService.unfollow(userId, id)
         );
     }
 }

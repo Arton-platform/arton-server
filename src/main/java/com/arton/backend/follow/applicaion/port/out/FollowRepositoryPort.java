@@ -9,8 +9,6 @@ import java.util.List;
 public interface FollowRepositoryPort {
     Long getFollowersCount(Long userId);
     Long getFollowingsCount(Long userId);
-    Follow add(Follow follow);
-    void delete(Follow follow);
     List<User> getFollowingList(Long userId);
     List<User> getFollowerList(Long userId);
     /**

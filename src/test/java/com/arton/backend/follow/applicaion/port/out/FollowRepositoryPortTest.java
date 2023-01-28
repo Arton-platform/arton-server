@@ -20,6 +20,10 @@ class FollowRepositoryPortTest {
     @Autowired
     FollowRepositoryPort followRepository;
     @Autowired
+    FollowRegistRepositoryPort followRegistRepositoryPort;
+    @Autowired
+    UnFollowRepositoryPort unFollowRepositoryPort;
+    @Autowired
     UserRepositoryPort userRepository;
 
     @Transactional
@@ -51,7 +55,7 @@ class FollowRepositoryPortTest {
                     .toUser(base.getId())
                     .fromUser(user.getId())
                     .build();
-            followRepository.add(build);
+            followRegistRepositoryPort.add(build);
         }
 
         // user 1의 팔로워를 구하자
@@ -93,7 +97,7 @@ class FollowRepositoryPortTest {
                     .toUser(base.getId())
                     .fromUser(user.getId())
                     .build();
-            followRepository.add(build);
+            followRegistRepositoryPort.add(build);
         }
 
         // user 1의 팔로워를 구하자
@@ -136,7 +140,7 @@ class FollowRepositoryPortTest {
                     .toUser(base.getId())
                     .fromUser(user.getId())
                     .build();
-            followRepository.add(build);
+            followRegistRepositoryPort.add(build);
         }
 
         // user 1의 팔로워를 구하자
@@ -179,7 +183,7 @@ class FollowRepositoryPortTest {
                     .toUser(base.getId())
                     .fromUser(user.getId())
                     .build();
-            followRepository.add(build);
+            followRegistRepositoryPort.add(build);
         }
 
         // user 1의 팔로워를 구하자
@@ -223,7 +227,7 @@ class FollowRepositoryPortTest {
                     .toUser(base.getId())
                     .fromUser(user.getId())
                     .build();
-            followRepository.add(build);
+            followRegistRepositoryPort.add(build);
         }
 
         // user 1의 팔로워를 구하자
@@ -268,7 +272,7 @@ class FollowRepositoryPortTest {
                     .toUser(base.getId())
                     .fromUser(user.getId())
                     .build();
-            followRepository.add(build);
+            followRegistRepositoryPort.add(build);
         }
 
         // user 1의 팔로워를 구하자
@@ -309,7 +313,7 @@ class FollowRepositoryPortTest {
                     .toUser(base.getId())
                     .fromUser(user.getId())
                     .build();
-            followRepository.add(build);
+            followRegistRepositoryPort.add(build);
         }
 
         // user 1의 팔로워를 구하자
@@ -319,7 +323,7 @@ class FollowRepositoryPortTest {
         Follow build = Follow.builder()
                 .fromUser(3L)
                 .toUser(base.getId()).build();
-        followRepository.delete(build);
+        unFollowRepositoryPort.delete(build);
 
         followerList = followRepository.getFollowerList(base.getId(), searchDto);
         Assertions.assertThat(followerList.size()).isEqualTo(8);
