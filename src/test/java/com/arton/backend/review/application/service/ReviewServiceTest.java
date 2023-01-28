@@ -1,24 +1,17 @@
 package com.arton.backend.review.application.service;
 
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
-import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
-import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.domain.Review;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
-import com.arton.backend.user.adapter.out.repository.UserRepository;
-import com.arton.backend.user.domain.User;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
@@ -95,7 +88,7 @@ class ReviewServiceTest {
 
         service.regist(review2);
 
-        Long reviewCount = service.reviewCount(user.getId());
+        Long reviewCount = service.userReviewCount(user.getId());
         assertEquals(reviewCount, 2);
     }
 }

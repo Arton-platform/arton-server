@@ -33,6 +33,20 @@ public class MyPageReviewDto {
                 .content(review.getContent())
                 .images(new ArrayList<>())
                 .hit(review.getPerformance().getHit())
+                .reviewCount(0L)
+                .build();
+    }
+
+    public static MyPageReviewDto to(Review review, Long reviewCount) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        return MyPageReviewDto.builder()
+                .title(review.getPerformance().getTitle())
+                .starScore(review.getStarScore())
+                .createdDate(review.getCreatedDate().format(formatter))
+                .content(review.getContent())
+                .images(new ArrayList<>())
+                .hit(review.getPerformance().getHit())
+                .reviewCount(reviewCount)
                 .build();
     }
 }

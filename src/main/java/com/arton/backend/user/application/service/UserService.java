@@ -103,6 +103,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
         List<Review> userReviews = reviewListPort.userReviewList(UserMapper.toEntity(user)).map(reviews ->
                 reviews.stream().map(review -> reviewMapper.toDomain(review))
                         .collect(Collectors.toList())).orElseGet(Collections::emptyList);
+
         return null;
     }
 }
