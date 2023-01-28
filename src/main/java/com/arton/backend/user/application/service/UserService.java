@@ -82,10 +82,12 @@ public class UserService implements UserUseCase, MyPageUseCase {
         User user = findUser(userId);
         // 이미지 업데이트
         if (multipartFile != null) {
-            fileUploadUtils.delete(user.getId(), user.getUserImage().getImageUrl());
+            UserImage userImage = userImageRepository.findUserImageByUser(user.getId()).get();
+            fileUploadUtils.delete(user.getId(), userImage.getImageUrl());
             String upload = fileUploadUtils.upload(multipartFile, "arton/image/profiles/" + user.getId());
-            user.getUserImage().updateImage(upload);
-            userImageSaveRepository.save(user.getUserImage());
+            userImage.updateImage(upload);
+            user.setImage(userImage);
+            userImageSaveRepository.save(userImage);
         }
         user.updateProfile(userProfileEditDto);
         userRepository.save(user);
@@ -105,9 +107,10 @@ public class UserService implements UserUseCase, MyPageUseCase {
     @Override
     public MyPageDto getMyPageInfo(long userId) {
         User user = findUser(userId);
+        UserImage userImage = userImageRepository.findUserImageByUser(userId).orElseThrow(() -> new CustomException(ErrorCode.IMAGE_LOAD_FAILED.getMessage(), ErrorCode.IMAGE_LOAD_FAILED));
         String nickname = user.getNickname();
         String selfDescription = user.getSelfDescription();
-        String profileImageUrl = user.getUserImage().getImageUrl();
+        String profileImageUrl = userImage.getImageUrl();
         Long followersCount = followRepositoryPort.getFollowersCount(userId);
         Long followingsCount = followRepositoryPort.getFollowingsCount(userId);
         Long userReviewCount = reviewCountPort.getUserReviewCount(userId);

@@ -36,6 +36,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * OnetoOne 자식 먼저 저장. 즉 유저 먼저 저장하고 이를 유저이미지에 사용
+ */
 @Slf4j
 @Service
 @Transactional
@@ -69,15 +72,13 @@ public class AuthService implements AuthUseCase {
         if (!checkPassword(signupRequestDto.getPassword(), signupRequestDto.getCheckPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
-        // 기본 이미지 지정후 image 저장
-        UserImage userImage = UserImage.builder().imageUrl(fileUploadUtils.getDefaultImageUrl()).build();
-        userImage = userImageSaveRepository.save(userImage);
-
         // 회원가입
         User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
-        user.setImage(userImage);
         User savedUser = userRepository.save(user);
         Long id = savedUser.getId();
+        // 기본 이미지 지정후 image 저장
+        UserImage userImage = UserImage.builder().imageUrl(fileUploadUtils.getDefaultImageUrl()).user(savedUser).build();
+        userImage = userImageSaveRepository.save(userImage);
 
         // 프로필 이미지 있다면 이미지 업데이트
         if (multipartFile != null) {

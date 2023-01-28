@@ -21,5 +21,6 @@ public class PerformanceImageEntity {
     private Long id;
     private String imageUrl;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "performance_id")
     private PerformanceEntity performance;
 }

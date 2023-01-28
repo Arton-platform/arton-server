@@ -51,10 +51,6 @@ public class TestDataInit {
         // user
         List<UserEntity> userList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            UserImageEntity build = UserImageEntity.builder().imageUrl(defaultImage).build();
-            userImageRepository.save(build);
-
-
             UserEntity user = UserEntity.builder()
                     .email(i == 0 ? "j67310@gmail.com" : "tempaa"+i)
                     .password(passwordEncoder.encode("temp"))
@@ -64,11 +60,14 @@ public class TestDataInit {
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
                     .auth(UserRole.NORMAL)
-                    .userImage(build)
                     .build();
             userList.add(user);
         }
-        userRepository.saveAll(userList);
+        List<UserEntity> userEntities = userRepository.saveAll(userList);
+        for (UserEntity userEntity : userEntities) {
+            UserImageEntity build = UserImageEntity.builder().imageUrl(defaultImage).user(userEntity).build();
+            userImageRepository.save(build);
+        }
 
         UserEntity base = userRepository.findById(1L).get();
         for (UserEntity user : userRepository.findAll()) {

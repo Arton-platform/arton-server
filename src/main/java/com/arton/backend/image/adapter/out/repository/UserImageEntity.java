@@ -18,7 +18,8 @@ public class UserImageEntity extends BaseEntity {
     @Column(name = "user_image_id")
     private Long id;
     private String imageUrl;
-    @OneToOne(mappedBy = "userImage", fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @Builder

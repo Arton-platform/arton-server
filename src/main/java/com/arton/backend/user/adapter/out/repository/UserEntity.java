@@ -63,8 +63,7 @@ public class UserEntity extends BaseEntity {
 
     private String selfDescription;
 
-    @OneToOne
-    @JoinColumn(name = "user_image_id")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserImageEntity userImage;
 
     /**
