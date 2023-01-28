@@ -2,6 +2,8 @@ package com.arton.backend.auth.application.service;
 
 import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.auth.application.port.in.TokenDto;
+import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
@@ -34,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class NaverService implements NaverUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
+    private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
@@ -161,12 +164,13 @@ public class NaverService implements NaverUseCase {
                     .password(passwordEncoder.encode(password))
                     .naverId(id)
                     .nickname(nickName)
-                    .profileImageUrl(defaultImage)
                     .ageRange(AgeRange.get(age))
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.NAVER)
                     .build();
-            userRepository.save(user);
+            user = userRepository.save(user);
+            UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
+            userImage = userImageSaveRepository.save(userImage);
         }
         return userRepository.findByNaverId(id).orElseThrow(() -> new CustomException(ErrorCode.NAVER_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.NAVER_SIMPLE_LOGIN_ERROR));
     }

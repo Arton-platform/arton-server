@@ -1,6 +1,9 @@
 package com.arton.backend.user.application.service;
 
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
+import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
+import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.exception.CustomException;
@@ -41,6 +44,8 @@ public class UserService implements UserUseCase, MyPageUseCase {
     private final PasswordEncoder passwordEncoder;
     private final FileUploadUtils fileUploadUtils;
     private final ReviewMapper reviewMapper;
+    private final UserImageSaveRepositoryPort userImageSaveRepository;
+    private final UserImageRepositoryPort userImageRepository;
 
     @Override
     public void changePassword(Long userId, UserPasswordEditDto editDto) {
@@ -77,9 +82,12 @@ public class UserService implements UserUseCase, MyPageUseCase {
         User user = findUser(userId);
         // 이미지 업데이트
         if (multipartFile != null) {
-            fileUploadUtils.delete(user.getId(), user.getProfileImageUrl());
+            UserImage userImage = userImageRepository.findUserImageByUser(user.getId()).get();
+            fileUploadUtils.delete(user.getId(), userImage.getImageUrl());
             String upload = fileUploadUtils.upload(multipartFile, "arton/image/profiles/" + user.getId());
-            user.setProfileImageUrl(upload);
+            userImage.updateImage(upload);
+            user.setImage(userImage);
+            userImageSaveRepository.save(userImage);
         }
         user.updateProfile(userProfileEditDto);
         userRepository.save(user);
@@ -99,9 +107,10 @@ public class UserService implements UserUseCase, MyPageUseCase {
     @Override
     public MyPageDto getMyPageInfo(long userId) {
         User user = findUser(userId);
+        UserImage userImage = userImageRepository.findUserImageByUser(userId).orElseThrow(() -> new CustomException(ErrorCode.IMAGE_LOAD_FAILED.getMessage(), ErrorCode.IMAGE_LOAD_FAILED));
         String nickname = user.getNickname();
         String selfDescription = user.getSelfDescription();
-        String profileImageUrl = user.getProfileImageUrl();
+        String profileImageUrl = userImage.getImageUrl();
         Long followersCount = followRepositoryPort.getFollowersCount(userId);
         Long followingsCount = followRepositoryPort.getFollowingsCount(userId);
         Long userReviewCount = reviewCountPort.getUserReviewCount(userId);
