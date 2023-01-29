@@ -98,4 +98,35 @@ public class FollowController {
                 .message("SUCCESS").build();
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * query parameter를 받아 팔로워를 리턴한다.
+     * @param userDetails
+     * @param userFollowSearchDto
+     * @return
+     */
+    @GetMapping("/user/{id}/follower")
+    public ResponseEntity<ResponseData<UserFollowDto>> getFollower(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id, UserFollowSearchDto userFollowSearchDto) {
+        ResponseData response = new ResponseData(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                followService.getFollowers(id, userFollowSearchDto));
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * query parameter를 받아 팔로잉을 리턴한다.
+     * @param userDetails
+     * @param userFollowSearchDto
+     * @return
+     */
+    @GetMapping("/user/{id}/following")
+    public ResponseEntity<ResponseData<UserFollowDto>> getFollowing(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id, UserFollowSearchDto userFollowSearchDto) {
+        ResponseData response = new ResponseData(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                followService.getFollowings(id, userFollowSearchDto));
+        return ResponseEntity.ok(response);
+    }
+
 }
