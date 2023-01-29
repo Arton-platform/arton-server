@@ -170,7 +170,7 @@ public class NaverService implements NaverUseCase {
                     .build();
             user = userRepository.save(user);
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
-            userImage = userImageSaveRepository.save(userImage);
+            userImageSaveRepository.save(userImage);
         }
         return userRepository.findByNaverId(id).orElseThrow(() -> new CustomException(ErrorCode.NAVER_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.NAVER_SIMPLE_LOGIN_ERROR));
     }
