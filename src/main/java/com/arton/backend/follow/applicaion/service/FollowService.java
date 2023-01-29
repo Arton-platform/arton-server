@@ -5,6 +5,8 @@ import com.arton.backend.follow.applicaion.port.out.FollowRegistRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.UnFollowRepositoryPort;
 import com.arton.backend.follow.domain.Follow;
+import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
@@ -27,10 +29,13 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
     private final FollowRegistRepositoryPort followRegistRepository;
     private final UnFollowRepositoryPort unFollowRepository;
     private final UserRepositoryPort userRepository;
+    private final UserImageRepositoryPort userImageRepository;
 
     @Override
     public UserFollowDto getFollowers(Long userId, UserFollowSearchDto userFollowSearchDto) {
         findUser(userId);
+        //유저의 이미지 링크
+        UserImage userImage = userImageRepository.findUserImageByUser(userId).orElseThrow(() -> new CustomException(ErrorCode.IMAGE_LOAD_FAILED.getMessage(), ErrorCode.IMAGE_LOAD_FAILED));
         // 유저의 팔로워수
         Long followersCount = followRepository.getFollowersCount(userId);
         // 유저의 팔로잉수
@@ -38,12 +43,14 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
         // 팔로워 short response
         List<User> followerList = followRepository.getFollowerList(userId, userFollowSearchDto);
         List<UserShortDto> shortResponse = followerList.stream().map(UserShortDto::to).collect(Collectors.toList());
-        return UserFollowDto.builder().id(userId).followers(followersCount).followings(followingsCount).users(shortResponse).build();
+        return UserFollowDto.builder().id(userId).imageUrl(userImage.getImageUrl()).followers(followersCount).followings(followingsCount).users(shortResponse).build();
     }
 
     @Override
     public UserFollowDto getFollowings(Long userId, UserFollowSearchDto userFollowSearchDto) {
         findUser(userId);
+        //유저의 이미지 링크
+        UserImage userImage = userImageRepository.findUserImageByUser(userId).orElseThrow(() -> new CustomException(ErrorCode.IMAGE_LOAD_FAILED.getMessage(), ErrorCode.IMAGE_LOAD_FAILED));
         // 유저의 팔로워수
         Long followersCount = followRepository.getFollowersCount(userId);
         // 유저의 팔로잉수
@@ -51,7 +58,7 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
         // 팔로워 short response
         List<User> followerList = followRepository.getFollowingList(userId, userFollowSearchDto);
         List<UserShortDto> shortResponse = followerList.stream().map(UserShortDto::to).collect(Collectors.toList());
-        return UserFollowDto.builder().id(userId).followers(followersCount).followings(followingsCount).users(shortResponse).build();
+        return UserFollowDto.builder().id(userId).imageUrl(userImage.getImageUrl()).followers(followersCount).followings(followingsCount).users(shortResponse).build();
     }
 
     /**
