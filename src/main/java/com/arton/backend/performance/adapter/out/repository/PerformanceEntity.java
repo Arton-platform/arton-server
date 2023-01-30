@@ -61,7 +61,7 @@ public class PerformanceEntity extends BaseEntity {
     @ToString.Exclude
     private List<PriceGrade> priceGradeList = new ArrayList<>();
     private float starScore;
-    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<PerformanceImageEntity> images = new ArrayList<>();
 
