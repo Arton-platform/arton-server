@@ -1,6 +1,7 @@
 package com.arton.backend.image.adapter.out.repository;
 
 import com.arton.backend.image.domain.UserImage;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.adapter.out.repository.UserMapper;
 
 /**
@@ -21,7 +22,7 @@ public class UserImageMapper {
     public static UserImageEntity toEntity(UserImage userImage) {
         return UserImageEntity.builder()
                 .id(userImage.getId())
-                .user(UserMapper.toEntity(userImage.getUser()))
+                .user(UserEntity.builder().id(userImage.getUser().getId()).build())
                 .imageUrl(userImage.getImageUrl())
                 .createdDate(userImage.getCreatedDate())
                 .updateDate(userImage.getUpdateDate())
