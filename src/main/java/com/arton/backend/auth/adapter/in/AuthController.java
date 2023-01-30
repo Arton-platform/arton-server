@@ -28,7 +28,7 @@ public class AuthController {
      * US-7
      * @return
      */
-    @GetMapping("/login/kakao")
+    @PostMapping("/login/kakao")
     public ResponseEntity<TokenDto> loginByKakao(@RequestBody @Valid OAuthLoginDto loginDto){
         TokenDto tokenDto = kaKaoUseCase.login(loginDto.getAccessToken());
         return ResponseEntity.ok(tokenDto);
@@ -38,7 +38,7 @@ public class AuthController {
      * US-7
      * @return
      */
-    @GetMapping("/login/naver")
+    @PostMapping("/login/naver")
     public ResponseEntity<TokenDto> loginByNaver(@RequestBody @Valid OAuthLoginDto loginDto){
         TokenDto login = naverUseCase.login(loginDto.getAccessToken());
         return ResponseEntity.ok(login);
