@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PerformanceImageRepositoryPort {
-    Optional<PerformanceImage> findPerformanceImage(Long id);
-    List<PerformanceImage> findByPerformance(Long id);
+    Optional<PerformanceImage> findById(Long id);
+    List<PerformanceImage> findByPerformanceId(Long id);
 }

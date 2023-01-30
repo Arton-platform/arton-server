@@ -36,7 +36,6 @@ public class PerformanceMapper {
                 .title(performance.getTitle())
                 .createdDate(performance.getCreatedDate())
                 .updateDate(performance.getUpdateDate())
-                .images(Optional.ofNullable(performance.getImages()).orElseGet(Collections::emptyList).stream().map(PerformanceImageMapper::toDomain).collect(Collectors.toList()))
                 .build();
     }
 
@@ -63,7 +62,6 @@ public class PerformanceMapper {
                 .title(performance.getTitle())
                 .createdDate(performance.getCreatedDate())
                 .updateDate(performance.getUpdateDate())
-                .images(Optional.ofNullable(performance.getImages()).orElseGet(Collections::emptyList).stream().map(PerformanceImageMapper::toEntity).collect(Collectors.toList()))
                 .build();
     }
 }

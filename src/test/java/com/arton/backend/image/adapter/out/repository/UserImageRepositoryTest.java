@@ -21,15 +21,16 @@ class UserImageRepositoryTest {
     @Commit
     @Test
     void imageSaveTest() {
-        UserImageEntity userImageEntity = UserImageEntity.builder()
-                .imageUrl("default")
-                .build();
-        userImageRepository.save(userImageEntity);  // 자식 먼저 저장
+        // 자식 저장
         UserEntity tester = UserEntity.builder()
                 .email("tester")
                 .build();
-        tester.setImage(userImageEntity);
-        userRepository.save(tester);
+        UserEntity save = userRepository.save(tester);
+        UserImageEntity userImageEntity = UserImageEntity.builder()
+                .imageUrl("default")
+                .user(save)
+                .build();
+        userImageRepository.save(userImageEntity);
         UserEntity userEntity = userRepository.findByEmail("tester").get();
         userRepository.findById(userEntity.getId());
     }

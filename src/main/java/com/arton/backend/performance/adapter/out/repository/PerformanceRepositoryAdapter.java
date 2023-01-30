@@ -57,4 +57,13 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
     public Optional<PerformanceEntity> findById(Long id) {
         return performanceRepository.findById(id);
     }
+
+    @Override
+    public Optional<Performance> findOne(Long id) {
+        Optional<PerformanceEntity> response = performanceRepository.findById(id);
+        if (response.isPresent()) {
+            return Optional.ofNullable(PerformanceMapper.toDomain(response.get()));
+        }
+        return Optional.ofNullable(null);
+    }
 }

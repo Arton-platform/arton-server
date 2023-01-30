@@ -21,7 +21,7 @@ public class PerformanceImageRepositoryAdapter implements PerformanceImageReposi
     private final PerformanceImageRepository performanceImageRepository;
 
     @Override
-    public Optional<PerformanceImage> findPerformanceImage(Long id) {
+    public Optional<PerformanceImage> findById(Long id) {
         Optional<PerformanceImageEntity> response = performanceImageRepository.findById(id);
         if (response.isPresent()) {
             return Optional.ofNullable(toDomain(response.get()));
@@ -30,7 +30,7 @@ public class PerformanceImageRepositoryAdapter implements PerformanceImageReposi
     }
 
     @Override
-    public List<PerformanceImage> findByPerformance(Long id) {
+    public List<PerformanceImage> findByPerformanceId(Long id) {
         return Optional.ofNullable(performanceImageRepository.findAllByPerformance_id(id)).orElseGet(Collections::emptyList)
                 .stream().map(PerformanceImageMapper::toDomain).collect(Collectors.toList());
     }

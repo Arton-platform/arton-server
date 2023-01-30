@@ -63,17 +63,6 @@ public class UserEntity extends BaseEntity {
 
     private String selfDescription;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
-    private UserImageEntity userImage;
-
-    /**
-     * 이미지 세팅
-     * @param userImage
-     */
-    public void setImage(UserImageEntity userImage) {
-        this.userImage = userImage;
-    }
-
     /**
      * 아티스트를 찜한다
      * @param artistZzim
@@ -101,7 +90,7 @@ public class UserEntity extends BaseEntity {
     }
 
     @Builder
-    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, UserImageEntity userImage) {
+    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription) {
         super(createdDate, updatedDate);
         this.id = id;
         this.kakaoId = kakaoId;
@@ -118,6 +107,5 @@ public class UserEntity extends BaseEntity {
         this.artistZzims = artistZzims;
         this.alertState = true;
         this.selfDescription = selfDescription;
-        this.userImage = userImage;
     }
 }

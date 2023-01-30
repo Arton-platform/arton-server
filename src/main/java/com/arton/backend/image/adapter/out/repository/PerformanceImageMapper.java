@@ -2,7 +2,9 @@ package com.arton.backend.image.adapter.out.repository;
 
 import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.image.domain.UserImage;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.repository.PerformanceMapper;
+import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.adapter.out.repository.UserMapper;
 
 /**
