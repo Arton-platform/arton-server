@@ -1,5 +1,6 @@
 package com.arton.backend.performance.adapter.out.repository;
 
+import com.arton.backend.image.adapter.out.repository.PerformanceImageEntity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performer.adapter.out.repository.PerformerEntity;
@@ -60,9 +61,19 @@ public class PerformanceEntity extends BaseEntity {
     @ToString.Exclude
     private List<PriceGrade> priceGradeList = new ArrayList<>();
     private float starScore;
+    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private List<PerformanceImageEntity> images = new ArrayList<>();
+
+    public void addImage(PerformanceImageEntity performanceImageEntity) {
+        if (!images.contains(performanceImageEntity)) {
+            images.add(performanceImageEntity);
+            performanceImageEntity.setPerformance(this);
+        }
+    }
 
     @Builder
-    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGrade> priceGradeList, float starScore) {
+    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGrade> priceGradeList, float starScore, List<PerformanceImageEntity> images) {
         super(createdDate, updateDate);
         this.id = id;
         this.title = title;
@@ -83,5 +94,6 @@ public class PerformanceEntity extends BaseEntity {
         this.performers = performers;
         this.priceGradeList = priceGradeList;
         this.starScore = starScore;
+        this.images = images;
     }
 }

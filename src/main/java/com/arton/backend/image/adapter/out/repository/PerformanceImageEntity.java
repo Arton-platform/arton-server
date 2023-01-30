@@ -2,6 +2,7 @@ package com.arton.backend.image.adapter.out.repository;
 
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,4 +24,8 @@ public class PerformanceImageEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_id")
     private PerformanceEntity performance;
+
+    public void setPerformance(PerformanceEntity performance) {
+        this.performance = performance;
+    }
 }

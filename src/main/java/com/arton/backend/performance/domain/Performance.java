@@ -1,5 +1,7 @@
 package com.arton.backend.performance.domain;
 
+import com.arton.backend.image.adapter.out.repository.PerformanceImageEntity;
+import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
@@ -62,9 +64,18 @@ public class Performance {
     private LocalDateTime createdDate;
     /** 업데이트일 */
     private LocalDateTime updateDate;
+    @ToString.Exclude
+    private List<PerformanceImage> images = new ArrayList<>();
+
+    public void addImage(PerformanceImage performanceImage) {
+        if (!images.contains(performanceImage)) {
+            images.add(performanceImage);
+            performanceImage.setPerformance(this);
+        }
+    }
 
     @Builder
-    public Performance(Long performanceId, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<Performer> performers, List<PriceGrade> priceGradeList, float starScore, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public Performance(Long performanceId, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<Performer> performers, List<PriceGrade> priceGradeList, float starScore, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceImage> images) {
         this.performanceId = performanceId;
         this.title = title;
         this.description = description;
@@ -86,5 +97,6 @@ public class Performance {
         this.starScore = starScore;
         this.createdDate = createdDate;
         this.updateDate = updateDate;
+        this.images = images;
     }
 }
