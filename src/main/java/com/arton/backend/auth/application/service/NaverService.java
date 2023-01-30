@@ -57,12 +57,11 @@ public class NaverService implements NaverUseCase {
      *  email, password 로 만들거임
      *  여기서 설정하는 값이 userdetails의 id password로 넘어감
      *  원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
-     * @param code
+     *
      * @return
      */
     @Override
-    public TokenDto login(String code, String state) {
-        String accessToken = getAccessToken(code, state);
+    public TokenDto login(String accessToken) {
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
