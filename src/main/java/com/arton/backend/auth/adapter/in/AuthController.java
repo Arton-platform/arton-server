@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
@@ -100,12 +101,11 @@ public class AuthController {
 
     /**
      * US-22 로그아웃
-     * @param logoutRequestDto
      * @return
      */
     @PostMapping("/logout")
-    public ResponseEntity<CommonResponse> logout(@RequestBody LogoutRequestDto logoutRequestDto) {
-        authUseCase.logout(logoutRequestDto);
+    public ResponseEntity<CommonResponse> logout(HttpServletRequest request) {
+        authUseCase.logout(request);
         CommonResponse response = CommonResponse.builder().message("로그아웃 하였습니다.").status(HttpStatus.OK.value()).build();
         return ResponseEntity.ok(response);
     }
