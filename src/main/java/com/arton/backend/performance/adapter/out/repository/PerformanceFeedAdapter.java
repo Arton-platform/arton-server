@@ -38,7 +38,7 @@ public class PerformanceFeedAdapter implements PerformanceFeedPort {
                 .from(performanceZzimEntity)
                 .leftJoin(performanceZzimEntity.performance,performanceEntity)
                 .leftJoin(performanceZzimEntity.user,userEntity)
-                .where(performanceEntity.ticketOpenDate.after(fiveDaysAfter))
+                .where(performanceEntity.ticketOpenDate.between(LocalDateTime.now(), fiveDaysAfter))
                 .fetch()
         );
     }

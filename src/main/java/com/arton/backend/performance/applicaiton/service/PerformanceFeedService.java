@@ -41,6 +41,7 @@ public class PerformanceFeedService implements PerformanceFeedUseCase {
                         .readStatus(false)
                         .user(performanceTicketOpenDateFromZzimDto.getUser())
                         .performance(performanceTicketOpenDateFromZzimDto.getPerformance())
+                        // 지금날자 부터 5일 이내
                         .dDay((int) ChronoUnit.DAYS.between(LocalDateTime.now(), performanceTicketOpenDateFromZzimDto.getPerformance().getTicketOpenDate()))
                         .build()
                 ).collect(Collectors.toList());

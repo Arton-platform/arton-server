@@ -6,8 +6,10 @@ import com.arton.backend.user.adapter.out.repository.UserEntity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class PerformanceFeed extends BaseEntity {
 
     private Long id;

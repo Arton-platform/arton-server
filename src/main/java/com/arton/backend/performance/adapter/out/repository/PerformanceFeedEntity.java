@@ -5,12 +5,12 @@ import javax.persistence.*;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
 @Table(name = "PerformanceFeed")
+@NoArgsConstructor
 public class PerformanceFeedEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
