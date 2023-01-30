@@ -85,7 +85,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-
     /**
      * UserProfileEditDto 수정된 값이 없더라도 GET 한 값을 그대로 보내주세요.
      * 더 좋은 방안이 있다면 수정 필요.

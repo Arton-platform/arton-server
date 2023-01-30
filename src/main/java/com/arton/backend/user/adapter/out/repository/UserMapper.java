@@ -1,6 +1,5 @@
 package com.arton.backend.user.adapter.out.repository;
 
-import com.arton.backend.image.adapter.out.repository.UserImageMapper;
 import com.arton.backend.user.domain.User;
 import com.arton.backend.zzim.adapter.out.repository.ArtistZzimMapper;
 import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimMapper;
@@ -26,8 +25,8 @@ public class UserMapper {
                 .termsAgree(user.getTermsAgree())
                 .createdDate(user.getCreatedDate())
                 .updateDate(user.getUpdateDate())
-                .performanceZzims(Optional.ofNullable(user.getPerformanceZzims()).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toDomain).collect(Collectors.toList()))
-                .artistZzims(Optional.ofNullable(user.getArtistZzims()).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toDomain).collect(Collectors.toList()))
+//                .performanceZzims(Optional.ofNullable(user.getPerformanceZzims()).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toDomain).collect(Collectors.toList()))
+//                .artistZzims(Optional.ofNullable(user.getArtistZzims()).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toDomain).collect(Collectors.toList()))
                 .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))
                 .build();
     }
@@ -45,8 +44,8 @@ public class UserMapper {
                 .naverId(user.getNaverId())
                 .kakaoId(user.getKakaoId())
                 .termsAgree(user.getTermsAgree())
-                .performanceZzims(Optional.ofNullable(user.getPerformanceZzims()).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toEntity).collect(Collectors.toList()))
-                .artistZzims(Optional.ofNullable(user.getArtistZzims()).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toEntity).collect(Collectors.toList()))
+//                .performanceZzims(Optional.ofNullable(user.getPerformanceZzims()).orElseGet(Collections::emptyList).stream().map(PerformanceZzimMapper::toEntity).collect(Collectors.toList()))
+//                .artistZzims(Optional.ofNullable(user.getArtistZzims()).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toEntity).collect(Collectors.toList()))
                 .createdDate(user.getCreatedDate())
                 .updatedDate(user.getUpdateDate())
                 .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))

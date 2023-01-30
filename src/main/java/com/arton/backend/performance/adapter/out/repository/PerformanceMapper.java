@@ -1,5 +1,7 @@
 package com.arton.backend.performance.adapter.out.repository;
 
+import com.arton.backend.image.adapter.out.repository.PerformanceImageMapper;
+import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performer.adapter.out.repository.PerformerMapper;
 import org.springframework.stereotype.Component;

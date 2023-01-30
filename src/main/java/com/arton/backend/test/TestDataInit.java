@@ -52,7 +52,7 @@ public class TestDataInit {
         List<UserEntity> userList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             UserEntity user = UserEntity.builder()
-                    .email(i == 0 ? "j67310@gmail.com" : "tempaa"+i)
+                    .email(i == 0 ? "j6731000@gmail.com" : "tempaa"+i)
                     .password(passwordEncoder.encode("temp"))
                     .nickname("temp" + i)
                     .gender(i % 2 == 0 ? Gender.MALE : Gender.FEMALE)

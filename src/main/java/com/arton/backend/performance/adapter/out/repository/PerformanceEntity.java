@@ -1,5 +1,6 @@
 package com.arton.backend.performance.adapter.out.repository;
 
+import com.arton.backend.image.adapter.out.repository.PerformanceImageEntity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performer.adapter.out.repository.PerformerEntity;

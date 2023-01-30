@@ -15,4 +15,5 @@ public interface PerformanceRepositoryPort {
     void deletePerformance(Performance performance);
     void deleteById(Long id);
     Optional<PerformanceEntity> findById(Long id);
+    Optional<Performance> findOne(Long id);
 }

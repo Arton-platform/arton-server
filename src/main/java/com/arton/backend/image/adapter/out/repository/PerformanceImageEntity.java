@@ -1,21 +1,25 @@
 package com.arton.backend.image.adapter.out.repository;
 
+import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
+/**
+ * 이미지가 외래키를 갖어야함.
+ * 만약 공연이 외래키를 갖는다면 데이터 정규성에 어울리지 않는듯함..
+ */
 @Entity
 @Table(name = "Performance_Image")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(exclude = {"user"})
-public class PerformanceImageEntity {
+public class PerformanceImageEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,4 +27,16 @@ public class PerformanceImageEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_id")
     private PerformanceEntity performance;
+
+    public void setPerformance(PerformanceEntity performance) {
+        this.performance = performance;
+    }
+
+    @Builder
+    public PerformanceImageEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String imageUrl, PerformanceEntity performance) {
+        super(createdDate, updateDate);
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.performance = performance;
+    }
 }
