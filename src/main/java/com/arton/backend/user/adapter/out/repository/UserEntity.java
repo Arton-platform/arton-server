@@ -63,7 +63,7 @@ public class UserEntity extends BaseEntity {
 
     private String selfDescription;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private UserImageEntity userImage;
 
     /**
