@@ -12,3 +12,4 @@ spring:
   root-dir: /arton/image/profiles
   terms-dir: arton/terms
   password-mail-key: arton/mail/passwordResetMail.html
+  performance-dir: arton/image/performances
