@@ -27,24 +27,17 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
      */
     @Override
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmailAndSignupType(email, SignupType.ARTON).map(UserMapper::toDomain);
+        return userRepository.getValidUserByEmailAndSignupType(email, SignupType.ARTON).map(UserMapper::toDomain);
     }
 
     @Override
     public Optional<User> findByKakaoId(Long id) {
-        Optional<UserEntity> response = userRepository.findByKakaoId(id);
-        if (response.isPresent()) {
-            return Optional.ofNullable(toDomain(response.get()));
-        }
-        return Optional.ofNullable(null);
+        return userRepository.findByKakaoId(id).map(UserMapper::toDomain);
     }
 
     @Override
     public Optional<User> findByNaverId(String id) {
-        Optional<UserEntity> response = userRepository.findByNaverId(id); if (response.isPresent()) {
-            return Optional.ofNullable(toDomain(response.get()));
-        }
-        return Optional.ofNullable(null);
+        return userRepository.findByNaverId(id).map(UserMapper::toDomain);
     }
 
     @Override

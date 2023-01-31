@@ -80,6 +80,9 @@ public class User {
         this.userStatus = status;
     }
     public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     /**
      * 프로필 업데이트

@@ -184,6 +184,7 @@ public class AuthService implements AuthUseCase {
         fileUploadUtils.delete(userId, userImage.getImageUrl());
         // user 비활성화
         user.changeUserStatus(false);
+        user.changeNickname("알수없음"+UUID.randomUUID().toString().replaceAll("-","").substring(0, 8));
         user = userRepository.save(user);
         // 탈퇴 사유 등록
         Withdrawal withdrawal = Withdrawal.builder().user(user).comment(withdrawalRequestDto.getComment()).build();
