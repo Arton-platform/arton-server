@@ -24,23 +24,30 @@ public class AuthController {
     private final AuthUseCase authUseCase;
     private final EmailUseCase emailUseCase;
 
+
     /**
      * US-7
+     * @param code
      * @return
      */
-    @PostMapping("/login/kakao")
-    public ResponseEntity<TokenDto> loginByKakao(@RequestBody @Valid OAuthLoginDto loginDto){
-        TokenDto tokenDto = kaKaoUseCase.login(loginDto.getAccessToken());
+    @GetMapping("/kakao")
+    public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
+        log.info("code {}", code);
+        TokenDto tokenDto = kaKaoUseCase.login(code);
         return ResponseEntity.ok(tokenDto);
     }
 
     /**
      * US-7
+     * @param code
+     * @param state
      * @return
      */
-    @PostMapping("/login/naver")
-    public ResponseEntity<TokenDto> loginByNaver(@RequestBody @Valid OAuthLoginDto loginDto){
-        TokenDto login = naverUseCase.login(loginDto.getAccessToken());
+    @GetMapping("/naver")
+    public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
+        log.info("code {}", code);
+        log.info("state {}", state);
+        TokenDto login = naverUseCase.login(code, state);
         return ResponseEntity.ok(login);
     }
 

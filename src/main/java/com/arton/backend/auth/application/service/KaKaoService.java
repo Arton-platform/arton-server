@@ -66,7 +66,8 @@ public class KaKaoService implements KaKaoUseCase {
      * @return
      */
     @Override
-    public TokenDto login(String accessToken) {
+    public TokenDto login(String code) {
+        String accessToken = getAccessToken(code);
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
         // Generate ArtOn JWT
