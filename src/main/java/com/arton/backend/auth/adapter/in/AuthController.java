@@ -26,7 +26,6 @@ public class AuthController {
     private final EmailUseCase emailUseCase;
 
 
-
     /**
      * US-7
      * @param code
@@ -52,7 +51,6 @@ public class AuthController {
         TokenDto login = naverUseCase.login(code, state);
         return ResponseEntity.ok(login);
     }
-    
 
     /**
      * US-8, 14
