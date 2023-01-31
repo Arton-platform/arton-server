@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
@@ -24,6 +25,34 @@ public class AuthController {
     private final AuthUseCase authUseCase;
     private final EmailUseCase emailUseCase;
 
+
+
+    /**
+     * US-7
+     * @param code
+     * @return
+     */
+    @GetMapping("/kakao")
+    public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
+        log.info("code {}", code);
+        TokenDto tokenDto = kaKaoUseCase.login(code);
+        return ResponseEntity.ok(tokenDto);
+    }
+
+    /**
+     * US-7
+     * @param code
+     * @param state
+     * @return
+     */
+    @GetMapping("/naver")
+    public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
+        log.info("code {}", code);
+        log.info("state {}", state);
+        TokenDto login = naverUseCase.login(code, state);
+        return ResponseEntity.ok(login);
+    }
+    
 
     /**
      * US-8, 14
@@ -81,12 +110,11 @@ public class AuthController {
 
     /**
      * US-22 로그아웃
-     * @param logoutRequestDto
      * @return
      */
     @PostMapping("/logout")
-    public ResponseEntity<CommonResponse> logout(@RequestBody LogoutRequestDto logoutRequestDto) {
-        authUseCase.logout(logoutRequestDto);
+    public ResponseEntity<CommonResponse> logout(HttpServletRequest request) {
+        authUseCase.logout(request);
         CommonResponse response = CommonResponse.builder().message("로그아웃 하였습니다.").status(HttpStatus.OK.value()).build();
         return ResponseEntity.ok(response);
     }

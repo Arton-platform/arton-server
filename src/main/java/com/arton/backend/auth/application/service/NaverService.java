@@ -61,7 +61,8 @@ public class NaverService implements NaverUseCase {
      * @return
      */
     @Override
-    public TokenDto login(String accessToken) {
+    public TokenDto login(String code, String status) {
+        String accessToken = getAccessToken(code, status);
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());

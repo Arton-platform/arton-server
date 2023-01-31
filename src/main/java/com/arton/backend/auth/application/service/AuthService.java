@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -31,8 +32,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -119,20 +122,21 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-    public boolean logout(LogoutRequestDto logoutRequestDto) {
+    public boolean logout(HttpServletRequest request) {
+        String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
         // token 검증
-        if (!tokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
+        if (!tokenProvider.validateToken(accessToken)) {
             throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
         }
         // get user id
-        Authentication authentication = tokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
         // 유저 토큰 확인후 존재하면 삭제
         if (redisTemplate.opsForValue().get(refreshTokenPrefix + authentication.getName()) != null) {
             redisTemplate.delete(refreshTokenPrefix+authentication.getName());
         }
         // 해당 토큰 블랙리스트 저장
-        Long expiration = tokenProvider.getExpiration(logoutRequestDto.getAccessToken());
-        redisTemplate.opsForValue().set(logoutRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+        Long expiration = tokenProvider.getExpiration(accessToken);
+        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
         return true;
     }
 
