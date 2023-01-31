@@ -126,4 +126,10 @@ public class AuthController {
     public ResponseEntity<TokenDto> checkStatus(@RequestBody TokenReissueDto tokenReissueDto) {
         return ResponseEntity.ok(authUseCase.reissue(tokenReissueDto));
     }
+
+    @PostMapping("/withdrawal")
+    public ResponseEntity<CommonResponse> withdraw(HttpServletRequest request, @RequestBody @Valid WithdrawalRequestDto withdrawalRequestDto) {
+        authUseCase.withdraw(request, withdrawalRequestDto);
+        return ResponseEntity.ok(CommonResponse.builder().message("성공적으로 회원 탈퇴를 하였습니다.").status(HttpStatus.NO_CONTENT.value()).build());
+    }
 }

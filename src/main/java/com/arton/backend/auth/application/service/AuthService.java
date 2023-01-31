@@ -17,6 +17,8 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
+import com.arton.backend.withdrawal.application.port.out.WithdrawalRegistPort;
+import com.arton.backend.withdrawal.domain.Withdrawal;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
@@ -50,6 +52,7 @@ public class AuthService implements AuthUseCase {
     private final UserRepositoryPort userRepository;
     private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final UserImageRepositoryPort userImageRepository;
+    private final WithdrawalRegistPort withdrawalRegistRepository;
     private final ArtistRepositoryPort artistRepository;
     private final PerformanceRepositoryPort performanceRepository;
     private final ZzimRepositoryPort zzimRepository;
@@ -180,7 +183,10 @@ public class AuthService implements AuthUseCase {
         userImageRepository.deleteByUserId(userId);
         // user 비활성화
         user.changeUserStatus(false);
-        userRepository.save(user);
+        user = userRepository.save(user);
+        // 탈퇴 사유 등록
+        Withdrawal withdrawal = Withdrawal.builder().user(user).comment(withdrawalRequestDto.getComment()).build();
+        withdrawalRegistRepository.save(withdrawal);
         // 토큰 정보 삭제
         // 유저 토큰 확인후 존재하면 삭제
         if (redisTemplate.opsForValue().get(refreshTokenPrefix + id) != null) {
