@@ -83,6 +83,11 @@ public class FileUploadLocal implements FileUploadUtils{
     }
 
     @Override
+    public List<String> uploadMultipleFiles(List<MultipartFile> multipartFiles, String dirName) {
+        return null;
+    }
+
+    @Override
     public String getDefaultImageUrl() {
         return defaultImageUrl;
     }
