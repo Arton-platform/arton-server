@@ -2,7 +2,6 @@ package com.arton.backend.follow.adapter.out.repository;
 
 import com.arton.backend.follow.applicaion.port.in.UserFollowSearchDto;
 import com.arton.backend.follow.domain.SortCondition;
-import com.arton.backend.user.adapter.out.repository.QUserEntity;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -14,9 +13,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.arton.backend.follow.adapter.out.repository.QFollowEntity.*;
-import static com.arton.backend.user.adapter.out.repository.QUserEntity.*;
-
+import static com.arton.backend.follow.adapter.out.repository.QFollowEntity.followEntity;
+import static com.arton.backend.user.adapter.out.repository.QUserEntity.userEntity;
 
 @Repository
 @RequiredArgsConstructor

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import static com.arton.backend.zzim.adapter.out.repository.QArtistZzimEntity.artistZzimEntity;
 
+
 @Transactional
 @RequiredArgsConstructor
 public class CustomArtistZzimRepositoryImpl implements CustomArtistZzimRepository{
