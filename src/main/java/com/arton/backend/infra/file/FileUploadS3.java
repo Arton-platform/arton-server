@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -36,12 +37,18 @@ public class FileUploadS3 implements FileUploadUtils {
     private String prefix;
     @Value("${spring.default-image}")
     private String defaultImageUrl;
+    @Value(("${spring.performance-dir}"))
+    private String performanceImageDir;
     // s3 uploader
     private final AmazonS3Client amazonS3Client;
 
     @Override
     public String getDefaultImageUrl() {
         return defaultImageUrl;
+    }
+
+    public String getPerformanceImageDir() {
+        return performanceImageDir;
     }
 
     /**
@@ -106,7 +113,10 @@ public class FileUploadS3 implements FileUploadUtils {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         try(InputStream inputStream = multipartFile.getInputStream()){
-            amazonS3Client.putObject(new PutObjectRequest(bucket, storeFileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            objectMetadata.setContentLength(bytes.length);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+            amazonS3Client.putObject(new PutObjectRequest(bucket, storeFileName, byteArrayInputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED.getMessage(), ErrorCode.FILE_UPLOAD_FAILED);
         }
@@ -123,7 +133,10 @@ public class FileUploadS3 implements FileUploadUtils {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(multipartFile.getContentType());
             try(InputStream inputStream = multipartFile.getInputStream()){
-                amazonS3Client.putObject(new PutObjectRequest(bucket, storeFileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+                byte[] bytes = IOUtils.toByteArray(inputStream);
+                objectMetadata.setContentLength(bytes.length);
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+                amazonS3Client.putObject(new PutObjectRequest(bucket, storeFileName, byteArrayInputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
             } catch (IOException e) {
                 throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED.getMessage(), ErrorCode.FILE_UPLOAD_FAILED);
             }
