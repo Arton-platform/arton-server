@@ -9,6 +9,7 @@ import java.util.List;
 
 import static com.arton.backend.artist.adapter.out.repository.QArtistEntity.artistEntity;
 
+
 @Transactional
 @RequiredArgsConstructor
 public class CustomArtistRepositoryImpl implements CustomArtistRepository{

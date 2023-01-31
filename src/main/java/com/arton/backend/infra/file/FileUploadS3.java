@@ -115,7 +115,21 @@ public class FileUploadS3 implements FileUploadUtils {
 
     @Override
     public List<String> uploadMultipleFiles(List<MultipartFile> multipartFiles, String dirName) {
-        return null;
+        List<String> result = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            // 검증
+            validateFile(multipartFile);
+            String storeFileName = dirName + "/" + createStoreFileName(multipartFile.getOriginalFilename());
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType(multipartFile.getContentType());
+            try(InputStream inputStream = multipartFile.getInputStream()){
+                amazonS3Client.putObject(new PutObjectRequest(bucket, storeFileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException e) {
+                throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED.getMessage(), ErrorCode.FILE_UPLOAD_FAILED);
+            }
+            result.add(amazonS3Client.getUrl(bucket, storeFileName).toString());
+        }
+        return result;
     }
 
     /**
