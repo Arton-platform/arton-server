@@ -1,5 +1,6 @@
 package com.arton.backend.withdrawal.adapter.out.repository;
 
+import com.arton.backend.user.adapter.out.repository.UserMapper;
 import com.arton.backend.user.domain.User;
 import com.arton.backend.withdrawal.application.port.out.GetWithdrawalPort;
 import com.arton.backend.withdrawal.application.port.out.WithdrawalRegistPort;
@@ -16,16 +17,16 @@ public class WithdrawalRepositoryAdapter implements GetWithdrawalPort, Withdrawa
 
     @Override
     public Withdrawal save(Withdrawal withdrawal) {
-        return null;
+        return WithdrawalMapper.toDomain(withdrawalRepository.save(WithdrawalMapper.toEntity(withdrawal)));
     }
 
     @Override
-    public Optional<Withdrawal> findByUser(User User) {
-        return Optional.empty();
+    public Optional<Withdrawal> findByUser(User user) {
+       return withdrawalRepository.findByUser(UserMapper.toEntity(user)).map(WithdrawalMapper::toDomain);
     }
 
     @Override
     public Optional<Withdrawal> findByUserId(Long userId) {
-        return Optional.empty();
+        return withdrawalRepository.findByUser_Id(userId).map(WithdrawalMapper::toDomain);
     }
 }

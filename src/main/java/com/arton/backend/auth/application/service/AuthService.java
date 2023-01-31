@@ -178,9 +178,10 @@ public class AuthService implements AuthUseCase {
         long userId = Long.parseLong(id);
         // when matches request user and request id then do withdraw
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        // 이미지 삭제
         UserImage userImage = userImageRepository.findUserImageByUser(userId).orElseThrow(() -> new CustomException(ErrorCode.IMAGE_LOAD_FAILED.getMessage(), ErrorCode.IMAGE_LOAD_FAILED));
-        fileUploadUtils.delete(userId, userImage.getImageUrl());
         userImageRepository.deleteByUserId(userId);
+        fileUploadUtils.delete(userId, userImage.getImageUrl());
         // user 비활성화
         user.changeUserStatus(false);
         user = userRepository.save(user);

@@ -22,7 +22,7 @@ public class WithdrawalMapper {
                 .comment(withdrawal.getComment())
                 .createdDate(withdrawal.getCreatedDate())
                 .updateDate(withdrawal.getUpdateDate())
-                .user(UserEntity.builder().id(withdrawal.getUser().getId()).build())
+                .user(UserMapper.toEntity(withdrawal.getUser()))
                 .build();
     }
 }

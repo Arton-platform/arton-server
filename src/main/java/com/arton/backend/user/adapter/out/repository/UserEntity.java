@@ -86,7 +86,7 @@ public class UserEntity extends BaseEntity {
     }
 
     @Builder
-    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription) {
+    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, Boolean userStatus) {
         super(createdDate, updatedDate);
         this.id = id;
         this.kakaoId = kakaoId;
@@ -103,5 +103,6 @@ public class UserEntity extends BaseEntity {
         this.artistZzims = artistZzims;
         this.alertState = true;
         this.selfDescription = selfDescription;
+        this.userStatus = userStatus;
     }
 }

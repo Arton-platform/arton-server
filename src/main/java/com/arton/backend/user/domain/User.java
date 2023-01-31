@@ -97,7 +97,7 @@ public class User {
         }
     }
     @Builder
-    public User(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription, UserImage userImage) {
+    public User(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription, UserImage userImage, Boolean userStatus) {
         this.id = id;
         this.kakaoId = kakaoId;
         this.naverId = naverId;
@@ -116,5 +116,6 @@ public class User {
         this.alertState = true;
         this.selfDescription = selfDescription;
         this.userImage = userImage;
+        this.userStatus = userStatus;
     }
 }
