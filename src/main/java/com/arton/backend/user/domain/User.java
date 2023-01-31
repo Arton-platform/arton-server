@@ -47,6 +47,8 @@ public class User {
     @ToString.Exclude
     List<ArtistZzim> artistZzims = new ArrayList<>();
     private Boolean alertState;
+    /** 회원 여부 */
+    private Boolean userStatus = true;
     private String selfDescription;
     private UserImage userImage;
     public void setImage(UserImage userImage){
@@ -73,6 +75,9 @@ public class User {
     }
     public void changeAlertState(Boolean state) {
         this.alertState = state;
+    }
+    public void changeUserStatus(boolean status) {
+        this.userStatus = status;
     }
     public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
 
