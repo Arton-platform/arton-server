@@ -47,6 +47,8 @@ public class User {
     @ToString.Exclude
     List<ArtistZzim> artistZzims = new ArrayList<>();
     private Boolean alertState;
+    /** 회원 여부 */
+    private Boolean userStatus = true;
     private String selfDescription;
     private UserImage userImage;
     public void setImage(UserImage userImage){
@@ -74,7 +76,13 @@ public class User {
     public void changeAlertState(Boolean state) {
         this.alertState = state;
     }
+    public void changeUserStatus(boolean status) {
+        this.userStatus = status;
+    }
     public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     /**
      * 프로필 업데이트
@@ -92,7 +100,7 @@ public class User {
         }
     }
     @Builder
-    public User(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription, UserImage userImage) {
+    public User(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription, UserImage userImage, Boolean userStatus) {
         this.id = id;
         this.kakaoId = kakaoId;
         this.naverId = naverId;
@@ -111,5 +119,6 @@ public class User {
         this.alertState = true;
         this.selfDescription = selfDescription;
         this.userImage = userImage;
+        this.userStatus = userStatus;
     }
 }

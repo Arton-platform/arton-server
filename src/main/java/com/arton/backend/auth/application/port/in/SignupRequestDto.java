@@ -50,6 +50,7 @@ public class SignupRequestDto {
                 .termsAgree(signupRequestDto.getTermsAgree())
                 .signupType(SignupType.ARTON)
                 .auth(UserRole.NORMAL)
+                .userStatus(true)
                 .build();
     }
 }

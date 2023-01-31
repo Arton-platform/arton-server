@@ -37,4 +37,14 @@ public class UserImageRepositoryAdapter implements UserImageSaveRepositoryPort, 
         }
         return Optional.ofNullable(null);
     }
+
+    @Override
+    public void delete(Long id) {
+        userImageRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByUserId(Long userId) {
+        userImageRepository.deleteByUser_Id(userId);
+    }
 }

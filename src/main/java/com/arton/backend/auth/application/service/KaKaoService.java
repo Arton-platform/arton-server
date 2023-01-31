@@ -181,6 +181,7 @@ public class KaKaoService implements KaKaoUseCase {
                     .ageRange(AgeRange.get(age))
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.KAKAO)
+                    .userStatus(true)
                     .build();
             user = userRepository.save(user);
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();

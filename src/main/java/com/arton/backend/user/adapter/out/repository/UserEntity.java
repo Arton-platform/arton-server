@@ -1,17 +1,14 @@
 package com.arton.backend.user.adapter.out.repository;
 
-import com.arton.backend.image.adapter.out.repository.UserImageEntity;
 import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.user.domain.AgeRange;
 import com.arton.backend.user.domain.Gender;
 import com.arton.backend.user.domain.SignupType;
 import com.arton.backend.user.domain.UserRole;
 import com.arton.backend.zzim.adapter.out.repository.ArtistZzimEntity;
 import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimEntity;
-import com.arton.backend.zzim.domain.ArtistZzim;
-import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -58,10 +55,9 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     List<ArtistZzimEntity> artistZzims = new ArrayList<>();
-
     private Boolean alertState;
-
     private String selfDescription;
+    private Boolean userStatus = true;
 
     /**
      * 아티스트를 찜한다
@@ -90,7 +86,7 @@ public class UserEntity extends BaseEntity {
     }
 
     @Builder
-    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription) {
+    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, Boolean userStatus) {
         super(createdDate, updatedDate);
         this.id = id;
         this.kakaoId = kakaoId;
@@ -107,5 +103,6 @@ public class UserEntity extends BaseEntity {
         this.artistZzims = artistZzims;
         this.alertState = true;
         this.selfDescription = selfDescription;
+        this.userStatus = userStatus;
     }
 }
