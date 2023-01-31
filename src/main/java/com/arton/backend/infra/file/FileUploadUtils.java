@@ -10,6 +10,7 @@ import java.util.List;
 public interface FileUploadUtils {
     void delete(Long userId, String dirName);
     String upload(MultipartFile multipartFile, String dirName);
+    List<String> uploadMultipleFiles(List<MultipartFile> multipartFiles, String dirName);
     String getDefaultImageUrl();
     String getFileContent(String directory);
     List<String> getFileNameInDirectory(String directory);

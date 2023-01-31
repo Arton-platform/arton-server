@@ -113,6 +113,11 @@ public class FileUploadS3 implements FileUploadUtils {
         return amazonS3Client.getUrl(bucket, storeFileName).toString();
     }
 
+    @Override
+    public List<String> uploadMultipleFiles(List<MultipartFile> multipartFiles, String dirName) {
+        return null;
+    }
+
     /**
      * s3 file delete
      * @param dirName
