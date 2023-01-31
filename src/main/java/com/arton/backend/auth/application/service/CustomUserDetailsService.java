@@ -2,9 +2,7 @@ package com.arton.backend.auth.application.service;
 
 import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.adapter.out.repository.UserMapper;
-import com.arton.backend.user.adapter.out.repository.UserRepository;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
-import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
