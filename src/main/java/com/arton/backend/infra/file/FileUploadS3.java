@@ -37,18 +37,12 @@ public class FileUploadS3 implements FileUploadUtils {
     private String prefix;
     @Value("${spring.default-image}")
     private String defaultImageUrl;
-    @Value(("${spring.performance-dir}"))
-    private String performanceImageDir;
     // s3 uploader
     private final AmazonS3Client amazonS3Client;
 
     @Override
     public String getDefaultImageUrl() {
         return defaultImageUrl;
-    }
-
-    public String getPerformanceImageDir() {
-        return performanceImageDir;
     }
 
     /**
