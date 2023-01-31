@@ -27,11 +27,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
      */
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<UserEntity> response = userRepository.findByEmailAndSignupType(email, SignupType.ARTON);
-        if (response.isPresent()) {
-            return Optional.ofNullable(toDomain(response.get()));
-        }
-        return Optional.ofNullable(null);
+        return userRepository.findByEmailAndSignupType(email, SignupType.ARTON).map(UserMapper::toDomain);
     }
 
     @Override
@@ -53,25 +49,17 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public Optional<User> findById(Long id) {
-        Optional<UserEntity> response = userRepository.findById(id);
-        if (response.isPresent()) {
-            return Optional.ofNullable(toDomain(response.get()));
-        }
-        return Optional.ofNullable(null);
+        return userRepository.findById(id).map(UserMapper::toDomain);
     }
 
     @Override
     public boolean checkEmailDup(String email) {
-        return userRepository.existsByEmailAndSignupType(email, SignupType.ARTON);
+        return userRepository.checkEmailDup(email);
     }
 
     @Override
     public Optional<User> findUserForReset(String nickname, String email) {
-        Optional<UserEntity> response = userRepository.findByNicknameAndEmailAndSignupType(nickname, email, SignupType.ARTON);
-        if (response.isPresent()) {
-            return Optional.ofNullable(toDomain(response.get()));
-        }
-        return Optional.ofNullable(null);
+        return userRepository.getUserForResetPassword(nickname, email).map(UserMapper::toDomain);
     }
 
     @Override
