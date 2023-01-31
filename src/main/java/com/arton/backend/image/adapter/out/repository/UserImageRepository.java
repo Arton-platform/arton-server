@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface UserImageRepository extends JpaRepository<UserImageEntity, Long> {
     Optional<UserImageEntity> findByUser_id(Long userId);
+    void deleteByUser_Id(Long userId);
 }

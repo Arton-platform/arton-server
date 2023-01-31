@@ -10,6 +10,7 @@ public interface AuthUseCase {
     boolean signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile);
     boolean logout(HttpServletRequest request);
     boolean validateSignupRequest(SignupValidationDto signupValidationDto);
+    boolean withdraw(HttpServletRequest request, WithdrawalRequestDto withdrawalRequestDto);
     TokenDto reissue(TokenReissueDto tokenReissueDto);
     TokenDto login(LoginRequestDto loginRequestDto);
     MailDto resetPassword(PasswordResetDto passwordResetDto);

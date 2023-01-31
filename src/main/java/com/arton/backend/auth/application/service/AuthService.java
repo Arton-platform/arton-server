@@ -3,6 +3,7 @@ package com.arton.backend.auth.application.service;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.file.FileUploadLocal;
@@ -30,13 +31,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,6 +49,7 @@ public class AuthService implements AuthUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
     private final UserImageSaveRepositoryPort userImageSaveRepository;
+    private final UserImageRepositoryPort userImageRepository;
     private final ArtistRepositoryPort artistRepository;
     private final PerformanceRepositoryPort performanceRepository;
     private final ZzimRepositoryPort zzimRepository;
@@ -148,6 +148,47 @@ public class AuthService implements AuthUseCase {
         if (!checkPassword(signupValidationDto.getPassword(), signupValidationDto.getCheckPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
+        return true;
+    }
+
+    /**
+     * 회원 탈퇴 처리.
+     * @param request
+     * @param withdrawalRequestDto
+     * @return
+     */
+    @Override
+    public boolean withdraw(HttpServletRequest request, WithdrawalRequestDto withdrawalRequestDto) {
+        String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
+        // token 검증
+        if (!tokenProvider.validateToken(accessToken)) {
+            throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
+        }
+        // get current user id
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String id = authentication.getName();
+        // compare request user id and withdrawal id
+        String withdrawalId = withdrawalRequestDto.getWithdrawalId();
+        if (!withdrawalId.equals(id)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_REQUEST.getMessage(), ErrorCode.FORBIDDEN_REQUEST);
+        }
+        long userId = Long.parseLong(id);
+        // when matches request user and request id then do withdraw
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        UserImage userImage = userImageRepository.findUserImageByUser(userId).orElseThrow(() -> new CustomException(ErrorCode.IMAGE_LOAD_FAILED.getMessage(), ErrorCode.IMAGE_LOAD_FAILED));
+        fileUploadUtils.delete(userId, userImage.getImageUrl());
+        userImageRepository.deleteByUserId(userId);
+        // user 비활성화
+        user.changeUserStatus(false);
+        userRepository.save(user);
+        // 토큰 정보 삭제
+        // 유저 토큰 확인후 존재하면 삭제
+        if (redisTemplate.opsForValue().get(refreshTokenPrefix + id) != null) {
+            redisTemplate.delete(refreshTokenPrefix + id);
+        }
+        // 해당 토큰 블랙리스트 저장
+        Long expiration = tokenProvider.getExpiration(accessToken);
+        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
         return true;
     }
 
