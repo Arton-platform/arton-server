@@ -140,9 +140,8 @@ public class NaverService implements NaverUseCase {
      * @param accessToken
      * @return
      */
-    private User signup(String accessToken) {
+    private synchronized User signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken).get("response");
-//        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         String id = userInfo.get("id").asText();
         User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {

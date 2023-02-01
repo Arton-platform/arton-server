@@ -157,9 +157,8 @@ public class KaKaoService implements KaKaoUseCase {
      * @param accessToken
      * @return
      */
-    private User signup(String accessToken) {
+    private synchronized User signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken);
-//        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         long id = userInfo.get("id").asLong();
         User user = userRepository.findByKakaoId(id).orElse(null);
         if (user == null) {

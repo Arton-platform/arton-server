@@ -89,7 +89,7 @@ class CustomZzimRepositoryImplTest {
                 .andExpect(status().isOk());
 
         // 유저의 찜리스트
-        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get(0);
         List<ArtistZzim> usersFavoriteArtists = artistZzimRepository.getUsersFavoriteArtists(user.getId());
         for (ArtistZzim usersFavoriteArtist : usersFavoriteArtists) {
             System.out.println("usersFavoriteArtist = " + usersFavoriteArtist);
@@ -120,7 +120,7 @@ class CustomZzimRepositoryImplTest {
                 .andExpect(status().isOk());
 
         // 유저의 찜리스트
-        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get(0);
         List<PerformanceZzim> usersFavoritePerformances = performanceZzimRepository.getUsersFavoritePerformances(user.getId());
         for (PerformanceZzim userFavoritePerformance : usersFavoritePerformances) {
             System.out.println("userFavoritePerformance = " + userFavoritePerformance);
@@ -154,7 +154,7 @@ class CustomZzimRepositoryImplTest {
         System.out.println("response = " + response);
 
         // 유저의 찜리스트
-        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get(0);
         List<PerformanceZzim> usersFavoritePerformances = performanceZzimRepository.getUsersFavoritePerformances(user.getId());
         for (PerformanceZzim userFavoritePerformance : usersFavoritePerformances) {
             System.out.println("userFavoritePerformance = " + userFavoritePerformance);
@@ -192,7 +192,7 @@ class CustomZzimRepositoryImplTest {
         System.out.println("response = " + response);
 
         // 유저의 찜리스트
-        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get(0);
         List<PerformanceZzim> usersFavoritePerformances = performanceZzimRepository.getUsersFavoritePerformances(user.getId());
         for (PerformanceZzim userFavoritePerformance : usersFavoritePerformances) {
             System.out.println("userFavoritePerformance = " + userFavoritePerformance);
@@ -245,7 +245,7 @@ class CustomZzimRepositoryImplTest {
         System.out.println("response = " + response);
 
         // 유저의 찜리스트
-        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get(0);
 
         List<ArtistZzim> usersFavoriteArtists = artistZzimRepository.getUsersFavoriteArtists(user.getId());
         for (ArtistZzim usersFavoriteArtist : usersFavoriteArtists) {
@@ -290,7 +290,7 @@ class CustomZzimRepositoryImplTest {
         String response = mvcResult.getResponse().getContentAsString();
 
         // 유저의 찜리스트
-        UserEntity user = userRepository.findByEmail("abc123@naver.com").get();
+        UserEntity user = userRepository.findByEmail("abc123@naver.com").get(0);
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(String.valueOf(user.getId()));
 
         ZzimDeleteDto deleteDto = ZzimDeleteDto.builder().artists(artistIds.subList(0, artistIds.size() / 2))

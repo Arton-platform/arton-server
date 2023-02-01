@@ -35,10 +35,7 @@ public class AuthController {
     @GetMapping("/kakao")
     public ResponseEntity<TokenDto> loginByKakao(HttpServletRequest request, @RequestParam String code){
         log.info("code {}", code);
-        TokenDto tokenDto;
-        synchronized(WebUtils.getSessionMutex(request.getSession())){
-            tokenDto = kaKaoUseCase.login(code);
-        }
+        TokenDto tokenDto = kaKaoUseCase.login(code);
         return ResponseEntity.ok(tokenDto);
     }
 
@@ -52,10 +49,7 @@ public class AuthController {
     public ResponseEntity<TokenDto> loginByNaver(HttpServletRequest request, @RequestParam String code, @RequestParam String state){
         log.info("code {}", code);
         log.info("state {}", state);
-        TokenDto login;
-        synchronized (WebUtils.getSessionMutex(request.getSession())) {
-            login = naverUseCase.login(code, state);
-        }
+        TokenDto login = naverUseCase.login(code, state);
         return ResponseEntity.ok(login);
     }
 

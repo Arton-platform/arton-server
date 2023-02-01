@@ -31,7 +31,7 @@ class UserImageRepositoryTest {
                 .user(save)
                 .build();
         userImageRepository.save(userImageEntity);
-        UserEntity userEntity = userRepository.findByEmail("tester").get();
+        UserEntity userEntity = userRepository.findByEmail("tester").get(0);
         userRepository.findById(userEntity.getId());
     }
 }
