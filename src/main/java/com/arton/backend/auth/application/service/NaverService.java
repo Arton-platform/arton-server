@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.springframework.util.StringUtils.hasText;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -63,24 +65,33 @@ public class NaverService implements NaverUseCase {
         return tokenDto;
     }
 
-    private User signup(OAuthSignupDto oAuthSignupDto) {
-        String id = oAuthSignupDto.getId();
+    private User signup(OAuthSignupDto signupDto) {
+        String id = signupDto.getId();
         User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
-
-            String nickName = oAuthSignupDto.getNickname();
-            String email = oAuthSignupDto.getEmail();
-            String ageRange = oAuthSignupDto.getAge();
-            int age = Integer.parseInt(ageRange.substring(0, 1));
-            String gender = oAuthSignupDto.getGender();
+            String nickName = "";
+            if (hasText(signupDto.getNickname()))
+                nickName = signupDto.getNickname();
+            String email = "";
+            if (hasText(signupDto.getEmail()))
+                email = signupDto.getEmail();
+            String ageRange = "";
+            int age = -1;
+            if (hasText(signupDto.getAge())) {
+                age = Integer.parseInt(ageRange.substring(0, 1));
+            }
+            String gender = "";
+            if (hasText(signupDto.getGender())) {
+                gender = signupDto.getGender();
+            }
             /** password is user's own kakao id */
             String password = id;
             user = User.builder().email(email)
-                    .gender(getGender(gender))
+                    .gender(hasText(gender) ? getGender(gender) : Gender.ETC)
                     .password(passwordEncoder.encode(password))
                     .naverId(id)
                     .nickname(nickName)
-                    .ageRange(AgeRange.get(age))
+                    .ageRange(age != -1 ? AgeRange.get(age) : AgeRange.ETC)
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.NAVER)
                     .userStatus(true)

@@ -21,9 +21,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import static org.springframework.util.StringUtils.*;
 
 @Slf4j
 @Service
@@ -78,18 +81,29 @@ public class KaKaoService implements KaKaoUseCase {
         long id = Long.parseLong(signupDto.getId());
         User user = userRepository.findByKakaoId(id).orElse(null);
         if (user == null) {
-            String nickName = signupDto.getNickname();
-            String email = signupDto.getEmail();
-            String ageRange = signupDto.getAge();
-            int age = Integer.parseInt(ageRange.substring(0, 1));
-            String gender = signupDto.getGender();
+            String nickName = "";
+            if (hasText(signupDto.getNickname()))
+                nickName = signupDto.getNickname();
+            String email = "";
+            if (hasText(signupDto.getEmail()))
+                email = signupDto.getEmail();
+            String ageRange = "";
+            int age = -1;
+            if (hasText(signupDto.getAge())) {
+                age = Integer.parseInt(ageRange.substring(0, 1));
+            }
+            String gender = "";
+            if (hasText(signupDto.getGender())) {
+                gender = signupDto.getGender();
+            }
             String password = signupDto.getId();
-            user = User.builder().email(email)
-                    .gender(Gender.get(gender.toUpperCase(Locale.ROOT)))
+            user = User.builder()
+                    .email(email)
+                    .gender(!gender.equals("") ? Gender.get(gender.toUpperCase(Locale.ROOT)) : Gender.ETC)
                     .password(passwordEncoder.encode(password))
                     .kakaoId(id)
                     .nickname(nickName)
-                    .ageRange(AgeRange.get(age))
+                    .ageRange(age != -1 ? AgeRange.get(age) : AgeRange.ETC)
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.KAKAO)
                     .userStatus(true)

@@ -17,13 +17,10 @@ public class OAuthSignupDto {
     @NotBlank
     @Schema(description = "닉네임", required = true)
     private String nickname;
-    @NotBlank
     @Schema(description = "이메일", required = true)
     private String email;
-    @NotBlank
     @Schema(description = "AGE_RANGE 값", required = true)
     private String age;
-    @NotBlank
     @Schema(description = "성별", required = true)
     private String gender;
 }
