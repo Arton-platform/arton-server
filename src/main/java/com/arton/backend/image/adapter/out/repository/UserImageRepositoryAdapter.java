@@ -22,20 +22,12 @@ public class UserImageRepositoryAdapter implements UserImageSaveRepositoryPort, 
 
     @Override
     public Optional<UserImage> findUserImage(Long id) {
-        Optional<UserImageEntity> response = userImageRepository.findById(id);
-        if (response.isPresent()) {
-            return Optional.ofNullable(toDomain(response.get()));
-        }
-        return Optional.ofNullable(null);
+        return userImageRepository.findById(id).map(UserImageMapper::toDomain);
     }
 
     @Override
     public Optional<UserImage> findUserImageByUser(Long userId) {
-        Optional<UserImageEntity> response = userImageRepository.findByUser_id(userId);
-        if (response.isPresent()) {
-            return Optional.ofNullable(toDomain(response.get()));
-        }
-        return Optional.ofNullable(null);
+        return userImageRepository.findByUser_id(userId).map(UserImageMapper::toDomain);
     }
 
     @Override
@@ -45,6 +37,6 @@ public class UserImageRepositoryAdapter implements UserImageSaveRepositoryPort, 
 
     @Override
     public void deleteByUserId(Long userId) {
-        userImageRepository.deleteByUser_Id(userId);
+        userImageRepository.deleteByUser_Id(userId                                                                                                                                         );
     }
 }

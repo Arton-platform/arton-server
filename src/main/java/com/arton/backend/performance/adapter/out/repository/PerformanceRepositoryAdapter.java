@@ -60,10 +60,6 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
 
     @Override
     public Optional<Performance> findOne(Long id) {
-        Optional<PerformanceEntity> response = performanceRepository.findById(id);
-        if (response.isPresent()) {
-            return Optional.ofNullable(PerformanceMapper.toDomain(response.get()));
-        }
-        return Optional.ofNullable(null);
+        return performanceRepository.findById(id).map(PerformanceMapper::toDomain);
     }
 }

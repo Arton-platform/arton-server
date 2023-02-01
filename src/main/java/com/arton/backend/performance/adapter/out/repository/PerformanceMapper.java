@@ -4,6 +4,7 @@ import com.arton.backend.image.adapter.out.repository.PerformanceImageMapper;
 import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performer.adapter.out.repository.PerformerMapper;
+import com.arton.backend.price.adapter.out.repository.PriceGradeMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class PerformanceMapper {
                 .link(performance.getLink())
                 .musicalDateTime(performance.getMusicalDateTime())
                 .place(performance.getPlace())
-                .priceGradeList(performance.getPriceGradeList())
+                .priceGradeList(Optional.ofNullable(performance.getPriceGradeList()).orElseGet(Collections::emptyList).stream().map(PriceGradeMapper::toDomain).collect(Collectors.toList()))
                 .runningTime(performance.getRunningTime())
                 .starScore(performance.getStarScore())
                 .startDate(performance.getStartDate())
@@ -55,7 +56,7 @@ public class PerformanceMapper {
                 .link(performance.getLink())
                 .musicalDateTime(performance.getMusicalDateTime())
                 .place(performance.getPlace())
-                .priceGradeList(performance.getPriceGradeList())
+                .priceGradeList(Optional.ofNullable(performance.getPriceGradeList()).orElseGet(Collections::emptyList).stream().map(PriceGradeMapper::toEntity).collect(Collectors.toList()))
                 .runningTime(performance.getRunningTime())
                 .starScore(performance.getStarScore())
                 .startDate(performance.getStartDate())
