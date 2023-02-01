@@ -66,7 +66,7 @@ public class KaKaoService implements KaKaoUseCase {
      */
     @Override
     @Transactional
-    public TokenDto login(String code) {
+    public synchronized TokenDto login(String code) {
         String accessToken = getAccessToken(code);
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
@@ -157,7 +157,7 @@ public class KaKaoService implements KaKaoUseCase {
      * @param accessToken
      * @return
      */
-    private synchronized User signup(String accessToken) {
+    private User signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken);
         long id = userInfo.get("id").asLong();
         User user = userRepository.findByKakaoId(id).orElse(null);

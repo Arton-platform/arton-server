@@ -61,7 +61,7 @@ public class NaverService implements NaverUseCase {
      * @return
      */
     @Override
-    public TokenDto login(String code, String status) {
+    public synchronized TokenDto login(String code, String status) {
         String accessToken = getAccessToken(code, status);
         log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
@@ -140,7 +140,7 @@ public class NaverService implements NaverUseCase {
      * @param accessToken
      * @return
      */
-    private synchronized User signup(String accessToken) {
+    private User signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken).get("response");
         String id = userInfo.get("id").asText();
         User user = userRepository.findByNaverId(id).orElse(null);
