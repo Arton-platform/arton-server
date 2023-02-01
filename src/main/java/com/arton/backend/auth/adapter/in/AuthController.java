@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -35,7 +36,7 @@ public class AuthController {
     public ResponseEntity<TokenDto> loginByKakao(HttpServletRequest request, @RequestParam String code){
         log.info("code {}", code);
         TokenDto tokenDto;
-        synchronized(this){
+        synchronized(WebUtils.getSessionMutex(request.getSession())){
             tokenDto = kaKaoUseCase.login(code);
         }
         return ResponseEntity.ok(tokenDto);
@@ -48,11 +49,11 @@ public class AuthController {
      * @return
      */
     @GetMapping("/naver")
-    public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
+    public ResponseEntity<TokenDto> loginByNaver(HttpServletRequest request, @RequestParam String code, @RequestParam String state){
         log.info("code {}", code);
         log.info("state {}", state);
         TokenDto login;
-        synchronized (this) {
+        synchronized (WebUtils.getSessionMutex(request.getSession())) {
             login = naverUseCase.login(code, state);
         }
         return ResponseEntity.ok(login);
