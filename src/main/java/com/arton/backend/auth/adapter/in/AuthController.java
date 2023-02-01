@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -33,9 +32,13 @@ public class AuthController {
      * @return
      */
     @GetMapping("/kakao")
-    public ResponseEntity<TokenDto> loginByKakao(HttpServletRequest request, @RequestParam String code){
-        log.info("code {}", code);
-        TokenDto tokenDto = kaKaoUseCase.login(code);
+    public ResponseEntity<CommonResponse> loginByKakao(@RequestParam String code){
+        return ResponseEntity.ok(CommonResponse.builder().message(code).status(HttpStatus.OK.value()).build());
+    }
+
+    @PostMapping("/kakao/signup")
+    public ResponseEntity<TokenDto> signupByKaKao(@RequestBody OAuthSignupDto signupDto) {
+        TokenDto tokenDto = kaKaoUseCase.login(signupDto);
         return ResponseEntity.ok(tokenDto);
     }
 
@@ -46,11 +49,14 @@ public class AuthController {
      * @return
      */
     @GetMapping("/naver")
-    public ResponseEntity<TokenDto> loginByNaver(HttpServletRequest request, @RequestParam String code, @RequestParam String state){
-        log.info("code {}", code);
-        log.info("state {}", state);
-        TokenDto login = naverUseCase.login(code, state);
-        return ResponseEntity.ok(login);
+    public ResponseEntity<CommonResponse> loginByNaver(@RequestParam String code, @RequestParam String state){
+        return ResponseEntity.ok(CommonResponse.builder().message(code+" "+state).status(HttpStatus.OK.value()).build());
+    }
+
+    @PostMapping("/naver/signup")
+    public ResponseEntity<TokenDto> loginByNaver(@RequestBody @Valid OAuthSignupDto signupDto){
+        TokenDto tokenDto = naverUseCase.login(signupDto);
+        return ResponseEntity.ok(tokenDto);
     }
 
     /**
