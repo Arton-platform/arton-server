@@ -4,6 +4,16 @@ import com.arton.backend.auth.application.port.in.*;
 import com.arton.backend.infra.mail.EmailUseCase;
 import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.common.CommonResponse;
+import com.arton.backend.infra.shared.exception.ErrorResponse;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+@Tag(name = "AUTH", description = "회원등록 API")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -25,19 +36,25 @@ public class AuthController {
     private final AuthUseCase authUseCase;
     private final EmailUseCase emailUseCase;
 
-
     /**
      * US-7
      * @param code
      * @return
      */
+    @Hidden
     @GetMapping("/kakao")
     public ResponseEntity<CommonResponse> loginByKakao(@RequestParam String code){
         return ResponseEntity.ok(CommonResponse.builder().message(code).status(HttpStatus.OK.value()).build());
     }
 
+    @Operation(summary = "카카오 간편 회원가입", description = "카카오 아이디로 회원가입을 진행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원가입 성공",
+            content = @Content(schema = @Schema(implementation = TokenDto.class))),
+            @ApiResponse(responseCode = "500", description = "회원가입 처리 실패",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/kakao/signup")
-    public ResponseEntity<TokenDto> signupByKaKao(@RequestBody OAuthSignupDto signupDto) {
+    public ResponseEntity<TokenDto> signupByKaKao(@RequestBody @Valid OAuthSignupDto signupDto) {
         TokenDto tokenDto = kaKaoUseCase.login(signupDto);
         return ResponseEntity.ok(tokenDto);
     }
@@ -48,11 +65,18 @@ public class AuthController {
      * @param state
      * @return
      */
+    @Hidden
     @GetMapping("/naver")
     public ResponseEntity<CommonResponse> loginByNaver(@RequestParam String code, @RequestParam String state){
         return ResponseEntity.ok(CommonResponse.builder().message(code+" "+state).status(HttpStatus.OK.value()).build());
     }
 
+    @Operation(summary = "카카오 간편 회원가입", description = "카카오 아이디로 회원가입을 진행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원가입 성공",
+                    content = @Content(schema = @Schema(implementation = TokenDto.class))),
+            @ApiResponse(responseCode = "500", description = "회원가입 처리 실패",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/naver/signup")
     public ResponseEntity<TokenDto> loginByNaver(@RequestBody @Valid OAuthSignupDto signupDto){
         TokenDto tokenDto = naverUseCase.login(signupDto);
