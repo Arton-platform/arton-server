@@ -7,8 +7,6 @@ import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -71,7 +69,7 @@ public class AuthController {
         return ResponseEntity.ok(CommonResponse.builder().message(code+" "+state).status(HttpStatus.OK.value()).build());
     }
 
-    @Operation(summary = "카카오 간편 회원가입", description = "카카오 아이디로 회원가입을 진행합니다.")
+    @Operation(summary = "네이버 간편 회원가입", description = "네이버 아이디로 회원가입을 진행합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공",
                     content = @Content(schema = @Schema(implementation = TokenDto.class))),
@@ -87,10 +85,22 @@ public class AuthController {
      * US-8, 14
      * 회원가입
      * 200 성공
-     * 400 패스워드 불일치
+     * 401 패스워드 불일치
      * 409 이메일 중복
      * @return
      */
+    @Operation(summary = "회원가입", description = "앱 자체 회원가입을 진행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원가입 성공",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "400", description = "빈파일 업로드",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "401", description = "패스워드 불일치",
+                content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "이메일 중복",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "이미지 업로드 실패",
+                content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CommonResponse> signUp(@RequestPart(required = true, name = "signupRequestDto") @Valid SignupRequestDto signupRequestDto, @RequestPart(required = false, name = "image") MultipartFile multipartFile) {
         authUseCase.signup(signupRequestDto, multipartFile);
@@ -103,6 +113,14 @@ public class AuthController {
      * @param signupValidationDto
      * @return
      */
+    @Operation(summary = "이메일/패스워드 검증", description = "패스워드/이메일 유효성을 검증합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "검증 성공",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "401", description = "패스워드 불일치",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "이메일 중복",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping(value = "/check/signup")
     public ResponseEntity<CommonResponse> checkPasswordAndEmail(@RequestBody @Valid SignupValidationDto signupValidationDto) {
         authUseCase.validateSignupRequest(signupValidationDto);
@@ -112,10 +130,18 @@ public class AuthController {
 
     /**
      * US-7
-     * 로그인
+     * 로그인 404 401
      * @param loginRequestDto
      * @return
      */
+    @Operation(summary = "로그인", description = "로그인을 진행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공",
+                    content = @Content(schema = @Schema(implementation = TokenDto.class))),
+            @ApiResponse(responseCode = "401", description = "아이디 or 패스워드 불일치",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 회원",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(authUseCase.login(loginRequestDto));
@@ -126,8 +152,14 @@ public class AuthController {
      * @param passwordResetDto
      * @return
      */
+    @Operation(summary = "패스워드 초기화", description = "패스워드 재발급을 진행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "패스워드 초기화 성공",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 회원",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PutMapping("/reset/password")
-    public ResponseEntity<CommonResponse> resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
+    public ResponseEntity<CommonResponse> resetPassword(@RequestBody @Valid PasswordResetDto passwordResetDto) {
         MailDto mailDto = authUseCase.resetPassword(passwordResetDto);
         emailUseCase.sendMailByHTML(mailDto);
         CommonResponse commonResponse = CommonResponse.builder()
