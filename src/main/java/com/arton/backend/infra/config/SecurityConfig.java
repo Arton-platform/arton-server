@@ -2,6 +2,7 @@ package com.arton.backend.infra.config;
 
 import com.arton.backend.infra.jwt.JwtAccessDeniedHandler;
 import com.arton.backend.infra.jwt.JwtAuthenticationEntryPoint;
+import com.arton.backend.infra.jwt.JwtAuthenticationFilter;
 import com.arton.backend.infra.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;

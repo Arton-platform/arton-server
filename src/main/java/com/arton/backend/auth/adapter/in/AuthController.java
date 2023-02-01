@@ -32,9 +32,12 @@ public class AuthController {
      * @return
      */
     @GetMapping("/kakao")
-    public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
+    public ResponseEntity<TokenDto> loginByKakao(HttpServletRequest request, @RequestParam String code){
         log.info("code {}", code);
-        TokenDto tokenDto = kaKaoUseCase.login(code);
+        TokenDto tokenDto;
+        synchronized(this){
+            tokenDto = kaKaoUseCase.login(code);
+        }
         return ResponseEntity.ok(tokenDto);
     }
 
@@ -48,7 +51,10 @@ public class AuthController {
     public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
         log.info("code {}", code);
         log.info("state {}", state);
-        TokenDto login = naverUseCase.login(code, state);
+        TokenDto login;
+        synchronized (this) {
+            login = naverUseCase.login(code, state);
+        }
         return ResponseEntity.ok(login);
     }
 

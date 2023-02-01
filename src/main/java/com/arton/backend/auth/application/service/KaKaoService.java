@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class KaKaoService implements KaKaoUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
@@ -66,6 +65,7 @@ public class KaKaoService implements KaKaoUseCase {
      * @return
      */
     @Override
+    @Transactional
     public TokenDto login(String code) {
         String accessToken = getAccessToken(code);
         log.info("accessToken {}", accessToken);
