@@ -173,6 +173,12 @@ public class AuthController {
      * US-22 로그아웃
      * @return
      */
+    @Operation(summary = "로그아웃", description = "로그아웃을 진행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "401", description = "유효하지 않은 토큰",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/logout")
     public ResponseEntity<CommonResponse> logout(HttpServletRequest request) {
         authUseCase.logout(request);
@@ -185,11 +191,30 @@ public class AuthController {
      * @param tokenReissueDto
      * @return
      */
+    @Operation(summary = "로그인 상태 확인", description = "리프레쉬 토큰을 활용해 사용자의 로그인 상태를 체크합니다.(토큰 기간 만료시 재발급을 진행하여 로그인 상태 유지.)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 상태 체크 완료",
+                    content = @Content(schema = @Schema(implementation = TokenDto.class))),
+            @ApiResponse(responseCode = "401", description = "유효하지 않은 토큰",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/check/login")
     public ResponseEntity<TokenDto> checkStatus(@RequestBody TokenReissueDto tokenReissueDto) {
         return ResponseEntity.ok(authUseCase.reissue(tokenReissueDto));
     }
 
+
+    @Operation(summary = "회원탈퇴", description = "회원탈퇴를 진행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원탈퇴 성공",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "401", description = "유효하지 않은 토큰",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "금지된 요청(다른 유저 탈퇴 요청등..)",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 회원",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "이미지 로드 에러",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class)))})
     @PostMapping("/withdrawal")
     public ResponseEntity<CommonResponse> withdraw(HttpServletRequest request, @RequestBody @Valid WithdrawalRequestDto withdrawalRequestDto) {
         authUseCase.withdraw(request, withdrawalRequestDto);
