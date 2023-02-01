@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "Price_Grade")
 @ToString
 public class PriceGradeEntity extends BaseEntity {
     @Id
