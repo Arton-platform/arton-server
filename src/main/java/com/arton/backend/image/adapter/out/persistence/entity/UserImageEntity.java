@@ -22,6 +22,10 @@ public class UserImageEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     @Builder
     public UserImageEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String imageUrl, UserEntity user) {
         super(createdDate, updateDate);

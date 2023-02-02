@@ -1,5 +1,7 @@
 package com.arton.backend.user.adapter.out.persistence.entity;
 
+import com.arton.backend.image.adapter.out.persistence.entity.UserImageEntity;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.user.domain.AgeRange;
 import com.arton.backend.user.domain.Gender;
@@ -57,6 +59,13 @@ public class UserEntity extends BaseEntity {
     private Boolean alertState;
     private String selfDescription;
     private Boolean userStatus = true;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private UserImageEntity userImage;
+
+    public void setImage(UserImageEntity userImage) {
+        this.userImage = userImage;
+        userImage.setUser(this);
+    }
 
     /**
      * 아티스트를 찜한다
@@ -85,7 +94,7 @@ public class UserEntity extends BaseEntity {
     }
 
     @Builder
-    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, Boolean userStatus) {
+    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, Boolean userStatus, UserImageEntity userImage) {
         super(createdDate, updatedDate);
         this.id = id;
         this.kakaoId = kakaoId;
@@ -103,5 +112,6 @@ public class UserEntity extends BaseEntity {
         this.alertState = true;
         this.selfDescription = selfDescription;
         this.userStatus = userStatus;
+        this.userImage = userImage;
     }
 }

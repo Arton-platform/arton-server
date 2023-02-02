@@ -1,5 +1,6 @@
 package com.arton.backend.user.adapter.out.persistence.mapper;
 
+import com.arton.backend.image.adapter.out.persistence.mapper.UserImageMapper;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.domain.User;
 
@@ -24,6 +25,7 @@ public class UserMapper {
                 .updateDate(user.getUpdateDate())
                 .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))
                 .userStatus(user.getUserStatus())
+                .userImage(UserImageMapper.toDomain(user.getUserImage()))
                 .build();
     }
 
@@ -44,6 +46,7 @@ public class UserMapper {
                 .updatedDate(user.getUpdateDate())
                 .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))
                 .userStatus(user.getUserStatus())
+                .userImage(UserImageMapper.toEntity(user.getUserImage()))
                 .build();
     }
 
