@@ -2,7 +2,7 @@ package com.arton.backend.zzim.adapter.out.repository;
 
 import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.adapter.out.repository.ArtistRepository;
-import com.arton.backend.auth.application.port.in.SignupRequestDto;
+import com.arton.backend.auth.application.data.SignupRequestDto;
 import com.arton.backend.auth.application.service.CustomUserDetailsService;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
@@ -24,7 +24,6 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;

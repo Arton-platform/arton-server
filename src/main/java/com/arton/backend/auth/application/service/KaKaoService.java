@@ -1,8 +1,8 @@
 package com.arton.backend.auth.application.service;
 
 import com.arton.backend.auth.application.port.in.KaKaoUseCase;
-import com.arton.backend.auth.application.port.in.OAuthSignupDto;
-import com.arton.backend.auth.application.port.in.TokenDto;
+import com.arton.backend.auth.application.data.OAuthSignupDto;
+import com.arton.backend.auth.application.data.TokenDto;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
@@ -21,7 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;

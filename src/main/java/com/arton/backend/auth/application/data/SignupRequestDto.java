@@ -1,6 +1,5 @@
-package com.arton.backend.auth.application.port.in;
+package com.arton.backend.auth.application.data;
 
-import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.domain.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;

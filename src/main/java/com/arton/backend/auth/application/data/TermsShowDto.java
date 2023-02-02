@@ -1,4 +1,4 @@
-package com.arton.backend.auth.application.port.in;
+package com.arton.backend.auth.application.data;
 
 import lombok.*;
 

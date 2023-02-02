@@ -5,16 +5,17 @@ import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.file.FileUploadUtils;
-import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
 import com.arton.backend.review.application.port.in.MyPageReviewDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
 import com.arton.backend.review.domain.Review;
 import com.arton.backend.user.adapter.out.repository.UserMapper;
+import com.arton.backend.user.application.data.MyPageDto;
+import com.arton.backend.user.application.data.UserPasswordEditDto;
+import com.arton.backend.user.application.data.UserProfileEditDto;
 import com.arton.backend.user.application.port.in.*;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
@@ -25,10 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j

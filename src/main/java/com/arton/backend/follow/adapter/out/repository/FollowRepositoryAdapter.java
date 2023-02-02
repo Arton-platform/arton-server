@@ -1,6 +1,6 @@
 package com.arton.backend.follow.adapter.out.repository;
 
-import com.arton.backend.follow.applicaion.port.in.UserFollowSearchDto;
+import com.arton.backend.follow.applicaion.data.UserFollowSearchDto;
 import com.arton.backend.follow.applicaion.port.out.FollowRegistRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.UnFollowRepositoryPort;

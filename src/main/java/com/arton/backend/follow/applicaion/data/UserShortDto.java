@@ -1,4 +1,4 @@
-package com.arton.backend.follow.applicaion.port.in;
+package com.arton.backend.follow.applicaion.data;
 
 import com.arton.backend.user.domain.User;
 import lombok.*;

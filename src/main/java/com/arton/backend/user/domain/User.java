@@ -1,7 +1,7 @@
 package com.arton.backend.user.domain;
 
 import com.arton.backend.image.domain.UserImage;
-import com.arton.backend.user.application.port.in.UserProfileEditDto;
+import com.arton.backend.user.application.data.UserProfileEditDto;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

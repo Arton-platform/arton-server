@@ -1,6 +1,6 @@
 package com.arton.backend.infra.jwt;
 
-import com.arton.backend.auth.application.port.in.TokenDto;
+import com.arton.backend.auth.application.data.TokenDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import io.jsonwebtoken.*;

@@ -1,4 +1,4 @@
-package com.arton.backend.user.application.port.in;
+package com.arton.backend.user.application.data;
 
 import lombok.*;
 
@@ -8,8 +8,9 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserProfileEditDto {
+public class UserPasswordEditDto {
     @NotBlank
-    private String nickname;
-    private String selfDescription;
+    private String password;
+    @NotBlank
+    private String checkPassword;
 }

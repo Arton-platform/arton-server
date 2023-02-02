@@ -1,4 +1,4 @@
-package com.arton.backend.user.application.port.in;
+package com.arton.backend.user.application.data;
 
 import com.arton.backend.review.application.port.in.MyPageReviewDto;
 import lombok.*;

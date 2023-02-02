@@ -1,4 +1,4 @@
-package com.arton.backend.auth.application.port.in;
+package com.arton.backend.auth.application.data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

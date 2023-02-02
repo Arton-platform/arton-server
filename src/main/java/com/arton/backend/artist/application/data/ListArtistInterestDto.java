@@ -1,4 +1,4 @@
-package com.arton.backend.artist.application.port.in;
+package com.arton.backend.artist.application.data;
 
 import lombok.*;
 

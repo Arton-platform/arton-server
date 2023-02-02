@@ -1,10 +1,8 @@
 package com.arton.backend.auth.application.service;
 
-import com.arton.backend.auth.application.port.in.TermsShowDto;
+import com.arton.backend.auth.application.data.TermsShowDto;
 import com.arton.backend.auth.application.port.in.TermsUseCase;
 import com.arton.backend.infra.file.FileUploadUtils;
-import com.arton.backend.infra.shared.exception.CustomException;
-import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

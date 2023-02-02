@@ -1,6 +1,5 @@
-package com.arton.backend.artist.application.port.in;
+package com.arton.backend.artist.application.data;
 
-import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
 import com.arton.backend.artist.domain.Artist;
 import lombok.*;
 

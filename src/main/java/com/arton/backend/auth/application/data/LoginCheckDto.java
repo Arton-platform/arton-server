@@ -1,4 +1,4 @@
-package com.arton.backend.auth.application.port.in;
+package com.arton.backend.auth.application.data;
 
 import lombok.*;
 
@@ -6,6 +6,6 @@ import lombok.*;
 @Getter
 @Builder
 @AllArgsConstructor
-public class TokenReissueDto {
+public class LoginCheckDto {
     private String refreshToken;
 }
