@@ -28,6 +28,7 @@ public class UserImage {
 
     public void setUser(User user) {
         this.user = user;
+        this.user.setImage(this);
     }
 
     public void updateImage(String imageUrl) {

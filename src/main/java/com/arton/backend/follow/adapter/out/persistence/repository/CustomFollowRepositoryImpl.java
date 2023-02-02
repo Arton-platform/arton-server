@@ -13,8 +13,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.arton.backend.follow.adapter.out.persistence.QFollowEntity.followEntity;
-import static com.arton.backend.user.adapter.out.persistence.QUserEntity.userEntity;
+import static com.arton.backend.follow.adapter.out.persistence.entity.QFollowEntity.followEntity;
+import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.userEntity;
 
 @Repository
 @RequiredArgsConstructor

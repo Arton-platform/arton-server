@@ -42,19 +42,8 @@ public class AuthController {
      */
     @Hidden
     @GetMapping("/kakao")
-    public ResponseEntity<CommonResponse> loginByKakao(@RequestParam String code){
-        return ResponseEntity.ok(CommonResponse.builder().message(code).status(HttpStatus.OK.value()).build());
-    }
-
-    @Operation(summary = "카카오 간편 회원가입", description = "카카오 아이디로 회원가입을 진행합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공",
-            content = @Content(schema = @Schema(implementation = TokenDto.class))),
-            @ApiResponse(responseCode = "500", description = "회원가입 처리 실패",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
-    @PostMapping("/kakao/signup")
-    public ResponseEntity<TokenDto> signupByKaKao(@RequestBody @Valid OAuthSignupDto signupDto) {
-        TokenDto tokenDto = kaKaoUseCase.login(signupDto);
+    public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
+        TokenDto tokenDto = kaKaoUseCase.login(code);
         return ResponseEntity.ok(tokenDto);
     }
 
@@ -66,19 +55,8 @@ public class AuthController {
      */
     @Hidden
     @GetMapping("/naver")
-    public ResponseEntity<CommonResponse> loginByNaver(@RequestParam String code, @RequestParam String state){
-        return ResponseEntity.ok(CommonResponse.builder().message(code+" "+state).status(HttpStatus.OK.value()).build());
-    }
-
-    @Operation(summary = "네이버 간편 회원가입", description = "네이버 아이디로 회원가입을 진행합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공",
-                    content = @Content(schema = @Schema(implementation = TokenDto.class))),
-            @ApiResponse(responseCode = "500", description = "회원가입 처리 실패",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
-    @PostMapping("/naver/signup")
-    public ResponseEntity<TokenDto> loginByNaver(@RequestBody @Valid OAuthSignupDto signupDto){
-        TokenDto tokenDto = naverUseCase.login(signupDto);
+    public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
+        TokenDto tokenDto = naverUseCase.login(code, state);
         return ResponseEntity.ok(tokenDto);
     }
 

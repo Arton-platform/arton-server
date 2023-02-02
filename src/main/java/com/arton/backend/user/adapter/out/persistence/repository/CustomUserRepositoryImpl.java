@@ -9,7 +9,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Optional;
 
-import static com.arton.backend.user.adapter.out.persistence.QUserEntity.*;
+import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.*;
 
 
 @Repository

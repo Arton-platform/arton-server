@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.arton.backend.zzim.adapter.out.persistence.QPerformanceZzimEntity.performanceZzimEntity;
+import static com.arton.backend.zzim.adapter.out.persistence.entity.QPerformanceZzimEntity.performanceZzimEntity;
 
 
 @Transactional
