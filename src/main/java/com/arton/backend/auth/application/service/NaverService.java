@@ -147,17 +147,11 @@ public class NaverService implements NaverUseCase {
         String id = userInfo.get("id").asText();
         User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
-            String mobile = userInfo.get("mobile").asText();
-            log.info("mobile {}", mobile);
             String nickName = userInfo.get("nickname").asText();
-            log.info("nickName {}", nickName);
             String email = userInfo.get("email").asText();
-            log.info("email {}", email);
             String ageRange = userInfo.get("age").asText();
-            log.info("ageRange {}", ageRange);
             int age = Integer.parseInt(ageRange.substring(0, 1));
             String gender = userInfo.get("gender").asText();
-            log.info("gender {}", gender);
             /** password is user's own kakao id */
             String password = id;
             user = User.builder().email(email)
@@ -169,6 +163,7 @@ public class NaverService implements NaverUseCase {
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.NAVER)
                     .userStatus(true)
+                    .termsAgree("Y")
                     .build();
             user = userRepository.save(user);
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
