@@ -1,12 +1,11 @@
 package com.arton.backend.review.adapter.out.persistence;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
-import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
-import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
 import com.arton.backend.review.application.port.out.ReviewRegistPort;
-import com.arton.backend.user.adapter.out.repository.UserEntity;
+import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

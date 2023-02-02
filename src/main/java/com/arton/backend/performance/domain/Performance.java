@@ -1,7 +1,5 @@
 package com.arton.backend.performance.domain;
 
-import com.arton.backend.image.adapter.out.repository.PerformanceImageEntity;
-import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;

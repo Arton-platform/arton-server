@@ -1,6 +1,6 @@
 package com.arton.backend.artist.application.service;
 
-import com.arton.backend.artist.application.port.in.ArtistInterestDto;
+import com.arton.backend.artist.application.data.ArtistInterestDto;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;

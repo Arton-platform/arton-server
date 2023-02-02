@@ -1,12 +1,9 @@
 package com.arton.backend.review.adapter.in.web;
 
 import com.arton.backend.infra.shared.common.ResponseData;
-import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
-import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.application.port.in.ReviewListUseCase;
 import com.arton.backend.review.application.port.in.ReviewRegistUseCase;
 import com.arton.backend.review.domain.Review;
-import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.arton.backend.auth.application.service;
 
-import com.arton.backend.user.adapter.out.repository.UserEntity;
-import com.arton.backend.user.adapter.out.repository.UserMapper;
+import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

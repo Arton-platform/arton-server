@@ -2,7 +2,7 @@ package com.arton.backend.comment.adapter.out.persistence;
 
 import com.arton.backend.comment.application.port.out.CommentListPort;
 import com.arton.backend.comment.application.port.out.CommentRegistPort;
-import com.arton.backend.performance.adapter.out.repository.QPerformanceEntity;
+import com.arton.backend.performance.adapter.out.persistence.QPerformanceEntity;
 import com.arton.backend.review.adapter.out.persistence.QReviewEntity;
 import com.arton.backend.review.domain.Review;
 import com.querydsl.jpa.impl.JPAQueryFactory;

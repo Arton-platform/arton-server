@@ -1,8 +1,8 @@
 package com.arton.backend.auth.application.service;
 
 import com.arton.backend.auth.application.port.in.NaverUseCase;
-import com.arton.backend.auth.application.port.in.OAuthSignupDto;
-import com.arton.backend.auth.application.port.in.TokenDto;
+import com.arton.backend.auth.application.data.OAuthSignupDto;
+import com.arton.backend.auth.application.data.TokenDto;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;

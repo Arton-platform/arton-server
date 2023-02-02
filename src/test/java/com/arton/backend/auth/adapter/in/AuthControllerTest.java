@@ -1,8 +1,7 @@
 package com.arton.backend.auth.adapter.in;
 
-import com.arton.backend.auth.application.port.in.LoginRequestDto;
-import com.arton.backend.auth.application.port.in.SignupRequestDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.arton.backend.auth.application.data.LoginRequestDto;
+import com.arton.backend.auth.application.data.SignupRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

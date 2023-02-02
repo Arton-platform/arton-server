@@ -1,8 +1,8 @@
 package com.arton.backend.review.application.service;
 
-import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
+import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.review.domain.Review;
-import com.arton.backend.user.adapter.out.repository.UserEntity;
+import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
