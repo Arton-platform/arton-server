@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.arton.backend.artist.adapter.out.persistence.QArtistEntity.artistEntity;
+import static com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity.artistEntity;
 
 
 @Transactional

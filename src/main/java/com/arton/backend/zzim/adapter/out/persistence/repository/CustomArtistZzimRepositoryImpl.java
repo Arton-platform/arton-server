@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.arton.backend.zzim.adapter.out.persistence.QArtistZzimEntity.artistZzimEntity;
+import static com.arton.backend.zzim.adapter.out.persistence.entity.QArtistZzimEntity.artistZzimEntity;
 
 
 @Transactional

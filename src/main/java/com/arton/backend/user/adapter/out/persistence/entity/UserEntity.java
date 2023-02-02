@@ -59,7 +59,7 @@ public class UserEntity extends BaseEntity {
     private Boolean alertState;
     private String selfDescription;
     private Boolean userStatus = true;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private UserImageEntity userImage;
 
     public void setImage(UserImageEntity userImage) {
