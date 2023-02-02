@@ -12,7 +12,7 @@ import com.arton.backend.review.application.port.in.MyPageReviewDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
 import com.arton.backend.review.domain.Review;
-import com.arton.backend.user.adapter.out.repository.UserMapper;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.application.data.MyPageDto;
 import com.arton.backend.user.application.data.UserPasswordEditDto;
 import com.arton.backend.user.application.data.UserProfileEditDto;

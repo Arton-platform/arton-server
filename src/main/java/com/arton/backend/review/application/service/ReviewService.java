@@ -1,8 +1,7 @@
 package com.arton.backend.review.application.service;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
-import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
-import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
 import com.arton.backend.review.application.port.in.ReviewCountUseCase;

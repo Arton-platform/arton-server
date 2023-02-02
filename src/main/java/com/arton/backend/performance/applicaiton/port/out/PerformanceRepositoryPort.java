@@ -1,6 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.out;
 
-import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
+import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 
 import java.util.List;
