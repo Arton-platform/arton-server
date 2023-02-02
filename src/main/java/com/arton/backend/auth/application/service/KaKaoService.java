@@ -167,6 +167,7 @@ public class KaKaoService implements KaKaoUseCase {
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.KAKAO)
                     .userStatus(true)
+                    .termsAgree("Y")
                     .build();
             user = userRepository.save(user);
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
