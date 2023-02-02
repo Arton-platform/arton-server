@@ -7,7 +7,8 @@ import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.application.port.out.GetUserRepositoryPort;
+import com.arton.backend.user.application.port.out.UserSaveRepositoryPort;
 import com.arton.backend.user.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,7 +39,8 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 public class NaverService implements NaverUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final UserRepositoryPort userRepository;
+    private final GetUserRepositoryPort userRepository;
+    private final UserSaveRepositoryPort userSaveRepository;
     private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -165,7 +167,7 @@ public class NaverService implements NaverUseCase {
                     .userStatus(true)
                     .termsAgree("Y")
                     .build();
-            user = userRepository.save(user);
+            user = userSaveRepository.save(user);
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
             userImageSaveRepository.save(userImage);
         }

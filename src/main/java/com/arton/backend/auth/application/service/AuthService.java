@@ -3,7 +3,7 @@ package com.arton.backend.auth.application.service;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.data.*;
-import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.auth.application.port.in.AuthUseCase;
 import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
@@ -14,7 +14,9 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.application.port.out.GetUserRepositoryPort;
+import com.arton.backend.user.application.port.out.UserSaveRepositoryPort;
+import com.arton.backend.user.application.port.out.UserValidRepositoryPort;
 import com.arton.backend.user.domain.User;
 import com.arton.backend.withdrawal.application.port.out.WithdrawalRegistPort;
 import com.arton.backend.withdrawal.domain.Withdrawal;
@@ -34,7 +36,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,7 +51,9 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthService implements AuthUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final UserRepositoryPort userRepository;
+    private final GetUserRepositoryPort userRepository;
+    private final UserSaveRepositoryPort userSaveRepository;
+    private final UserValidRepositoryPort userValidRepository;
     private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final UserImageRepositoryPort userImageRepository;
     private final WithdrawalRegistPort withdrawalRegistRepository;
@@ -77,7 +84,7 @@ public class AuthService implements AuthUseCase {
         }
         // 회원가입
         User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
-        User savedUser = userRepository.save(user);
+        User savedUser = userSaveRepository.save(user);
         Long id = savedUser.getId();
         // 기본 이미지 지정후 image 저장
         UserImage userImage = UserImage.builder().imageUrl(fileUploadUtils.getDefaultImageUrl()).user(savedUser).build();
@@ -97,7 +104,6 @@ public class AuthService implements AuthUseCase {
                 List<ArtistZzim> zzims = new ArrayList<>();
                 for (Artist artist : artists) {
                     ArtistZzim artistZzim = ArtistZzim.builder().artist(artist.getId()).user(savedUser.getId()).build();
-//                    artistZzim.setUser(savedUser.getId());
                     zzims.add(artistZzim);
                 }
                 zzimRepository.saveArtists(zzims);
@@ -111,13 +117,12 @@ public class AuthService implements AuthUseCase {
                 List<PerformanceZzim> zzims = new ArrayList<>();
                 for (Performance performance : performances) {
                     PerformanceZzim performanceZzim = PerformanceZzim.builder().performanceId(performance.getPerformanceId()).userId(savedUser.getId()).build();
-//                    performanceZzim.setUser(savedUser.getId());
                     zzims.add(performanceZzim);
                 }
                 zzimRepository.savePerformances(zzims);
             }
         }
-        userRepository.save(savedUser);
+        userSaveRepository.save(savedUser);
         return true;
     }
 
@@ -182,7 +187,7 @@ public class AuthService implements AuthUseCase {
         // user 비활성화
         user.changeUserStatus(false);
         user.changeNickname("알수없음"+UUID.randomUUID().toString().replaceAll("-","").substring(0, 8));
-        user = userRepository.save(user);
+        user = userSaveRepository.save(user);
         // 탈퇴 사유 등록
         Withdrawal withdrawal = Withdrawal.builder().user(user).comment(withdrawalRequestDto.getComment()).build();
         withdrawalRegistRepository.save(withdrawal);
@@ -260,7 +265,7 @@ public class AuthService implements AuthUseCase {
         // 비밀번호 변경
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
         user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+        userSaveRepository.save(user);
         // 메일 정보 전송
         return MailDto.builder()
                 .messageBody(newPassword)
@@ -270,7 +275,7 @@ public class AuthService implements AuthUseCase {
     }
 
     public boolean checkEmailDup(String email){
-        return userRepository.checkEmailDup(email);
+        return userValidRepository.checkEmailDup(email);
     }
 
     public boolean checkPassword(String password, String checkPassword){

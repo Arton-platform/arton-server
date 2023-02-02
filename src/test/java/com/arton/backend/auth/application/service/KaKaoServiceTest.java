@@ -1,29 +1,22 @@
 package com.arton.backend.auth.application.service;
 
-import com.arton.backend.image.domain.UserImage;
-import com.arton.backend.infra.shared.exception.CustomException;
-import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.application.port.out.GetUserRepositoryPort;
 import com.arton.backend.user.domain.*;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class KaKaoServiceTest {
     @Autowired
-    UserRepositoryPort userRepository;
+    GetUserRepositoryPort userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired

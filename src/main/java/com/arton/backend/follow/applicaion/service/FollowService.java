@@ -13,7 +13,7 @@ import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.application.port.out.GetUserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
     private final FollowRepositoryPort followRepository;
     private final FollowRegistRepositoryPort followRegistRepository;
     private final UnFollowRepositoryPort unFollowRepository;
-    private final UserRepositoryPort userRepository;
+    private final GetUserRepositoryPort userRepository;
     private final UserImageRepositoryPort userImageRepository;
 
     @Override

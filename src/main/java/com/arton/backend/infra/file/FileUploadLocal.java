@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * 이미지 업로드 유틸 로컬
  */
 @Slf4j
-@Profile(value = "dev")
+@Profile(value = {"dev", "test"})
 @Service
 @RequiredArgsConstructor
 public class FileUploadLocal implements FileUploadUtils{
@@ -41,7 +41,6 @@ public class FileUploadLocal implements FileUploadUtils{
         // 기본 이미지가 아니라면 삭제 진행
         if (!dir.equals(defaultImageUrl)) {
             Path dirPath = Paths.get(System.getProperty("user.dir") + rootDir + "/" + userId);
-
             try {
                 Files.list(dirPath).forEach(file -> {
                     if (!Files.isDirectory(file)) {

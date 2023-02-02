@@ -82,7 +82,6 @@ public class User {
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
-
     /**
      * 프로필 업데이트
      * @param userProfileEditDto

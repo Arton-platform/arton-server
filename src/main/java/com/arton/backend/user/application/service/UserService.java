@@ -17,7 +17,8 @@ import com.arton.backend.user.application.data.MyPageDto;
 import com.arton.backend.user.application.data.UserPasswordEditDto;
 import com.arton.backend.user.application.data.UserProfileEditDto;
 import com.arton.backend.user.application.port.in.*;
-import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.application.port.out.GetUserRepositoryPort;
+import com.arton.backend.user.application.port.out.UserSaveRepositoryPort;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +36,8 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class UserService implements UserUseCase, MyPageUseCase {
-
-    private final UserRepositoryPort userRepository;
+    private final GetUserRepositoryPort userRepository;
+    private final UserSaveRepositoryPort userSaveRepository;
     private final ReviewCountPort reviewCountPort;
     private final ReviewListPort reviewListPort;
     private final FollowRepositoryPort followRepositoryPort;
@@ -53,7 +54,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
         user.setPassword(passwordEncoder.encode(editDto.getPassword()));
-        userRepository.save(user);
+        userSaveRepository.save(user);
     }
 
     public boolean checkPassword(String password, String checkPassword){
@@ -89,7 +90,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
             userImageSaveRepository.save(userImage);
         }
         user.updateProfile(userProfileEditDto);
-        userRepository.save(user);
+        userSaveRepository.save(user);
     }
 
     @Override

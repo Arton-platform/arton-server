@@ -4,6 +4,7 @@ import com.arton.backend.image.adapter.out.persistence.entity.UserImageEntity;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
+import org.springframework.util.ObjectUtils;
 
 /**
  * 자식 먼저 저장해야하므로
@@ -13,7 +14,7 @@ public class UserImageMapper {
     public static UserImage toDomain(UserImageEntity userImage) {
         return UserImage.builder()
                 .id(userImage.getId())
-                .user(UserMapper.toDomain(userImage.getUser()))
+                .user(!ObjectUtils.isEmpty(userImage.getUser()) ? UserMapper.toDomain(userImage.getUser()) : null)
                 .imageUrl(userImage.getImageUrl())
                 .createdDate(userImage.getCreatedDate())
                 .updateDate(userImage.getUpdateDate())
@@ -23,7 +24,7 @@ public class UserImageMapper {
     public static UserImageEntity toEntity(UserImage userImage) {
         return UserImageEntity.builder()
                 .id(userImage.getId())
-                .user(UserEntity.builder().id(userImage.getUser().getId()).build())
+                .user(!ObjectUtils.isEmpty(userImage.getUser()) ? UserMapper.toEntity(userImage.getUser()) : null)
                 .imageUrl(userImage.getImageUrl())
                 .createdDate(userImage.getCreatedDate())
                 .updateDate(userImage.getUpdateDate())

@@ -1,7 +1,9 @@
 package com.arton.backend.user.adapter.out.persistence.repository;
 
 import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
-import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.application.port.out.GetUserRepositoryPort;
+import com.arton.backend.user.application.port.out.UserSaveRepositoryPort;
+import com.arton.backend.user.application.port.out.UserValidRepositoryPort;
 import com.arton.backend.user.domain.SignupType;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ import static com.arton.backend.user.adapter.out.persistence.mapper.UserMapper.t
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class UserRepositoryAdapter implements UserRepositoryPort {
+public class GetUserRepositoryAdapter implements GetUserRepositoryPort, UserValidRepositoryPort, UserSaveRepositoryPort {
     private final UserRepository userRepository;
     /**
      * 카카오 네이버와 구분시켜야됨.

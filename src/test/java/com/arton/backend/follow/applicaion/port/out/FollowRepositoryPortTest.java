@@ -2,7 +2,7 @@ package com.arton.backend.follow.applicaion.port.out;
 
 import com.arton.backend.follow.applicaion.data.UserFollowSearchDto;
 import com.arton.backend.follow.domain.Follow;
-import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.application.port.out.GetUserRepositoryPort;
 import com.arton.backend.user.domain.*;
 import jdk.jfr.Description;
 import org.assertj.core.api.Assertions;
@@ -24,7 +24,7 @@ class FollowRepositoryPortTest {
     @Autowired
     UnFollowRepositoryPort unFollowRepositoryPort;
     @Autowired
-    UserRepositoryPort userRepository;
+    GetUserRepositoryPort userRepository;
 
     @Transactional
     @Commit

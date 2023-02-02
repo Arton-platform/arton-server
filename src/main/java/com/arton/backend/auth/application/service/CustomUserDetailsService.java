@@ -2,7 +2,7 @@ package com.arton.backend.auth.application.service;
 
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
-import com.arton.backend.user.application.port.out.UserRepositoryPort;
+import com.arton.backend.user.application.port.out.GetUserRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +19,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepositoryPort userRepository;
+    private final GetUserRepositoryPort userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
