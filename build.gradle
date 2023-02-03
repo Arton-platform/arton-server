@@ -70,6 +70,10 @@ dependencies {
 
 	// s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// api limit
+	implementation 'com.github.vladimir-bukhtoyarov:bucket4j-core:7.1.0'
+
 }
 
 tasks.named('test') {
