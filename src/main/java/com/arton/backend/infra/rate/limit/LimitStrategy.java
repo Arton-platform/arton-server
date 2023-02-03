@@ -2,6 +2,7 @@ package com.arton.backend.infra.rate.limit;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Refill;
+import org.springframework.util.ObjectUtils;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -18,6 +19,11 @@ public enum LimitStrategy {
         public Bandwidth getLimit() {
             return Bandwidth.classic(10, Refill.intervally(10, Duration.ofDays(1)));
         }
+    },
+    BASIC{
+        public Bandwidth getLimit() {
+            return Bandwidth.classic(50, Refill.intervally(50, Duration.ofMinutes(1)));
+        }
     };
 
     public abstract Bandwidth getLimit();
@@ -33,6 +39,10 @@ public enum LimitStrategy {
     }
 
     public static LimitStrategy get(String name){
-        return hasText(name)?LIMIT_STRATEGY_MAP.get(name.toUpperCase(Locale.ROOT)):null;
+        LimitStrategy res = null;
+        if (hasText(name)) {
+            res = LIMIT_STRATEGY_MAP.get(name.toUpperCase(Locale.ROOT));
+        }
+        return ObjectUtils.isEmpty(res) ? FREE : res;
     }
 }
