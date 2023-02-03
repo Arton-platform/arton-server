@@ -48,8 +48,24 @@ public class AuthController {
     @Hidden
     @GetMapping("/kakao")
     public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
-        TokenDto tokenDto = kaKaoUseCase.login(code);
-        return ResponseEntity.ok(tokenDto);
+
+        Bucket bucket = rateLimitService.resolveBucket("OAUTH");
+        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+
+        long remainingTokens = probe.getRemainingTokens();
+
+        if (probe.isConsumed()) {
+            TokenDto tokenDto = kaKaoUseCase.login(code);
+            return ResponseEntity.ok(tokenDto);
+        }
+
+        long remainTimeForRefill = probe.getNanosToWaitForRefill() / 1000000000;
+
+        log.error("TOO_MANY_REQUEST");
+        log.error("Available Token : {}", remainingTokens);
+        log.error("Wait Time {} Seconds ", remainTimeForRefill);
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 
     /**
@@ -61,8 +77,24 @@ public class AuthController {
     @Hidden
     @GetMapping("/naver")
     public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
-        TokenDto tokenDto = naverUseCase.login(code, state);
-        return ResponseEntity.ok(tokenDto);
+
+        Bucket bucket = rateLimitService.resolveBucket("OAUTH");
+        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+
+        long remainingTokens = probe.getRemainingTokens();
+
+        if (probe.isConsumed()) {
+            TokenDto tokenDto = naverUseCase.login(code, state);
+            return ResponseEntity.ok(tokenDto);
+        }
+
+        long remainTimeForRefill = probe.getNanosToWaitForRefill() / 1000000000;
+
+        log.error("TOO_MANY_REQUEST");
+        log.error("Available Token : {}", remainingTokens);
+        log.error("Wait Time {} Seconds ", remainTimeForRefill);
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 
     /**
@@ -87,26 +119,9 @@ public class AuthController {
                 content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CommonResponse> signUp(@RequestPart(required = true, name = "signupRequestDto") @Valid SignupRequestDto signupRequestDto, @RequestPart(required = false, name = "image") MultipartFile multipartFile) {
-
-        Bucket bucket = rateLimitService.resolveBucket("OAUTH");
-        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
-
-        long remainingTokens = probe.getRemainingTokens();
-
-        if (probe.isConsumed()) {
             authUseCase.signup(signupRequestDto, multipartFile);
             CommonResponse commonResponse = CommonResponse.builder().message("회원가입에 성공하였습니다").status(HttpStatus.OK.value()).build();
             return ResponseEntity.ok(commonResponse);
-        }
-
-        long remainTimeForRefill = probe.getNanosToWaitForRefill() / 1000000000;
-
-        log.error("TOO_MANY_REQUEST");
-        log.error("Available Token : {}", remainingTokens);
-        log.error("Wait Time {} Seconds ", remainTimeForRefill);
-
-        CommonResponse commonResponse = CommonResponse.builder().message("로그인 요청 횟수를 초과하였습니다. 1시간후 다시 시도해주세요...").status(HttpStatus.TOO_MANY_REQUESTS.value()).build();
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(commonResponse);
     }
 
     /**
@@ -161,13 +176,29 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PutMapping("/reset/password")
     public ResponseEntity<CommonResponse> resetPassword(@RequestBody @Valid PasswordResetDto passwordResetDto) {
-        MailDto mailDto = authUseCase.resetPassword(passwordResetDto);
-        emailUseCase.sendMailByHTML(mailDto);
-        CommonResponse commonResponse = CommonResponse.builder()
-                .status(HttpStatus.OK.value())
-                .message("성공적으로 메일을 보냈습니다.")
-                .build();
-        return ResponseEntity.ok(commonResponse);
+
+        Bucket bucket = rateLimitService.resolveBucket("MAIL");
+        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+
+        long remainingTokens = probe.getRemainingTokens();
+
+        if (probe.isConsumed()) {
+            MailDto mailDto = authUseCase.resetPassword(passwordResetDto);
+            emailUseCase.sendMailByHTML(mailDto);
+            CommonResponse commonResponse = CommonResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("성공적으로 메일을 보냈습니다.")
+                    .build();
+            return ResponseEntity.ok(commonResponse);
+        }
+
+        long remainTimeForRefill = probe.getNanosToWaitForRefill() / 1000000000;
+
+        log.error("TOO_MANY_REQUEST");
+        log.error("Available Token : {}", remainingTokens);
+        log.error("Wait Time {} Seconds ", remainTimeForRefill);
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 
     /**

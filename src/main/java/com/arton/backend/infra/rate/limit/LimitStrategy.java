@@ -24,6 +24,15 @@ public enum LimitStrategy {
         public Bandwidth getLimit() {
             return Bandwidth.classic(50, Refill.intervally(50, Duration.ofMinutes(1)));
         }
+    },
+    MAIL{
+        /**
+         * 5분에 3번 요청 가능
+         * @return
+         */
+        public Bandwidth getLimit() {
+            return Bandwidth.classic(3, Refill.intervally(3, Duration.ofMinutes(5)));
+        }
     };
 
     public abstract Bandwidth getLimit();
