@@ -4,8 +4,12 @@ import com.arton.backend.auth.application.data.*;
 import com.arton.backend.auth.application.port.in.*;
 import com.arton.backend.infra.mail.EmailUseCase;
 import com.arton.backend.infra.mail.MailDto;
+import com.arton.backend.infra.rate.limit.LimitStrategy;
+import com.arton.backend.infra.rate.limit.RateLimitService;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.ConsumptionProbe;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,6 +38,7 @@ public class AuthController {
     private final NaverUseCase naverUseCase;
     private final AuthUseCase authUseCase;
     private final EmailUseCase emailUseCase;
+    private final RateLimitService rateLimitService;
 
     /**
      * US-7
@@ -82,9 +87,26 @@ public class AuthController {
                 content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CommonResponse> signUp(@RequestPart(required = true, name = "signupRequestDto") @Valid SignupRequestDto signupRequestDto, @RequestPart(required = false, name = "image") MultipartFile multipartFile) {
-        authUseCase.signup(signupRequestDto, multipartFile);
-        CommonResponse commonResponse = CommonResponse.builder().message("회원가입에 성공하였습니다").status(HttpStatus.OK.value()).build();
-        return ResponseEntity.ok(commonResponse);
+
+        Bucket bucket = rateLimitService.resolveBucket("OAUTH");
+        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+
+        long remainingTokens = probe.getRemainingTokens();
+
+        if (probe.isConsumed()) {
+            authUseCase.signup(signupRequestDto, multipartFile);
+            CommonResponse commonResponse = CommonResponse.builder().message("회원가입에 성공하였습니다").status(HttpStatus.OK.value()).build();
+            return ResponseEntity.ok(commonResponse);
+        }
+
+        long remainTimeForRefill = probe.getNanosToWaitForRefill() / 1000000000;
+
+        log.error("TOO_MANY_REQUEST");
+        log.error("Available Token : {}", remainingTokens);
+        log.error("Wait Time {} Seconds ", remainTimeForRefill);
+
+        CommonResponse commonResponse = CommonResponse.builder().message("로그인 요청 횟수를 초과하였습니다. 1시간후 다시 시도해주세요...").status(HttpStatus.TOO_MANY_REQUESTS.value()).build();
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(commonResponse);
     }
 
     /**

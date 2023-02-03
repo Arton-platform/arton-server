@@ -15,7 +15,7 @@ import static org.springframework.util.StringUtils.hasText;
 public enum LimitStrategy {
 
     // 1일 10번만 가능
-    FREE{
+    OAUTH{
         public Bandwidth getLimit() {
             return Bandwidth.classic(10, Refill.intervally(10, Duration.ofDays(1)));
         }
@@ -43,6 +43,6 @@ public enum LimitStrategy {
         if (hasText(name)) {
             res = LIMIT_STRATEGY_MAP.get(name.toUpperCase(Locale.ROOT));
         }
-        return ObjectUtils.isEmpty(res) ? FREE : res;
+        return ObjectUtils.isEmpty(res) ? OAUTH : res;
     }
 }
