@@ -14,7 +14,7 @@ public class ArtistZzim{
     /** 가입일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
     public void setUser(Long user) {
         this.user = user;
     }
@@ -25,6 +25,6 @@ public class ArtistZzim{
         this.artist = artist;
         this.user = user;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updateDate;
     }
 }

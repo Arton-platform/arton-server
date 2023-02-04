@@ -24,7 +24,7 @@ public class UserMapper {
                 .kakaoId(user.getKakaoId())
                 .termsAgree(user.getTermsAgree())
                 .createdDate(user.getCreatedDate())
-                .updateDate(user.getUpdateDate())
+                .updateDate(user.getUpdatedDate())
                 .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))
                 .userStatus(user.getUserStatus())
                 .build();
@@ -44,7 +44,7 @@ public class UserMapper {
                 .kakaoId(user.getKakaoId())
                 .termsAgree(user.getTermsAgree())
                 .createdDate(user.getCreatedDate())
-                .updatedDate(user.getUpdateDate())
+                .updatedDate(user.getUpdatedDate())
                 .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))
                 .userStatus(user.getUserStatus())
                 .build();

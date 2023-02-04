@@ -13,7 +13,7 @@ public class PerformanceZzimMapper {
                 .userId(performanceZzim.getUser().getId())
                 .performanceId(performanceZzim.getPerformance().getId())
                 .id(performanceZzim.getId())
-                .updateDate(performanceZzim.getUpdateDate())
+                .updateDate(performanceZzim.getUpdatedDate())
                 .build();
     }
 
@@ -23,7 +23,7 @@ public class PerformanceZzimMapper {
                 .user(UserEntity.builder().id(performanceZzim.getUserId()).build())
                 .performance(PerformanceEntity.builder().id(performanceZzim.getPerformanceId()).build())
                 .id(performanceZzim.getId())
-                .updateDate(performanceZzim.getUpdateDate())
+                .updateDate(performanceZzim.getUpdatedDate())
                 .build();
     }
 }

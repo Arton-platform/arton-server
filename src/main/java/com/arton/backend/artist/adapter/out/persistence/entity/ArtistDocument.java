@@ -37,10 +37,10 @@ public class ArtistDocument {
     private LocalDateTime createdDate;
     /** 수정일 */
     @Field(type = FieldType.Date, format = {DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis})
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
 
     @Builder
-    public ArtistDocument(Long id, String name, Integer age, String snsId, String profileImageUrl, List<PerformerEntity> performances, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public ArtistDocument(Long id, String name, Integer age, String snsId, String profileImageUrl, List<PerformerEntity> performances, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -48,13 +48,13 @@ public class ArtistDocument {
         this.profileImageUrl = profileImageUrl;
         this.performances = performances;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updatedDate;
     }
 
     public static ArtistDocument from(ArtistEntity artist) {
         return ArtistDocument.builder()
                 .createdDate(artist.getCreatedDate())
-                .updateDate(artist.getUpdateDate())
+                .updatedDate(artist.getUpdatedDate())
                 .age(artist.getAge())
                 .name(artist.getName())
                 .profileImageUrl(artist.getProfileImageUrl())
