@@ -1,5 +1,6 @@
-package com.arton.backend.performance.adapter.out.persistence.entity;
+package com.arton.backend.performance.adapter.out.persistence.document;
 
+import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.AccessLevel;
 import lombok.Builder;
