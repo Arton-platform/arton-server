@@ -6,9 +6,9 @@ import com.arton.backend.performance.adapter.out.persistence.document.Performanc
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceSearchRepository;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
+import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
-import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PerformanceService implements PerformanceUseCase {
+public class PerformanceService implements PerformanceUseCase, PerformanceSearchUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceMapper performanceMapper;
     private final PerformanceSearchRepository performanceSearchRepository;
@@ -85,6 +85,5 @@ public class PerformanceService implements PerformanceUseCase {
         PerformanceType performanceType = PerformanceType.get(type);
         return performanceSearchRepository.findByPerformanceType(performanceType);
     }
-
 
 }
