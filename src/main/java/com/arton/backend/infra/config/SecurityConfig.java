@@ -77,6 +77,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests().antMatchers("/auth/signup", "/auth/login/**", "/auth/reissue", "/auth/kakao/**", "/auth/naver/**", "/faq/**", "/announcement/**", "/review/**",
                 "/auth/reset/password", "/auth/check/signup", "/artist/**", "/performance/**", "/terms/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/performance/documents").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfig(tokenProvider, redisTemplate));

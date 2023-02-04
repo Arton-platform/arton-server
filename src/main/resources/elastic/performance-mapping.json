@@ -1,9 +1,9 @@
 {
   "properties" : {
     "id" : {"type" : "keyword"},
-    "title" : {"type" : "keyword", "analyzer" : "korean"},
+    "title" : {"type" : "text", "analyzer" : "korean"},
     "musicalDateTime" : {"type" : "keyword"},
-    "place" : {"type" : "keyword", "analyzer" : "korean"},
+    "place" : {"type" : "text", "analyzer" : "korean"},
     "imageUrl" : {"type" : "text"},
     "performanceType" : {"type" : "text"},
     "startDate" : {"type" : "date", "format": "uuuu-MM-dd'T'HH:mm:ss.SSS||epoch_millis"},
