@@ -1,9 +1,12 @@
 {
-  "analysis": {
-    "analyzer": {
-      "korean": {
-        "type": "nori"
-      }
-    }
+  "properties" : {
+    "id" : {"type" : "keyword"},
+    "title" : {"type" : "keyword", "analyzer" : "korean"},
+    "musicalDateTime" : {"type" : "keyword"},
+    "place" : {"type" : "keyword", "analyzer" : "korean"},
+    "imageUrl" : {"type" : "text"},
+    "performanceType" : {"type" : "text"},
+    "startDate" : {"type" : "date", "format": "uuuu-MM-dd'T'HH:mm:ss.SSS||epoch_millis"},
+    "endDate" : {"type" : "date", "format": "uuuu-MM-dd'T'HH:mm:ss.SSS||epoch_millis"}
   }
 }
