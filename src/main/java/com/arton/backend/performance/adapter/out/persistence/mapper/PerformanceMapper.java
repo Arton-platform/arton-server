@@ -61,7 +61,7 @@ public class PerformanceMapper {
                 .startDate(performance.getStartDate())
                 .title(performance.getTitle())
                 .createdDate(performance.getCreatedDate())
-                .updateDate(performance.getUpdatedDate())
+                .updatedDate(performance.getUpdatedDate())
                 .build();
     }
 }
