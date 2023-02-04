@@ -13,7 +13,7 @@ public class ArtistMapper {
     public static Artist toDomain(ArtistEntity artist) {
         return Artist.builder()
                 .createdDate(artist.getCreatedDate())
-                .updateDate(artist.getUpdatedDate())
+                .updatedDate(artist.getUpdatedDate())
                 .age(artist.getAge())
                 .name(artist.getName())
                 .profileImageUrl(artist.getProfileImageUrl())
@@ -26,7 +26,7 @@ public class ArtistMapper {
     public static ArtistEntity toEntity(Artist artist) {
         return ArtistEntity.builder()
                 .createdDate(artist.getCreatedDate())
-                .updateDate(artist.getUpdateDate())
+                .updateDate(artist.getUpdatedDate())
                 .age(artist.getAge())
                 .name(artist.getName())
                 .profileImageUrl(artist.getProfileImageUrl())
