@@ -1,5 +1,6 @@
 package com.arton.backend.performance.domain;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,7 +27,12 @@ public enum PerformanceType {
         PERFORMANCE_TYPE_MAP = unmodifiableMap(map);
     }
 
+    /**
+     * 매칭되는 타입이 없으면 null 반환.
+     * @param type
+     * @return
+     */
     public static PerformanceType get(String type) {
-        return hasText(type)?PERFORMANCE_TYPE_MAP.get(type):null;
+        return hasText(type.toUpperCase(Locale.ROOT))?PERFORMANCE_TYPE_MAP.get(type):null;
     }
 }

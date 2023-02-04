@@ -1,5 +1,6 @@
 package com.arton.backend.performance.adapter.out.persistence.mapper;
 
+import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performer.adapter.out.persistence.mapper.PerformerMapper;
@@ -62,6 +63,32 @@ public class PerformanceMapper {
                 .title(performance.getTitle())
                 .createdDate(performance.getCreatedDate())
                 .updatedDate(performance.getUpdatedDate())
+                .build();
+    }
+
+    public static PerformanceDocument entityToDocument(PerformanceEntity performance) {
+        return PerformanceDocument.builder()
+                .endDate(performance.getEndDate())
+                .id(performance.getId())
+                .imageUrl(performance.getImageUrl())
+                .performanceType(performance.getPerformanceType())
+                .musicalDateTime(performance.getMusicalDateTime())
+                .place(performance.getPlace())
+                .startDate(performance.getStartDate())
+                .title(performance.getTitle())
+                .build();
+    }
+
+    public static PerformanceDocument domainToDocument(Performance performance) {
+        return PerformanceDocument.builder()
+                .endDate(performance.getEndDate())
+                .id(performance.getPerformanceId())
+                .imageUrl(performance.getImageUrl())
+                .performanceType(performance.getPerformanceType())
+                .musicalDateTime(performance.getMusicalDateTime())
+                .place(performance.getPlace())
+                .startDate(performance.getStartDate())
+                .title(performance.getTitle())
                 .build();
     }
 }

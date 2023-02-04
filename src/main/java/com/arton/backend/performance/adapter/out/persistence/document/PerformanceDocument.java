@@ -54,16 +54,4 @@ public class PerformanceDocument{
         this.endDate = endDate;
     }
 
-    public static PerformanceDocument from(PerformanceEntity performance) {
-            return PerformanceDocument.builder()
-                    .endDate(performance.getEndDate())
-                    .id(performance.getId())
-                    .imageUrl(performance.getImageUrl())
-                    .performanceType(performance.getPerformanceType())
-                    .musicalDateTime(performance.getMusicalDateTime())
-                    .place(performance.getPlace())
-                    .startDate(performance.getStartDate())
-                    .title(performance.getTitle())
-                    .build();
-    }
 }
