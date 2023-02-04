@@ -3,9 +3,11 @@ package com.arton.backend.performance.applicaiton.service;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceSearchRepository;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class PerformanceService implements PerformanceUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceMapper performanceMapper;
+    private final PerformanceSearchRepository performanceSearchRepository;
 
     @Override
     public List<Performance> getAllPerformances() {
@@ -62,4 +65,5 @@ public class PerformanceService implements PerformanceUseCase {
                 .map(performanceEntity -> performanceMapper.toDomain(performanceEntity))
                 .orElseThrow(() -> new CustomException("데이터가 없습니다.", ErrorCode.SELECT_ERROR));
     }
+
 }
