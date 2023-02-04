@@ -10,4 +10,6 @@ public interface PerformanceFeedPort {
     Optional<List<PerformanceTicketOpenDateFromZzimDto>> getAllZzimList();
 
     void saveAll(List<PerformanceFeedEntity> entities);
+
+    Optional<List<PerformanceFeedEntity>> getAllFeed();
 }

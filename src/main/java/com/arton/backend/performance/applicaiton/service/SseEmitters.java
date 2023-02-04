@@ -1,4 +1,4 @@
-package com.arton.backend.zzim.domain;
+package com.arton.backend.performance.applicaiton.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,10 +19,12 @@ public class SseEmitters {
             this.emitters.remove(emitter);
         });
 
-        emitter.onTimeout(()->{
-            emitter.complete();
-        });
+        emitter.onTimeout(emitter::complete);
 
         return emitter;
+    }
+
+    public List<SseEmitter> getEmitters(){
+        return this.emitters;
     }
 }

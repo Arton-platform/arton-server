@@ -1,25 +1,47 @@
 package com.arton.backend.performance.adapter.out.repository;
 
+import com.arton.backend.user.adapter.out.repository.UserMapper;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import com.arton.backend.performance.domain.PerformanceFeed;
 
 @Component
+@NoArgsConstructor
 public class PerformanceFeedMapper {
-    public PerformanceFeed toDomain(PerformanceFeedEntity performanceFeedEntity) {
+
+    public static PerformanceFeed toDomain(PerformanceFeedEntity performanceFeedEntity) {
         return PerformanceFeed.builder()
                 .id(performanceFeedEntity.getId())
                 .readStatus(performanceFeedEntity.getReadStatus())
-                .user(performanceFeedEntity.getUser())
-                .performance(performanceFeedEntity.getPerformance())
+                .user(
+                    UserMapper.toDomain(
+                        performanceFeedEntity.getUser()
+                    )
+                )
+                .performance(
+                    PerformanceMapper.toDomain(
+                        performanceFeedEntity.getPerformance()
+                    )
+                )
                 .build();
     }
 
-    public PerformanceFeedEntity toEntity(PerformanceFeed performanceFeed) {
+    public static PerformanceFeedEntity toEntity(PerformanceFeed performanceFeed) {
         return PerformanceFeedEntity.builder()
                 .id(performanceFeed.getId())
-                .performanceEntity(performanceFeed.getPerformance())
-                .user(performanceFeed.getUser())
+                .performanceEntity(
+                    PerformanceMapper.toEntity(
+                            performanceFeed.getPerformance()
+                    )
+                )
+                .user(
+                    UserMapper.toEntity(
+                            performanceFeed.getUser()
+                    )
+                )
                 .readStatus(performanceFeed.getReadStatus())
                 .build();
     }

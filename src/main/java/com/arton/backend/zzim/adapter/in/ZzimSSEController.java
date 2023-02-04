@@ -1,6 +1,6 @@
 package com.arton.backend.zzim.adapter.in;
 
-import com.arton.backend.zzim.domain.SseEmitters;
+import com.arton.backend.performance.applicaiton.service.SseEmitters;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -4,6 +4,7 @@ import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
 import com.arton.backend.user.adapter.out.repository.UserEntity;
 
+import com.arton.backend.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -14,9 +15,9 @@ public class PerformanceFeed extends BaseEntity {
 
     private Long id;
 
-    private UserEntity user;
+    private User user;
 
-    private PerformanceEntity performance;
+    private Performance performance;
 
     private Boolean readStatus;
 
@@ -27,7 +28,7 @@ public class PerformanceFeed extends BaseEntity {
     }
 
     @Builder
-    public PerformanceFeed(Long id, UserEntity user, PerformanceEntity performance, Boolean readStatus, int dDay) {
+    public PerformanceFeed(Long id, User user, Performance performance, Boolean readStatus, int dDay) {
         this.id = id;
         this.user = user;
         this.performance = performance;

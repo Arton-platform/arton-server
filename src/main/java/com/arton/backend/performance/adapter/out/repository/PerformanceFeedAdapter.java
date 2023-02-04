@@ -47,4 +47,9 @@ public class PerformanceFeedAdapter implements PerformanceFeedPort {
     public void saveAll(List<PerformanceFeedEntity> entities) {
         repository.saveAll(entities);
     }
+
+    @Override
+    public Optional<List<PerformanceFeedEntity>> getAllFeed() {
+        return Optional.ofNullable(repository.findAll());
+    }
 }

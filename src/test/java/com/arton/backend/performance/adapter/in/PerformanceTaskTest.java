@@ -22,6 +22,5 @@ public class PerformanceTaskTest {
     @Transactional
     void testPerformanceSchedule() {
         performanceTask.performanceSchedule();
-
     }
 }

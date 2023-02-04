@@ -5,10 +5,8 @@ import com.arton.backend.performance.adapter.out.repository.PerformanceFeedMappe
 import com.arton.backend.performance.adapter.out.repository.PerformanceMapper;
 import com.arton.backend.performance.adapter.out.repository.PerformanceTicketOpenDateFromZzimDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceFeedPort;
-import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceFeed;
 import com.arton.backend.user.adapter.out.repository.UserMapper;
-import com.arton.backend.zzim.domain.PerformanceZzim;
 import org.springframework.stereotype.Service;
 
 import com.arton.backend.performance.applicaiton.port.in.PerformanceFeedUseCase;
@@ -29,7 +27,6 @@ import java.util.stream.Collectors;
 public class PerformanceFeedService implements PerformanceFeedUseCase {
 
     private final PerformanceFeedPort performanceFeedPort;
-    private final PerformanceFeedMapper feedMapper;
 
     @Override
     public List<PerformanceFeed> getFeedFromZzim() {
@@ -39,8 +36,16 @@ public class PerformanceFeedService implements PerformanceFeedUseCase {
                 .stream()
                 .map(performanceTicketOpenDateFromZzimDto -> PerformanceFeed.builder()
                         .readStatus(false)
-                        .user(performanceTicketOpenDateFromZzimDto.getUser())
-                        .performance(performanceTicketOpenDateFromZzimDto.getPerformance())
+                        .user(
+                            UserMapper.toDomain(
+                                performanceTicketOpenDateFromZzimDto.getUser()
+                            )
+                        )
+                        .performance(
+                            PerformanceMapper.toDomain(
+                                performanceTicketOpenDateFromZzimDto.getPerformance()
+                            )
+                        )
                         // 지금날자 부터 5일 이내
                         .dDay((int) ChronoUnit.DAYS.between(LocalDateTime.now(), performanceTicketOpenDateFromZzimDto.getPerformance().getTicketOpenDate()))
                         .build()
@@ -50,9 +55,18 @@ public class PerformanceFeedService implements PerformanceFeedUseCase {
     @Override
     public void saveAll(List<PerformanceFeed> feeds) {
         List<PerformanceFeedEntity> entities = feeds.stream()
-                        .map(feedMapper::toEntity)
+                        .map(PerformanceFeedMapper::toEntity)
                         .collect(Collectors.toList());
 
         performanceFeedPort.saveAll(entities);
     }
+
+    @Override
+    public List<PerformanceFeed> getAllFeed() {
+        return performanceFeedPort.getAllFeed().orElseGet(ArrayList::new)
+                .stream()
+                .map(PerformanceFeedMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
 }
