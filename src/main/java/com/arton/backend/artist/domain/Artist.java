@@ -22,7 +22,7 @@ public class Artist {
     private String profileImageUrl;
     /** 가입일 */
     private LocalDateTime createdDate;
-    /** 업데이트일 */
+    /** 수정일 */
     private LocalDateTime updateDate;
     /** 아티스트의 musical or concert 작품 */
     @ToString.Exclude
