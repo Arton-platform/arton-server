@@ -34,7 +34,8 @@ public class PerformanceSSEService implements PerformanceSSEUseCase {
                     .data("Subscribe for Performance Info!")
             );
         } catch (IOException e) {
-            throw new RuntimeException();
+            e.printStackTrace();
+            throw new CustomException("Emitter ADD ERROR", ErrorCode.IO_EXCEPTION);
         }
         return sseEmitter;
     }
@@ -52,6 +53,8 @@ public class PerformanceSSEService implements PerformanceSSEUseCase {
                                 .name("performanceInfo")
                                 .data(stringFeedList)
                     );
+
+                    sseEmitter.complete();
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                     throw new CustomException("JsonProcessingException", ErrorCode.JSON_PROCESSING_ERROR);

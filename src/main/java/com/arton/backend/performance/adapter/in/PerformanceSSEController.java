@@ -29,10 +29,9 @@ public class PerformanceSSEController {
         summary = "찜 피드 갱신 구독",
         description = "날자가 변경 될 때 마다 티켓오픈이 5일 이하로 남은 공연의 정보를 수신하기 위해 사용자를 추가한다."
     )
-    @GetMapping(value = "/subscribe-performance-info", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> subscribePerformanceInfo(){
-        SseEmitter sseEmitter = performanceSSEUseCase.subscribePerformanceInfo();
-        return ResponseEntity.ok(sseEmitter);
+    @GetMapping(value = "/subscribe-performance-info")
+    public SseEmitter subscribePerformanceInfo(){
+        return performanceSSEUseCase.subscribePerformanceInfo();
     }
 
     @Operation(
