@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class Performance {
     private String description;
     /** 좋아요 */
     private Long hit;
+    /** */
+    private LocalDateTime ticketOpenDate;
     /** 공연 시작일 */
     private LocalDateTime startDate;
     /** 공연 종료일 */
@@ -53,6 +56,7 @@ public class Performance {
     private PerformanceType performanceType;
     /** 공연의 출연자들 리스트 */
     @ToString.Exclude
+    @OneToMany(mappedBy = "performance")
     private List<Performer> performers = new ArrayList<>();
     /** 좌석 등급 가격 */
     @ToString.Exclude
@@ -64,11 +68,12 @@ public class Performance {
     private LocalDateTime updateDate;
 
     @Builder
-    public Performance(Long performanceId, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<Performer> performers, List<PriceGrade> priceGradeList, float starScore, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public Performance(Long performanceId, String title, String description, Long hit, LocalDateTime ticketOpenDate, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<Performer> performers, List<PriceGrade> priceGradeList, float starScore, LocalDateTime createdDate, LocalDateTime updateDate) {
         this.performanceId = performanceId;
         this.title = title;
         this.description = description;
         this.hit = hit;
+        this.ticketOpenDate = ticketOpenDate;
         this.startDate = startDate;
         this.endDate = endDate;
         this.musicalDateTime = musicalDateTime;

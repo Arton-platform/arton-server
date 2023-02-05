@@ -1,13 +1,9 @@
 package com.arton.backend.test;
 
-import com.arton.backend.artist.adapter.out.persistence.entity.ArtistEntity;
-import com.arton.backend.artist.adapter.out.persistence.repository.ArtistRepository;
-import com.arton.backend.follow.adapter.out.persistence.entity.FollowEntity;
-import com.arton.backend.follow.adapter.out.persistence.repository.FollowRepository;
-import com.arton.backend.image.adapter.out.persistence.entity.UserImageEntity;
-import com.arton.backend.image.adapter.out.persistence.repository.UserImageRepository;
-import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
-import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceRepository;
+import com.arton.backend.artist.adapter.out.repository.ArtistEntity;
+import com.arton.backend.artist.adapter.out.repository.ArtistRepository;
+import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
+import com.arton.backend.performance.adapter.out.repository.PerformanceRepository;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewRepository;

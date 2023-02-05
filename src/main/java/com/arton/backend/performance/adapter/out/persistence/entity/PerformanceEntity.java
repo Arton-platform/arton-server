@@ -26,6 +26,8 @@ public class PerformanceEntity extends BaseEntity {
     private String description;
     /** 좋아요 */
     private Long hit;
+    /** 티켓 오픈 날자 */
+    private LocalDateTime ticketOpenDate;
     /** 공연 시작일 */
     private LocalDateTime startDate;
     /** 공연 종료일 */
@@ -58,11 +60,11 @@ public class PerformanceEntity extends BaseEntity {
     /** 좌석 등급 가격 */
     @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<PriceGradeEntity> priceGradeList = new ArrayList<>();
+    private List<PriceGrade> priceGradeList = new ArrayList<>();
     private float starScore;
 
     @Builder
-    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGradeEntity> priceGradeList, float starScore) {
+    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGrade> priceGradeList, float starScore) {
         super(createdDate, updateDate);
         this.id = id;
         this.title = title;
