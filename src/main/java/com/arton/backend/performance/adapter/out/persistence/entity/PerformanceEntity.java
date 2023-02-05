@@ -3,7 +3,7 @@ package com.arton.backend.performance.adapter.out.persistence.entity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performer.adapter.out.persistence.entity.PerformerEntity;
-import com.arton.backend.price.adapter.out.persistence.entity.PriceGradeEntity;
+import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
 import javax.persistence.*;
