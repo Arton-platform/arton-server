@@ -15,13 +15,18 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Performance_Zzim")
 @ToString
+@IdClass(PerformanceZzimCompoundKey.class)
 public class PerformanceZzimEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_id")
     private PerformanceEntity performance;

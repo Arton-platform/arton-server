@@ -26,30 +26,30 @@ public class TestDataInit {
     @Transactional
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
-        Random random = new Random();
-        List<ArtistEntity> artistList = new ArrayList<>();
-        List<PerformanceEntity> performances = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            ArtistEntity artist = ArtistEntity.builder()
-                    .age(random.nextInt(30) + i)
-                    .name("test" + i)
-                    .profileImageUrl(defaultImage)
-                    .snsId("abc" + i + "@naver.com")
-                    .performances(new ArrayList<>())
-                    .build();
-            artistList.add(artist);
-
-            PerformanceEntity performance = PerformanceEntity.builder()
-                    .performanceType(i % 2 == 0 ? PerformanceType.MUSICAL : PerformanceType.CONCERT)
-                    .description("test" + i)
-                    .title("test" + i)
-                    .performers(new ArrayList<>())
-                    .priceGradeList(new ArrayList<>())
-                    .build();
-            performances.add(performance);
-        }
-
-        artistRepository.saveAll(artistList);
-        performanceRepository.saveAll(performances);
+//        Random random = new Random();
+//        List<ArtistEntity> artistList = new ArrayList<>();
+//        List<PerformanceEntity> performances = new ArrayList<>();
+//        for (int i = 0; i < 20; i++) {
+//            ArtistEntity artist = ArtistEntity.builder()
+//                    .age(random.nextInt(30) + i)
+//                    .name("test" + i)
+//                    .profileImageUrl(defaultImage)
+//                    .snsId("abc" + i + "@naver.com")
+//                    .performances(new ArrayList<>())
+//                    .build();
+//            artistList.add(artist);
+//
+//            PerformanceEntity performance = PerformanceEntity.builder()
+//                    .performanceType(i % 2 == 0 ? PerformanceType.MUSICAL : PerformanceType.CONCERT)
+//                    .description("test" + i)
+//                    .title("test" + i)
+//                    .performers(new ArrayList<>())
+//                    .priceGradeList(new ArrayList<>())
+//                    .build();
+//            performances.add(performance);
+//        }
+//
+//        artistRepository.saveAll(artistList);
+//        performanceRepository.saveAll(performances);
     }
 }
