@@ -11,5 +11,5 @@ import java.util.List;
  */
 public interface CustomPerformanceSearchRepository {
     /** 제목 검색 */
-    List<PerformanceDocument> findByTitleContains(PerformanceSearchDto performanceSearchDto);
+    List<PerformanceDocument> findByCondition(PerformanceSearchDto performanceSearchDto);
 }

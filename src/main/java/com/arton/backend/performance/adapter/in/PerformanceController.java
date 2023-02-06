@@ -4,6 +4,7 @@ import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.domain.Performance;
@@ -64,4 +65,10 @@ public class PerformanceController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<ResponseData<List<PerformanceDocument>>> search(@RequestBody PerformanceSearchDto performanceSearchDto) {
+        List<PerformanceDocument> documents = performanceSearchService.searchByCondition(performanceSearchDto);
+        ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
+        return ResponseEntity.ok().body(response);
+    }
 }

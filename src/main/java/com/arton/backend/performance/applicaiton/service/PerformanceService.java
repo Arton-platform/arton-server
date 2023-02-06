@@ -6,6 +6,7 @@ import com.arton.backend.performance.adapter.out.persistence.document.Performanc
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceSearchRepository;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
@@ -84,6 +85,11 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
     public List<PerformanceDocument> searchByPerformanceType(String type) {
         PerformanceType performanceType = PerformanceType.get(type);
         return performanceSearchRepository.findByPerformanceType(performanceType);
+    }
+
+    @Override
+    public List<PerformanceDocument> searchByCondition(PerformanceSearchDto performanceSearchDto) {
+        return performanceSearchRepository.findByCondition(performanceSearchDto);
     }
 
 }

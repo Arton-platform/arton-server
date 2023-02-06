@@ -1,6 +1,7 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,10 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
     @Override
     public List<PerformanceDocument> findByPlace(String place) {
         return performanceSearchRepository.findByPlaceContains(place);
+    }
+
+    @Override
+    public List<PerformanceDocument> searchByCondition(PerformanceSearchDto performanceSearchDto) {
+        return performanceSearchRepository.findByCondition(performanceSearchDto);
     }
 }

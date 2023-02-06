@@ -21,7 +21,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
-    public List<PerformanceDocument> findByTitleContains(PerformanceSearchDto performanceSearchDto) {
+    public List<PerformanceDocument> findByCondition(PerformanceSearchDto performanceSearchDto) {
         CriteriaQuery condition = createConditionCriteriaQuery(performanceSearchDto);
         return elasticsearchOperations.search(condition, PerformanceDocument.class).stream().map(SearchHit::getContent).collect(Collectors.toList());
     }
@@ -33,16 +33,16 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
             return query;
 
         if (hasText(searchCondition.getPerformanceType()))
-            query.addCriteria(Criteria.where("performanceType").is(searchCondition.getPerformanceType()));
+            query.addCriteria(Criteria.where("performanceType").contains(searchCondition.getPerformanceType()));
 
         if(hasText(searchCondition.getArtist()))
-            query.addCriteria(Criteria.where("artist").is(searchCondition.getArtist()));
+            query.addCriteria(Criteria.where("artist").contains(searchCondition.getArtist()));
 
         if(hasText(searchCondition.getTitle()))
-            query.addCriteria(Criteria.where("title").is(searchCondition.getTitle()));
+            query.addCriteria(Criteria.where("title").contains(searchCondition.getTitle()));
 
         if(hasText(searchCondition.getPlace()))
-            query.addCriteria(Criteria.where("place").is(searchCondition.getPlace()));
+            query.addCriteria(Criteria.where("place").contains(searchCondition.getPlace()));
         return query;
     }
 }
