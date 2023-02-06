@@ -1,5 +1,6 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.auth.application.data.OAuthSignupDto;
 import com.arton.backend.auth.application.data.TokenDto;
 import com.arton.backend.auth.application.port.in.KaKaoUseCase;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
@@ -30,7 +31,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -66,9 +69,9 @@ public class KaKaoService implements KaKaoUseCase {
      */
     @Override
     @Transactional
-    public synchronized TokenDto login(String code) {
-        String accessToken = getAccessToken(code);
-        User register = signup(accessToken);
+    public synchronized TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto) {
+        String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
+        User register = signup(accessToken, signupDto);
         // Generate ArtOn JWT
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), String.valueOf(register.getKakaoId()));
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -143,9 +146,13 @@ public class KaKaoService implements KaKaoUseCase {
      * @param accessToken
      * @return
      */
-    private User signup(String accessToken) {
+    private User signup(String accessToken, OAuthSignupDto signupDto) {
         JsonNode userInfo = getUserInfo(accessToken);
         long id = userInfo.get("id").asLong();
+        // 해당 유저가 맞는지 확인
+        if (!userInfo.get("id").asText().equals(signupDto.getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND);
+        }
         User user = userRepository.findByKakaoId(id).orElse(null);
         if (user == null) {
             String nickName = userInfo.get("kakao_account").get("profile").get("nickname").asText();

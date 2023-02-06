@@ -12,6 +12,9 @@ import javax.validation.constraints.NotBlank;
 @Schema(description = "간편 회원가입 요청 데이터")
 public class OAuthSignupDto {
     @NotBlank
+    @Schema(description = "SNS_Type 입니다.\n 0: Kakao\n 1: Naver\n 2: Apple", required = true)
+    private String loginType;
+    @NotBlank
     @Schema(description = "KAKAO_ID/NAVER_ID", required = true)
     private String id;
     @NotBlank

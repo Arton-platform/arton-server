@@ -1,5 +1,6 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.auth.application.data.OAuthSignupDto;
 import com.arton.backend.auth.application.data.TokenDto;
 import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
@@ -30,6 +31,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -64,9 +67,9 @@ public class NaverService implements NaverUseCase {
      * @return
      */
     @Override
-    public synchronized TokenDto login(String code, String status) {
-        String accessToken = getAccessToken(code, status);
-        User register = signup(accessToken);
+    public synchronized TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto) {
+        String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
+        User register = signup(accessToken, signupDto);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
@@ -142,9 +145,12 @@ public class NaverService implements NaverUseCase {
      * @param accessToken
      * @return
      */
-    private User signup(String accessToken) {
+    private User signup(String accessToken, OAuthSignupDto signupDto) {
         JsonNode userInfo = getUserInfo(accessToken).get("response");
         String id = userInfo.get("id").asText();
+        if (!id.equals(signupDto.getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND);
+        }
         User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
             String nickName = userInfo.get("nickname").asText();

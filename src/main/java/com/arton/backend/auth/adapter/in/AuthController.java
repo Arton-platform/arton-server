@@ -30,33 +30,20 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-    private final KaKaoUseCase kaKaoUseCase;
-    private final NaverUseCase naverUseCase;
+    private final OAuthUseCase oAuthUseCase;
     private final AuthUseCase authUseCase;
     private final EmailUseCase emailUseCase;
 
     /**
-     * US-7
-     * @param code
+     * header에서 token 분리후 간편가입 진행
+     * @param request
+     * @param signupDto
      * @return
      */
     @Hidden
-    @GetMapping("/kakao")
-    public ResponseEntity<TokenDto> loginByKakao(@RequestParam String code){
-        TokenDto tokenDto = kaKaoUseCase.login(code);
-        return ResponseEntity.ok(tokenDto);
-    }
-
-    /**
-     * US-7
-     * @param code
-     * @param state
-     * @return
-     */
-    @Hidden
-    @GetMapping("/naver")
-    public ResponseEntity<TokenDto> loginByNaver(@RequestParam String code, @RequestParam String state){
-        TokenDto tokenDto = naverUseCase.login(code, state);
+    @GetMapping("/singup/oauth")
+    public ResponseEntity<TokenDto> loginByKakao(HttpServletRequest request, @RequestBody @Valid OAuthSignupDto signupDto){
+        TokenDto tokenDto = oAuthUseCase.signup(request, signupDto);
         return ResponseEntity.ok(tokenDto);
     }
 

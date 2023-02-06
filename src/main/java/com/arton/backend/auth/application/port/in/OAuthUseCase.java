@@ -5,6 +5,6 @@ import com.arton.backend.auth.application.data.TokenDto;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface KaKaoUseCase {
-    TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto);
+public interface OAuthUseCase {
+    TokenDto signup(HttpServletRequest request, OAuthSignupDto signupDto);
 }
