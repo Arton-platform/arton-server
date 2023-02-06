@@ -16,7 +16,7 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
     @Override
     public List<PerformanceDocument> findByTitle(String title) {
 //        return performanceSearchRepository.findByTitle(title);
-        return performanceSearchRepository.findPerformanceDocumentsByTitle(title);
+        return performanceSearchRepository.findByTitleContains(title);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
 
     @Override
     public List<PerformanceDocument> findByPlace(String place) {
-        return performanceSearchRepository.findByPlace(place);
+        return performanceSearchRepository.findByPlaceContains(place);
     }
 }

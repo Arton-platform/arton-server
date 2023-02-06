@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface PerformanceSearchRepository extends ElasticsearchRepository<PerformanceDocument, Long> {
     /** 제목 검색 */
-    List<PerformanceDocument> findByTitle(String title);
+    List<PerformanceDocument> findByTitleContains(String title);
     /** 공연타입 검색 */
     List<PerformanceDocument> findByPerformanceType(PerformanceType performanceType);
     /** 장소 검색 */
-    List<PerformanceDocument> findByPlace(String place);
+    List<PerformanceDocument> findByPlaceContains(String place);
     List<PerformanceDocument> findPerformanceDocumentsByTitle(String title);
     List<PerformanceDocument> findPerformanceDocumentsByPerformanceType(PerformanceType performanceType);
 }

@@ -74,11 +74,11 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
     }
 
     public List<PerformanceDocument> searchByTitle(String title) {
-        return performanceSearchRepository.findByTitle(title);
+        return performanceSearchRepository.findByTitleContains(title);
     }
 
     public List<PerformanceDocument> searchByPlace(String place) {
-        return performanceSearchRepository.findByPlace(place);
+        return performanceSearchRepository.findByPlaceContains(place);
     }
 
     public List<PerformanceDocument> searchByPerformanceType(String type) {
