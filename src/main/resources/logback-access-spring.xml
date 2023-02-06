@@ -53,6 +53,10 @@
                 <name>requestURI</name>
                 <value>%U</value>
             </property>
+            <property>
+                <name>requestBody</name>
+                <value>%U</value>
+            </property>
         </properties>
         <headers>
             <header>
