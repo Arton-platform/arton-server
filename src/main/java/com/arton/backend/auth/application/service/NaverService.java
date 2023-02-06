@@ -1,13 +1,12 @@
 package com.arton.backend.auth.application.service;
 
-import com.arton.backend.SSLConnectionCover;
-import com.arton.backend.auth.application.port.in.KaKaoUseCase;
+import com.arton.backend.auth.application.data.TokenDto;
 import com.arton.backend.auth.application.port.in.NaverUseCase;
-import com.arton.backend.auth.application.port.in.TokenDto;
+import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.user.adapter.out.repository.UserEntity;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,9 +16,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.*;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -30,11 +30,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -44,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 public class NaverService implements NaverUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
+    private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
@@ -55,7 +51,7 @@ public class NaverService implements NaverUseCase {
     private String clientSecret;
     @Value("${naver.redirect.url}")
     private String redirectURL;
-    @Value("${default.image}")
+    @Value("${spring.default-image}")
     private String defaultImage;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
@@ -64,13 +60,12 @@ public class NaverService implements NaverUseCase {
      *  email, password 로 만들거임
      *  여기서 설정하는 값이 userdetails의 id password로 넘어감
      *  원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
-     * @param code
+     *
      * @return
      */
     @Override
-    public TokenDto login(String code, String state) {
-        String accessToken = getAccessToken(code, state);
-        log.info("accessToken {}", accessToken);
+    public synchronized TokenDto login(String code, String status) {
+        String accessToken = getAccessToken(code, status);
         User register = signup(accessToken);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -149,21 +144,14 @@ public class NaverService implements NaverUseCase {
      */
     private User signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken).get("response");
-//        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         String id = userInfo.get("id").asText();
         User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
-            String mobile = userInfo.get("mobile").asText();
-            log.info("mobile {}", mobile);
             String nickName = userInfo.get("nickname").asText();
-            log.info("nickName {}", nickName);
             String email = userInfo.get("email").asText();
-            log.info("email {}", email);
             String ageRange = userInfo.get("age").asText();
-            log.info("ageRange {}", ageRange);
             int age = Integer.parseInt(ageRange.substring(0, 1));
             String gender = userInfo.get("gender").asText();
-            log.info("gender {}", gender);
             /** password is user's own kakao id */
             String password = id;
             user = User.builder().email(email)
@@ -171,12 +159,15 @@ public class NaverService implements NaverUseCase {
                     .password(passwordEncoder.encode(password))
                     .naverId(id)
                     .nickname(nickName)
-                    .profileImageUrl(defaultImage)
                     .ageRange(AgeRange.get(age))
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.NAVER)
+                    .userStatus(true)
+                    .termsAgree("Y")
                     .build();
-            userRepository.save(user);
+            user = userRepository.save(user);
+            UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
+            userImageSaveRepository.save(userImage);
         }
         return userRepository.findByNaverId(id).orElseThrow(() -> new CustomException(ErrorCode.NAVER_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.NAVER_SIMPLE_LOGIN_ERROR));
     }

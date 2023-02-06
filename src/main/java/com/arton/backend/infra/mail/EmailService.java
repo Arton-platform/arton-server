@@ -1,7 +1,10 @@
 package com.arton.backend.infra.mail;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,8 +24,12 @@ public class EmailService implements EmailUseCase{
     private JavaMailSender javaMailSender;
     @Autowired
     private SpringTemplateEngine springTemplateEngine;
+    @Autowired
+    private FileUploadUtils fileUploadUtils;
     @Value("${spring.mail.username}")
     private String sender;
+    @Value("${spring.password-mail-key}")
+    private String mailKey;
 
     @Async
     @Override
@@ -41,16 +48,25 @@ public class EmailService implements EmailUseCase{
 
     }
 
+    /**
+     * 메일이 발송 될 때 까지 기다리는건 메일 서버 상황에 따라 시간이 오래 걸릴 수 있기 때문에 비동기 처리.
+     * @param details
+     */
     @Async
     @Override
     public void sendMailByHTML(MailDto details) {
         try {
+            // get mail form
+            String fileContent = fileUploadUtils.getFileContent(mailKey);
+            // input password
+            String mailBody = fileContent.replace("${password}", details.getMessageBody());
+            // send mail
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setFrom(sender);
             helper.setTo(details.getReceiver());
-            helper.setText(setContext(details.getMessageBody(), "password"), true); // html type
+            helper.setText(mailBody, true); // html type
             helper.setSubject(details.getSubject());
             //send
             javaMailSender.send(mimeMessage);

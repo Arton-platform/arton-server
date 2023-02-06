@@ -2,9 +2,12 @@ package com.arton.backend.auth.application.service;
 
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
+import com.arton.backend.auth.application.data.*;
 import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
+import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.file.FileUploadUtils;
-import com.arton.backend.infra.file.MD5Generator;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.exception.CustomException;
@@ -13,6 +16,8 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
+import com.arton.backend.withdrawal.application.port.out.WithdrawalRegistPort;
+import com.arton.backend.withdrawal.domain.Withdrawal;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
@@ -28,11 +33,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * OnetoOne 자식 먼저 저장. 즉 유저 먼저 저장하고 이를 유저이미지에 사용
+ */
 @Slf4j
 @Service
 @Transactional
@@ -40,15 +47,16 @@ import java.util.concurrent.TimeUnit;
 public class AuthService implements AuthUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
+    private final UserImageSaveRepositoryPort userImageSaveRepository;
+    private final UserImageRepositoryPort userImageRepository;
+    private final WithdrawalRegistPort withdrawalRegistRepository;
     private final ArtistRepositoryPort artistRepository;
     private final PerformanceRepositoryPort performanceRepository;
     private final ZzimRepositoryPort zzimRepository;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
-
-    @Value("${default.image}")
-    private String defaultImage;
+    private final FileUploadUtils fileUploadUtils;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
 
@@ -69,20 +77,18 @@ public class AuthService implements AuthUseCase {
         }
         // 회원가입
         User user = SignupRequestDto.toUser(signupRequestDto, passwordEncoder);
-        // 기본 이미지 지정
-        user.setProfileImageUrl(defaultImage);
         User savedUser = userRepository.save(user);
         Long id = savedUser.getId();
+        // 기본 이미지 지정후 image 저장
+        UserImage userImage = UserImage.builder().imageUrl(fileUploadUtils.getDefaultImageUrl()).user(savedUser).build();
+        userImage = userImageSaveRepository.save(userImage);
 
-        // 프로필 이미지 업로드
+        // 프로필 이미지 있다면 이미지 업데이트
         if (multipartFile != null) {
-            String filename = multipartFile.getOriginalFilename();
-            String format = filename.substring(filename.lastIndexOf(".") + 1); // 포맷
-            String newFileName = new MD5Generator(filename).toString() + "." + format; // 이미지 이름 해싱
-            FileUploadUtils.saveFile("/image/profiles/"+id, newFileName, multipartFile); // 업로드
-            savedUser.setProfileImageUrl("/" + id + "/" + newFileName);
+            String upload = fileUploadUtils.upload(multipartFile, "arton/image/profiles/" + id);
+            userImage.updateImage(upload);
+            userImageSaveRepository.save(userImage);
         }
-
         // 아티스트 찜하기
         List<Long> artistIds = signupRequestDto.getArtists();
         if (!artistIds.isEmpty()) {
@@ -91,7 +97,7 @@ public class AuthService implements AuthUseCase {
                 List<ArtistZzim> zzims = new ArrayList<>();
                 for (Artist artist : artists) {
                     ArtistZzim artistZzim = ArtistZzim.builder().artist(artist.getId()).user(savedUser.getId()).build();
-                    artistZzim.setUser(savedUser.getId());
+//                    artistZzim.setUser(savedUser.getId());
                     zzims.add(artistZzim);
                 }
                 zzimRepository.saveArtists(zzims);
@@ -105,7 +111,7 @@ public class AuthService implements AuthUseCase {
                 List<PerformanceZzim> zzims = new ArrayList<>();
                 for (Performance performance : performances) {
                     PerformanceZzim performanceZzim = PerformanceZzim.builder().performanceId(performance.getPerformanceId()).userId(savedUser.getId()).build();
-                    performanceZzim.setUser(savedUser.getId());
+//                    performanceZzim.setUser(savedUser.getId());
                     zzims.add(performanceZzim);
                 }
                 zzimRepository.savePerformances(zzims);
@@ -116,20 +122,21 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-    public boolean logout(LogoutRequestDto logoutRequestDto) {
+    public boolean logout(HttpServletRequest request) {
+        String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
         // token 검증
-        if (!tokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
+        if (!tokenProvider.validateToken(accessToken)) {
             throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
         }
         // get user id
-        Authentication authentication = tokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
         // 유저 토큰 확인후 존재하면 삭제
         if (redisTemplate.opsForValue().get(refreshTokenPrefix + authentication.getName()) != null) {
             redisTemplate.delete(refreshTokenPrefix+authentication.getName());
         }
         // 해당 토큰 블랙리스트 저장
-        Long expiration = tokenProvider.getExpiration(logoutRequestDto.getAccessToken());
-        redisTemplate.opsForValue().set(logoutRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+        Long expiration = tokenProvider.getExpiration(accessToken);
+        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
         return true;
     }
 
@@ -141,6 +148,52 @@ public class AuthService implements AuthUseCase {
         if (!checkPassword(signupValidationDto.getPassword(), signupValidationDto.getCheckPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH.getMessage(), ErrorCode.PASSWORD_NOT_MATCH);
         }
+        return true;
+    }
+
+    /**
+     * 회원 탈퇴 처리.
+     * @param request
+     * @param withdrawalRequestDto
+     * @return
+     */
+    @Override
+    public boolean withdraw(HttpServletRequest request, WithdrawalRequestDto withdrawalRequestDto) {
+        String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
+        // token 검증
+        if (!tokenProvider.validateToken(accessToken)) {
+            throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
+        }
+        // get current user id
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String id = authentication.getName();
+        // compare request user id and withdrawal id
+        String withdrawalId = withdrawalRequestDto.getWithdrawalId();
+        if (!withdrawalId.equals(id)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_REQUEST.getMessage(), ErrorCode.FORBIDDEN_REQUEST);
+        }
+        long userId = Long.parseLong(id);
+        // when matches request user and request id then do withdraw
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        // 이미지 삭제
+        UserImage userImage = userImageRepository.findUserImageByUser(userId).orElseThrow(() -> new CustomException(ErrorCode.IMAGE_LOAD_FAILED.getMessage(), ErrorCode.IMAGE_LOAD_FAILED));
+        userImageRepository.deleteByUserId(userId);
+        fileUploadUtils.delete(userId, userImage.getImageUrl());
+        // user 비활성화
+        user.changeUserStatus(false);
+        user.changeNickname("알수없음"+UUID.randomUUID().toString().replaceAll("-","").substring(0, 8));
+        user = userRepository.save(user);
+        // 탈퇴 사유 등록
+        Withdrawal withdrawal = Withdrawal.builder().user(user).comment(withdrawalRequestDto.getComment()).build();
+        withdrawalRegistRepository.save(withdrawal);
+        // 토큰 정보 삭제
+        // 유저 토큰 확인후 존재하면 삭제
+        if (redisTemplate.opsForValue().get(refreshTokenPrefix + id) != null) {
+            redisTemplate.delete(refreshTokenPrefix + id);
+        }
+        // 해당 토큰 블랙리스트 저장
+        Long expiration = tokenProvider.getExpiration(accessToken);
+        redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
         return true;
     }
 

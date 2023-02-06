@@ -1,8 +1,11 @@
 package com.arton.backend.user.domain;
 
+import com.arton.backend.image.domain.UserImage;
+import com.arton.backend.user.application.data.UserProfileEditDto;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,8 +24,6 @@ public class User {
     private String email;
     /** 비밀번호 */
     private String password;
-    /** 프로필 이미지 링크 */
-    private String profileImageUrl;
     /** 닉네임 */
     private String nickname;
     /** 성별 */
@@ -45,8 +46,12 @@ public class User {
     @ToString.Exclude
     List<ArtistZzim> artistZzims = new ArrayList<>();
     private Boolean alertState;
-    public void setProfileImageUrl(String url){
-        this.profileImageUrl = url;
+    /** 회원 여부 */
+    private Boolean userStatus = true;
+    private String selfDescription;
+    private UserImage userImage;
+    public void setImage(UserImage userImage){
+        this.userImage = userImage;
     }
     /**
      * 아티스트를 찜한다
@@ -70,14 +75,36 @@ public class User {
     public void changeAlertState(Boolean state) {
         this.alertState = state;
     }
+    public void changeUserStatus(boolean status) {
+        this.userStatus = status;
+    }
+    public void setSelfDescription(String selfDescription) {this.selfDescription = selfDescription;}
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    /**
+     * 프로필 업데이트
+     * @param userProfileEditDto
+     */
+    public void updateProfile(UserProfileEditDto userProfileEditDto) {
+        if (userProfileEditDto != null) {
+            // 컨트롤러에서 이미 검증이 됨.
+            if (StringUtils.hasText(userProfileEditDto.getNickname())) {
+                this.nickname = userProfileEditDto.getNickname();
+            }
+            if (StringUtils.hasText(userProfileEditDto.getSelfDescription())) {
+                this.selfDescription = userProfileEditDto.getSelfDescription();
+            }
+        }
+    }
     @Builder
-    public User(Long id, Long kakaoId, String naverId, String email, String password, String profileImageUrl, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims) {
+    public User(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, LocalDateTime createdDate, LocalDateTime updateDate, List<PerformanceZzim> performanceZzims, List<ArtistZzim> artistZzims, String selfDescription, UserImage userImage, Boolean userStatus) {
         this.id = id;
         this.kakaoId = kakaoId;
         this.naverId = naverId;
         this.email = email;
         this.password = password;
-        this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.gender = gender;
         this.ageRange = ageRange;
@@ -89,5 +116,8 @@ public class User {
         this.performanceZzims = performanceZzims;
         this.artistZzims = artistZzims;
         this.alertState = true;
+        this.selfDescription = selfDescription;
+        this.userImage = userImage;
+        this.userStatus = userStatus;
     }
 }

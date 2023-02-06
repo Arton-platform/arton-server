@@ -58,9 +58,6 @@ logging:
       descriptor:
         sql: trace
 
-default:
-  image: /image/profiles/default.png
-
 kakao:
   client:
     id: 2aad40910868e3c5fa9594f8de34a07b
@@ -97,3 +94,18 @@ springdoc:
   default-produces-media-type: application/json
   paths-to-match:
     - /**
+
+
+
+cloud:
+  aws:
+    s3:
+      bucket: test
+    credentials:
+      access-key: testtest
+      secret-key: testtesttesttest
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

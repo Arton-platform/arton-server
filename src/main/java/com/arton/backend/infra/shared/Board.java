@@ -1,10 +1,7 @@
 package com.arton.backend.infra.shared;
 
 import com.arton.backend.image.domain.Image;
-import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.user.adapter.out.repository.UserEntity;
-import com.arton.backend.user.domain.User;
-import lombok.Builder;
+import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

@@ -1,8 +1,8 @@
 package com.arton.backend.artist.adapter.in;
 
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
-import com.arton.backend.artist.application.port.in.ArtistInterestDto;
-import com.arton.backend.artist.application.port.in.ListArtistInterestDto;
+import com.arton.backend.artist.application.data.ArtistInterestDto;
+import com.arton.backend.artist.application.data.ListArtistInterestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

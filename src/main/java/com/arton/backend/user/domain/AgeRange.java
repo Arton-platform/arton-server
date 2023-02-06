@@ -10,6 +10,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 @Getter
 public enum AgeRange {
+    ETC("정보없음"),
     Age0_9("아동"),
     Age10_19("10대"),
     Age20_29("20대"),

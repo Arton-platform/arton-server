@@ -1,7 +1,9 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.auth.application.data.TokenDto;
 import com.arton.backend.auth.application.port.in.KaKaoUseCase;
-import com.arton.backend.auth.application.port.in.TokenDto;
+import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
+import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
@@ -34,10 +36,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class KaKaoService implements KaKaoUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
+    private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
@@ -47,7 +49,7 @@ public class KaKaoService implements KaKaoUseCase {
     private String clientId;
     @Value("${kakao.redirect.url}")
     private String redirectURL;
-    @Value("${default.image}")
+    @Value("${spring.default-image}")
     private String defaultImage;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
@@ -58,14 +60,14 @@ public class KaKaoService implements KaKaoUseCase {
      * email, password 로 만들거임
      * 여기서 설정하는 값이 userdetails의 id password로 넘어감
      * 원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
-     * @param code
+     * 기존 인가코드 받아 토큰을 생성했지만 프론트에서 한번에 액세스 토큰 발급이 가능하므로
+     * accessToken 받아서 진행으로 변경하자.
      * @return
      */
     @Override
-    public TokenDto login(String code) {
+    @Transactional
+    public synchronized TokenDto login(String code) {
         String accessToken = getAccessToken(code);
-//        String accessToken = SSLConnectionCover.getAccessToken(clientId, redirectURL, code);
-        log.info("accessToken {}", accessToken);
         User register = signup(accessToken);
         // Generate ArtOn JWT
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), String.valueOf(register.getKakaoId()));
@@ -143,7 +145,6 @@ public class KaKaoService implements KaKaoUseCase {
      */
     private User signup(String accessToken) {
         JsonNode userInfo = getUserInfo(accessToken);
-//        JsonNode userInfo = SSLConnectionCover.getUserInfo(accessToken);
         long id = userInfo.get("id").asLong();
         User user = userRepository.findByKakaoId(id).orElse(null);
         if (user == null) {
@@ -162,12 +163,15 @@ public class KaKaoService implements KaKaoUseCase {
                     .password(passwordEncoder.encode(password))
                     .kakaoId(id)
                     .nickname(nickName)
-                    .profileImageUrl(defaultImage)
                     .ageRange(AgeRange.get(age))
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.KAKAO)
+                    .userStatus(true)
+                    .termsAgree("Y")
                     .build();
-            userRepository.save(user);
+            user = userRepository.save(user);
+            UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
+            userImageSaveRepository.save(userImage);
         }
         return userRepository.findByKakaoId(id).orElseThrow(()->new CustomException(ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR));
     }
