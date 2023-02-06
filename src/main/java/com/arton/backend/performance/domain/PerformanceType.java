@@ -1,6 +1,5 @@
 package com.arton.backend.performance.domain;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,6 +12,10 @@ public enum PerformanceType {
 
     private String value;
 
+    public String getValue() {
+        return value;
+    }
+
     PerformanceType(String value) {
         this.value = value;
     }
@@ -22,7 +25,7 @@ public enum PerformanceType {
     static {
         Map<String, PerformanceType> map = new ConcurrentHashMap<>();
         for (PerformanceType performanceType : PerformanceType.values()) {
-            map.put(performanceType.name(), performanceType);
+            map.put(performanceType.getValue(), performanceType);
         }
         PERFORMANCE_TYPE_MAP = unmodifiableMap(map);
     }
@@ -33,6 +36,6 @@ public enum PerformanceType {
      * @return
      */
     public static PerformanceType get(String type) {
-        return hasText(type.toUpperCase(Locale.ROOT))?PERFORMANCE_TYPE_MAP.get(type):null;
+        return hasText(type) ?PERFORMANCE_TYPE_MAP.get(type):null;
     }
 }
