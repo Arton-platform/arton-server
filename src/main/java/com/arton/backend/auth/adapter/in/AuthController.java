@@ -48,7 +48,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = CommonResponse.class))),
             @ApiResponse(responseCode = "404", description = "ID값 불일치",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
-    @GetMapping("/signup/oauth")
+    @PostMapping("/signup/oauth")
     public ResponseEntity<TokenDto> loginByKakao(HttpServletRequest request, @RequestBody @Valid OAuthSignupDto signupDto){
         TokenDto tokenDto = oAuthUseCase.signup(request, signupDto);
         return ResponseEntity.ok(tokenDto);
