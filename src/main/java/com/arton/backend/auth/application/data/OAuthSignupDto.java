@@ -17,7 +17,6 @@ public class OAuthSignupDto {
     @NotBlank
     @Schema(description = "KAKAO_ID/NAVER_ID", required = true)
     private String id;
-    @NotBlank
     @Schema(description = "닉네임", required = true)
     private String nickname;
     @Schema(description = "이메일", required = true)

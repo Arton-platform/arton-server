@@ -29,12 +29,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
+import static org.springframework.util.StringUtils.*;
 
 @Slf4j
 @Service
@@ -71,44 +74,17 @@ public class KaKaoService implements KaKaoUseCase {
     @Transactional
     public synchronized TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto) {
         String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
-        User register = signup(accessToken, signupDto);
+        JsonNode userInfo = getUserInfo(accessToken);
+        if (!userInfo.get("id").asText().equals(signupDto.getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND);
+        }
+        User register = signup(signupDto);
         // Generate ArtOn JWT
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), String.valueOf(register.getKakaoId()));
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
         return tokenDto;
-    }
-
-    /**
-     * https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api
-     * 토근 받기 참조
-     * @param code
-     * @return
-     */
-    private String getAccessToken(String code) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "authorization_code");
-        body.add("client_id", clientId);
-        body.add("redirect_uri", redirectURL);
-        body.add("code", code);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, httpHeaders);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange("https://kauth.kakao.com/oauth/token",
-                HttpMethod.POST,
-                request,
-                String.class);
-        String responseBody = response.getBody();
-        try {
-            return objectMapper.readTree(responseBody).get("access_token").asText();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
     /**
@@ -143,34 +119,22 @@ public class KaKaoService implements KaKaoUseCase {
      * 아니면 회원가입 진행 + return
      * kakao ageRange example
      * 0~9, 10~14, 15~19, 20~29, ...
-     * @param accessToken
+     * @param signupDto
      * @return
      */
-    private User signup(String accessToken, OAuthSignupDto signupDto) {
-        JsonNode userInfo = getUserInfo(accessToken);
-        long id = userInfo.get("id").asLong();
-        // 해당 유저가 맞는지 확인
-        if (!userInfo.get("id").asText().equals(signupDto.getId())) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND);
-        }
+    private User signup(OAuthSignupDto signupDto) {
+        long id = Long.parseLong(signupDto.getId());
         User user = userRepository.findByKakaoId(id).orElse(null);
         if (user == null) {
-            String nickName = userInfo.get("kakao_account").get("profile").get("nickname").asText();
-            log.info("nickName {}", nickName);
-            String email = userInfo.get("kakao_account").get("email").asText();
-            log.info("email {}", email);
-            String ageRange = userInfo.get("kakao_account").get("age_range").asText();
-            log.info("ageRange {}", ageRange);
-            int age = Integer.parseInt(ageRange.substring(0, 1));
-            String gender = userInfo.get("kakao_account").get("gender").asText();
             /** password is user's own kakao id */
-            String password = userInfo.get("id").asText();
-            user = User.builder().email(email)
-                    .gender(Gender.get(gender.toUpperCase(Locale.ROOT)))
+            String password = signupDto.getId();
+            user = User.builder()
+                    .email(hasText(signupDto.getEmail()) ? signupDto.getEmail() : "")
+                    .gender(hasText(signupDto.getGender()) ? Gender.get(signupDto.getGender().toUpperCase(Locale.ROOT)) : Gender.ETC)
                     .password(passwordEncoder.encode(password))
                     .kakaoId(id)
-                    .nickname(nickName)
-                    .ageRange(AgeRange.get(age))
+                    .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
+                    .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.KAKAO)
                     .userStatus(true)
