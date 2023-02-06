@@ -1,8 +1,8 @@
 package com.arton.backend.performance.domain;
 
 import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.performance.adapter.out.repository.PerformanceEntity;
-import com.arton.backend.user.adapter.out.repository.UserEntity;
+import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
+import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 
 import com.arton.backend.user.domain.User;
 import lombok.Builder;
