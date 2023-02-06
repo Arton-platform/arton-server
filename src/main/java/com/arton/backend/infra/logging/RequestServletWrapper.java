@@ -1,7 +1,6 @@
 package com.arton.backend.infra.logging;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -12,10 +11,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-
+@Slf4j
 public class RequestServletWrapper extends HttpServletRequestWrapper {
-    private final Logger log = LoggerFactory.getLogger("ELASTIC");
-
     private String requestData = null;
     /**
      * Constructs a request object wrapping the given request.

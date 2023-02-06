@@ -44,31 +44,25 @@ public class PerformanceController {
         return ResponseEntity.ok(CommonResponse.builder().message("ES에 성공적으로 저장하였습니다.").status(HttpStatus.OK.value()).build());
     }
 
-    @GetMapping("/title")
-    public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByTitle(@RequestParam String title) {
-        List<PerformanceDocument> documents = performanceSearchService.searchByTitle(title);
-        ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @GetMapping("/place")
-    public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByPlace(@RequestParam String place) {
+    @GetMapping("/search/place")
+    public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByPlace(@RequestParam(name = "query") String place) {
         List<PerformanceDocument> documents = performanceSearchService.searchByPlace(place);
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/type")
-    public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByPerformanceType(@RequestParam String performanceType) {
+    @GetMapping("/search/type")
+    public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByPerformanceType(@RequestParam(name = "query", required = true) String performanceType) {
         List<PerformanceDocument> documents = performanceSearchService.searchByPerformanceType(performanceType);
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/search")
-    public ResponseEntity<ResponseData<List<PerformanceDocument>>> search(@RequestBody PerformanceSearchDto performanceSearchDto) {
-        List<PerformanceDocument> documents = performanceSearchService.searchByCondition(performanceSearchDto);
+    @GetMapping("/search/title")
+    public ResponseEntity<ResponseData<List<PerformanceDocument>>> search(@RequestParam(name = "query", required = true) String query) {
+        List<PerformanceDocument> documents = performanceSearchService.searchByTitle(query);
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
         return ResponseEntity.ok().body(response);
     }
+
 }
