@@ -36,14 +36,11 @@ public class FollowFeedService implements FollowFeedUseCase {
      */
     @Override
     public void myReviewCommented(FollowFeed followFeed){
+        String feedContent = followFeed.getFromUser() + " " + FeedType.COMMENT_MY_REVIEW;
+        FollowFeedEntity entity = followFeedMapper.toEntity(followFeed, feedContent);
+        followFeedPort.save(entity);
         //TODO:
-        // FROM USER
-        // TO USER
-        // Comment ID
-        // FeedType
-        // Save FollowFeed Table
-
-        String followContent = followFeed.getFromUser() + " " + FeedType.COMMENT_MY_REVIEW;
+        // Alert User
     }
 
     /**
@@ -51,14 +48,11 @@ public class FollowFeedService implements FollowFeedUseCase {
     */
     @Override
     public void reviewFromFollow(FollowFeed followFeed){
+        String feedContent = followFeed.getFromUser() + " " +  FeedType.FOLLOW_REVIEW_REGIST;
+        FollowFeedEntity entity = followFeedMapper.toEntity(followFeed, feedContent);
+        followFeedPort.save(entity);
         //TODO:
-        // FROM USER
-        // TO USER
-        // Review ID
-        // FeedType
-        // Save FollowFeed Table
-
-        String followContent = followFeed.getFromUser() + " " +  FeedType.FOLLOW_REVIEW_REGIST;
+        // Alert User
     }
 
     /**
@@ -66,14 +60,11 @@ public class FollowFeedService implements FollowFeedUseCase {
     */
     @Override
     public void commentFromFollow(FollowFeed followFeed){
+        String feedContent = followFeed.getFromUser() + " " + FeedType.FOLLOW_COMMENT_REGIST;
+        FollowFeedEntity entity = followFeedMapper.toEntity(followFeed, feedContent);
+        followFeedPort.save(entity);
         //TODO:
-        // FROM USER
-        // TO USER
-        // Comment ID
-        // FeedType
-        // Save FollowFeed Table
-
-        String followContent = followFeed.getFromUser() + " " + FeedType.FOLLOW_COMMENT_REGIST;
+        // Alert User
     }
 
     /**
@@ -81,12 +72,10 @@ public class FollowFeedService implements FollowFeedUseCase {
     */
     @Override
     public void followMe(FollowFeed followFeed){
-        //TODO:
-        // FROM USER
-        // TO USER
-        // FeedType
-        // Save FollowFeed Table
-
         String feedContent = followFeed.getFromUser() + " " + FeedType.FOLLOW_ME;
+        FollowFeedEntity entity = followFeedMapper.toEntity(followFeed, feedContent);
+        followFeedPort.save(entity);
+        //TODO:
+        // Alert User
     }
 }

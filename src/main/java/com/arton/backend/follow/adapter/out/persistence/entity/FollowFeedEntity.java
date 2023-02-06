@@ -1,12 +1,13 @@
 package com.arton.backend.follow.adapter.out.persistence.entity;
 
+import com.arton.backend.comment.adapter.out.persistence.CommentEntity;
 import com.arton.backend.infra.shared.BaseEntity;
+import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
+import com.arton.backend.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -15,13 +16,21 @@ public class FollowFeedEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long fromUser;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User fromUser;
 
-    private Long toUser;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User toUser;
 
-    private Long reviewId;
+    @ManyToOne
+    @JoinColumn(name = "reviewId")
+    private ReviewEntity review;
 
-    private Long commentId;
+    @ManyToOne
+    @JoinColumn(name = "commentId")
+    private CommentEntity comment;
 
     private String feedContent;
 
