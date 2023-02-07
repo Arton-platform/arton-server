@@ -5,7 +5,7 @@
     "musicalDateTime" : {"type" : "keyword"},
     "place" : {"type" : "text", "analyzer" : "korean"},
     "imageUrl" : {"type" : "text"},
-    "performanceType" : {"type" : "text"},
+    "performanceType" : {"type" : "text", "analyzer" : "korean"},
     "startDate" : {"type" : "date", "format": "uuuu-MM-dd'T'HH:mm:ss.SSS||epoch_millis"},
     "endDate" : {"type" : "date", "format": "uuuu-MM-dd'T'HH:mm:ss.SSS||epoch_millis"}
   }
