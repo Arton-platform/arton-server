@@ -23,10 +23,10 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
     @Override
     public List<AccessLogDocument> getRecentTop10Keywords() {
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(matchQuery("requestURI", "/performance/search"))
+                .withQuery(matchQuery("message", "/performance/search"))
                 .build();
         List<AccessLogDocument> documents = elasticsearchOperations
-                .search(searchQuery, AccessLogDocument.class, IndexCoordinates.of("application-accesslog-2023-02-07")).stream().map(SearchHit::getContent).collect(Collectors.toList());
+                . search(searchQuery, AccessLogDocument.class, IndexCoordinates.of("logstash*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
         return documents;
     }
 }

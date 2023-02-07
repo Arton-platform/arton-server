@@ -1,6 +1,8 @@
 package com.arton.backend.performance.adapter.in;
 
+import com.arton.backend.elastic.persistence.document.AccessLogDocument;
 import com.arton.backend.elastic.persistence.repository.CustomLogRepositoryImpl;
+import com.arton.backend.elastic.persistence.repository.LogRepository;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
@@ -25,7 +27,7 @@ import java.util.List;
 public class PerformanceController {
     private final PerformanceUseCase performanceService;
     private final PerformanceSearchUseCase performanceSearchService;
-    private CustomLogRepositoryImpl customLogRepository;
+    private final LogRepository logRepository;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
     @GetMapping("/list")
@@ -70,6 +72,14 @@ public class PerformanceController {
     public ResponseEntity<ResponseData<List<PerformanceDocument>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query) {
         List<PerformanceDocument> documents = performanceSearchService.searchByTitle(query);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", query));
+        ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/search/log")
+    public ResponseEntity<ResponseData<List<AccessLogDocument>>> searchLog() {
+        List<AccessLogDocument> documents = logRepository.getRecentTop10Keywords();
+        System.out.println("recentTop10Keywords = " + documents.size());
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
         return ResponseEntity.ok().body(response);
     }
