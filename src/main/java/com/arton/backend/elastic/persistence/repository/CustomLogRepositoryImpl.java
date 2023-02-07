@@ -12,8 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
-import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
     public List<AccessLogDocument> getRecentTop10Keywords() {
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(matchQuery("message", "/performance/search"))
+                .withQuery(matchPhraseQuery("logger_name", "LOGSTASH"))
                 .build();
         List<AccessLogDocument> documents = elasticsearchOperations
                 . search(searchQuery, AccessLogDocument.class, IndexCoordinates.of("logstash*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
