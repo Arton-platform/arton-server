@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,11 +53,7 @@ public class PerformanceController {
     @GetMapping("/search/place")
     public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place) {
         List<PerformanceDocument> documents = performanceSearchService.searchByPlace(place);
-        // for elastic search log
-        MDC.put("requestURI", request.getRequestURI());
-        MDC.put("keyword", place);
-        MDC.remove("requestURI");
-        MDC.remove("keyword");
+        log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", place));
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
         return ResponseEntity.ok().body(response);
     }
@@ -66,10 +61,7 @@ public class PerformanceController {
     @GetMapping("/search/type")
     public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByPerformanceType(HttpServletRequest request, @RequestParam(name = "query", required = true) String performanceType) {
         List<PerformanceDocument> documents = performanceSearchService.searchByPerformanceType(performanceType);
-        MDC.put("requestURI", request.getRequestURI());
-        MDC.put("keyword", performanceType);
-        MDC.remove("requestURI");
-        MDC.remove("keyword");
+        log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", performanceType));
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
         return ResponseEntity.ok().body(response);
     }
@@ -77,10 +69,7 @@ public class PerformanceController {
     @GetMapping("/search/title")
     public ResponseEntity<ResponseData<List<PerformanceDocument>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query) {
         List<PerformanceDocument> documents = performanceSearchService.searchByTitle(query);
-        MDC.put("requestURI", request.getRequestURI());
-        MDC.put("keyword", query);
-        MDC.remove("requestURI");
-        MDC.remove("keyword");
+        log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", query));
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
         return ResponseEntity.ok().body(response);
     }
