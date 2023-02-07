@@ -1,5 +1,8 @@
 package com.arton.backend.performance.adapter.in;
 
+import com.arton.backend.elastic.persistence.document.AccessLogDocument;
+import com.arton.backend.elastic.persistence.repository.CustomLogRepository;
+import com.arton.backend.elastic.persistence.repository.CustomLogRepositoryImpl;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
@@ -21,6 +24,7 @@ import java.util.List;
 public class PerformanceController {
     private final PerformanceUseCase performanceService;
     private final PerformanceSearchUseCase performanceSearchService;
+    private CustomLogRepositoryImpl customLogRepository;
 
     @GetMapping("/list")
     public ResponseEntity<List<PerformanceInterestDto>> getPerformanceList() {
