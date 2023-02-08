@@ -27,11 +27,11 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
 
     @Override
     public List<PerformanceDocument> findByPlace(String place) {
-        return performanceSearchRepository.findByPlaceContains(place);
+        return performanceSearchRepository.findByPlace(place);
     }
 
     @Override
-    public List<PerformanceDocument> searchByCondition(PerformanceSearchDto performanceSearchDto) {
-        return performanceSearchRepository.findByCondition(performanceSearchDto);
+    public void saveAll(List<PerformanceDocument> performanceDocuments) {
+        performanceSearchRepository.saveAll(performanceDocuments);
     }
 }

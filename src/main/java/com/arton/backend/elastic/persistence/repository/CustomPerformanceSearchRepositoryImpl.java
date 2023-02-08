@@ -1,19 +1,27 @@
 package com.arton.backend.elastic.persistence.repository;
 
+import com.arton.backend.elastic.persistence.document.AccessLogDocument;
 import com.arton.backend.elastic.persistence.document.PerformanceDocument;
-import com.arton.backend.elastic.persistence.repository.CustomPerformanceSearchRepository;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
 import static org.springframework.util.StringUtils.hasText;
 
 @Repository
@@ -25,6 +33,16 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
     public List<PerformanceDocument> findByCondition(PerformanceSearchDto performanceSearchDto) {
         CriteriaQuery condition = createConditionCriteriaQuery(performanceSearchDto);
         return elasticsearchOperations.search(condition, PerformanceDocument.class).stream().map(SearchHit::getContent).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PerformanceDocument> findByPlace(String place) {
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(matchQuery("place", place))
+                .build();
+        List<PerformanceDocument> documents = elasticsearchOperations
+                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
+        return documents;
     }
 
     private CriteriaQuery createConditionCriteriaQuery(PerformanceSearchDto searchCondition) {

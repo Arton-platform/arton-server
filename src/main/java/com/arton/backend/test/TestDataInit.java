@@ -20,6 +20,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -100,6 +101,8 @@ public class TestDataInit {
                     .title("test" + i)
                     .performers(new ArrayList<>())
                     .priceGradeList(new ArrayList<>())
+                    .place(i % 2 == 0 ? "전주" : "전라북도 전주")
+                    .startDate(i%2 == 0 ? LocalDateTime.now() : LocalDateTime.now().minusDays(3L))
                     .build();
             performances.add(performance);
 

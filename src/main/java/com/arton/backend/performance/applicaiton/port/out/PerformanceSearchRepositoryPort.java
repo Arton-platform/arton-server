@@ -13,6 +13,5 @@ public interface PerformanceSearchRepositoryPort {
     List<PerformanceDocument> findByPerformanceType(PerformanceType performanceType);
     /** 장소 검색 */
     List<PerformanceDocument> findByPlace(String place);
-    /** 동적 쿼리 */
-    List<PerformanceDocument> searchByCondition(PerformanceSearchDto performanceSearchDto);
+    void saveAll(List<PerformanceDocument> performanceDocuments);
 }

@@ -18,6 +18,4 @@ public interface PerformanceSearchRepository extends ElasticsearchRepository<Per
     List<PerformanceDocument> findByPerformanceType(PerformanceType performanceType);
     /** 장소 검색 */
     List<PerformanceDocument> findByPlaceContains(String place);
-    List<PerformanceDocument> findPerformanceDocumentsByTitle(String title);
-    List<PerformanceDocument> findPerformanceDocumentsByPerformanceType(PerformanceType performanceType);
 }

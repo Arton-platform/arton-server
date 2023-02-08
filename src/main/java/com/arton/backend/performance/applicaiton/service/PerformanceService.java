@@ -10,6 +10,7 @@ import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class PerformanceService implements PerformanceUseCase, PerformanceSearchUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceMapper performanceMapper;
-    private final PerformanceSearchRepository performanceSearchRepository;
+    private final PerformanceSearchRepositoryPort performanceSearchRepository;
 
     @Override
     public List<Performance> getAllPerformances() {
@@ -75,21 +76,15 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
     }
 
     public List<PerformanceDocument> searchByTitle(String title) {
-        return performanceSearchRepository.findByTitleContains(title);
+        return performanceSearchRepository.findByTitle(title);
     }
 
     public List<PerformanceDocument> searchByPlace(String place) {
-        return performanceSearchRepository.findByPlaceContains(place);
+        return performanceSearchRepository.findByPlace(place);
     }
 
     public List<PerformanceDocument> searchByPerformanceType(String type) {
         PerformanceType performanceType = PerformanceType.get(type);
         return performanceSearchRepository.findByPerformanceType(performanceType);
     }
-
-    @Override
-    public List<PerformanceDocument> searchByCondition(PerformanceSearchDto performanceSearchDto) {
-        return performanceSearchRepository.findByCondition(performanceSearchDto);
-    }
-
 }
