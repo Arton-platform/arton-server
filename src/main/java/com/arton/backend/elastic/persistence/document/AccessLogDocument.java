@@ -18,7 +18,8 @@ public class AccessLogDocument {
     @Id
     private String id;
 //    @Field(type = FieldType.Date, format = {DateFormat.date_hour_minute_second_millis}, name = "@timestamp")
-//    private LocalDateTime date;
+      @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", name = "@timestamp")
+    private LocalDateTime date;
     @Field(type = FieldType.Keyword, name = "@version")
     private String version;
     @Field(type = FieldType.Text)
