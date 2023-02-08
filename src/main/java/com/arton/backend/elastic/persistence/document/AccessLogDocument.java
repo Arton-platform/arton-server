@@ -37,4 +37,6 @@ public class AccessLogDocument {
     private String stackTrace;
     @Field(type = FieldType.Text)
     private String threadName;
+    @Field(type = FieldType.Text)
+    private String keyword;
 }
