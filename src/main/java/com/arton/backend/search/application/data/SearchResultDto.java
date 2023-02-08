@@ -20,15 +20,17 @@ public class SearchResultDto {
     private String place;
     private String startDate;
     private String endDate;
+    private String performanceType;
 
     @Builder
-    public SearchResultDto(Long id, String imageUrl, String title, String place, String startDate, String endDate) {
+    public SearchResultDto(Long id, String imageUrl, String title, String place, String startDate, String endDate, String performanceType) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.title = title;
         this.place = place;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.performanceType = performanceType;
     }
 
     public static SearchResultDto toResultFromDocument(PerformanceDocument document) {
@@ -39,6 +41,7 @@ public class SearchResultDto {
                 .place(document.getPlace())
                 .startDate(isEmpty(document.getStartDate()) ? null : document.getStartDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
                 .endDate(isEmpty(document.getEndDate()) ? null : document.getEndDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
+                .performanceType(document.getPerformanceType())
                 .build();
     }
 }
