@@ -1,9 +1,7 @@
 package com.arton.backend.search.persistence.repository;
 
-import com.arton.backend.search.application.data.RealTimeKeywordDto;
-
-import java.util.List;
+import com.arton.backend.search.application.data.SearchPageDto;
 
 public interface CustomLogRepository {
-    List<RealTimeKeywordDto> getRecentTop10Keywords();
+    SearchPageDto getRecentTop10Keywords();
 }

@@ -1,6 +1,7 @@
 package com.arton.backend.performance.adapter.in;
 
 import com.arton.backend.search.application.data.RealTimeKeywordDto;
+import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.persistence.repository.LogRepository;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
@@ -83,10 +84,9 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/log")
-    public ResponseEntity<ResponseData<List<RealTimeKeywordDto>>> searchLog() {
-        List<RealTimeKeywordDto> documents = logRepository.getRecentTop10Keywords();
-        System.out.println("recentTop10Keywords = " + documents.size());
-        ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
+    public ResponseEntity<ResponseData<List<SearchPageDto>>> searchLog() {
+        SearchPageDto searchPage = logRepository.getRecentTop10Keywords();
+        ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), searchPage);
         return ResponseEntity.ok().body(response);
     }
 

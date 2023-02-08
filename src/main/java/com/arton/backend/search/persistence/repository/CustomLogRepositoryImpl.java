@@ -3,6 +3,7 @@ package com.arton.backend.search.persistence.repository;
 import com.arton.backend.search.application.data.RealTimeKeywordDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.search.application.data.SearchPageDto;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +42,9 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
      * @return
      */
     @Override
-    public List<RealTimeKeywordDto> getRecentTop10Keywords() {
+    public SearchPageDto getRecentTop10Keywords() {
+        // now
+        LocalDateTime now = LocalDateTime.now();
         // 검색어로 집계하며 10순위까지만 뽑기
         TermsAggregationBuilder agg = AggregationBuilders
                 .terms("keyword")
@@ -51,8 +55,8 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
                 .must(matchQuery("message", "/performance/search"))
                 .must(matchPhraseQuery("logger_name", "LOGSTASH"))
                 .must(rangeQuery("@timestamp")
-                        .gte(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
-                        .lte(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+                        .gte(now.truncatedTo(ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                        .lte(now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
         // 쿼리 전송
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder().query(query).aggregation(agg);
         SearchRequest request = new SearchRequest().indices("logstash*").source(sourceBuilder);
@@ -66,6 +70,8 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
         ParsedStringTerms keyword = (ParsedStringTerms) searchResponse.getAggregations().asMap().get("keyword");
         // DTO 변환
         List<RealTimeKeywordDto> realTimeKeywords = keyword.getBuckets().stream().map(RealTimeKeywordDto::bucketToDTO).collect(Collectors.toList());
-        return realTimeKeywords;
+        // base Time
+        String basedTime = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm '기준'"));
+        return SearchPageDto.builder().basedTime(basedTime).keywords(realTimeKeywords).build();
     }
 }
