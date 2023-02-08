@@ -9,6 +9,8 @@ import org.springframework.util.ObjectUtils;
 
 import java.time.format.DateTimeFormatter;
 
+import static org.springframework.util.ObjectUtils.*;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SearchResultDto {
@@ -35,8 +37,8 @@ public class SearchResultDto {
                 .imageUrl(document.getImageUrl())
                 .title(document.getTitle())
                 .place(document.getPlace())
-                .startDate(ObjectUtils.isEmpty(document.getStartDate()) ? null : document.getStartDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
-                .endDate(ObjectUtils.isEmpty(document.getEndDate()) ? null : document.getEndDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
+                .startDate(isEmpty(document.getStartDate()) ? null : document.getStartDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
+                .endDate(isEmpty(document.getEndDate()) ? null : document.getEndDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
                 .build();
     }
 }
