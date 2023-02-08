@@ -53,14 +53,14 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
                 .terms("keyword")
                 .field("keyword.keyword")
                 .size(10);
-
+        // now_hour:00 ~ now 동안 검색어 집계
         QueryBuilder query = QueryBuilders.boolQuery()
                 .must(matchQuery("message", "/performance/search"))
                 .must(matchPhraseQuery("logger_name", "LOGSTASH"))
                 .must(rangeQuery("@timestamp")
                         .gte(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
                         .lte(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
-
+        // 쿼리 전송
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder().query(query).aggregation(agg);
         SearchRequest request = new SearchRequest().indices("logstash*").source(sourceBuilder);
         SearchResponse searchResponse;
@@ -69,14 +69,14 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
         } catch (IOException e) {
             throw new CustomException(ErrorCode.REAL_TIME_SEARCH_ERROR.getMessage(), ErrorCode.REAL_TIME_SEARCH_ERROR);
         }
-        Map<String, Aggregation> results = searchResponse.getAggregations().asMap();
-        // get terms result
-        ParsedStringTerms keyword = (ParsedStringTerms) results.get("keyword");
-        // get result from bucket
+        // 집계 필드로 넣었던 값.
+        ParsedStringTerms keyword = (ParsedStringTerms) searchResponse.getAggregations().asMap().get("keyword");
+        // 버킷으로부터 값 추출
         Map<String, Long> topKeywords = keyword.getBuckets().stream().collect(Collectors.toMap(MultiBucketsAggregation.Bucket::getKeyAsString, MultiBucketsAggregation.Bucket::getDocCount));
         for (String s : topKeywords.keySet()) {
             System.out.println("keyword = " + s + " count "+topKeywords.get(s));
         }
+        // DTO 변환
         List<RealTimeKeywordDto> realTimeKeywords = keyword.getBuckets().stream().map(RealTimeKeywordDto::bucketToDTO).collect(Collectors.toList());
         return realTimeKeywords;
     }
