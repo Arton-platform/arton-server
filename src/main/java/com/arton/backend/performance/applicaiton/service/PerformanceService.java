@@ -2,6 +2,7 @@ package com.arton.backend.performance.applicaiton.service;
 
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
@@ -14,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,15 +75,27 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
         performanceSearchRepository.saveAll(documents);
     }
 
-    public List<PerformanceDocument> searchByTitle(String title) {
-        return performanceSearchRepository.findByTitle(title);
+    public List<SearchResultDto> searchByTitle(String title) {
+        return Optional.ofNullable(performanceSearchRepository.findByTitle(title))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(SearchResultDto::toResultFromDocument)
+                .collect(Collectors.toList());
     }
 
-    public List<PerformanceDocument> searchByPlace(String place) {
-        return performanceSearchRepository.findByPlace(place);
+    public List<SearchResultDto> searchByPlace(String place) {
+        return Optional.ofNullable(performanceSearchRepository.findByPlace(place))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(SearchResultDto::toResultFromDocument)
+                .collect(Collectors.toList());
     }
 
-    public List<PerformanceDocument> searchByPerformanceType(String type) {
-        return performanceSearchRepository.findByPerformanceType(type);
+    public List<SearchResultDto> searchByPerformanceType(String type) {
+        return Optional.ofNullable(performanceSearchRepository.findByPerformanceType(type))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(SearchResultDto::toResultFromDocument)
+                .collect(Collectors.toList());
     }
 }

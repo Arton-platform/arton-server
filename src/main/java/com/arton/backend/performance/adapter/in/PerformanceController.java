@@ -1,15 +1,15 @@
 package com.arton.backend.performance.adapter.in;
 
-import com.arton.backend.search.application.data.RealTimeKeywordDto;
-import com.arton.backend.search.application.data.SearchPageDto;
-import com.arton.backend.search.persistence.repository.LogRepository;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
-import com.arton.backend.search.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.search.application.data.SearchPageDto;
+import com.arton.backend.search.application.data.SearchResultDto;
+import com.arton.backend.search.persistence.document.PerformanceDocument;
+import com.arton.backend.search.persistence.repository.LogRepository;
 import lombok.RequiredArgsConstructor;
 import net.logstash.logback.argument.StructuredArguments;
 import org.jboss.logging.MDC;
@@ -54,8 +54,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/place")
-    public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place) {
-        List<PerformanceDocument> documents = performanceSearchService.searchByPlace(place);
+    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place) {
+        List<SearchResultDto> documents = performanceSearchService.searchByPlace(place);
         MDC.put("keyword", place);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", place));
         MDC.remove("keyword");
@@ -64,8 +64,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/type")
-    public ResponseEntity<ResponseData<List<PerformanceDocument>>> searchByPerformanceType(HttpServletRequest request, @RequestParam(name = "query", required = true) String performanceType) {
-        List<PerformanceDocument> documents = performanceSearchService.searchByPerformanceType(performanceType);
+    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByPerformanceType(HttpServletRequest request, @RequestParam(name = "query", required = true) String performanceType) {
+        List<SearchResultDto> documents = performanceSearchService.searchByPerformanceType(performanceType);
         MDC.put("keyword", performanceType);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", performanceType));
         MDC.remove("keyword");
@@ -74,8 +74,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/title")
-    public ResponseEntity<ResponseData<List<PerformanceDocument>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query) {
-        List<PerformanceDocument> documents = performanceSearchService.searchByTitle(query);
+    public ResponseEntity<ResponseData<List<SearchResultDto>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query) {
+        List<SearchResultDto> documents = performanceSearchService.searchByTitle(query);
         MDC.put("keyword", query);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", query));
         MDC.remove("keyword");
@@ -84,7 +84,7 @@ public class PerformanceController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResponseData<List<SearchPageDto>>> searchLog() {
+    public ResponseEntity<ResponseData<SearchPageDto>> searchLog() {
         SearchPageDto searchPage = logRepository.getRecentTop10Keywords();
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), searchPage);
         return ResponseEntity.ok().body(response);
