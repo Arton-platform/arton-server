@@ -1,5 +1,6 @@
 package com.arton.backend.performance.adapter.in;
 
+import com.arton.backend.elastic.application.data.RealTimeKeywordDto;
 import com.arton.backend.elastic.persistence.document.AccessLogDocument;
 import com.arton.backend.elastic.persistence.repository.LogRepository;
 import com.arton.backend.infra.shared.common.CommonResponse;
@@ -83,8 +84,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/log")
-    public ResponseEntity<ResponseData<List<AccessLogDocument>>> searchLog() {
-        List<AccessLogDocument> documents = logRepository.getRecentTop10Keywords();
+    public ResponseEntity<ResponseData<List<RealTimeKeywordDto>>> searchLog() {
+        List<RealTimeKeywordDto> documents = logRepository.getRecentTop10Keywords();
         System.out.println("recentTop10Keywords = " + documents.size());
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), documents);
         return ResponseEntity.ok().body(response);

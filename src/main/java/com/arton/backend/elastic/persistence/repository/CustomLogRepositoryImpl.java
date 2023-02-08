@@ -1,5 +1,6 @@
 package com.arton.backend.elastic.persistence.repository;
 
+import com.arton.backend.elastic.application.data.RealTimeKeywordDto;
 import com.arton.backend.elastic.persistence.document.AccessLogDocument;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
@@ -8,9 +9,13 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.ml.inference.preprocessing.Multi;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -25,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -41,21 +47,12 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
      * @return
      */
     @Override
-    public List<AccessLogDocument> getRecentTop10Keywords() {
+    public List<RealTimeKeywordDto> getRecentTop10Keywords() {
         // 검색어로 집계하며 10순위까지만 뽑기
         TermsAggregationBuilder agg = AggregationBuilders
                 .terms("keyword")
                 .field("keyword.keyword")
                 .size(10);
-        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(boolQuery()
-                        .must(matchQuery("message", "/performance/search")) // 어느정도 일치만 하면 됨.
-                        .must(matchPhraseQuery("logger_name", "LOGSTASH")) // 정확하게 일치
-                        .must(rangeQuery("@timestamp")
-                                .gte(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
-                                .lte(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())))
-                .withAggregations(agg)
-                .build();
 
         QueryBuilder query = QueryBuilders.boolQuery()
                 .must(matchQuery("message", "/performance/search"))
@@ -72,31 +69,15 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
         } catch (IOException e) {
             throw new CustomException(ErrorCode.REAL_TIME_SEARCH_ERROR.getMessage(), ErrorCode.REAL_TIME_SEARCH_ERROR);
         }
-
-        /**
-         * nal TermsAggregationBuilder aggregation = AggregationBuilders.terms("top_tags")
-         *             .field("tags")
-         *             .order(BucketOrder.count(false));
-         *
-         *         final SearchSourceBuilder builder = new SearchSourceBuilder().aggregation(aggregation);
-         *         final SearchRequest searchRequest = new SearchRequest().indices("blog")
-         *             .source(builder);
-         *
-         *         final SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
-         *
-         *         final Map<String, Aggregation> results = response.getAggregations()
-         *             .asMap();
-         *         final ParsedStringTerms topTags = (ParsedStringTerms) results.get("top_tags");
-         *
-         *         final List<String> keys = topTags.getBuckets()
-         *             .stream()
-         *             .map(MultiBucketsAggregation.Bucket::getKeyAsString)
-         *             .collect(toList());
-         *         assertEquals(asList("elasticsearch", "spring data", "search engines", "tutorial"), keys);
-         */
-
-        List<AccessLogDocument> documents = elasticsearchOperations
-                . search(searchQuery, AccessLogDocument.class, IndexCoordinates.of("logstash*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
-        return documents;
+        Map<String, Aggregation> results = searchResponse.getAggregations().asMap();
+        // get terms result
+        ParsedStringTerms keyword = (ParsedStringTerms) results.get("keyword");
+        // get result from bucket
+        Map<String, Long> topKeywords = keyword.getBuckets().stream().collect(Collectors.toMap(MultiBucketsAggregation.Bucket::getKeyAsString, MultiBucketsAggregation.Bucket::getDocCount));
+        for (String s : topKeywords.keySet()) {
+            System.out.println("keyword = " + s + " count "+topKeywords.get(s));
+        }
+        List<RealTimeKeywordDto> realTimeKeywords = keyword.getBuckets().stream().map(RealTimeKeywordDto::bucketToDTO).collect(Collectors.toList());
+        return realTimeKeywords;
     }
 }
