@@ -2,23 +2,18 @@ package com.arton.backend.performance.applicaiton.service;
 
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.elastic.persistence.document.PerformanceDocument;
+import com.arton.backend.search.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.elastic.persistence.repository.PerformanceSearchRepository;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
-import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

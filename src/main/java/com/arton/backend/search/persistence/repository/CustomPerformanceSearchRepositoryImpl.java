@@ -1,6 +1,6 @@
-package com.arton.backend.elastic.persistence.repository;
+package com.arton.backend.search.persistence.repository;
 
-import com.arton.backend.elastic.persistence.document.PerformanceDocument;
+import com.arton.backend.search.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;

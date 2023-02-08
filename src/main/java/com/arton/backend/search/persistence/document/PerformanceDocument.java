@@ -1,4 +1,4 @@
-package com.arton.backend.elastic.persistence.document;
+package com.arton.backend.search.persistence.document;
 
 import lombok.AccessLevel;
 import lombok.Builder;

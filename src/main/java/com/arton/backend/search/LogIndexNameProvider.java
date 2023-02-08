@@ -1,4 +1,4 @@
-package com.arton.backend.elastic;
+package com.arton.backend.search;
 
 import org.springframework.stereotype.Component;
 

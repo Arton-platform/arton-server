@@ -1,4 +1,4 @@
-package com.arton.backend.elastic.application.data;
+package com.arton.backend.search.application.data;
 
 import lombok.AccessLevel;
 import lombok.Builder;
