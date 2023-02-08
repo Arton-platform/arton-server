@@ -83,7 +83,7 @@ public class PerformanceController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/search/log")
+    @GetMapping("/search")
     public ResponseEntity<ResponseData<List<SearchPageDto>>> searchLog() {
         SearchPageDto searchPage = logRepository.getRecentTop10Keywords();
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), searchPage);
