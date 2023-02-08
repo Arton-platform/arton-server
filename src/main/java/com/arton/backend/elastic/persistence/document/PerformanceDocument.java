@@ -1,6 +1,5 @@
 package com.arton.backend.elastic.persistence.document;
 
-import com.arton.backend.performance.domain.PerformanceType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +32,7 @@ public class PerformanceDocument{
     private String imageUrl;
     /** 뮤지컬 or 콘서트 */
     @Field(type = FieldType.Text)
-    private PerformanceType performanceType;
+    private String performanceType;
     /** 공연 시작일 */
     @Field(type = FieldType.Date, format = {DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis})
     private LocalDateTime startDate;
@@ -42,7 +41,7 @@ public class PerformanceDocument{
     private LocalDateTime endDate;
 
     @Builder
-    public PerformanceDocument(Long id, String title, String musicalDateTime, String place, String imageUrl, PerformanceType performanceType, LocalDateTime startDate, LocalDateTime endDate) {
+    public PerformanceDocument(Long id, String title, String musicalDateTime, String place, String imageUrl, String performanceType, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.title = title;
         this.musicalDateTime = musicalDateTime;

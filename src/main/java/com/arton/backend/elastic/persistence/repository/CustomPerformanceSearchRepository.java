@@ -1,7 +1,6 @@
 package com.arton.backend.elastic.persistence.repository;
 
 import com.arton.backend.elastic.persistence.document.PerformanceDocument;
-import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  * JPA 와 동일하게 복잡한 쿼리는 Querydsl 같이 사용하면 된다.
  */
 public interface CustomPerformanceSearchRepository {
-    /** 제목 검색 */
-    List<PerformanceDocument> findByCondition(PerformanceSearchDto performanceSearchDto);
     List<PerformanceDocument> findByPlace(String place);
+    List<PerformanceDocument> findByTitle(String title);
+    List<PerformanceDocument> findByType(String type);
 }

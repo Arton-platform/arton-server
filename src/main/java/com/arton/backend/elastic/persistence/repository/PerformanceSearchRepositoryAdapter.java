@@ -17,12 +17,12 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
 
     @Override
     public List<PerformanceDocument> findByTitle(String title) {
-        return performanceSearchRepository.findByTitleContains(title);
+        return performanceSearchRepository.findByTitle(title);
     }
 
     @Override
-    public List<PerformanceDocument> findByPerformanceType(PerformanceType performanceType) {
-        return performanceSearchRepository.findByPerformanceType(performanceType);
+    public List<PerformanceDocument> findByPerformanceType(String type) {
+        return performanceSearchRepository.findByType(type);
     }
 
     @Override

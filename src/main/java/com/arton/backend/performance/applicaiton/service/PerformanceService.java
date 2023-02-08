@@ -16,7 +16,9 @@ import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,7 +86,6 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
     }
 
     public List<PerformanceDocument> searchByPerformanceType(String type) {
-        PerformanceType performanceType = PerformanceType.get(type);
-        return performanceSearchRepository.findByPerformanceType(performanceType);
+        return performanceSearchRepository.findByPerformanceType(type);
     }
 }
