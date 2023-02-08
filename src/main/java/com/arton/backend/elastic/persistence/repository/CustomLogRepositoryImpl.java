@@ -9,6 +9,11 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,11 +24,20 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class CustomLogRepositoryImpl implements CustomLogRepository{
     private final ElasticsearchOperations elasticsearchOperations;
 
+    /**
+     * 시간을 비교할때 Long으로 넘겨줘야함..
+     * 기본적으로 dynamic finder가 long으로 비교한다고 한다.
+     * @return
+     */
     @Override
     public List<AccessLogDocument> getRecentTop10Keywords() {
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(matchQuery("message", "/performance/search"))
-                .withQuery(matchPhraseQuery("logger_name", "LOGSTASH"))
+                .withQuery(boolQuery()
+                        .must(matchQuery("message", "/performance/search"))
+                                .must(matchPhraseQuery("logger_name", "LOGSTASH"))
+                        .must(rangeQuery("@timestamp")
+                                .gte(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                                .lte(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())))
                 .build();
         List<AccessLogDocument> documents = elasticsearchOperations
                 . search(searchQuery, AccessLogDocument.class, IndexCoordinates.of("logstash*")).stream().map(SearchHit::getContent).collect(Collectors.toList());

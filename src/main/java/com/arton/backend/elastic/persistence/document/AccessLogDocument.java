@@ -27,7 +27,7 @@ public class AccessLogDocument {
     private String level;
     @Field(type = FieldType.Long)
     private Long levelValue;
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, name = "logger_name")
     private String loggerName;
     @Field(type = FieldType.Text)
     private String message;
