@@ -1,6 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.in;
 
-import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.elastic.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 
 import java.util.List;

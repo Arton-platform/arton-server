@@ -1,4 +1,4 @@
-package com.arton.backend.performance.adapter.out.persistence.document;
+package com.arton.backend.elastic.persistence.document;
 
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.AccessLevel;

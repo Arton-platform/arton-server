@@ -2,9 +2,9 @@ package com.arton.backend.performance.applicaiton.service;
 
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.elastic.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceSearchRepository;
+import com.arton.backend.elastic.persistence.repository.PerformanceSearchRepository;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;

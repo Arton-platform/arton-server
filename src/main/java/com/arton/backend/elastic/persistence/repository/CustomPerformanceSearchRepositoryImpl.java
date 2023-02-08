@@ -1,6 +1,7 @@
-package com.arton.backend.performance.adapter.out.persistence.repository;
+package com.arton.backend.elastic.persistence.repository;
 
-import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.elastic.persistence.document.PerformanceDocument;
+import com.arton.backend.elastic.persistence.repository.CustomPerformanceSearchRepository;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -17,7 +18,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceSearchRepository{
+public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceSearchRepository {
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override

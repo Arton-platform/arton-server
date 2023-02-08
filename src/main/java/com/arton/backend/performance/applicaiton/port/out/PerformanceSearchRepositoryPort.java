@@ -1,6 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.out;
 
-import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.elastic.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.performance.domain.PerformanceType;
 

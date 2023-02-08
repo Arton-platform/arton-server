@@ -1,6 +1,6 @@
 package com.arton.backend.performance.adapter.out.persistence.mapper;
 
-import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.elastic.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performer.adapter.out.persistence.mapper.PerformerMapper;

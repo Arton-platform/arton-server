@@ -1,11 +1,10 @@
 package com.arton.backend.performance.adapter.in;
 
 import com.arton.backend.elastic.persistence.document.AccessLogDocument;
-import com.arton.backend.elastic.persistence.repository.CustomLogRepositoryImpl;
 import com.arton.backend.elastic.persistence.repository.LogRepository;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
-import com.arton.backend.performance.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.elastic.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
