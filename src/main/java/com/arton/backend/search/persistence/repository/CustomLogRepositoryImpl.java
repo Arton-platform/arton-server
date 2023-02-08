@@ -64,11 +64,6 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
         }
         // 집계 필드로 넣었던 값.
         ParsedStringTerms keyword = (ParsedStringTerms) searchResponse.getAggregations().asMap().get("keyword");
-        // 버킷으로부터 값 추출
-        Map<String, Long> topKeywords = keyword.getBuckets().stream().collect(Collectors.toMap(MultiBucketsAggregation.Bucket::getKeyAsString, MultiBucketsAggregation.Bucket::getDocCount));
-        for (String s : topKeywords.keySet()) {
-            System.out.println("keyword = " + s + " count "+topKeywords.get(s));
-        }
         // DTO 변환
         List<RealTimeKeywordDto> realTimeKeywords = keyword.getBuckets().stream().map(RealTimeKeywordDto::bucketToDTO).collect(Collectors.toList());
         return realTimeKeywords;
