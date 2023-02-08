@@ -70,7 +70,7 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
         try {
             searchResponse = client.search(request, RequestOptions.DEFAULT);
         } catch (IOException e) {
-            throw new CustomException(ErrorCode.)
+            throw new CustomException(ErrorCode.REAL_TIME_SEARCH_ERROR.getMessage(), ErrorCode.REAL_TIME_SEARCH_ERROR);
         }
 
         /**
