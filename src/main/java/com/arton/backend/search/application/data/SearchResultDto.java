@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.ObjectUtils;
 
 import java.time.format.DateTimeFormatter;
 
@@ -34,8 +35,8 @@ public class SearchResultDto {
                 .imageUrl(document.getImageUrl())
                 .title(document.getTitle())
                 .place(document.getPlace())
-                .startDate(document.getStartDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
-                .endDate(document.getEndDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
+                .startDate(ObjectUtils.isEmpty(document.getStartDate()) ? null : document.getStartDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
+                .endDate(ObjectUtils.isEmpty(document.getEndDate()) ? null : document.getEndDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
                 .build();
     }
 }
