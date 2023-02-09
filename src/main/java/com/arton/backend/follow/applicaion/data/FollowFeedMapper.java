@@ -15,8 +15,8 @@ public class FollowFeedMapper {
 
     public FollowFeed toDomain(FollowFeedEntity followFeed, String feedContent){
         return FollowFeed.builder()
-                .fromUser(followFeed.getFromUser())
-                .toUser(followFeed.getToUser())
+//                .fromUser(followFeed.getFromUser())
+//                .toUser(followFeed.getToUser())
                 .review(reviewMapper.toDomain(followFeed.getReview()))
                 .comment(commentMapper.toDomain(followFeed.getComment()))
                 .feedContent(feedContent)
@@ -25,8 +25,8 @@ public class FollowFeedMapper {
 
     public FollowFeedEntity toEntity(FollowFeed followFeed, String feedContent){
         return FollowFeedEntity.builder()
-                .fromUser(followFeed.getFromUser())
-                .toUser(followFeed.getToUser())
+//                .fromUser(followFeed.getFromUser())
+//                .toUser(followFeed.getToUser())
                 .review(reviewMapper.toEntity(followFeed.getReview()))
                 .comment(commentMapper.toEntity(followFeed.getComment()))
                 .feedContent(feedContent)
