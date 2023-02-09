@@ -1,6 +1,6 @@
 package com.arton.backend.search;
 
-import com.arton.backend.search.persistence.repository.PerformanceSearchRepository;
+import com.arton.backend.search.adapter.out.persistence.repository.PerformanceSearchRepository;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;

@@ -101,7 +101,7 @@ public class TestDataInit {
                     .title("test" + i)
                     .performers(new ArrayList<>())
                     .priceGradeList(new ArrayList<>())
-                    .place(i % 2 == 0 ? "전주" : "전라북도 전주")
+                    .place("전주")
                     .startDate(i%2 == 0 ? LocalDateTime.now() : LocalDateTime.now().minusDays(3L))
                     .build();
             performances.add(performance);

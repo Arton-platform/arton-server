@@ -8,8 +8,7 @@ import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchResultDto;
-import com.arton.backend.search.persistence.document.PerformanceDocument;
-import com.arton.backend.search.persistence.repository.LogRepository;
+import com.arton.backend.search.adapter.out.persistence.repository.LogRepository;
 import lombok.RequiredArgsConstructor;
 import net.logstash.logback.argument.StructuredArguments;
 import org.jboss.logging.MDC;
@@ -54,8 +53,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/place")
-    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place) {
-        List<SearchResultDto> documents = performanceSearchService.searchByPlace(place);
+    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place, @RequestParam(name = "sort", required = false) String sort) {
+        List<SearchResultDto> documents = performanceSearchService.searchByPlace(place, sort);
         MDC.put("keyword", place);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", place));
         MDC.remove("keyword");

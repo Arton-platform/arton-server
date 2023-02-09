@@ -1,6 +1,6 @@
-package com.arton.backend.search.persistence.repository;
+package com.arton.backend.search.adapter.out.persistence.repository;
 
-import com.arton.backend.search.persistence.document.PerformanceDocument;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.domain.PerformanceType;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 

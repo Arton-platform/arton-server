@@ -3,7 +3,7 @@ package com.arton.backend.performance.applicaiton.service;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.search.application.data.SearchResultDto;
-import com.arton.backend.search.persistence.document.PerformanceDocument;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
@@ -83,8 +83,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
                 .collect(Collectors.toList());
     }
 
-    public List<SearchResultDto> searchByPlace(String place) {
-        return Optional.ofNullable(performanceSearchRepository.findByPlace(place))
+    public List<SearchResultDto> searchByPlace(String place, String sort) {
+        return Optional.ofNullable(performanceSearchRepository.findByPlace(place, sort))
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(SearchResultDto::toResultFromDocument)

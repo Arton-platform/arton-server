@@ -1,6 +1,6 @@
-package com.arton.backend.search.persistence.repository;
+package com.arton.backend.search.adapter.out.persistence.repository;
 
-import com.arton.backend.search.persistence.document.PerformanceDocument;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * JPA 와 동일하게 복잡한 쿼리는 Querydsl 같이 사용하면 된다.
  */
 public interface CustomPerformanceSearchRepository {
-    List<PerformanceDocument> findByPlace(String place);
+    List<PerformanceDocument> findByPlace(String place, String sort);
     List<PerformanceDocument> findByTitle(String title);
     List<PerformanceDocument> findByType(String type);
 }

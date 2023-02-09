@@ -1,11 +1,10 @@
 package com.arton.backend.search.application.data;
 
-import com.arton.backend.search.persistence.document.PerformanceDocument;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.ObjectUtils;
 
 import java.time.format.DateTimeFormatter;
 

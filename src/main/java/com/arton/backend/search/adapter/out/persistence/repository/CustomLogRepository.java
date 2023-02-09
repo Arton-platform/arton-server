@@ -1,4 +1,4 @@
-package com.arton.backend.search.persistence.repository;
+package com.arton.backend.search.adapter.out.persistence.repository;
 
 import com.arton.backend.search.application.data.SearchPageDto;
 

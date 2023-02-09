@@ -1,4 +1,4 @@
-package com.arton.backend.search.persistence.document;
+package com.arton.backend.search.adapter.out.persistence.document;
 
 import lombok.AccessLevel;
 import lombok.Builder;

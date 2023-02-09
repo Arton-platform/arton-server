@@ -1,6 +1,6 @@
-package com.arton.backend.search.persistence.repository;
+package com.arton.backend.search.adapter.out.persistence.repository;
 
-import com.arton.backend.search.persistence.document.PerformanceDocument;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,8 +23,8 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
     }
 
     @Override
-    public List<PerformanceDocument> findByPlace(String place) {
-        return performanceSearchRepository.findByPlace(place);
+    public List<PerformanceDocument> findByPlace(String place, String sort) {
+        return performanceSearchRepository.findByPlace(place, sort);
     }
 
     @Override

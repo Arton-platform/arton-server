@@ -1,8 +1,11 @@
-package com.arton.backend.search.persistence.repository;
+package com.arton.backend.search.adapter.out.persistence.repository;
 
-import com.arton.backend.search.persistence.document.PerformanceDocument;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
+import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -12,6 +15,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,10 +29,15 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
-    public List<PerformanceDocument> findByPlace(String place) {
-        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(matchQuery("place", place))
-                .build();
+    public List<PerformanceDocument> findByPlace(String place, String sort) {
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("place", place));
+        if (StringUtils.hasText(sort)) {
+            SortField sortField = SortField.get(sort);
+            if (!ObjectUtils.isEmpty(sortField)) { // 유효한 정렬 조건이면 정렬해주기
+                searchQueryBuilder.withSorts(SortBuilders.fieldSort(sort).order(SortOrder.DESC));
+            }
+        }
+        NativeSearchQuery searchQuery = searchQueryBuilder.build();
         List<PerformanceDocument> documents = elasticsearchOperations
                 . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
         return documents;
