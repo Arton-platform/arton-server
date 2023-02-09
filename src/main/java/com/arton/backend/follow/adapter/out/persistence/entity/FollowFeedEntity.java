@@ -3,6 +3,7 @@ package com.arton.backend.follow.adapter.out.persistence.entity;
 import com.arton.backend.comment.adapter.out.persistence.CommentEntity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
+import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,12 +18,12 @@ public class FollowFeedEntity extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User fromUser;
+    @JoinColumn(name = "from_user")
+    private UserEntity fromUser;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User toUser;
+    @JoinColumn(name = "to_user")
+    private UserEntity toUser;
 
     @ManyToOne
     @JoinColumn(name = "reviewId")

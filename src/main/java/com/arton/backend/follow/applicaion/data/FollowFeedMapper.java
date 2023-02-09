@@ -4,6 +4,7 @@ import com.arton.backend.comment.adapter.out.persistence.CommentMapper;
 import com.arton.backend.follow.adapter.out.persistence.entity.FollowFeedEntity;
 import com.arton.backend.follow.domain.FollowFeed;
 import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,8 @@ public class FollowFeedMapper {
 
     public FollowFeed toDomain(FollowFeedEntity followFeed, String feedContent){
         return FollowFeed.builder()
-                .fromUser(followFeed.getFromUser())
-                .toUser(followFeed.getToUser())
+                .fromUser(UserMapper.toDomain(followFeed.getFromUser()))
+                .toUser(UserMapper.toDomain(followFeed.getToUser()))
                 .review(reviewMapper.toDomain(followFeed.getReview()))
                 .comment(commentMapper.toDomain(followFeed.getComment()))
                 .feedContent(feedContent)
@@ -25,8 +26,8 @@ public class FollowFeedMapper {
 
     public FollowFeedEntity toEntity(FollowFeed followFeed, String feedContent){
         return FollowFeedEntity.builder()
-                .fromUser(followFeed.getFromUser())
-                .toUser(followFeed.getToUser())
+                .fromUser(UserMapper.toEntity(followFeed.getFromUser()))
+                .toUser(UserMapper.toEntity(followFeed.getToUser()))
                 .review(reviewMapper.toEntity(followFeed.getReview()))
                 .comment(commentMapper.toEntity(followFeed.getComment()))
                 .feedContent(feedContent)

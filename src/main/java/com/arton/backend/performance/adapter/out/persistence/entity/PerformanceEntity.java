@@ -3,6 +3,7 @@ package com.arton.backend.performance.adapter.out.persistence.entity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performer.adapter.out.persistence.entity.PerformerEntity;
+import com.arton.backend.price.adapter.out.persistence.entity.PriceGradeEntity;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
@@ -60,11 +61,11 @@ public class PerformanceEntity extends BaseEntity {
     /** 좌석 등급 가격 */
     @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<PriceGrade> priceGradeList = new ArrayList<>();
+    private List<PriceGradeEntity> priceGradeList = new ArrayList<>();
     private float starScore;
 
     @Builder
-    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGrade> priceGradeList, float starScore) {
+    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGradeEntity> priceGradeList, float starScore) {
         super(createdDate, updateDate);
         this.id = id;
         this.title = title;

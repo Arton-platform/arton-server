@@ -3,7 +3,8 @@ package com.arton.backend.performance.adapter.out.repository;
 import javax.persistence.*;
 
 import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.user.adapter.out.repository.UserEntity;
+import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
+import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 
 import lombok.*;
 

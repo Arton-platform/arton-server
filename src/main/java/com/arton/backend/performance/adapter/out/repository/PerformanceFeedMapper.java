@@ -1,6 +1,7 @@
 package com.arton.backend.performance.adapter.out.repository;
 
-import com.arton.backend.user.adapter.out.repository.UserMapper;
+import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
