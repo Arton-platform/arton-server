@@ -4,6 +4,7 @@ import com.arton.backend.comment.adapter.out.persistence.CommentMapper;
 import com.arton.backend.follow.adapter.out.persistence.entity.FollowFeedEntity;
 import com.arton.backend.follow.domain.FollowFeed;
 import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
