@@ -6,6 +6,7 @@ import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -32,6 +33,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
     public List<PerformanceDocument> findByPlace(String place, String sort) {
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("place", place));
         setSort(sort, searchQueryBuilder);
+        searchQueryBuilder.withPageable(PageRequest.of(0, 15));
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         List<PerformanceDocument> documents = elasticsearchOperations
                 . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
