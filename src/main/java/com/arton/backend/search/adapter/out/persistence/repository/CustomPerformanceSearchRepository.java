@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface CustomPerformanceSearchRepository {
     List<PerformanceDocument> findByPlace(String place, String sort);
-    List<PerformanceDocument> findByTitle(String title);
-    List<PerformanceDocument> findByType(String type);
+    List<PerformanceDocument> findByTitle(String title, String sort);
+    List<PerformanceDocument> findByType(String type, String sort);
 }

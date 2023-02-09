@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface PerformanceSearchRepositoryPort {
     /** 제목 검색 */
-    List<PerformanceDocument> findByTitle(String title);
+    List<PerformanceDocument> findByTitle(String title, String sort);
     /** 공연타입 검색 */
-    List<PerformanceDocument> findByPerformanceType(String type);
+    List<PerformanceDocument> findByPerformanceType(String type, String sort);
     /** 장소 검색 */
     List<PerformanceDocument> findByPlace(String place, String sort);
     void saveAll(List<PerformanceDocument> performanceDocuments);

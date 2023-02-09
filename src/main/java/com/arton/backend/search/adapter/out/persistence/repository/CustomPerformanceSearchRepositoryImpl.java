@@ -1,7 +1,7 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
-import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -31,12 +31,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
     @Override
     public List<PerformanceDocument> findByPlace(String place, String sort) {
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("place", place));
-        if (StringUtils.hasText(sort)) {
-            SortField sortField = SortField.get(sort);
-            if (!ObjectUtils.isEmpty(sortField)) { // 유효한 정렬 조건이면 정렬해주기
-                searchQueryBuilder.withSorts(SortBuilders.fieldSort(sort).order(SortOrder.DESC));
-            }
-        }
+        setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         List<PerformanceDocument> documents = elasticsearchOperations
                 . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
@@ -44,23 +39,37 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
     }
 
     @Override
-    public List<PerformanceDocument> findByTitle(String title) {
-        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(matchQuery("title", title))
-                .build();
+    public List<PerformanceDocument> findByTitle(String title, String sort) {
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("title", title));
+        setSort(sort, searchQueryBuilder);
+        NativeSearchQuery searchQuery = searchQueryBuilder.build();
         List<PerformanceDocument> documents = elasticsearchOperations
                 . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
         return documents;
     }
 
     @Override
-    public List<PerformanceDocument> findByType(String type) {
-        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(matchQuery("performanceType", type))
-                .build();
+    public List<PerformanceDocument> findByType(String type, String sort) {
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("performanceType", type));
+        setSort(sort, searchQueryBuilder);
+        NativeSearchQuery searchQuery = searchQueryBuilder.build();
         List<PerformanceDocument> documents = elasticsearchOperations
                 . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
         return documents;
+    }
+
+    /**
+     * sort 옵션을 지정해준다.
+     * @param sort
+     * @param searchQueryBuilder
+     */
+    private void setSort(String sort, NativeSearchQueryBuilder searchQueryBuilder) {
+        if (StringUtils.hasText(sort)) {
+            SortField sortField = SortField.get(sort);
+            if (!ObjectUtils.isEmpty(sortField)) { // 유효한 정렬 조건이면 정렬해주기
+                searchQueryBuilder.withSorts(SortBuilders.fieldSort(sort).order(SortOrder.DESC));
+            }
+        }
     }
 
     private CriteriaQuery createConditionCriteriaQuery(PerformanceSearchDto searchCondition) {

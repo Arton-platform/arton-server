@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PerformanceSearchUseCase {
     void saveAllDocuments();
-    List<SearchResultDto> searchByTitle(String title);
+    List<SearchResultDto> searchByTitle(String title, String sort);
     List<SearchResultDto> searchByPlace(String place, String sort);
-    List<SearchResultDto> searchByPerformanceType(String type);
+    List<SearchResultDto> searchByPerformanceType(String type, String sort);
 }

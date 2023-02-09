@@ -75,8 +75,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
         performanceSearchRepository.saveAll(documents);
     }
 
-    public List<SearchResultDto> searchByTitle(String title) {
-        return Optional.ofNullable(performanceSearchRepository.findByTitle(title))
+    public List<SearchResultDto> searchByTitle(String title, String sort) {
+        return Optional.ofNullable(performanceSearchRepository.findByTitle(title, sort))
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(SearchResultDto::toResultFromDocument)
@@ -91,8 +91,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
                 .collect(Collectors.toList());
     }
 
-    public List<SearchResultDto> searchByPerformanceType(String type) {
-        return Optional.ofNullable(performanceSearchRepository.findByPerformanceType(type))
+    public List<SearchResultDto> searchByPerformanceType(String type, String sort) {
+        return Optional.ofNullable(performanceSearchRepository.findByPerformanceType(type, sort))
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(SearchResultDto::toResultFromDocument)

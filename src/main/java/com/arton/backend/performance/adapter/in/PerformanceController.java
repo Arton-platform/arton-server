@@ -63,8 +63,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/type")
-    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByPerformanceType(HttpServletRequest request, @RequestParam(name = "query", required = true) String performanceType) {
-        List<SearchResultDto> documents = performanceSearchService.searchByPerformanceType(performanceType);
+    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByPerformanceType(HttpServletRequest request, @RequestParam(name = "query", required = true) String performanceType, @RequestParam(name = "sort", required = false) String sort) {
+        List<SearchResultDto> documents = performanceSearchService.searchByPerformanceType(performanceType, sort);
         MDC.put("keyword", performanceType);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", performanceType));
         MDC.remove("keyword");
@@ -73,8 +73,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/title")
-    public ResponseEntity<ResponseData<List<SearchResultDto>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query) {
-        List<SearchResultDto> documents = performanceSearchService.searchByTitle(query);
+    public ResponseEntity<ResponseData<List<SearchResultDto>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query, @RequestParam(name = "sort", required = false) String sort) {
+        List<SearchResultDto> documents = performanceSearchService.searchByTitle(query, sort);
         MDC.put("keyword", query);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", query));
         MDC.remove("keyword");
