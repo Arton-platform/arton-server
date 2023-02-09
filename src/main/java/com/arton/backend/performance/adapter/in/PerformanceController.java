@@ -57,7 +57,7 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/place")
-    public ResponseEntity<ResponseData<Page<SearchResultDto>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place, @RequestParam(name = "sort", required = false) String sort, Pageable pageable) {
+    public ResponseEntity<ResponseData<Page<SearchResultDto>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
         Page<SearchResultDto> documents = performanceSearchService.searchByPlace(place, sort, pageable);
         MDC.put("keyword", place);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", place));

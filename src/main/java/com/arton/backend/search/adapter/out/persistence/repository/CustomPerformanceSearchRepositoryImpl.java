@@ -2,6 +2,7 @@ package com.arton.backend.search.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.search.domain.IndexName;
 import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -37,7 +38,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
-        return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")), searchQuery.getPageable());
+        return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
 //        List<PerformanceDocument> documents = elasticsearchOperations
 //                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
 //        return documents;
@@ -49,7 +50,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         List<PerformanceDocument> documents = elasticsearchOperations
-                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
+                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())).stream().map(SearchHit::getContent).collect(Collectors.toList());
         return documents;
     }
 
@@ -59,7 +60,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         List<PerformanceDocument> documents = elasticsearchOperations
-                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
+                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())).stream().map(SearchHit::getContent).collect(Collectors.toList());
         return documents;
     }
 
