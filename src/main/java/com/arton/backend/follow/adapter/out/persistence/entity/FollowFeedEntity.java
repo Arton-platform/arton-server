@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Getter
 @Builder
 public class FollowFeedEntity extends BaseEntity {
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
