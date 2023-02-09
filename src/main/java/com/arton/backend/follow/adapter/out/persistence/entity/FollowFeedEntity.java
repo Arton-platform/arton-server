@@ -13,17 +13,16 @@ import javax.persistence.*;
 @Getter
 @Builder
 public class FollowFeedEntity extends BaseEntity {
-    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User fromUser;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "userId")
-//    private User toUser;
+    @JoinColumn(name = "from_user")
+    private UserEntity fromUser;
+
+    @ManyToOne
+    @JoinColumn(name = "to_user")
+    private UserEntity toUser;
 
     @ManyToOne
     @JoinColumn(name = "reviewId")
