@@ -6,9 +6,11 @@ import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHitSupport;
+import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
@@ -30,14 +32,15 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
-    public List<PerformanceDocument> findByPlace(String place, String sort) {
+    public SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable) {
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("place", place));
+        searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);
-        searchQueryBuilder.withPageable(PageRequest.of(0, 15));
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
-        List<PerformanceDocument> documents = elasticsearchOperations
-                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
-        return documents;
+        return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")), searchQuery.getPageable());
+//        List<PerformanceDocument> documents = elasticsearchOperations
+//                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
+//        return documents;
     }
 
     @Override

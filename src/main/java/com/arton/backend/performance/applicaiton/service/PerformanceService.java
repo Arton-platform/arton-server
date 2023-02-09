@@ -2,8 +2,6 @@ package com.arton.backend.performance.applicaiton.service;
 
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.search.application.data.SearchResultDto;
-import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
@@ -11,7 +9,11 @@ import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.search.application.data.SearchResultDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,12 +85,14 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
                 .collect(Collectors.toList());
     }
 
-    public List<SearchResultDto> searchByPlace(String place, String sort) {
-        return Optional.ofNullable(performanceSearchRepository.findByPlace(place, sort))
-                .orElseGet(Collections::emptyList)
-                .stream()
-                .map(SearchResultDto::toResultFromDocument)
-                .collect(Collectors.toList());
+    public Page<SearchResultDto> searchByPlace(String place, String sort, Pageable pageable) {
+        // DTO 변환
+        return performanceSearchRepository.findByPlace(place, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
+//        return Optional.ofNullable(performanceSearchRepository.findByPlace(place, sort, pageable))
+//                .orElseGet(Collections::emptyList)
+//                .stream()
+//                .map(SearchResultDto::toResultFromDocument)
+//                .collect(Collectors.toList());
     }
 
     public List<SearchResultDto> searchByPerformanceType(String type, String sort) {

@@ -1,6 +1,8 @@
 package com.arton.backend.performance.applicaiton.port.out;
 
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchPage;
 
 import java.util.List;
 
@@ -10,6 +12,6 @@ public interface PerformanceSearchRepositoryPort {
     /** 공연타입 검색 */
     List<PerformanceDocument> findByPerformanceType(String type, String sort);
     /** 장소 검색 */
-    List<PerformanceDocument> findByPlace(String place, String sort);
+    SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable);
     void saveAll(List<PerformanceDocument> performanceDocuments);
 }

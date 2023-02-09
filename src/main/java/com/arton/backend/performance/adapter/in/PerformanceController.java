@@ -6,6 +6,7 @@ import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.adapter.out.persistence.repository.LogRepository;
@@ -14,6 +15,9 @@ import net.logstash.logback.argument.StructuredArguments;
 import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,8 +57,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/place")
-    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place, @RequestParam(name = "sort", required = false) String sort) {
-        List<SearchResultDto> documents = performanceSearchService.searchByPlace(place, sort);
+    public ResponseEntity<ResponseData<Page<SearchResultDto>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 15) Pageable pageable) {
+        Page<SearchResultDto> documents = performanceSearchService.searchByPlace(place, sort, pageable);
         MDC.put("keyword", place);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", place));
         MDC.remove("keyword");

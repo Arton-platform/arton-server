@@ -1,6 +1,8 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchPage;
 
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
  * JPA 와 동일하게 복잡한 쿼리는 Querydsl 같이 사용하면 된다.
  */
 public interface CustomPerformanceSearchRepository {
-    List<PerformanceDocument> findByPlace(String place, String sort);
+    SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable);
     List<PerformanceDocument> findByTitle(String title, String sort);
     List<PerformanceDocument> findByType(String type, String sort);
 }

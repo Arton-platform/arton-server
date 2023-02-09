@@ -3,6 +3,8 @@ package com.arton.backend.search.adapter.out.persistence.repository;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,8 +25,8 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
     }
 
     @Override
-    public List<PerformanceDocument> findByPlace(String place, String sort) {
-        return performanceSearchRepository.findByPlace(place, sort);
+    public SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable) {
+        return performanceSearchRepository.findByPlace(place, sort, pageable);
     }
 
     @Override
