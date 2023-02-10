@@ -70,6 +70,17 @@ dependencies {
 
 	// s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// 실시간 검색을 위한 elastic search
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+	// 테스트용 elastic search
+	testImplementation "org.testcontainers:elasticsearch:1.16.3"
+
+	// spring boot log to elastic search
+//	implementation 'net.logstash.logback:logstash-logback-encoder:4.11'
+	implementation fileTree(dir:  'lib', includes: ['*.jar'])
+
 }
 
 tasks.named('test') {

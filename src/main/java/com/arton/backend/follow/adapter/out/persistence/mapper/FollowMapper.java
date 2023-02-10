@@ -8,7 +8,7 @@ public class FollowMapper {
     public static Follow toDomain(FollowEntity follow) {
         return Follow.builder()
                 .createdDate(follow.getCreatedDate())
-                .updateDate(follow.getUpdateDate())
+                .updateDate(follow.getUpdatedDate())
                 .fromUser(follow.getFromUser())
                 .toUser(follow.getToUser())
                 .build();
@@ -17,7 +17,7 @@ public class FollowMapper {
     public static FollowEntity toEntity(Follow follow) {
         return FollowEntity.builder()
                 .createdDate(follow.getCreatedDate())
-                .updateDate(follow.getUpdateDate())
+                .updatedDate(follow.getUpdateDate())
                 .fromUser(follow.getFromUser())
                 .toUser(follow.getToUser())
                 .build();

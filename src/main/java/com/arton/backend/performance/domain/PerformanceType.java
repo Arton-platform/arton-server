@@ -12,6 +12,10 @@ public enum PerformanceType {
 
     private String value;
 
+    public String getValue() {
+        return value;
+    }
+
     PerformanceType(String value) {
         this.value = value;
     }
@@ -21,12 +25,17 @@ public enum PerformanceType {
     static {
         Map<String, PerformanceType> map = new ConcurrentHashMap<>();
         for (PerformanceType performanceType : PerformanceType.values()) {
-            map.put(performanceType.name(), performanceType);
+            map.put(performanceType.getValue(), performanceType);
         }
         PERFORMANCE_TYPE_MAP = unmodifiableMap(map);
     }
 
+    /**
+     * 매칭되는 타입이 없으면 null 반환.
+     * @param type
+     * @return
+     */
     public static PerformanceType get(String type) {
-        return hasText(type)?PERFORMANCE_TYPE_MAP.get(type):null;
+        return hasText(type) ?PERFORMANCE_TYPE_MAP.get(type):null;
     }
 }

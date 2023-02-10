@@ -26,7 +26,7 @@ public class Performer{
     /** 가입일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
     public void setArtist(Long artist) {
         this.artist = artist;
     }
@@ -37,6 +37,6 @@ public class Performer{
         this.artist = artist;
         this.performance = performance;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updateDate;
     }
 }
