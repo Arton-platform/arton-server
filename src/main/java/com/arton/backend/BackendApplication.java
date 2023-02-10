@@ -10,6 +10,7 @@ import com.arton.backend.test.TestDataInit;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

@@ -15,7 +15,7 @@ public class PerformanceImageMapper {
                 .performance(PerformanceMapper.toDomain(performanceImage.getPerformance()))
                 .imageUrl(performanceImage.getImageUrl())
                 .createdDate(performanceImage.getCreatedDate())
-                .updateDate(performanceImage.getUpdateDate())
+                .updateDate(performanceImage.getUpdatedDate())
                 .build();
     }
 

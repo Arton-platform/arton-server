@@ -11,7 +11,7 @@ public class PriceGradeMapper {
                 .createdDate(priceGrade.getCreatedDate())
                 .id(priceGrade.getId())
                 .gradeName(priceGrade.getGradeName())
-                .updateDate(priceGrade.getUpdateDate())
+                .updateDate(priceGrade.getUpdatedDate())
                 .price(priceGrade.getPrice())
                 .build();
     }
@@ -22,7 +22,7 @@ public class PriceGradeMapper {
                 .createdDate(priceGrade.getCreatedDate())
                 .id(priceGrade.getId())
                 .gradeName(priceGrade.getGradeName())
-                .updateDate(priceGrade.getUpdateDate())
+                .updateDate(priceGrade.getUpdatedDate())
                 .price(priceGrade.getPrice())
                 .build();
     }

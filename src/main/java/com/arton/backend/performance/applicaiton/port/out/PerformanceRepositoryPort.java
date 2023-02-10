@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PerformanceRepositoryPort {
+    List<Performance> findAll();
     List<Performance> findAllPerformances();
     List<Performance> findAllMusicals();
     List<Performance> findAllConcerts();

@@ -13,7 +13,7 @@ public class PerformerMapper {
                 .artist(performer.getArtist().getId())
                 .performance(performer.getPerformance().getId())
                 .id(performer.getId())
-                .updateDate(performer.getUpdateDate())
+                .updateDate(performer.getUpdatedDate())
                 .build();
     }
 
@@ -23,7 +23,7 @@ public class PerformerMapper {
                 .artist(ArtistEntity.builder().id(performer.getArtist()).build())
                 .performance(PerformanceEntity.builder().id(performer.getPerformance()).build())
                 .id(performer.getId())
-                .updateDate(performer.getUpdateDate())
+                .updateDate(performer.getUpdatedDate())
                 .build();
     }
 }

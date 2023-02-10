@@ -65,7 +65,7 @@ public class Performance {
     /** 가입일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
 
     @Builder
     public Performance(Long performanceId, String title, String description, Long hit, LocalDateTime ticketOpenDate, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<Performer> performers, List<PriceGrade> priceGradeList, float starScore, LocalDateTime createdDate, LocalDateTime updateDate) {
@@ -90,6 +90,6 @@ public class Performance {
         this.priceGradeList = priceGradeList;
         this.starScore = starScore;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updateDate;
     }
 }

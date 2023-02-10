@@ -27,8 +27,8 @@ public class UserImageEntity extends BaseEntity {
     }
 
     @Builder
-    public UserImageEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, String imageUrl, UserEntity user) {
-        super(createdDate, updateDate);
+    public UserImageEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String imageUrl, UserEntity user) {
+        super(createdDate, updatedDate);
         this.id = id;
         this.imageUrl = imageUrl;
         this.user = user;

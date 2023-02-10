@@ -27,8 +27,8 @@ public class FollowEntity extends BaseEntity {
     private Long toUser;
 
     @Builder
-    public FollowEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long fromUser, Long toUser) {
-        super(createdDate, updateDate);
+    public FollowEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long fromUser, Long toUser) {
+        super(createdDate, updatedDate);
         this.fromUser = fromUser;
         this.toUser = toUser;
     }

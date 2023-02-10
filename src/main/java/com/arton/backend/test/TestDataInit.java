@@ -22,6 +22,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -85,8 +86,10 @@ public class TestDataInit {
             followRepository.save(build);
             followRepository.save(build2);
         }
-
-        for (int i = 0; i < 20; i++) {
+        String[] titles = {"이석훈", "이석훈 2021 연말 콘서트", "이석훈&SG워너비 동행", "김민수 연말콘서트"};
+        String[] places = {"전주", "전라북도 전주", "서울", "서울 특별시"};
+        LocalDateTime[] times = {LocalDateTime.now(), LocalDateTime.now().minusDays(5L), LocalDateTime.now().minusYears(1L), LocalDateTime.now().minusDays(2L)};
+        for (int i = 0; i < 1000; i++) {
             ArtistEntity artist = ArtistEntity.builder()
                     .age(random.nextInt(30) + i)
                     .name("test" + i)
@@ -98,10 +101,12 @@ public class TestDataInit {
 
             PerformanceEntity performance = PerformanceEntity.builder()
                     .performanceType(i % 2 == 0 ? PerformanceType.MUSICAL : PerformanceType.CONCERT)
-                    .description("test" + i)
-                    .title("test" + i)
+                    .description("감동의 콘서트로 초대합니다.")
+                    .title(titles[random.nextInt(4)])
                     .performers(new ArrayList<>())
                     .priceGradeList(new ArrayList<>())
+                    .place(places[random.nextInt(4)])
+                    .startDate(times[random.nextInt(4)])
                     .build();
             performances.add(performance);
 
