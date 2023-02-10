@@ -1,0 +1,10 @@
+{
+  "properties" : {
+    "id" : {"type" : "keyword"},
+    "title" : {"type" : "text", "fields": {"kor":  {"type":  "text", "analyzer": "korean"}, "ngram":  {"type" : "text", "analyzer":  "my_ngram_analyzer"}}},
+    "musicalDateTime" : {"type" : "keyword"},
+    "place" : {"type" : "text", "analyzer" : "korean"},
+    "imageUrl" : {"type" : "text"},
+    "performanceType" : {"type" : "text", "analyzer" : "korean"}
+  }
+}

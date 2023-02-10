@@ -12,26 +12,26 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(indexName = "performance")
-@Mapping(mappingPath = "elastic/performance-mapping.json")
-@Setting(settingPath = "elastic/performance-setting.json")
+@Mapping(mappingPath = "static/elastic/performance-mapping.json")
+@Setting(settingPath = "static/elastic/performance-setting.json")
 public class PerformanceDocument{
     @Id
-    @Field(type = FieldType.Keyword)
+//    @Field(type = FieldType.Keyword)
     private Long id;
     /** 제목 */
-    @Field(type = FieldType.Text)
+//    @Field(type = FieldType.Text)
     private String title;
     /** 공연 일시 */
-    @Field(type = FieldType.Text)
+//    @Field(type = FieldType.Text)
     private String musicalDateTime;
     /** 공연장소 */
-    @Field(type = FieldType.Text)
+//    @Field(type = FieldType.Text)
     private String place;
     /** 이미지 링크 */
-    @Field(type = FieldType.Text)
+//    @Field(type = FieldType.Text)
     private String imageUrl;
     /** 뮤지컬 or 콘서트 */
-    @Field(type = FieldType.Text)
+//    @Field(type = FieldType.Text)
     private String performanceType;
     /** 공연 시작일 */
     @Field(type = FieldType.Date, format = {DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis})

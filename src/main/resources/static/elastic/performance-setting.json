@@ -1,4 +1,7 @@
 {
+  "index" : {
+  "max_ngram_diff": 5
+  },
   "analysis": {
     "analyzer": {
       "korean": {
@@ -11,8 +14,8 @@
     "tokenizer": {
       "my_ngram_tokenizer": {
         "type": "ngram",
-        "min_gram": 2,
-        "max_gram": 5
+        "min_gram": "2",
+        "max_gram": "5"
       }
     }
   }

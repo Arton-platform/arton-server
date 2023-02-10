@@ -5,6 +5,8 @@ import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocu
 import com.arton.backend.search.domain.IndexName;
 import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 import static org.springframework.util.StringUtils.hasText;
 
 @Repository
@@ -46,7 +48,13 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
 
     @Override
     public SearchPage<PerformanceDocument> findByTitle(String title, String sort, Pageable pageable) {
-        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("title", title));
+        // 내부 자세한 쿼리
+        QueryBuilder query = QueryBuilders.boolQuery()
+                .should(termQuery("title", title))
+                .should(matchPhraseQuery("title.ngram", title))
+                .minimumShouldMatch(1);
+        // 쿼리에 넣기
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();

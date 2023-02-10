@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Document(indexName = "artist")
-@Mapping(mappingPath = "elastic/artist-mapping.json")
-@Setting(settingPath = "elastic/artist-setting.json")
+@Mapping(mappingPath = "static/els/artist-mapping.json")
+@Setting(settingPath = "static/els/artist-setting.json")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArtistDocument {
