@@ -2,6 +2,7 @@ package com.arton.backend.performance.adapter.in;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
+import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
@@ -10,6 +11,14 @@ import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocu
 import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.adapter.out.persistence.repository.LogRepository;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import net.logstash.logback.argument.StructuredArguments;
 import org.jboss.logging.MDC;
@@ -25,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Tag(name = "PERFORMANCE", description = "공연 API")
 @RestController
 @RequestMapping("/performance")
 @RequiredArgsConstructor
@@ -34,6 +44,20 @@ public class PerformanceController {
     private final LogRepository logRepository;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
+    @Operation(summary = "회원가입시 찜에 필요한 공연 리스트 불러오기", description = "회원가입시 찜에 필요한 공연 리스트를 가져옵니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
+                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = PerformanceInterestDto.class))))})
+    @GetMapping("/list/zzim")
+    public ResponseEntity<List<PerformanceInterestDto>> getPerformanceZzimList() {
+        List<PerformanceInterestDto> allPerformances = performanceService.getZzimList();
+        return ResponseEntity.ok(allPerformances);
+    }
+
+    @Operation(summary = "전체 공연 리스트 불러오기", description = "전체 공연 리스트를 가져옵니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
+                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = PerformanceInterestDto.class))))})
     @GetMapping("/list")
     public ResponseEntity<List<PerformanceInterestDto>> getPerformanceList() {
         List<PerformanceInterestDto> allPerformances = performanceService.getZzimList();
@@ -50,12 +74,17 @@ public class PerformanceController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Hidden
     @PostMapping("/documents")
     public ResponseEntity<CommonResponse> saveDocuments() {
         performanceSearchService.saveAllDocuments();
         return ResponseEntity.ok(CommonResponse.builder().message("ES에 성공적으로 저장하였습니다.").status(HttpStatus.OK.value()).build());
     }
 
+    @Operation(summary = "공연장소 검색하기", description = "공연장소로 공연을 검색합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "검색 성공",
+                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = SearchResultDto.class))))})
     @GetMapping("/search/place")
     public ResponseEntity<ResponseData<Page<SearchResultDto>>> searchByPlace(HttpServletRequest request, @RequestParam(name = "query") String place, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
         Page<SearchResultDto> documents = performanceSearchService.searchByPlace(place, sort, pageable);
@@ -66,6 +95,10 @@ public class PerformanceController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "공연타입 검색하기", description = "공연타입으로 공연을 검색합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "검색 성공",
+                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = SearchResultDto.class))))})
     @GetMapping("/search/type")
     public ResponseEntity<ResponseData<Page<SearchResultDto>>> searchByPerformanceType(HttpServletRequest request, @RequestParam(name = "query", required = true) String performanceType, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
         Page<SearchResultDto> documents = performanceSearchService.searchByPerformanceType(performanceType, sort, pageable);
@@ -76,6 +109,10 @@ public class PerformanceController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "공연명 검색하기", description = "공연명으로 공연을 검색합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "검색 성공",
+                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = SearchResultDto.class))))})
     @GetMapping("/search/title")
     public ResponseEntity<ResponseData<Page<SearchResultDto>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
         Page<SearchResultDto> documents = performanceSearchService.searchByTitle(query, sort, pageable);
@@ -86,6 +123,11 @@ public class PerformanceController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "실시간 검색어 화면", description = "실시간 검색어 순위를 보여줍니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "검색 성공",
+                    content = @Content(schema = @Schema(implementation = SearchPageDto.class))),
+    @ApiResponse(responseCode = "500", description = "실시간 검색어 집계 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/search")
     public ResponseEntity<ResponseData<SearchPageDto>> searchLog() {
         SearchPageDto searchPage = logRepository.getRecentTop10Keywords();

@@ -1,5 +1,6 @@
 package com.arton.backend.search.application.data;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,8 +9,11 @@ import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Schema(description = "실시간 키워드 정보")
 public class RealTimeKeywordDto {
+    @Schema(description = "키워드")
     private String keyword;
+    @Schema(description = "특정 시간 동안 검색 횟수")
     private Long count;
 
     @Builder
