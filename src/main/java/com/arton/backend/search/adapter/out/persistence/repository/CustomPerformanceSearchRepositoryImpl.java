@@ -5,6 +5,7 @@ import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocu
 import com.arton.backend.search.domain.IndexName;
 import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -36,7 +37,11 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
 
     @Override
     public SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable) {
-        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("place", place));
+        QueryBuilder query = boolQuery()
+                .should(termQuery("place", place))
+                .should(matchPhraseQuery("place.ngram", place))
+                .minimumShouldMatch(1);
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
@@ -66,7 +71,11 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
 
     @Override
     public SearchPage<PerformanceDocument> findByType(String type, String sort, Pageable pageable) {
-        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("performanceType", type));
+        QueryBuilder query = boolQuery()
+                .should(termQuery("performanceType", type))
+                .should(matchPhraseQuery("performanceType.ngram", type))
+                .minimumShouldMatch(1);
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
