@@ -45,23 +45,27 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
     }
 
     @Override
-    public List<PerformanceDocument> findByTitle(String title, String sort) {
+    public SearchPage<PerformanceDocument> findByTitle(String title, String sort, Pageable pageable) {
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("title", title));
+        searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
-        List<PerformanceDocument> documents = elasticsearchOperations
-                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())).stream().map(SearchHit::getContent).collect(Collectors.toList());
-        return documents;
+        return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
+//        List<PerformanceDocument> documents = elasticsearchOperations
+//                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())).stream().map(SearchHit::getContent).collect(Collectors.toList());
+//        return documents;
     }
 
     @Override
-    public List<PerformanceDocument> findByType(String type, String sort) {
+    public SearchPage<PerformanceDocument> findByType(String type, String sort, Pageable pageable) {
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(matchQuery("performanceType", type));
+        searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
-        List<PerformanceDocument> documents = elasticsearchOperations
-                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())).stream().map(SearchHit::getContent).collect(Collectors.toList());
-        return documents;
+        return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
+//        List<PerformanceDocument> documents = elasticsearchOperations
+//                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())).stream().map(SearchHit::getContent).collect(Collectors.toList());
+//        return documents;
     }
 
     /**

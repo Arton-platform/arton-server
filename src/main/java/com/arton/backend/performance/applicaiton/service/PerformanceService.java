@@ -77,29 +77,17 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
         performanceSearchRepository.saveAll(documents);
     }
 
-    public List<SearchResultDto> searchByTitle(String title, String sort) {
-        return Optional.ofNullable(performanceSearchRepository.findByTitle(title, sort))
-                .orElseGet(Collections::emptyList)
-                .stream()
-                .map(SearchResultDto::toResultFromDocument)
-                .collect(Collectors.toList());
+    public Page<SearchResultDto> searchByTitle(String title, String sort, Pageable pageable) {
+        return performanceSearchRepository.findByTitle(title, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
     }
 
     public Page<SearchResultDto> searchByPlace(String place, String sort, Pageable pageable) {
         // DTO 변환
         return performanceSearchRepository.findByPlace(place, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
-//        return Optional.ofNullable(performanceSearchRepository.findByPlace(place, sort, pageable))
-//                .orElseGet(Collections::emptyList)
-//                .stream()
-//                .map(SearchResultDto::toResultFromDocument)
-//                .collect(Collectors.toList());
     }
 
-    public List<SearchResultDto> searchByPerformanceType(String type, String sort) {
-        return Optional.ofNullable(performanceSearchRepository.findByPerformanceType(type, sort))
-                .orElseGet(Collections::emptyList)
-                .stream()
-                .map(SearchResultDto::toResultFromDocument)
-                .collect(Collectors.toList());
+    public Page<SearchResultDto> searchByPerformanceType(String type, String sort, Pageable pageable) {
+        return performanceSearchRepository.findByPerformanceType(type, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
+
     }
 }

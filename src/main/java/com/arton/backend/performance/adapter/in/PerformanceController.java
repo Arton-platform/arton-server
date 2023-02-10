@@ -67,8 +67,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/type")
-    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByPerformanceType(HttpServletRequest request, @RequestParam(name = "query", required = true) String performanceType, @RequestParam(name = "sort", required = false) String sort) {
-        List<SearchResultDto> documents = performanceSearchService.searchByPerformanceType(performanceType, sort);
+    public ResponseEntity<ResponseData<Page<SearchResultDto>>> searchByPerformanceType(HttpServletRequest request, @RequestParam(name = "query", required = true) String performanceType, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
+        Page<SearchResultDto> documents = performanceSearchService.searchByPerformanceType(performanceType, sort, pageable);
         MDC.put("keyword", performanceType);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", performanceType));
         MDC.remove("keyword");
@@ -77,8 +77,8 @@ public class PerformanceController {
     }
 
     @GetMapping("/search/title")
-    public ResponseEntity<ResponseData<List<SearchResultDto>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query, @RequestParam(name = "sort", required = false) String sort) {
-        List<SearchResultDto> documents = performanceSearchService.searchByTitle(query, sort);
+    public ResponseEntity<ResponseData<Page<SearchResultDto>>> search(HttpServletRequest request, @RequestParam(name = "query", required = true) String query, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
+        Page<SearchResultDto> documents = performanceSearchService.searchByTitle(query, sort, pageable);
         MDC.put("keyword", query);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", query));
         MDC.remove("keyword");

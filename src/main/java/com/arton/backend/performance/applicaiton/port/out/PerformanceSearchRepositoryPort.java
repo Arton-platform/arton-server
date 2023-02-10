@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface PerformanceSearchRepositoryPort {
     /** 제목 검색 */
-    List<PerformanceDocument> findByTitle(String title, String sort);
+    SearchPage<PerformanceDocument> findByTitle(String title, String sort, Pageable pageable);
     /** 공연타입 검색 */
-    List<PerformanceDocument> findByPerformanceType(String type, String sort);
+    SearchPage<PerformanceDocument> findByPerformanceType(String type, String sort, Pageable pageable);
     /** 장소 검색 */
     SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable);
     void saveAll(List<PerformanceDocument> performanceDocuments);

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PerformanceSearchUseCase {
     void saveAllDocuments();
-    List<SearchResultDto> searchByTitle(String title, String sort);
+    Page<SearchResultDto> searchByTitle(String title, String sort, Pageable pageable);
     Page<SearchResultDto> searchByPlace(String place, String sort, Pageable pageable);
-    List<SearchResultDto> searchByPerformanceType(String type, String sort);
+    Page<SearchResultDto> searchByPerformanceType(String type, String sort, Pageable pageable);
 }

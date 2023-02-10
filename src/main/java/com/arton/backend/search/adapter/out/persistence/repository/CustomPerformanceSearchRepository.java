@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface CustomPerformanceSearchRepository {
     SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable);
-    List<PerformanceDocument> findByTitle(String title, String sort);
-    List<PerformanceDocument> findByType(String type, String sort);
+    SearchPage<PerformanceDocument> findByTitle(String title, String sort, Pageable pageable);
+    SearchPage<PerformanceDocument> findByType(String type, String sort, Pageable pageable);
 }
