@@ -3,6 +3,7 @@ package com.arton.backend.zzim.adapter.out.persistence.entity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
+import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimCompoundKey;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,13 +15,18 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Performance_Zzim")
 @ToString
+@IdClass(PerformanceZzimCompoundKey.class)
 public class PerformanceZzimEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_id")
     private PerformanceEntity performance;

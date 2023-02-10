@@ -25,6 +25,8 @@ public enum ErrorCode {
     NAVER_SIMPLE_LOGIN_ERROR(500, "NAVER_SIMPLE_LOGIN_ERROR", "네이버 간편 로그인에 실패하였습니다."),
     INVALID_URI_REQUEST(400, "INVALID_URI_REQUEST", "잘못된 URI 요청입니다."),
     FORBIDDEN_REQUEST(403, "INVALID_REQUEST", "잘못된 요청입니다."),
+    JSON_PROCESSING_ERROR(600, "JSON_PROCESSING_ERROR", "JSON 변환 오류 입니다."),
+    IO_EXCEPTION(600, "IO_EXCEPTION", "입출력 오류 입니다."),
     SELECT_ERROR(404, "SELECT_ERROR", "조회에 실패 했습니다.");
     private int status;
     private String errorCode;

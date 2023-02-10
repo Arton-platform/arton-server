@@ -4,6 +4,7 @@ import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performer.adapter.out.persistence.entity.PerformerEntity;
 import com.arton.backend.price.adapter.out.persistence.entity.PriceGradeEntity;
+import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,8 @@ public class PerformanceEntity extends BaseEntity {
     private String description;
     /** 좋아요 */
     private Long hit;
+    /** 티켓 오픈 날자 */
+    private LocalDateTime ticketOpenDate;
     /** 공연 시작일 */
     private LocalDateTime startDate;
     /** 공연 종료일 */

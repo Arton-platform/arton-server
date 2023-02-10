@@ -5,6 +5,9 @@ import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.domain.Performance;
 import lombok.*;
 
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
@@ -17,6 +20,8 @@ public class Performer{
     /** 아티스트 */
     private Long artist;
     /** 공연 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "performance_id")
     private Long performance;
     /** 가입일 */
     private LocalDateTime createdDate;

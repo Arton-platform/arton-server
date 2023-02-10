@@ -1,5 +1,6 @@
 package com.arton.backend;
 
+
 import com.arton.backend.artist.adapter.out.persistence.repository.ArtistRepository;
 import com.arton.backend.follow.adapter.out.persistence.repository.FollowRepository;
 import com.arton.backend.image.adapter.out.persistence.repository.UserImageRepository;
@@ -14,10 +15,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableAsync
 @EnableJpaAuditing
+@EnableScheduling
 @SpringBootApplication
 public class BackendApplication {
 

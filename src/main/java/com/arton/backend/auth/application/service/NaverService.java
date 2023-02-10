@@ -1,5 +1,6 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.auth.application.data.OAuthSignupDto;
 import com.arton.backend.auth.application.data.TokenDto;
 import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
@@ -30,7 +31,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
+import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j
 @Service
@@ -64,9 +70,13 @@ public class NaverService implements NaverUseCase {
      * @return
      */
     @Override
-    public synchronized TokenDto login(String code, String status) {
-        String accessToken = getAccessToken(code, status);
-        User register = signup(accessToken);
+    public synchronized TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto) {
+        String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
+        JsonNode userInfo = getUserInfo(accessToken).get("response");
+        if (!userInfo.get("id").asText().equals(signupDto.getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND);
+        }
+        User register = signup(signupDto);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getNaverId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
@@ -139,27 +149,23 @@ public class NaverService implements NaverUseCase {
      * 아니면 회원가입 진행 + return
      * kakao ageRange example
      * 0~9, 10~14, 15~19, 20~29, ...
-     * @param accessToken
+     * @param signupDto
      * @return
      */
-    private User signup(String accessToken) {
-        JsonNode userInfo = getUserInfo(accessToken).get("response");
-        String id = userInfo.get("id").asText();
+
+    private User signup(OAuthSignupDto signupDto) {
+        String id = signupDto.getId();
         User user = userRepository.findByNaverId(id).orElse(null);
         if (user == null) {
-            String nickName = userInfo.get("nickname").asText();
-            String email = userInfo.get("email").asText();
-            String ageRange = userInfo.get("age").asText();
-            int age = Integer.parseInt(ageRange.substring(0, 1));
-            String gender = userInfo.get("gender").asText();
             /** password is user's own kakao id */
             String password = id;
-            user = User.builder().email(email)
-                    .gender(getGender(gender))
+            user = User.builder()
+                    .email(hasText(signupDto.getEmail()) ? signupDto.getEmail() : "")
+                    .gender(hasText(signupDto.getGender()) ? getGender(signupDto.getGender()) : Gender.ETC)
                     .password(passwordEncoder.encode(password))
                     .naverId(id)
-                    .nickname(nickName)
-                    .ageRange(AgeRange.get(age))
+                    .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
+                    .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
                     .auth(UserRole.NORMAL)
                     .signupType(SignupType.NAVER)
                     .userStatus(true)

@@ -83,14 +83,38 @@ public class UserEntity extends BaseEntity {
         performanceZzims.add(performanceZzim);
         performanceZzim.setUser(this);
     }
-    public void setPassword(String newPassword){
+    public UserEntity setPassword(String newPassword){
         this.password = newPassword;
+        return this;
     }
-    public void changeAlertState(Boolean state){
+    public UserEntity changeAlertState(Boolean state){
         this.alertState = state;
+        return this;
     }
-    public void setSelfDescription(String selfDescription) {
+    public UserEntity setSelfDescription(String selfDescription) {
         this.selfDescription = selfDescription;
+        return this;
+    }
+
+    public UserEntity changeNickName(String nickname){
+        this.nickname = nickname;
+        return this;
+    }
+    public UserEntity changeEmail(String email){
+        this.email = email;
+        return this;
+    }
+    public UserEntity changeGender(Gender gender){
+        this.gender = gender;
+        return this;
+    }
+    public UserEntity changeAgeRange(AgeRange ageRange){
+        this.ageRange = ageRange;
+        return this;
+    }
+    public UserEntity changeAuth(UserRole auth){
+        this.auth = auth;
+        return this;
     }
 
     @Builder
