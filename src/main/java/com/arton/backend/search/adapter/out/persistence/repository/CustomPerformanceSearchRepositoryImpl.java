@@ -5,14 +5,12 @@ import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocu
 import com.arton.backend.search.domain.IndexName;
 import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -23,9 +21,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 import static org.springframework.util.StringUtils.hasText;
@@ -46,9 +41,6 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
-//        List<PerformanceDocument> documents = elasticsearchOperations
-//                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of("performance*")).stream().map(SearchHit::getContent).collect(Collectors.toList());
-//        return documents;
     }
 
     @Override
@@ -64,9 +56,6 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
-//        List<PerformanceDocument> documents = elasticsearchOperations
-//                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())).stream().map(SearchHit::getContent).collect(Collectors.toList());
-//        return documents;
     }
 
     @Override
@@ -80,9 +69,6 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         setSort(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
-//        List<PerformanceDocument> documents = elasticsearchOperations
-//                . search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())).stream().map(SearchHit::getContent).collect(Collectors.toList());
-//        return documents;
     }
 
     /**
