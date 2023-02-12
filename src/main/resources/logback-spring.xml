@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- Console -->
-    <springProfile name="console-logging">
+    <springProfile name="local">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{10} - %msg%n</pattern>
@@ -10,7 +10,7 @@
     </springProfile>
 
     <!-- Logstash local-->
-    <springProfile name="logstash-local">
+    <springProfile name="local">
         <appender name="LOGSTASH-LOCAL" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
             <destination>local:4560</destination>
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
@@ -19,7 +19,7 @@
     </springProfile>
 
     <!-- Logstash prod-->
-    <springProfile name="logstash-aws">
+    <springProfile name="aws">
         <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
             <destination>3.39.238.131:4560</destination>
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
@@ -29,14 +29,12 @@
 
 
     <root>
-        <springProfile name="console-logging">
+        <springProfile name="local">
             <appender-ref ref="CONSOLE"/>
-        </springProfile>
-        <springProfile name="logstash-aws">
-            <appender-ref ref="LOGSTASH" />
-        </springProfile>
-        <springProfile name="logstash-local">
             <appender-ref ref="LOGSTASH-LOCAL" />
+        </springProfile>
+        <springProfile name="aws">
+            <appender-ref ref="LOGSTASH" />
         </springProfile>
     </root>
 </configuration>
