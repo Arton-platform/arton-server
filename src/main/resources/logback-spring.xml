@@ -7,10 +7,6 @@
                 <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{10} - %msg%n</pattern>
             </encoder>
         </appender>
-    </springProfile>
-
-    <!-- Logstash local-->
-    <springProfile name="local">
         <appender name="LOGSTASH-LOCAL" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
             <destination>local:4560</destination>
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
@@ -18,8 +14,8 @@
         </appender>
     </springProfile>
 
-    <!-- Logstash prod-->
     <springProfile name="aws">
+        <!-- Logstash aws-->
         <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
             <destination>3.39.238.131:4560</destination>
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
