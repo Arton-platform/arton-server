@@ -1,12 +1,12 @@
 package com.arton.backend.auth.adapter.in;
 
 import com.arton.backend.auth.application.data.*;
-import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.auth.application.port.in.AuthUseCase;
+import com.arton.backend.auth.application.port.in.OAuthUseCase;
 import com.arton.backend.infra.mail.EmailUseCase;
 import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,13 +43,13 @@ public class AuthController {
     @Operation(summary = "간편 회원가입", description = "SNS 간편로그인을 통해 회원가입을 진행합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공",
-                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+                    content = @Content(schema = @Schema(implementation = TokenDto.class))),
             @ApiResponse(responseCode = "401", description = "유효하지않은 토큰",
-                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "ID값 불일치",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/signup/oauth")
-    public ResponseEntity<TokenDto> loginByKakao(HttpServletRequest request, @RequestBody @Valid OAuthSignupDto signupDto){
+    public ResponseEntity<TokenDto> loginByOauth(HttpServletRequest request, @RequestBody @Valid OAuthSignupDto signupDto){
         TokenDto tokenDto = oAuthUseCase.signup(request, signupDto);
         return ResponseEntity.ok(tokenDto);
     }
@@ -67,7 +67,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "회원가입 성공",
                     content = @Content(schema = @Schema(implementation = CommonResponse.class))),
             @ApiResponse(responseCode = "400", description = "빈파일 업로드",
-                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "패스워드 불일치",
                 content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "409", description = "이메일 중복",
