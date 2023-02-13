@@ -9,6 +9,7 @@ import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.data.SearchPageDto;
+import com.arton.backend.search.application.data.SearchPageDtoV2;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.adapter.out.persistence.repository.LogRepository;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -131,6 +132,17 @@ public class PerformanceController {
     @GetMapping("/search")
     public ResponseEntity<ResponseData<SearchPageDto>> searchLog() {
         SearchPageDto searchPage = logRepository.getRecentTop10Keywords();
+        ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), searchPage);
+        return ResponseEntity.ok().body(response);
+    }
+    @Operation(summary = "실시간 검색어 Advanced", description = "실시간 검색어 순위를 보여줍니다. Advanced 버전")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "검색 성공",
+                    content = @Content(schema = @Schema(implementation = SearchPageDto.class))),
+            @ApiResponse(responseCode = "500", description = "실시간 검색어 집계 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
+    @GetMapping("/search/v2")
+    public ResponseEntity<ResponseData<SearchPageDtoV2>> searchLogV2() {
+        SearchPageDtoV2 searchPage = logRepository.getAdvancedTop10Keywords();
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), searchPage);
         return ResponseEntity.ok().body(response);
     }
