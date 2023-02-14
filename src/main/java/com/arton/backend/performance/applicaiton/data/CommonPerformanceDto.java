@@ -1,5 +1,6 @@
 package com.arton.backend.performance.applicaiton.data;
 
+import com.arton.backend.performance.domain.PerformanceType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,11 +17,14 @@ public class CommonPerformanceDto {
     private String title;
     @Schema(description = "이미지 링크")
     private String imageUrl;
+    @Schema(description = "공연타입(뮤지컬/콘서트)")
+    private PerformanceType performanceType;
 
     @Builder
-    public CommonPerformanceDto(Long id, String title, String imageUrl) {
+    public CommonPerformanceDto(Long id, String title, String imageUrl, PerformanceType performanceType) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
+        this.performanceType = performanceType;
     }
 }
