@@ -100,3 +100,4 @@ fabric.properties
 application-aws.yml
 application-local.yml
 /server-log/
+.vscode/settings.json
