@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "메인 페이지에 공통으로 사용할 Dto")
+@Schema(description = "메인 페이지에 공통으로 사용할 공연 Dto")
 public class CommonPerformanceDto {
     @Schema(description = "공연 ID")
     private Long id;
