@@ -8,4 +8,11 @@ public interface ManageAnnouncementUseCase {
 
     List<Announcement> allAnnouncement();
 
+    Announcement getAnnouncement(Long id);
+
+    void announcementRegist(Announcement announcement);
+
+    void announcementUpdate(Announcement announcement);
+
+    void announcementDelete(Long id);
 }
