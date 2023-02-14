@@ -50,17 +50,17 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
 
     @Override
     public List<Performance> findPopularPerformances() {
-        return null;
+        return performanceRepository.getPerformanceByEndDateASC();
     }
 
     @Override
     public List<Performance> findStartingSoonPerformances() {
-        return null;
+        return performanceRepository.getPerformanceByStartDateASC();
     }
 
     @Override
     public List<Performance> findEndingSoonPerformances() {
-        return null;
+        return performanceRepository.getPerformanceByEndDateASC();
     }
 
     @Override

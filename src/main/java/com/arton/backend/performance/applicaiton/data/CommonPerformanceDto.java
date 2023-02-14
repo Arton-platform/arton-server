@@ -1,5 +1,6 @@
 package com.arton.backend.performance.applicaiton.data;
 
+import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -26,5 +27,14 @@ public class CommonPerformanceDto {
         this.title = title;
         this.imageUrl = imageUrl;
         this.performanceType = performanceType;
+    }
+
+    public static CommonPerformanceDto domainToDto(Performance performance) {
+        return CommonPerformanceDto.builder()
+                .id(performance.getPerformanceId())
+                .title(performance.getTitle())
+                .imageUrl(performance.getImageUrl())
+                .performanceType(performance.getPerformanceType())
+                .build();
     }
 }
