@@ -27,8 +27,10 @@ public class PerformanceEntity extends BaseEntity {
     private String description;
     /** 좋아요 */
     private Long hit;
-    /** 티켓 오픈 날자 */
+    /** 티켓 오픈 날짜 */
     private LocalDateTime ticketOpenDate;
+    /** 티켓 종료 날짜 */
+    private LocalDateTime ticketEndDate;
     /** 공연 시작일 */
     private LocalDateTime startDate;
     /** 공연 종료일 */
@@ -65,7 +67,7 @@ public class PerformanceEntity extends BaseEntity {
     private float starScore;
 
     @Builder
-    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGradeEntity> priceGradeList, float starScore) {
+    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGradeEntity> priceGradeList, float starScore, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate) {
         super(createdDate, updatedDate);
         this.id = id;
         this.title = title;
@@ -86,5 +88,7 @@ public class PerformanceEntity extends BaseEntity {
         this.performers = performers;
         this.priceGradeList = priceGradeList;
         this.starScore = starScore;
+        this.ticketEndDate = ticketEndDate;
+        this.ticketOpenDate = ticketOpenDate;
     }
 }
