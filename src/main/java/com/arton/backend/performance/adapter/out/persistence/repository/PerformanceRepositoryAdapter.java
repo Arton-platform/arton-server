@@ -49,6 +49,21 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
+    public List<Performance> findPopularPerformances() {
+        return null;
+    }
+
+    @Override
+    public List<Performance> findStartingSoonPerformances() {
+        return null;
+    }
+
+    @Override
+    public List<Performance> findEndingSoonPerformances() {
+        return null;
+    }
+
+    @Override
     public Performance save(Performance performance) {
         return toDomain(performanceRepository.save(toEntity(performance)));
     }

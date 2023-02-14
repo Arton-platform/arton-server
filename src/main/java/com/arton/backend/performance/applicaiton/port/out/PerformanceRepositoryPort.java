@@ -12,6 +12,9 @@ public interface PerformanceRepositoryPort {
     List<Performance> findAllMusicals();
     List<Performance> findAllConcerts();
     List<Performance> findByIds(List<Long> ids);
+    List<Performance> findPopularPerformances();
+    List<Performance> findStartingSoonPerformances();
+    List<Performance> findEndingSoonPerformances();
     Optional<PerformanceEntity> findById(Long id);
     Optional<Performance> findOne(Long id);
 }

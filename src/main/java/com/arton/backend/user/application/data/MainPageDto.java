@@ -20,7 +20,7 @@ public class MainPageDto {
     @Schema(description = "아티스트")
     private List<CommonArtistDto> artists = new ArrayList<>();
     @Schema(description = "곧 공연 시작")
-    private List<StartDateBasedPerformanceDto> soonOpened = new ArrayList<>();
+    private List<StartDateBasedPerformanceDto> startingSoon = new ArrayList<>();
     @Schema(description = "곧 공연 종료")
-    private List<EndDateBasedPerformanceDto> soonEnded = new ArrayList<>();
+    private List<EndDateBasedPerformanceDto> endingSoon = new ArrayList<>();
 }
