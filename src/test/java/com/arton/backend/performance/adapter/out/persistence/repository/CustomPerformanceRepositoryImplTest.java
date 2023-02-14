@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Transactional(readOnly = true)
 @SpringBootTest
 class CustomPerformanceRepositoryImplTest {
     @Autowired
@@ -21,7 +21,6 @@ class CustomPerformanceRepositoryImplTest {
     /**
      * getPerformanceByStartDateASC 기능 테스트
      */
-    @Transactional(readOnly = true)
     @Test
     void getPerformanceByStartDateASCTest() {
         List<Performance> performanceByStartDateASC = performanceRepository.getPerformanceByStartDateASC();
@@ -32,6 +31,36 @@ class CustomPerformanceRepositoryImplTest {
             System.out.println("performanceByStartDateASC = " + performanceByStartDateASC.size());
             System.out.println("total = " + total.size());
             Assertions.assertThat(performanceByStartDateASC.size()).isEqualTo(collect.size());
+        }
+    }
+
+    @Test
+    void getPerformanceByEndDateASCTest() {
+        List<Performance> performances = performanceRepository.getPerformanceByEndDateASC();
+        List<PerformanceEntity> collect = performanceRepository.findAll().stream().filter(performanceEntity -> performanceEntity.getStartDate().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+        if (performances != null && collect != null) {
+            System.out.println("collect = " + collect.size());
+            System.out.println("performanceByStartDateASC = " + performances.size());
+            int idx = 1;
+            for (Performance performance : performances) {
+                System.out.println("performance " + (idx++) +" = " + performance);
+            }
+            Assertions.assertThat(performances.size()).isEqualTo(collect.size());
+        }
+    }
+
+    @Test
+    void getPopularPerformanceTest() {
+        List<Performance> performances = performanceRepository.getPopularPerformances();
+        List<PerformanceEntity> collect = performanceRepository.findAll().stream().filter(performanceEntity -> performanceEntity.getStartDate().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+        if (performances != null && collect != null) {
+            System.out.println("collect = " + collect.size());
+            System.out.println("performanceByStartDateASC = " + performances.size());
+            int idx = 1;
+            for (Performance performance : performances) {
+                System.out.println("performance " + (idx++) +" = " + performance);
+            }
+            Assertions.assertThat(performances.size()).isEqualTo(collect.size());
         }
     }
 }
