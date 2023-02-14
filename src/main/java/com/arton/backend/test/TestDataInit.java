@@ -107,6 +107,7 @@ public class TestDataInit {
                     .priceGradeList(new ArrayList<>())
                     .place(places[random.nextInt(4)])
                     .startDate(times[random.nextInt(4)])
+                    .ticketOpenDate(times[random.nextInt(4)].minusDays(3L))
                     .ticketEndDate(times[random.nextInt(4)].minusDays(3L))
                     .hit((long)random.nextInt(1000)+1)
                     .build();

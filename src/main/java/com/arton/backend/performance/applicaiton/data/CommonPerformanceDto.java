@@ -3,14 +3,13 @@ package com.arton.backend.performance.applicaiton.data;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Schema(description = "메인 페이지에 공통으로 사용할 공연 Dto")
+@ToString
 public class CommonPerformanceDto {
     @Schema(description = "공연 ID")
     private Long id;
@@ -21,20 +20,7 @@ public class CommonPerformanceDto {
     @Schema(description = "공연타입(뮤지컬/콘서트)")
     private PerformanceType performanceType;
 
-    @Builder
-    public CommonPerformanceDto(Long id, String title, String imageUrl, PerformanceType performanceType) {
-        this.id = id;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.performanceType = performanceType;
-    }
-
     public static CommonPerformanceDto domainToDto(Performance performance) {
-        return CommonPerformanceDto.builder()
-                .id(performance.getPerformanceId())
-                .title(performance.getTitle())
-                .imageUrl(performance.getImageUrl())
-                .performanceType(performance.getPerformanceType())
-                .build();
+        return new CommonPerformanceDto(performance.getPerformanceId(), performance.getTitle(), performance.getImageUrl(), performance.getPerformanceType());
     }
 }

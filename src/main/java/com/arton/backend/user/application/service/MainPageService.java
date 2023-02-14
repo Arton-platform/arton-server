@@ -5,6 +5,7 @@ import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.data.CommonPerformanceDto;
+import com.arton.backend.performance.applicaiton.data.StartDateBasedPerformanceDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.application.data.MainPageDto;
@@ -29,7 +30,7 @@ public class MainPageService implements MainPageUseCase {
         List<Artist> artists = artistRepositoryPort.findAll();
         List<CommonPerformanceDto> popularPerformances = performanceRepositoryPort.findPopularPerformances().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
         List<CommonPerformanceDto> endingSoonPerformances = performanceRepositoryPort.findEndingSoonPerformances().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
-        List<CommonPerformanceDto> startingSoonPerformances = performanceRepositoryPort.findStartingSoonPerformances().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
+        List<StartDateBasedPerformanceDto> startingSoonPerformances = performanceRepositoryPort.findStartingSoonPerformances().stream().map(StartDateBasedPerformanceDto::domainToDto).collect(Collectors.toList());
         return null;
     }
 }
