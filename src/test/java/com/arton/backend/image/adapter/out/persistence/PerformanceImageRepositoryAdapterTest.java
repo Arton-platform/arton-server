@@ -4,6 +4,7 @@ import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPo
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,14 @@ class PerformanceImageRepositoryAdapterTest {
     PerformanceImageRepositoryPort performanceImageRepositoryPort;
     @Autowired
     PerformanceRepositoryPort performanceRepositoryPort;
+    @Autowired
+    PerformanceSavePort performanceSavePort;
 
     @Transactional
     @Test
     void performanceImageSaveTest() {
         Performance test = Performance.builder().title("test").build();
-        Performance saved = performanceRepositoryPort.save(test);
+        Performance saved = performanceSavePort.save(test);
 
         List<PerformanceImage> images = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
