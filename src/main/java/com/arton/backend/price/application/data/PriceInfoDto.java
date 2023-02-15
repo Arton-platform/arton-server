@@ -1,11 +1,13 @@
 package com.arton.backend.price.application.data;
 
 import com.arton.backend.price.domain.PriceGrade;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
+@Schema(description = "가격 정보 DTO")
 public class PriceInfoDto {
     private String gradeName;
     private Long price;

@@ -79,8 +79,8 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
-    public Optional<PerformanceEntity> findById(Long id) {
-        return performanceRepository.findById(id);
+    public Optional<Performance> findById(Long id) {
+        return performanceRepository.findById(id).map(PerformanceMapper::toDomain);
     }
 
     @Override

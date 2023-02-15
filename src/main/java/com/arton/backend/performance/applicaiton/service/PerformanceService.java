@@ -1,5 +1,7 @@
 package com.arton.backend.performance.applicaiton.service;
 
+import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
+import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
@@ -14,6 +16,8 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.price.application.data.PriceInfoDto;
+import com.arton.backend.price.application.port.out.PriceGradeRepositoryPort;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.data.SearchResultDto;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,10 +34,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PerformanceService implements PerformanceUseCase, PerformanceSearchUseCase, PerformanceSaveUseCase, PerformanceDeleteUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
-    private final PerformanceMapper performanceMapper;
     private final PerformanceSearchRepositoryPort performanceSearchRepository;
     private final PerformanceSavePort performanceSavePort;
     private final PerformanceDeletePort performanceDeletePort;
+    private final PriceGradeRepositoryPort priceGradeRepositoryPort;
+    private final PerformanceImageRepositoryPort performanceImageRepositoryPort;
+
 
     @Override
     public List<Performance> getAllPerformances() {
@@ -74,7 +78,10 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
 
     @Override
     public PerformanceDetailDto getOne(Long id) {
-        return null;
+        Performance performance = performanceRepositoryPort.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
+        List<String> images = performanceImageRepositoryPort.findByPerformanceId(id).stream().map(PerformanceImage::getImageUrl).collect(Collectors.toList());
+        List<PriceInfoDto> priceInfos = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toList());
+        return PerformanceDetailDto.toDto(performance, images, priceInfos);
     }
 
     public void saveAllDocuments() {
