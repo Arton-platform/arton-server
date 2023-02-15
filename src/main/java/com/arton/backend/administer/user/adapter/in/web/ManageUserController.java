@@ -7,7 +7,9 @@ import com.arton.backend.administer.user.application.port.in.ManageUserUseCase;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.user.domain.User;
-import lombok.Getter;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/admin")
 public class ManageUserController {
 
-    ManageUserUseCase manageUserUseCase;
+    private final ManageUserUseCase manageUserUseCase;
 
     @GetMapping("/all-users")
     public ResponseEntity<ResponseData<List<User>>> allUser(){
