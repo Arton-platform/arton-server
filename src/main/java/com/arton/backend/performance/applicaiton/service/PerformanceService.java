@@ -3,7 +3,10 @@ package com.arton.backend.performance.applicaiton.service;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
+import com.arton.backend.performance.applicaiton.port.in.PerformanceDeleteUseCase;
+import com.arton.backend.performance.applicaiton.port.in.PerformanceSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PerformanceService implements PerformanceUseCase, PerformanceSearchUseCase {
+public class PerformanceService implements PerformanceUseCase, PerformanceSearchUseCase, PerformanceSaveUseCase, PerformanceDeleteUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceMapper performanceMapper;
     private final PerformanceSearchRepositoryPort performanceSearchRepository;
@@ -70,10 +73,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
     }
 
     @Override
-    public Performance getOne(Long id) {
-        return performanceRepositoryPort.findById(id)
-                .map(performanceEntity -> performanceMapper.toDomain(performanceEntity))
-                .orElseThrow(() -> new CustomException("데이터가 없습니다.", ErrorCode.SELECT_ERROR));
+    public PerformanceDetailDto getOne(Long id) {
+        return null;
     }
 
     public void saveAllDocuments() {
