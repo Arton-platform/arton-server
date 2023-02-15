@@ -29,6 +29,7 @@ public class MainPageService implements MainPageUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final ArtistRepositoryPort artistRepositoryPort;
 
+
     /**
      * 홈 화면에 필요한 데이터 제공
      * @param userId

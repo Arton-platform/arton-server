@@ -61,6 +61,7 @@ public class TestDataInit {
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
                     .auth(UserRole.NORMAL)
+                    .userStatus(true)
                     .build();
             userList.add(user);
         }
