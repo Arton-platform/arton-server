@@ -1,7 +1,5 @@
 package com.arton.backend.performance.domain;
 
-import com.arton.backend.infra.shared.exception.CustomException;
-import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;

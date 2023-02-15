@@ -1,7 +1,5 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
-import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
-import com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.domain.Performance;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.*;
+import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
 
 @Repository
 @RequiredArgsConstructor
