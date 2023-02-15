@@ -80,8 +80,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
     public PerformanceDetailDto getOne(Long id) {
         Performance performance = performanceRepositoryPort.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
         List<String> images = performanceImageRepositoryPort.findByPerformanceId(id).stream().map(PerformanceImage::getImageUrl).collect(Collectors.toList());
-        List<PriceInfoDto> priceInfos = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toList());
-        return PerformanceDetailDto.toDto(performance, images, priceInfos);
+        List<PriceInfoDto> priceInfo = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toList());
+        return PerformanceDetailDto.toDto(performance, images, priceInfo);
     }
 
     public void saveAllDocuments() {
