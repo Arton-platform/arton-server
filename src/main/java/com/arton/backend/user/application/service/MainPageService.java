@@ -16,6 +16,7 @@ import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,9 +30,9 @@ public class MainPageService implements MainPageUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final ArtistRepositoryPort artistRepositoryPort;
 
-
     /**
      * 홈 화면에 필요한 데이터 제공
+     * 최대 10개 까지만 제공
      * @param userId
      * @return
      */
@@ -47,12 +48,12 @@ public class MainPageService implements MainPageUseCase {
         List<StartDateBasedPerformanceDto> startingSoonPerformances = performanceRepositoryPort.findStartingSoonPerformances().stream().map(StartDateBasedPerformanceDto::domainToDto).collect(Collectors.toList());
 
         return MainPageDto.builder()
-                .performances(performances)
-                .zzims(performanceZzims)
-                .artists(artists)
-                .popular(popularPerformances)
-                .endingSoon(endingSoonPerformances)
-                .startingSoon(startingSoonPerformances)
+                .performances(!ObjectUtils.isEmpty(performances) ? performances.subList(0, Math.min(performances.size(), 9)) : performances)
+                .zzims(!ObjectUtils.isEmpty(performanceZzims) ? performanceZzims.subList(0, Math.min(performanceZzims.size(), 9)) : performanceZzims)
+                .artists(!ObjectUtils.isEmpty(artists) ? artists.subList(0, Math.min(artists.size(), 9)) : artists)
+                .popular(!ObjectUtils.isEmpty(popularPerformances) ? popularPerformances.subList(0, Math.min(popularPerformances.size(), 9)) : popularPerformances)
+                .endingSoon(!ObjectUtils.isEmpty(endingSoonPerformances) ? endingSoonPerformances.subList(0, Math.min(endingSoonPerformances.size(), 9)) : endingSoonPerformances)
+                .startingSoon(!ObjectUtils.isEmpty(startingSoonPerformances) ? startingSoonPerformances.subList(0, Math.min(startingSoonPerformances.size(), 9)) : startingSoonPerformances)
                 .build();
     }
 }
