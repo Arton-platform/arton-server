@@ -1,5 +1,6 @@
 package com.arton.backend.price.adapter.out.persistence.repository;
 
+import com.arton.backend.price.adapter.out.persistence.entity.PriceGradeEntity;
 import com.arton.backend.price.adapter.out.persistence.mapper.PriceGradeMapper;
 import com.arton.backend.price.application.port.out.PriceGradeRepositoryPort;
 import com.arton.backend.price.application.port.out.PriceGradeSavePort;
@@ -34,5 +35,11 @@ public class PriceGradeRepositoryAdapter implements PriceGradeRepositoryPort, Pr
     @Override
     public PriceGrade save(PriceGrade priceGrade) {
         return toDomain(priceGradeRepository.save(toEntity(priceGrade)));
+    }
+
+    @Override
+    public void saveAll(List<PriceGrade> priceGradeList) {
+        List<PriceGradeEntity> entities = Optional.ofNullable(priceGradeList).orElseGet(Collections::emptyList).stream().map(PriceGradeMapper::toEntity).collect(Collectors.toList());
+        priceGradeRepository.saveAll(entities);
     }
 }
