@@ -73,7 +73,7 @@ public class SecurityConfig {
                 .sameOrigin()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/auth/signup/**", "/auth/login/**", "/auth/reissue", "/faq/**", "/announcement/**", "/review/**",
+                .authorizeRequests().antMatchers("/auth/signup/**", "/auth/login/**", "/faq/**", "/announcement/**", "/review/**",
                 "/auth/reset/password", "/auth/check/signup", "/artist/**", "/performance/**", "/terms/**", "/performance-sse/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

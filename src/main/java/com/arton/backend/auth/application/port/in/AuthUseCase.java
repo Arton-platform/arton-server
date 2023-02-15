@@ -12,7 +12,7 @@ public interface AuthUseCase {
     boolean logout(HttpServletRequest request);
     boolean validateSignupRequest(SignupValidationDto signupValidationDto);
     boolean withdraw(HttpServletRequest request, WithdrawalRequestDto withdrawalRequestDto);
-    TokenDto reissue(TokenReissueDto tokenReissueDto);
+    TokenDto reissue(HttpServletRequest request);
     TokenDto login(LoginRequestDto loginRequestDto);
     MailDto resetPassword(PasswordResetDto passwordResetDto);
 }

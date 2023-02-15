@@ -161,7 +161,7 @@ public class AuthController {
 
     /**
      * 리프레쉬 토큰과, 액세스 토큰을 이용하여 사용자의 로그인 상태를 체크합니다.
-     * @param tokenReissueDto
+     * @param request
      * @return
      */
     @Operation(summary = "로그인 상태 확인", description = "리프레쉬 토큰을 활용해 사용자의 로그인 상태를 체크합니다.(토큰 기간 만료시 재발급을 진행하여 로그인 상태 유지.)")
@@ -171,8 +171,8 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "유효하지 않은 토큰",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/check/login")
-    public ResponseEntity<TokenDto> checkStatus(@RequestBody TokenReissueDto tokenReissueDto) {
-        return ResponseEntity.ok(authUseCase.reissue(tokenReissueDto));
+    public ResponseEntity<TokenDto> checkStatus(HttpServletRequest request) {
+        return ResponseEntity.ok(authUseCase.reissue(request));
     }
 
 
