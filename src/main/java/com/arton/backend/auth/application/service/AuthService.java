@@ -202,21 +202,22 @@ public class AuthService implements AuthUseCase {
      * 리프레쉬 토큰의 유효값을 체크하여 로그인 체크를 하자
      * 유효하면 메인
      * 유효하지 않다면 로그인 페이지로
-     * @param tokenReissueDto
+     * @param request
      * @return
      */
     @Override
-    public TokenDto reissue(TokenReissueDto tokenReissueDto) {
+    public TokenDto reissue(HttpServletRequest request) {
+        String refreshToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
         // 유효하지 않음 알림
-        if (!tokenProvider.validateToken(tokenReissueDto.getRefreshToken())) {
+        if (!tokenProvider.validateToken(refreshToken)) {
             throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
         }
         // 인증 정보
-        Authentication authentication = tokenProvider.getAuthenticationByRefreshToken(tokenReissueDto.getRefreshToken());
+        Authentication authentication = tokenProvider.getAuthenticationByRefreshToken(refreshToken);
         // 캐시에서 토큰 가져옴
-        String refreshToken = (String) redisTemplate.opsForValue().get(refreshTokenPrefix + authentication.getName());
+        String cacheRefreshToken = (String) redisTemplate.opsForValue().get(refreshTokenPrefix + authentication.getName());
         // 일치여부 확인
-        if (refreshToken == null || !refreshToken.equals(tokenReissueDto.getRefreshToken())) {
+        if (cacheRefreshToken == null || !cacheRefreshToken.equals(refreshToken)) {
             throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
         }
         // 리프레쉬 토큰 만료기간 확인
