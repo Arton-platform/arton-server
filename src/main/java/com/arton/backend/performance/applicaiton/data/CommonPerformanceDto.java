@@ -2,6 +2,7 @@ package com.arton.backend.performance.applicaiton.data;
 
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.zzim.domain.PerformanceZzim;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
