@@ -67,9 +67,11 @@ public class PerformanceEntity extends BaseEntity {
     @ToString.Exclude
     private List<PriceGradeEntity> priceGradeList = new ArrayList<>();
     private float starScore;
+    /** 매수 제한 */
+    private Integer purchaseLimit;
 
     @Builder
-    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGradeEntity> priceGradeList, float starScore, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate) {
+    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGradeEntity> priceGradeList, float starScore, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Integer purchaseLimit) {
         super(createdDate, updatedDate);
         this.id = id;
         this.title = title;
@@ -92,5 +94,6 @@ public class PerformanceEntity extends BaseEntity {
         this.starScore = starScore;
         this.ticketEndDate = ticketEndDate;
         this.ticketOpenDate = ticketOpenDate;
+        this.purchaseLimit = purchaseLimit;
     }
 }
