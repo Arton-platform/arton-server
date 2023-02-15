@@ -1,10 +1,12 @@
 package com.arton.backend.user.application.service;
 
+import com.arton.backend.artist.application.data.CommonArtistDto;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.data.CommonPerformanceDto;
+import com.arton.backend.performance.applicaiton.data.EndDateBasedPerformanceDto;
 import com.arton.backend.performance.applicaiton.data.StartDateBasedPerformanceDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
@@ -27,9 +29,9 @@ public class MainPageService implements MainPageUseCase {
         userRepositoryPort.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
         List<CommonPerformanceDto> performances = performanceRepositoryPort.findAll().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
         List<PerformanceZzim> performanceZzims = zzimRepositoryPort.getPerformanceZzimByUserId(userId);
-        List<Artist> artists = artistRepositoryPort.findAll();
+        List<CommonArtistDto> artists = artistRepositoryPort.findAll().stream().map(CommonArtistDto::domainToDto).collect(Collectors.toList());
         List<CommonPerformanceDto> popularPerformances = performanceRepositoryPort.findPopularPerformances().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
-        List<CommonPerformanceDto> endingSoonPerformances = performanceRepositoryPort.findEndingSoonPerformances().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
+        List<EndDateBasedPerformanceDto> endingSoonPerformances = performanceRepositoryPort.findEndingSoonPerformances().stream().map(EndDateBasedPerformanceDto::domainToDto).collect(Collectors.toList());
         List<StartDateBasedPerformanceDto> startingSoonPerformances = performanceRepositoryPort.findStartingSoonPerformances().stream().map(StartDateBasedPerformanceDto::domainToDto).collect(Collectors.toList());
         return null;
     }
