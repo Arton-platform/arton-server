@@ -6,7 +6,9 @@ import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceM
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
@@ -29,6 +31,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceMapper performanceMapper;
     private final PerformanceSearchRepositoryPort performanceSearchRepository;
+    private final PerformanceSavePort performanceSavePort;
+    private final PerformanceDeletePort performanceDeletePort;
 
     @Override
     public List<Performance> getAllPerformances() {
@@ -52,17 +56,17 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
 
     @Override
     public Performance save(Performance performance) {
-        return performanceRepositoryPort.save(performance);
+        return performanceSavePort.save(performance);
     }
 
     @Override
     public void deletePerformance(Performance performance) {
-        performanceRepositoryPort.deletePerformance(performance);
+        performanceDeletePort.deletePerformance(performance);
     }
 
     @Override
     public void deletePerformance(Long id) {
-        performanceRepositoryPort.deleteById(id);
+        performanceDeletePort.deleteById(id);
     }
 
     @Override

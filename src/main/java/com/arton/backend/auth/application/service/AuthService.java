@@ -97,7 +97,6 @@ public class AuthService implements AuthUseCase {
                 List<ArtistZzim> zzims = new ArrayList<>();
                 for (Artist artist : artists) {
                     ArtistZzim artistZzim = ArtistZzim.builder().artist(artist.getId()).user(savedUser.getId()).build();
-//                    artistZzim.setUser(savedUser.getId());
                     zzims.add(artistZzim);
                 }
                 zzimRepository.saveArtists(zzims);
@@ -111,7 +110,6 @@ public class AuthService implements AuthUseCase {
                 List<PerformanceZzim> zzims = new ArrayList<>();
                 for (Performance performance : performances) {
                     PerformanceZzim performanceZzim = PerformanceZzim.builder().performanceId(performance.getPerformanceId()).userId(savedUser.getId()).build();
-//                    performanceZzim.setUser(savedUser.getId());
                     zzims.add(performanceZzim);
                 }
                 zzimRepository.savePerformances(zzims);
