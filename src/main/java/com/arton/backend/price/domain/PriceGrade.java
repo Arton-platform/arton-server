@@ -21,7 +21,7 @@ public class PriceGrade {
     /** 등록일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
 
     @Builder
     public PriceGrade(Long id, String gradeName, Long price, Performance performance, LocalDateTime createdDate, LocalDateTime updateDate) {
@@ -30,6 +30,6 @@ public class PriceGrade {
         this.price = price;
         this.performance = performance;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updateDate;
     }
 }

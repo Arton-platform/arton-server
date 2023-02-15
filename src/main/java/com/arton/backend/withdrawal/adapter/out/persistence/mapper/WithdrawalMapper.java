@@ -11,7 +11,7 @@ public class WithdrawalMapper {
                 .id(withdrawal.getId())
                 .comment(withdrawal.getComment())
                 .createdDate(withdrawal.getCreatedDate())
-                .updateDate(withdrawal.getUpdateDate())
+                .updateDate(withdrawal.getUpdatedDate())
                 .user(UserMapper.toDomain(withdrawal.getUser()))
                 .build();
     }
@@ -21,7 +21,7 @@ public class WithdrawalMapper {
                 .id(withdrawal.getId())
                 .comment(withdrawal.getComment())
                 .createdDate(withdrawal.getCreatedDate())
-                .updateDate(withdrawal.getUpdateDate())
+                .updateDate(withdrawal.getUpdatedDate())
                 .user(UserMapper.toEntity(withdrawal.getUser()))
                 .build();
     }

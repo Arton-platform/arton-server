@@ -16,7 +16,7 @@ public class UserImageMapper {
                 .user(UserMapper.toDomain(userImage.getUser()))
                 .imageUrl(userImage.getImageUrl())
                 .createdDate(userImage.getCreatedDate())
-                .updateDate(userImage.getUpdateDate())
+                .updateDate(userImage.getUpdatedDate())
                 .build();
     }
 
@@ -26,7 +26,7 @@ public class UserImageMapper {
                 .user(UserEntity.builder().id(userImage.getUser().getId()).build())
                 .imageUrl(userImage.getImageUrl())
                 .createdDate(userImage.getCreatedDate())
-                .updateDate(userImage.getUpdateDate())
+                .updatedDate(userImage.getUpdateDate())
                 .build();
     }
 }

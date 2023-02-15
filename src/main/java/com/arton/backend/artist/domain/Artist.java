@@ -22,8 +22,8 @@ public class Artist {
     private String profileImageUrl;
     /** 가입일 */
     private LocalDateTime createdDate;
-    /** 업데이트일 */
-    private LocalDateTime updateDate;
+    /** 수정일 */
+    private LocalDateTime updatedDate;
     /** 아티스트의 musical or concert 작품 */
     @ToString.Exclude
     private List<Performer> performances = new ArrayList<>();
@@ -34,14 +34,14 @@ public class Artist {
     }
 
     @Builder
-    public Artist(Long id, String name, Integer age, String snsId, String profileImageUrl, LocalDateTime createdDate, LocalDateTime updateDate, List<Performer> performances) {
+    public Artist(Long id, String name, Integer age, String snsId, String profileImageUrl, LocalDateTime createdDate, LocalDateTime updatedDate, List<Performer> performances) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.snsId = snsId;
         this.profileImageUrl = profileImageUrl;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updatedDate;
         this.performances = performances;
     }
 }

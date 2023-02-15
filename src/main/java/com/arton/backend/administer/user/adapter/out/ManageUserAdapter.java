@@ -7,14 +7,12 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Slf4j
 @RequiredArgsConstructor
 public class ManageUserAdapter implements ManageUserPort {
 

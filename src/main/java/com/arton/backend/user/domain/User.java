@@ -39,7 +39,7 @@ public class User {
     /** 가입일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
     /** 찜 목록 유저는 찜을 여러개 할 수 있음*/
     @ToString.Exclude
     List<PerformanceZzim> performanceZzims = new ArrayList<>();
@@ -112,7 +112,7 @@ public class User {
         this.signupType = signupType;
         this.termsAgree = termsAgree;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updateDate;
         this.performanceZzims = performanceZzims;
         this.artistZzims = artistZzims;
         this.alertState = true;

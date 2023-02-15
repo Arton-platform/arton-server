@@ -11,7 +11,6 @@ import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ManageUserService implements ManageUserUseCase {
 

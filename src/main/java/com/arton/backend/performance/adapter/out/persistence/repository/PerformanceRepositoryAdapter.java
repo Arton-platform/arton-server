@@ -21,6 +21,12 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
     private final PerformanceRepository performanceRepository;
 
     @Override
+    public List<Performance> findAll() {
+        return Optional.ofNullable(performanceRepository.findAll())
+                .orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
     public List<Performance> findAllPerformances() {
         return Optional.ofNullable(performanceRepository.findAll()).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
     }

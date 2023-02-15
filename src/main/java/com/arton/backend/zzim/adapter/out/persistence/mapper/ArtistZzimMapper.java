@@ -13,7 +13,7 @@ public class ArtistZzimMapper {
                 .user(artistZzim.getUser().getId())
                 .artist(artistZzim.getArtist().getId())
                 .id(artistZzim.getId())
-                .updateDate(artistZzim.getUpdateDate())
+                .updateDate(artistZzim.getUpdatedDate())
                 .build();
     }
 
@@ -23,7 +23,7 @@ public class ArtistZzimMapper {
                 .user(UserEntity.builder().id(artistZzim.getUser()).build())
                 .artist(ArtistEntity.builder().id(artistZzim.getArtist()).build())
                 .id(artistZzim.getId())
-                .updateDate(artistZzim.getUpdateDate())
+                .updateDate(artistZzim.getUpdatedDate())
                 .build();
     }
 }

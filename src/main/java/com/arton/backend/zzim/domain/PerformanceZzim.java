@@ -14,7 +14,7 @@ public class PerformanceZzim {
     /** 가입일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
     public void setUser(Long userId) {
         this.userId = userId;
     }
@@ -25,6 +25,6 @@ public class PerformanceZzim {
         this.performanceId = performanceId;
         this.userId = userId;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updateDate;
     }
 }
