@@ -17,7 +17,7 @@
     <springProfile name="aws">
         <!-- Logstash aws-->
         <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-            <destination>3.39.238.131:4560</destination>
+            <destination>3.35.166.76:4560</destination>
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             </encoder>
         </appender>
