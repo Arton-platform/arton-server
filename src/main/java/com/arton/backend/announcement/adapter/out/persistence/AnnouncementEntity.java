@@ -19,6 +19,17 @@ public class AnnouncementEntity extends Board {
     private String title;
     private String content;
 
+    public AnnouncementEntity changeTitle(String title){
+        this.title = title;
+        return this;
+    }
+
+    public AnnouncementEntity changeContent(String content){
+        this.content = content;
+        return this;
+    }
+
+
     @Builder
     public AnnouncementEntity(long announcementId, String title, String content, UserEntity user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
         super(user, hit, image, createdDate, updateDate);
