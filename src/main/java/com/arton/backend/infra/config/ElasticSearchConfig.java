@@ -13,8 +13,8 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
     @Override
     public RestHighLevelClient elasticsearchClient() {
         // http port 와 통신할 주소
-        ClientConfiguration configuration = ClientConfiguration.builder().connectedTo("localhost:9200").build();
-//        ClientConfiguration configuration = ClientConfiguration.builder().connectedTo("13.125.194.137:9200").build();
+//        ClientConfiguration configuration = ClientConfiguration.builder().connectedTo("localhost:9200").build();
+        ClientConfiguration configuration = ClientConfiguration.builder().connectedTo("13.125.194.137:9200").build();
         return RestClients.create(configuration).rest();
     }
 }
