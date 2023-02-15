@@ -15,6 +15,6 @@ public interface PerformanceRepositoryPort {
     List<Performance> findPopularPerformances();
     List<Performance> findStartingSoonPerformances();
     List<Performance> findEndingSoonPerformances();
-    Optional<PerformanceEntity> findById(Long id);
+    Optional<Performance> findById(Long id);
     Optional<Performance> findOne(Long id);
 }

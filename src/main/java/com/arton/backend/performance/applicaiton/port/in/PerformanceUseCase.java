@@ -1,5 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.in;
 
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.domain.Performance;
 
@@ -10,8 +11,5 @@ public interface PerformanceUseCase {
     List<PerformanceInterestDto> getZzimList();
     List<Performance> getMusicals();
     List<Performance> getConcerts();
-    Performance save(Performance performance);
-    void deletePerformance(Performance performance);
-    void deletePerformance(Long id);
-    Performance getOne(Long id);
+    PerformanceDetailDto getOne(Long id);
 }
