@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<form action="@{/web/performance/add}" th:action th:object="${performance}" method="post">
+    <div>
+        <label for="title">상품명</label>
+        <input type="text" th:field="*{title}" class="form-control" placeholder="이름을 입력하세요">
+    </div>
+    <div>
+        <label for="description">설명</label>
+        <input type="text" th:field="*{description}" class="form-control" placeholder="가격을 입력하세요">
+    </div>
+    <div>
+        <label for="runningTime">상영시간</label>
+        <input type="number" name="runningTime" th:field="*{runningTime}" class="form-control" placeholder="상영시간을 입력하세요">
+    </div>
+
+</html>
