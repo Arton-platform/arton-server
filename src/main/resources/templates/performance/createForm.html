@@ -11,6 +11,14 @@
         <input type="text" th:field="*{description}" class="form-control" placeholder="공연 설명을 입력하세요">
     </div>
     <div>
+        <label for="startDate">공연시작일</label>
+        <input type="date" th:field="*{startDate}">
+    </div>
+    <div>
+        <label for="endDate">공연종료일</label>
+        <input type="date" th:field="*{endDate}">
+    </div>
+    <div>
         <label for="runningTime">상영시간</label>
         <input type="number" name="runningTime" th:field="*{runningTime}" class="form-control" placeholder="상영시간을 입력하세요(분단위, ex: 90)">
     </div>
@@ -41,8 +49,12 @@
         <input type="text"  th:field="*{place}" class="form-control" placeholder="공연장소를 입력하세요">
     </div>
     <div>
-        <label for="musicalDateTime">공연일시</label>
-        <input type="text" th:field="*{musicalDateTime}" class="form-control" placeholder="공연일시를 입력하세요">
+        <label for="ticketOpenDate">티켓팅 오픈일</label>
+        <input type="datetime-local" th:field="*{ticketOpenDate}">
+    </div>
+    <div>
+        <label for="ticketEndDate">티켓팅 종료일</label>
+        <input type="datetime-local" th:field="*{ticketEndDate}">
     </div>
     <div>
         <label for="purchaseLimit">매수 제한</label>
