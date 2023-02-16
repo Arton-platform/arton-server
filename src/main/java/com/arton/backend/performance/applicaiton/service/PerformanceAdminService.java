@@ -13,6 +13,7 @@ import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocu
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,10 +40,11 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase {
         PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(performance);
         System.out.println("performanceDocument = " + performanceDocument.getId());
         performanceSearchRepositoryPort.save(performanceDocument);
-        // 공연 이미지가 있다면
         List<MultipartFile> images = performanceCreateDto.getImages();
+        boolean isEmpty = images.stream().filter(multipartFile -> !multipartFile.isEmpty()).count() == 0;
         List<PerformanceImage> performanceImages = new ArrayList<>();
-        if (!ObjectUtils.isEmpty(images)) {
+        // 공연 이미지가 있다면
+        if (!isEmpty) {
             for (MultipartFile image : images) {
                 String upload = fileUploadUtils.upload(image, "arton/image/performances/" + performance.getPerformanceId());
                 performanceImages.add(PerformanceImage.builder()
