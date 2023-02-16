@@ -12,7 +12,7 @@
     </div>
     <div>
         <label for="runningTime">상영시간</label>
-        <input type="number" name="runningTime" th:field="*{runningTime}" class="form-control" placeholder="상영시간을 입력하세요">
+        <input type="number" name="runningTime" th:field="*{runningTime}" class="form-control" placeholder="상영시간을 입력하세요(분단위, ex: 90)">
     </div>
     <div>
         <label for="interMission">휴식시간</label>
@@ -27,8 +27,9 @@
         <input type="text" th:field="*{link}" class="form-control" placeholder="예매링크를 입력하세요">
     </div>
     <div>
-        <select th:field="*{performanceType}" class="form-select">
-            <option value="">==공연타입==</option>
+        <label for="link">공연타입</label>
+        <select th:field="*{performanceType}" class="form-select" required>
+            <option value="">==공연==</option>
             <option th:each="type : ${type}"
                     th:value="${type.name()}"
                     th:text="${type.getValue()}">뮤지컬
@@ -47,6 +48,7 @@
         <label for="purchaseLimit">매수 제한</label>
         <input type="number" name="purchaseLimit" th:field="*{purchaseLimit}" class="form-control" placeholder="매수 제한을 입력하세요">
     </div>
+    <input type="submit" value="등록"/>
 </form>
 
 </html>

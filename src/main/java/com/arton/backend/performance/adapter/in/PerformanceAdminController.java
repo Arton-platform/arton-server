@@ -30,6 +30,7 @@ public class PerformanceAdminController {
 
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String postPerformance(@RequestPart(required = true, name = "performance")PerformanceCreateDto performanceCreateDto, @RequestPart(required = false, name = "images") MultipartFile[] multipartFiles) {
+        System.out.println("performanceCreateDto = " + performanceCreateDto);
         return "performance/index";
     }
 }
