@@ -2,17 +2,13 @@ package com.arton.backend.performance.applicaiton.data;
 
 import com.arton.backend.performance.domain.PerformanceType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 @Schema(description = "공연 생성을 위한 Dto")
 @ToString
 public class PerformanceCreateDto {
