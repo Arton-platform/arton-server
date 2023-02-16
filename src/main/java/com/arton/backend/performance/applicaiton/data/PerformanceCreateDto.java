@@ -42,7 +42,7 @@ public class PerformanceCreateDto {
     @Schema(description = "티켓팅 오픈일")
     private LocalDateTime ticketOpenDate;
     @Schema(description = "티켓팅 종료일")
-    private String ticketEndDate;
+    private LocalDateTime ticketEndDate;
     @Schema(description = "매수 제한")
     private Integer purchaseLimit;
 }

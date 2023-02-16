@@ -1,6 +1,8 @@
 package com.arton.backend.performance.adapter.in;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
+import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.performance.domain.PerformanceType;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ public class PerformanceAdminController {
     @GetMapping("/add")
     public String addPerformance(Model model) {
         model.addAttribute("performance", new PerformanceCreateDto());
+        model.addAttribute("type", PerformanceType.values());
         return "performance/createForm";
     }
 

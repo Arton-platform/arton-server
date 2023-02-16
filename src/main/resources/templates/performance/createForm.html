@@ -3,16 +3,50 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <form action="@{/web/performance/add}" th:action th:object="${performance}" method="post">
     <div>
-        <label for="title">상품명</label>
-        <input type="text" th:field="*{title}" class="form-control" placeholder="이름을 입력하세요">
+        <label for="title">제목</label>
+        <input type="text" th:field="*{title}" class="form-control" placeholder="공연 제목을 입력하세요">
     </div>
     <div>
         <label for="description">설명</label>
-        <input type="text" th:field="*{description}" class="form-control" placeholder="가격을 입력하세요">
+        <input type="text" th:field="*{description}" class="form-control" placeholder="공연 설명을 입력하세요">
     </div>
     <div>
         <label for="runningTime">상영시간</label>
         <input type="number" name="runningTime" th:field="*{runningTime}" class="form-control" placeholder="상영시간을 입력하세요">
     </div>
+    <div>
+        <label for="interMission">휴식시간</label>
+        <input type="number" name="interMission" th:field="*{interMission}" class="form-control" placeholder="휴식시간을 입력하세요">
+    </div>
+    <div>
+        <label for="limitTime">제한시간</label>
+        <input type="number" name="limitTime" th:field="*{limitTime}" class="form-control" placeholder="입장 제한시간을 입력하세요">
+    </div>
+    <div>
+        <label for="link">예매링크</label>
+        <input type="text" th:field="*{link}" class="form-control" placeholder="예매링크를 입력하세요">
+    </div>
+    <div>
+        <select th:field="*{performanceType}" class="form-select">
+            <option value="">==공연타입==</option>
+            <option th:each="type : ${type}"
+                    th:value="${type.name()}"
+                    th:text="${type.getValue()}">뮤지컬
+            </option>
+        </select>
+    </div>
+    <div>
+        <label for="place">장소</label>
+        <input type="text"  th:field="*{place}" class="form-control" placeholder="공연장소를 입력하세요">
+    </div>
+    <div>
+        <label for="musicalDateTime">공연일시</label>
+        <input type="text" th:field="*{musicalDateTime}" class="form-control" placeholder="공연일시를 입력하세요">
+    </div>
+    <div>
+        <label for="purchaseLimit">매수 제한</label>
+        <input type="number" name="purchaseLimit" th:field="*{purchaseLimit}" class="form-control" placeholder="매수 제한을 입력하세요">
+    </div>
+</form>
 
 </html>
