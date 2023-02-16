@@ -14,4 +14,5 @@ public interface PerformanceSearchRepositoryPort {
     /** 장소 검색 */
     SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable);
     void saveAll(List<PerformanceDocument> performanceDocuments);
+    void save(PerformanceDocument performanceDocument);
 }

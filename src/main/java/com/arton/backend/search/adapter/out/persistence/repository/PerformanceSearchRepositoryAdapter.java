@@ -33,4 +33,9 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
     public void saveAll(List<PerformanceDocument> performanceDocuments) {
         performanceSearchRepository.saveAll(performanceDocuments);
     }
+
+    @Override
+    public void save(PerformanceDocument performanceDocument) {
+        performanceSearchRepository.save(performanceDocument);
+    }
 }

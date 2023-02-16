@@ -1,8 +1,12 @@
 package com.arton.backend.performance.adapter.in;
 
+import com.arton.backend.performance.applicaiton.data.EndDateBasedPerformanceDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
+import com.arton.backend.performance.applicaiton.data.StartDateBasedPerformanceDto;
+import com.arton.backend.performance.applicaiton.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -18,7 +22,9 @@ import java.time.temporal.TemporalField;
 @Controller
 //@Secured("ADMIN")
 @RequestMapping("/web/performance")
+@RequiredArgsConstructor
 public class PerformanceAdminController {
+    private final PerformanceAdminSaveUseCase performanceAdminSaveUseCase;
 
     @GetMapping("/add")
     public String addPerformance(Model model) {
@@ -29,7 +35,7 @@ public class PerformanceAdminController {
 
     @PostMapping(value = "/add")
     public String postPerformance(@ModelAttribute(name = "performance") PerformanceCreateDto performance, @RequestParam(required = false, name = "images") MultipartFile[] multipartFiles) {
-
+        performanceAdminSaveUseCase.addPerformance(performance, multipartFiles);
         return "performance/index";
     }
 }
