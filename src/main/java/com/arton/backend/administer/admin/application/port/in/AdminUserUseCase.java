@@ -6,4 +6,6 @@ public interface AdminUserUseCase {
 
     void regist(User user);
 
+    User findAdmin(Long id);
+
 }
