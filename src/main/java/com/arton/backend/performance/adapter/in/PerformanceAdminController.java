@@ -34,8 +34,8 @@ public class PerformanceAdminController {
     }
 
     @PostMapping(value = "/add")
-    public String postPerformance(@ModelAttribute(name = "performance") PerformanceCreateDto performance, @RequestParam(required = false, name = "images") MultipartFile[] multipartFiles) {
-        performanceAdminSaveUseCase.addPerformance(performance, multipartFiles);
+    public String postPerformance(@ModelAttribute(name = "performance") PerformanceCreateDto performance) {
+        performanceAdminSaveUseCase.addPerformance(performance);
         return "performance/index";
     }
 }

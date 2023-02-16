@@ -27,14 +27,16 @@ import java.util.stream.Stream;
  * 이미지 업로드 유틸 로컬
  */
 @Slf4j
-@Profile(value = "dev")
+@Profile(value = {"dev", "test"})
 @Service
 @RequiredArgsConstructor
 public class FileUploadLocal implements FileUploadUtils{
     @Value("${spring.default-image-local}")
     private String defaultImageUrl;
-    @Value("${spring.root-dir}")
+    @Value("${spring.user.image.dir}")
     private String rootDir;
+    @Value("${spring.performance.image.dir}")
+    private String rootPerformanceDir;
 
     @Override
     public void delete(Long userId, String dir) {

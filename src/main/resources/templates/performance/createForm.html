@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<form action="@{/web/performance/add}" th:action th:object="${performance}" method="post">
+<form action="@{/web/performance/add}" th:action th:object="${performance}" method="post" enctype="multipart/form-data">
     <div>
         <label for="title">제목</label>
         <input type="text" th:field="*{title}" class="form-control" placeholder="공연 제목을 입력하세요">
@@ -12,11 +12,11 @@
     </div>
     <div>
         <label for="startDate">공연시작일</label>
-        <input type="date" th:field="*{startDate}">
+        <input type="date" th:field="*{startDate}" required>
     </div>
     <div>
         <label for="endDate">공연종료일</label>
-        <input type="date" th:field="*{endDate}">
+        <input type="date" th:field="*{endDate}" required>
     </div>
     <div>
         <label for="runningTime">상영시간</label>
@@ -50,16 +50,18 @@
     </div>
     <div>
         <label for="ticketOpenDate">티켓팅 오픈일</label>
-        <input type="datetime-local" th:field="*{ticketOpenDate}">
+        <input type="datetime-local" th:field="*{ticketOpenDate}" required>
     </div>
     <div>
         <label for="ticketEndDate">티켓팅 종료일</label>
-        <input type="datetime-local" th:field="*{ticketEndDate}">
+        <input type="datetime-local" th:field="*{ticketEndDate}" required>
     </div>
     <div>
         <label for="purchaseLimit">매수 제한</label>
         <input type="number" name="purchaseLimit" th:field="*{purchaseLimit}" class="form-control" placeholder="매수 제한을 입력하세요">
     </div>
+
+    <input type="file" value="이미지" th:field="*{images}" multiple style="width:100%; height:100px;">
     <input type="submit" value="등록"/>
 </form>
 

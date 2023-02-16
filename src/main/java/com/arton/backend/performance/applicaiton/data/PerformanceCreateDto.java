@@ -6,11 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @Schema(description = "공연 생성을 위한 Dto")
@@ -50,6 +52,8 @@ public class PerformanceCreateDto implements Serializable {
     private LocalDateTime ticketEndDate;
     @Schema(description = "매수 제한")
     private Integer purchaseLimit;
+    @Schema(description = "공연 이미지")
+    List<MultipartFile> images;
 
     public Performance dtoToDomain() {
         return Performance.builder()
