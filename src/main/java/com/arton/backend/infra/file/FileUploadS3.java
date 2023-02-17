@@ -21,6 +21,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 이미지 업로드 유틸 S3
@@ -155,6 +156,9 @@ public class FileUploadS3 implements FileUploadUtils {
     private void validateFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
             throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+        if (!multipartFile.getContentType().toLowerCase(Locale.ROOT).contains("image")) {
+            throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
         }
     }
 

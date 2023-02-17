@@ -70,7 +70,11 @@
             </option>
         </select>
     </div>
-    <input type="file" value="이미지" th:field="*{images}" multiple style="width:100%; height:100px;">
+    <div>
+        <label for="img_upload"></label>
+        <input type="file" name="img_upload" id="img_upload" value="이미지" th:field="*{images}" multiple style="width:100%; height:100px;">
+    </div>
+
     <input type="submit" value="등록"/>
 </form>
 
