@@ -22,21 +22,25 @@ import java.time.temporal.TemporalField;
  */
 @Controller
 //@Secured("ADMIN")
-@RequestMapping("/web/performance")
 @RequiredArgsConstructor
 public class PerformanceAdminController {
     private final PerformanceAdminSaveUseCase performanceAdminSaveUseCase;
 
-    @GetMapping("/add")
+    @GetMapping("/web/performance/add")
     public String addPerformance(Model model) {
-        model.addAttribute("performance", new PerformanceCreateDto());
         model.addAttribute("type", PerformanceType.values());
         model.addAttribute("category", ShowCategory.values());
         return "performance/createForm";
     }
 
-    @PostMapping(value = "/add")
-    public String postPerformance(@ModelAttribute(name = "performance") PerformanceCreateDto performance) {
+    @GetMapping("/")
+    public String goHome() {
+        return "index";
+    }
+
+    @PostMapping(value = "/web/performance/add")
+    public String postPerformance(PerformanceCreateDto performance) {
+        System.out.println("performance = " + performance.getTicketEndDate());
         performanceAdminSaveUseCase.addPerformance(performance);
         return "performance/index";
     }

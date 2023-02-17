@@ -56,7 +56,7 @@ public class PerformanceCreateDto implements Serializable {
     @Schema(description = "노출 상태")
     private ShowCategory showCategory;
     @Schema(description = "공연 이미지")
-    List<MultipartFile> images;
+    private List<MultipartFile> images;
 
     public Performance dtoToDomain() {
         return Performance.builder()

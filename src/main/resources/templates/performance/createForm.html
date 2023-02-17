@@ -6,7 +6,7 @@
         <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
         <script src="/js/imagePreview.js"></script>
         <script src="/js/dataSend.js"></script>
-        <form action="@{/web/performance/add}"  method="post" enctype="multipart/form-data">
+        <form id="addForm">
             <div style="display: inline">
             <div>
                 <label for="title">제목</label>
@@ -85,7 +85,9 @@
                 <span id='View_area'
                       style='position:relative; color: black; border: 0px solid black;'/>
             </div>
-            <input type="submit" value="등록" class="btn" style="background: #FF6491; color: #FFF2F6;" onclick="dataSubmit();"/>
+                <div>
+                    <input type="button" value="등록" class="btn" style="background: #FF6491; color: #FFF2F6;" onclick="dataSubmit();"/>
+                </div>
             </div>
         </form>
     </div>
