@@ -11,10 +11,9 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepos
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -28,6 +27,8 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase {
     private final PerformanceImageSaveRepositoryPort performanceImageSaveRepositoryPort;
     private final PerformanceSearchRepositoryPort performanceSearchRepositoryPort;
     private final FileUploadUtils fileUploadUtils;
+    @Value("${spring.performance.image.dir}")
+    private String performanceDir;
 
     /**
      * 공연 추가하면 ElasticSearch performance 인덱스에 도큐먼트 추가해야함.
@@ -46,7 +47,7 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase {
         // 공연 이미지가 있다면
         if (!isEmpty) {
             for (MultipartFile image : images) {
-                String upload = fileUploadUtils.upload(image, "arton/image/performances/" + performance.getPerformanceId());
+                String upload = fileUploadUtils.upload(image, performanceDir + performance.getPerformanceId());
                 performanceImages.add(PerformanceImage.builder()
                         .performance(performance)
                         .imageUrl(upload)
