@@ -17,7 +17,7 @@ function dataSubmit() {
     data.append('ticketEndDate', $("#ticketEndDate").val())
     data.append('purchaseLimit', $("#purchaseLimit").val())
     data.append('showCategory', $("#showCategory").val())
-    data.append('images', $("#addForm")[0])
+    data.append('images', $("#img_upload"))
     // var data=new FormData($("#storeAddForm")[0]);
 
     $.ajax({
