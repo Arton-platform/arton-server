@@ -2,6 +2,7 @@ package com.arton.backend.performance.applicaiton.data;
 
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.performance.domain.ShowCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.ToString;
@@ -53,6 +54,8 @@ public class PerformanceCreateDto implements Serializable {
     private LocalDateTime ticketEndDate;
     @Schema(description = "매수 제한")
     private Integer purchaseLimit;
+    @Schema(description = "노출 상태")
+    private ShowCategory showCategory;
     @Schema(description = "공연 이미지")
     List<MultipartFile> images;
 
@@ -75,6 +78,7 @@ public class PerformanceCreateDto implements Serializable {
                 .starScore(0)
                 .limitTime(getLimitTime())
                 .musicalDateTime(getStartDate().toString()+"~"+getEndDate().toString())
+                .showCategory(showCategory)
                 .build();
     }
 }

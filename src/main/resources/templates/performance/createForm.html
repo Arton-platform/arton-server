@@ -61,7 +61,14 @@
         <input type="number" name="purchaseLimit" th:field="*{purchaseLimit}" class="form-control" placeholder="매수 제한을 입력하세요">
     </div>
     <div>
-        <label for=""
+        <label for="showCategory">노출 상태</label>
+        <select th:field="*{showCategory}" class="form-select" required>
+            <option value="">==상태==</option>
+            <option th:each="type : ${category}"
+                    th:value="${type.name()}"
+                    th:text="${type.getValue()}">
+            </option>
+        </select>
     </div>
     <input type="file" value="이미지" th:field="*{images}" multiple style="width:100%; height:100px;">
     <input type="submit" value="등록"/>

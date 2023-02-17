@@ -6,6 +6,7 @@ import com.arton.backend.performance.applicaiton.data.StartDateBasedPerformanceD
 import com.arton.backend.performance.applicaiton.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.performance.domain.ShowCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -30,6 +31,7 @@ public class PerformanceAdminController {
     public String addPerformance(Model model) {
         model.addAttribute("performance", new PerformanceCreateDto());
         model.addAttribute("type", PerformanceType.values());
+        model.addAttribute("category", ShowCategory.values());
         return "performance/createForm";
     }
 

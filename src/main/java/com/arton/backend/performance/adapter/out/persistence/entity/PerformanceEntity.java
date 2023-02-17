@@ -71,6 +71,7 @@ public class PerformanceEntity extends BaseEntity {
     /** 매수 제한 */
     private Integer purchaseLimit;
     /** 공연 상태 구분*/
+    @Enumerated(EnumType.STRING)
     private ShowCategory showCategory;
 
     @Builder
