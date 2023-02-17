@@ -4,6 +4,7 @@ import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.performance.domain.ShowCategory;
 import com.arton.backend.performer.adapter.out.persistence.entity.PerformerEntity;
 import com.arton.backend.price.adapter.out.persistence.entity.PriceGradeEntity;
 import com.arton.backend.price.domain.PriceGrade;
@@ -69,9 +70,11 @@ public class PerformanceEntity extends BaseEntity {
     private float starScore;
     /** 매수 제한 */
     private Integer purchaseLimit;
+    /** 공연 상태 구분*/
+    private ShowCategory showCategory;
 
     @Builder
-    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGradeEntity> priceGradeList, float starScore, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Integer purchaseLimit) {
+    public PerformanceEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String title, String description, Long hit, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<PerformerEntity> performers, List<PriceGradeEntity> priceGradeList, float starScore, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Integer purchaseLimit, ShowCategory showCategory) {
         super(createdDate, updatedDate);
         this.id = id;
         this.title = title;
@@ -95,5 +98,6 @@ public class PerformanceEntity extends BaseEntity {
         this.ticketEndDate = ticketEndDate;
         this.ticketOpenDate = ticketOpenDate;
         this.purchaseLimit = purchaseLimit;
+        this.showCategory = showCategory;
     }
 }
