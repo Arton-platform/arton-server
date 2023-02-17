@@ -61,7 +61,7 @@ class AuthControllerTest {
                 .build();
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
-        MockMultipartFile image = new MockMultipartFile("image", "static/images/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile image = new MockMultipartFile("image", "static/img/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
         mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
                         .file(json)
@@ -84,7 +84,7 @@ class AuthControllerTest {
                 .build();
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
-        MockMultipartFile image = new MockMultipartFile("image", "static/images/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile image = new MockMultipartFile("image", "static/img/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
         mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
                         .file(json)
@@ -107,7 +107,7 @@ class AuthControllerTest {
                 .build();
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
-        MockMultipartFile image = new MockMultipartFile("image", "static/images/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile image = new MockMultipartFile("image", "static/img/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
         mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
                         .file(json)
@@ -126,7 +126,7 @@ class AuthControllerTest {
                 .build();
         String content2 = objectMapper.writeValueAsString(signupRequestDto2);
         System.out.println("content2 = " + content2);
-        MockMultipartFile image2 = new MockMultipartFile("image", "static/images/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile image2 = new MockMultipartFile("image", "static/img/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
         MockMultipartFile json2 = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content2.getBytes(StandardCharsets.UTF_8));
         mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
                         .file(json2)
@@ -149,7 +149,7 @@ class AuthControllerTest {
                 .build();
         String content = objectMapper.writeValueAsString(signupRequestDto);
         System.out.println("content = " + content);
-        MockMultipartFile image = new MockMultipartFile("image", "static/images/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile image = new MockMultipartFile("image", "static/img/dog.jpg", "image/jpeg", "<<jpeg data>>".getBytes(StandardCharsets.UTF_8));
         MockMultipartFile json = new MockMultipartFile("signupRequestDto", "jsondata", "application/json", content.getBytes(StandardCharsets.UTF_8));
         mockMvc.perform(MockMvcRequestBuilders.multipart("/auth/signup")
                         .file(json)

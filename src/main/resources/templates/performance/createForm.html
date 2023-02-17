@@ -3,44 +3,46 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
 <body>
     <div>
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
         <script src="/js/imagePreview.js"></script>
-        <form action="@{/web/performance/add}" th:action th:object="${performance}" method="post" enctype="multipart/form-data">
+        <script src="/js/dataSend.js"></script>
+        <form action="@{/web/performance/add}"  method="post" enctype="multipart/form-data">
             <div style="display: inline">
             <div>
                 <label for="title">제목</label>
-                <input type="text" th:field="*{title}" class="form-control" placeholder="공연 제목을 입력하세요">
+                <input id="title" name="title" type="text"  class="form-control" placeholder="공연 제목을 입력하세요">
             </div>
             <div>
                 <label for="description">설명</label>
-                <input type="text" th:field="*{description}" class="form-control" placeholder="공연 설명을 입력하세요">
+                <input id="description" name="description" type="text"  class="form-control" placeholder="공연 설명을 입력하세요">
             </div>
             <div>
                 <label for="startDate">공연시작일</label>
-                <input type="date" th:field="*{startDate}" required>
+                <input id="startDate" name="startDate" type="date"  required>
             </div>
             <div>
                 <label for="endDate">공연종료일</label>
-                <input type="date" th:field="*{endDate}" required>
+                <input id="endDate" name="endDate" type="date"  required>
             </div>
             <div>
                 <label for="runningTime">상영시간</label>
-                <input type="number" name="runningTime" th:field="*{runningTime}" class="form-control" placeholder="상영시간을 입력하세요(분단위, ex: 90)">
+                <input id="runningTime" name="runningTime" type="number"  class="form-control" placeholder="상영시간을 입력하세요(분단위, ex: 90)">
             </div>
             <div>
                 <label for="interMission">휴식시간</label>
-                <input type="number" name="interMission" th:field="*{interMission}" class="form-control" placeholder="휴식시간을 입력하세요">
+                <input id="interMission" name="interMission" type="number" class="form-control" placeholder="휴식시간을 입력하세요">
             </div>
             <div>
                 <label for="limitTime">제한시간</label>
-                <input type="number" name="limitTime" th:field="*{limitTime}" class="form-control" placeholder="입장 제한시간을 입력하세요">
+                <input id="limitTime" name="limitTime" type="number"  class="form-control" placeholder="입장 제한시간을 입력하세요">
             </div>
             <div>
                 <label for="link">예매링크</label>
-                <input type="text" th:field="*{link}" class="form-control" placeholder="예매링크를 입력하세요">
+                <input id="link" name="link" type="text"  class="form-control" placeholder="예매링크를 입력하세요">
             </div>
             <div>
-                <label for="link">공연타입</label>
-                <select th:field="*{performanceType}" class="form-select" required>
+                <label for="performanceType">공연타입</label>
+                <select id="performanceType" name="performanceType" class="form-select" required>
                     <option value="">==공연==</option>
                     <option th:each="type : ${type}"
                             th:value="${type.name()}"
@@ -50,23 +52,23 @@
             </div>
             <div>
                 <label for="place">장소</label>
-                <input type="text"  th:field="*{place}" class="form-control" placeholder="공연장소를 입력하세요">
+                <input id="place" name="place" type="text" class="form-control" placeholder="공연장소를 입력하세요">
             </div>
             <div>
                 <label for="ticketOpenDate">티켓팅 오픈일</label>
-                <input type="datetime-local" th:field="*{ticketOpenDate}" required>
+                <input id="ticketOpenDate" name="ticketOpenDate" type="datetime-local" required>
             </div>
             <div>
                 <label for="ticketEndDate">티켓팅 종료일</label>
-                <input type="datetime-local" th:field="*{ticketEndDate}" required>
+                <input id="ticketEndDate" name="ticketEndDate" type="datetime-local" required>
             </div>
             <div>
                 <label for="purchaseLimit">매수 제한</label>
-                <input type="number" name="purchaseLimit" th:field="*{purchaseLimit}" class="form-control" placeholder="매수 제한을 입력하세요">
+                <input id="purchaseLimit" name="purchaseLimit" type="number" class="form-control" placeholder="매수 제한을 입력하세요">
             </div>
             <div>
                 <label for="showCategory">노출 상태</label>
-                <select th:field="*{showCategory}" class="form-select" required>
+                <select id="showCategory" name="showCategory" class="form-select" required>
                     <option value="">==상태==</option>
                     <option th:each="type : ${category}"
                             th:value="${type.name()}"
@@ -76,14 +78,14 @@
             </div>
             <div>
                 <label for="img_upload">
-                    <img th:src="@{/images/image_add.png}" style="width:100px; height:100px; cursor: pointer;">
+                    <img th:src="@{/img/image_add.png}" style="width:100px; height:100px; cursor: pointer;">
                 </label>
-                <input type="file" name="img_upload" id="img_upload" value="이미지" th:field="*{images}" multiple
+                <input type="file" name="img_upload" id="img_upload" value="이미지" multiple
                        onchange="previewImage(this,'View_area')" style="display: none">
                 <span id='View_area'
                       style='position:relative; color: black; border: 0px solid black;'/>
             </div>
-            <input type="submit" value="등록" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
+            <input type="submit" value="등록" class="btn" style="background: #FF6491; color: #FFF2F6;" onclick="dataSubmit();"/>
             </div>
         </form>
     </div>
