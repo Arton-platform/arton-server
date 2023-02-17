@@ -5,6 +5,7 @@ import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocu
 import com.arton.backend.search.domain.IndexName;
 import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import static org.elasticsearch.index.query.MultiMatchQueryBuilder.Type.BEST_FIELDS;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -64,6 +66,18 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
                 .should(termQuery("performanceType", type))
                 .should(matchPhraseQuery("performanceType.ngram", type))
                 .minimumShouldMatch(1);
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
+        searchQueryBuilder.withPageable(pageable);
+        setSort(sort, searchQueryBuilder);
+        NativeSearchQuery searchQuery = searchQueryBuilder.build();
+        return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
+    }
+
+    @Override
+    public SearchPage<PerformanceDocument> findByKeyword(String keyword, String sort, Pageable pageable) {
+        QueryBuilder query = boolQuery().should(multiMatchQuery(keyword,"performanceType.ngram", "performanceType", "title", "title.ngram", "place", "place.ngram")
+                .type(BEST_FIELDS)
+                .tieBreaker(0.3f));
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);

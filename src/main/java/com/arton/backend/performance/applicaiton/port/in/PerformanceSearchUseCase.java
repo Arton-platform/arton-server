@@ -11,4 +11,5 @@ public interface PerformanceSearchUseCase {
     Page<SearchResultDto> searchByTitle(String title, String sort, Pageable pageable);
     Page<SearchResultDto> searchByPlace(String place, String sort, Pageable pageable);
     Page<SearchResultDto> searchByPerformanceType(String type, String sort, Pageable pageable);
+    Page<SearchResultDto> searchAll(String type, String sort, Pageable pageable);
 }

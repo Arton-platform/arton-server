@@ -89,17 +89,24 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
         performanceSearchRepository.saveAll(documents);
     }
 
+    @Override
     public Page<SearchResultDto> searchByTitle(String title, String sort, Pageable pageable) {
         return performanceSearchRepository.findByTitle(title, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
     }
 
+    @Override
     public Page<SearchResultDto> searchByPlace(String place, String sort, Pageable pageable) {
         // DTO 변환
         return performanceSearchRepository.findByPlace(place, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
     }
 
+    @Override
     public Page<SearchResultDto> searchByPerformanceType(String type, String sort, Pageable pageable) {
         return performanceSearchRepository.findByPerformanceType(type, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
+    }
 
+    @Override
+    public Page<SearchResultDto> searchAll(String type, String sort, Pageable pageable) {
+        return performanceSearchRepository.findByKeyword(type, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
     }
 }
