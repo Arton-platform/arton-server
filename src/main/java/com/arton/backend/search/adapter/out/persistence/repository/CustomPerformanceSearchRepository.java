@@ -14,4 +14,5 @@ public interface CustomPerformanceSearchRepository {
     SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable);
     SearchPage<PerformanceDocument> findByTitle(String title, String sort, Pageable pageable);
     SearchPage<PerformanceDocument> findByType(String type, String sort, Pageable pageable);
+    SearchPage<PerformanceDocument> findByKeyword(String keyword, String sort, Pageable pageable);
 }

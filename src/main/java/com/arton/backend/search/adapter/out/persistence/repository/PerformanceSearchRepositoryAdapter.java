@@ -30,6 +30,11 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
     }
 
     @Override
+    public SearchPage<PerformanceDocument> findByKeyword(String keyword, String sort, Pageable pageable) {
+        return performanceSearchRepository.findByKeyword(keyword, sort, pageable);
+    }
+
+    @Override
     public void saveAll(List<PerformanceDocument> performanceDocuments) {
         performanceSearchRepository.saveAll(performanceDocuments);
     }
