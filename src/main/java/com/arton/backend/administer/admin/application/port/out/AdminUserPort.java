@@ -9,10 +9,10 @@ public interface AdminUserPort {
 
     void regist(UserEntity entity);
 
-    Optional<UserEntity> finadAdmin(Long id);
+    Optional<UserEntity> findAdmin(Long id);
 
-    Optional<List<UserEntity>> fiandAll();
+    Optional<List<UserEntity>> findAll();
 
     void delete(UserEntity entity);
-    
+
 }

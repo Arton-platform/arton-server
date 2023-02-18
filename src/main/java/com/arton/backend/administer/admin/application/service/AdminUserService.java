@@ -30,8 +30,7 @@ public class AdminUserService implements AdminUserUseCase {
 
         try {
             adminUserPort.regist(
-                UserMapper.toEntity(user)
-            );
+                    UserMapper.toEntity(user));
         } catch (Exception e) {
             new CustomException(ErrorCode.REGIST_ERROR.getMessage(), ErrorCode.REGIST_ERROR);
             e.printStackTrace();
@@ -42,35 +41,41 @@ public class AdminUserService implements AdminUserUseCase {
     public User findAdmin(Long id) {
         log.info("[findAdmin] : {}", id);
         return UserMapper.toDomain(
-            adminUserPort.finadAdmin(id).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND))
-        );
+                adminUserPort.findAdmin(id).orElseThrow(
+                        () -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND)));
     }
 
     @Override
     public List<User> findAll() {
-        log.info("[findAll] : {}", "findAll`" );
-        return adminUserPort.fiandAll().orElseGet(ArrayList::new).stream()
-            .map(UserMapper::toDomain)
-            .collect(Collectors.toList());
+        log.info("[findAll] : {}", "findAll`");
+        return adminUserPort.findAll().orElseGet(ArrayList::new).stream()
+                .map(UserMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void update(User user) {
         log.info("[update] : {}", user.toString());
-        UserEntity origianl = adminUserPort.finadAdmin(user.getId()).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
+        UserEntity origianl = adminUserPort.findAdmin(user.getId()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
         UserEntity update = UserMapper.toEntity(user);
 
         origianl.setSelfDescription(update.getSelfDescription())
-            .setPassword(update.getPassword())
-            .setImage(update.getUserImage());
+                .setPassword(update.getPassword())
+                .setImage(update.getUserImage());
     }
 
     @Override
     public void delete(User user) {
         log.info("[delete] : {}", user.toString());
-        adminUserPort.delete(
-            UserMapper.toEntity(user)
-        );
+        // 삭제하기 전에 관리자의 숫자를 측정한다.
+        Long adminCount = adminUserPort.findAll().stream().count();
+        if (adminCount > 1) {
+            adminUserPort.delete(
+                    UserMapper.toEntity(user));
+        } else {
+            throw new CustomException("관리자는 최소 1명이상 존재해야 합니다.", ErrorCode.DELETE_ERROR);
+        }
     }
-    
+
 }
