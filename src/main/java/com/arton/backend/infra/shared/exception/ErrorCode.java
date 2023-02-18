@@ -29,7 +29,11 @@ public enum ErrorCode {
     JSON_PROCESSING_ERROR(600, "JSON_PROCESSING_ERROR", "JSON 변환 오류 입니다."),
     IO_EXCEPTION(600, "IO_EXCEPTION", "입출력 오류 입니다."),
     HIT_INVALID_ERROR(400, "HIT_INVALID_ERROR", "현재 좋아요는 0개 입니다. 0개 미만으로 변경할 수 없습니다."),
-    SELECT_ERROR(404, "SELECT_ERROR", "조회에 실패 했습니다.");
+    SELECT_ERROR(404, "SELECT_ERROR", "조회에 실패 했습니다."),
+    REGIST_ERROR(500, "REGIST_ERROR", "저장에 문제가 발생했습니다."),
+    DELETE_ERROR(500, "DELETE_ERROR", "삭제에 문제가 발생했습니다.");
+    ;
+
     private int status;
     private String errorCode;
     private String message;
