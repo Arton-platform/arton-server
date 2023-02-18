@@ -2,7 +2,9 @@ package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ import static com.arton.backend.performance.adapter.out.persistence.mapper.Perfo
 
 @Repository
 @RequiredArgsConstructor
-public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
+public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, PerformanceSavePort, PerformanceDeletePort {
     private final PerformanceRepository performanceRepository;
 
     @Override
@@ -47,6 +49,21 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
     }
 
     @Override
+    public List<Performance> findPopularPerformances() {
+        return performanceRepository.getPerformanceByEndDateASC();
+    }
+
+    @Override
+    public List<Performance> findStartingSoonPerformances() {
+        return performanceRepository.getPerformanceByStartDateASC();
+    }
+
+    @Override
+    public List<Performance> findEndingSoonPerformances() {
+        return performanceRepository.getPerformanceByEndDateASC();
+    }
+
+    @Override
     public Performance save(Performance performance) {
         return toDomain(performanceRepository.save(toEntity(performance)));
     }
@@ -62,8 +79,8 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort {
     }
 
     @Override
-    public Optional<PerformanceEntity> findById(Long id) {
-        return performanceRepository.findById(id);
+    public Optional<Performance> findById(Long id) {
+        return performanceRepository.findById(id).map(PerformanceMapper::toDomain);
     }
 
     @Override

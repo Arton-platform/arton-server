@@ -27,8 +27,10 @@ public class Performance {
     private String description;
     /** 좋아요 */
     private Long hit;
-    /** */
+    /** 티켓 오픈일*/
     private LocalDateTime ticketOpenDate;
+    /** 티켓 종료일*/
+    private LocalDateTime ticketEndDate;
     /** 공연 시작일 */
     private LocalDateTime startDate;
     /** 공연 종료일 */
@@ -66,9 +68,11 @@ public class Performance {
     private LocalDateTime createdDate;
     /** 업데이트일 */
     private LocalDateTime updatedDate;
+    /** 매수 제한 */
+    private Integer purchaseLimit;
 
     @Builder
-    public Performance(Long performanceId, String title, String description, Long hit, LocalDateTime ticketOpenDate, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<Performer> performers, List<PriceGrade> priceGradeList, float starScore, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public Performance(Long performanceId, String title, String description, Long hit, LocalDateTime ticketOpenDate, LocalDateTime startDate, LocalDateTime endDate, String musicalDateTime, String place, Integer runningTime, Integer interMission, Integer limitTime, Integer limitAge, String link, String etc, String imageUrl, PerformanceType performanceType, List<Performer> performers, List<PriceGrade> priceGradeList, float starScore, LocalDateTime createdDate, LocalDateTime updateDate, LocalDateTime ticketEndDate, Integer purchaseLimit) {
         this.performanceId = performanceId;
         this.title = title;
         this.description = description;
@@ -91,5 +95,7 @@ public class Performance {
         this.starScore = starScore;
         this.createdDate = createdDate;
         this.updatedDate = updateDate;
+        this.ticketEndDate = ticketEndDate;
+        this.purchaseLimit = purchaseLimit;
     }
 }

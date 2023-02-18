@@ -61,6 +61,7 @@ public class TestDataInit {
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
                     .auth(UserRole.NORMAL)
+                    .userStatus(true)
                     .build();
             userList.add(user);
         }
@@ -88,7 +89,9 @@ public class TestDataInit {
         }
         String[] titles = {"이석훈", "이석훈 2021 연말 콘서트", "이석훈&SG워너비 동행", "김민수 연말콘서트"};
         String[] places = {"전주", "전라북도 전주", "서울", "서울 특별시"};
-        LocalDateTime[] times = {LocalDateTime.now(), LocalDateTime.now().minusDays(5L), LocalDateTime.now().minusYears(1L), LocalDateTime.now().minusDays(2L)};
+        String[] musicalDates = {"2022.02.13~2022.02.15", "2023.02.01~2023.02.11"};
+        int[] ages = {8, 15, 19};
+        LocalDateTime[] times = {LocalDateTime.now(), LocalDateTime.now().minusDays(5L), LocalDateTime.now().minusYears(1L), LocalDateTime.now().plusDays(2L)};
         for (int i = 0; i < 1000; i++) {
             ArtistEntity artist = ArtistEntity.builder()
                     .age(random.nextInt(30) + i)
@@ -107,6 +110,12 @@ public class TestDataInit {
                     .priceGradeList(new ArrayList<>())
                     .place(places[random.nextInt(4)])
                     .startDate(times[random.nextInt(4)])
+                    .ticketOpenDate(times[random.nextInt(4)].minusDays(3L))
+                    .ticketEndDate(times[random.nextInt(4)].minusDays(3L))
+                    .hit((long)random.nextInt(1000)+1)
+                    .musicalDateTime(musicalDates[random.nextInt(2)])
+                    .purchaseLimit(3)
+                    .limitAge(ages[random.nextInt(3)])
                     .build();
             performances.add(performance);
 

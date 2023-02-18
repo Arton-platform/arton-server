@@ -15,6 +15,7 @@ public enum ErrorCode {
     IMAGE_LOAD_FAILED(500, "IMAGE_LOAD_FAILED", "이미지 로드에 실패하였습니다."),
     PARAMETER_NOT_VALID(400, "PARAMETER_ERR_400", "유효하지 않은 입력값입니다."),
     USER_NOT_FOUND(404, "COMMON-ERR-404", "사용자를 찾을 수 없습니다"),
+    PERFORMANCE_NOT_FOUND(404, "COMMON-ERR-404", "공연을 찾을 수 없습니다"),
     PASSWORD_NOT_MATCH(401, "NOT_MATCH_401", "패스워드가 일치하지 않습니다."),
     LOGIN_INFO_NOT_MATCHED(401, "NOT_MATCH_401", "아이디 또는 패스워드가 틀립니다."),
     USER_NOT_AUTHORITY(403, "COMMON-ERR-403", "권한이 없습니다."),
@@ -27,7 +28,12 @@ public enum ErrorCode {
     FORBIDDEN_REQUEST(403, "INVALID_REQUEST", "잘못된 요청입니다."),
     JSON_PROCESSING_ERROR(600, "JSON_PROCESSING_ERROR", "JSON 변환 오류 입니다."),
     IO_EXCEPTION(600, "IO_EXCEPTION", "입출력 오류 입니다."),
-    SELECT_ERROR(404, "SELECT_ERROR", "조회에 실패 했습니다.");
+    HIT_INVALID_ERROR(400, "HIT_INVALID_ERROR", "현재 좋아요는 0개 입니다. 0개 미만으로 변경할 수 없습니다."),
+    SELECT_ERROR(404, "SELECT_ERROR", "조회에 실패 했습니다."),
+    REGIST_ERROR(500, "REGIST_ERROR", "저장에 문제가 발생했습니다."),
+    DELETE_ERROR(500, "DELETE_ERROR", "삭제에 문제가 발생했습니다.");
+    ;
+
     private int status;
     private String errorCode;
     private String message;

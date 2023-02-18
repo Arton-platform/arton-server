@@ -37,6 +37,9 @@ public class PerformanceMapper {
                 .title(performance.getTitle())
                 .createdDate(performance.getCreatedDate())
                 .updateDate(performance.getUpdatedDate())
+                .ticketOpenDate(performance.getTicketOpenDate())
+                .ticketEndDate(performance.getTicketEndDate())
+                .purchaseLimit(performance.getPurchaseLimit())
                 .build();
     }
 
@@ -63,6 +66,9 @@ public class PerformanceMapper {
                 .title(performance.getTitle())
                 .createdDate(performance.getCreatedDate())
                 .updatedDate(performance.getUpdatedDate())
+                .ticketOpenDate(performance.getTicketOpenDate())
+                .ticketEndDate(performance.getTicketEndDate())
+                .purchaseLimit(performance.getPurchaseLimit())
                 .build();
     }
 
