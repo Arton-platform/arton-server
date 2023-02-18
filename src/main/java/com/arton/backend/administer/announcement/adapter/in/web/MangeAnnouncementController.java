@@ -1,10 +1,7 @@
 package com.arton.backend.administer.announcement.adapter.in.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.protocol.ResponseDate;
-import org.elasticsearch.action.admin.indices.dangling.find.FindDanglingIndexRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
