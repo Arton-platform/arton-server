@@ -48,6 +48,8 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase {
         // 공연 이미지가 있다면
         if (!isEmpty) {
             for (MultipartFile image : images) {
+                if (image.isEmpty())
+                    continue;
                 String upload = fileUploadUtils.upload(image, performanceDir + performance.getPerformanceId());
                 performanceImages.add(PerformanceImage.builder()
                         .performance(performance)

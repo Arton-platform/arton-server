@@ -23,7 +23,6 @@ function dataSubmit() {
     $.ajax({
         url: '/web/performance/add',
         data: data,
-        cache: false,
         processData:false,
         contentType:false,
         enctype:'multipart/form-data',
