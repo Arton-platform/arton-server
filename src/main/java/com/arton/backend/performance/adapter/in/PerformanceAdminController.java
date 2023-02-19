@@ -1,21 +1,14 @@
 package com.arton.backend.performance.adapter.in;
 
-import com.arton.backend.performance.applicaiton.data.EndDateBasedPerformanceDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
-import com.arton.backend.performance.applicaiton.data.StartDateBasedPerformanceDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceAdminSaveUseCase;
-import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.temporal.TemporalField;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * 관리자만 접근 가능.

@@ -78,7 +78,7 @@ dependencies {
 	testImplementation "org.testcontainers:elasticsearch:1.16.3"
 
 	// spring boot log to elastic search
-//	implementation 'net.logstash.logback:logstash-logback-encoder:4.11'
+	implementation 'net.logstash.logback:logstash-logback-encoder:4.11'
 	implementation fileTree(dir:  'lib', includes: ['*.jar'])
 
 }
