@@ -1,5 +1,6 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
+import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.domain.IndexName;
@@ -15,10 +16,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.Criteria;
-import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -81,6 +79,35 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
         setSort(sort, searchQueryBuilder);
+        NativeSearchQuery searchQuery = searchQueryBuilder.build();
+        return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
+    }
+
+    @Override
+    public SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable) {
+        if (ObjectUtils.isEmpty(searchDto))
+        {
+            return SearchHitSupport.searchPageFor(elasticsearchOperations.search(Query.findAll(), PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), pageable);
+        }
+        QueryBuilder query = null;
+        QueryBuilder type = null;
+        QueryBuilder category = null;
+        if (!ObjectUtils.isEmpty(searchDto) && StringUtils.hasText(searchDto.getKeyword())) {
+            if (StringUtils.hasText(searchDto.getKeyword())) {
+                query = boolQuery().should(multiMatchQuery(searchDto.getKeyword(),"performanceType.ngram", "performanceType", "title", "title.ngram", "place", "place.ngram")
+                        .type(BEST_FIELDS)
+                        .tieBreaker(0.3f));
+            }
+            if (!ObjectUtils.isEmpty(searchDto.getPerformanceType())) {
+                type = termQuery("performanceType", searchDto.getPerformanceType().getValue());
+            }
+            if (!ObjectUtils.isEmpty(searchDto.getShowCategory())) {
+                category = termQuery("showCategory", searchDto.getShowCategory().getValue());
+            }
+        }
+        QueryBuilder all = boolQuery().must(query).must(type).must(category);
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(all);
+        searchQueryBuilder.withPageable(pageable);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
     }

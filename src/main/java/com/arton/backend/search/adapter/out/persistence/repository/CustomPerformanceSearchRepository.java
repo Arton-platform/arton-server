@@ -1,5 +1,6 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
+import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -15,4 +16,5 @@ public interface CustomPerformanceSearchRepository {
     SearchPage<PerformanceDocument> findByTitle(String title, String sort, Pageable pageable);
     SearchPage<PerformanceDocument> findByType(String type, String sort, Pageable pageable);
     SearchPage<PerformanceDocument> findByKeyword(String keyword, String sort, Pageable pageable);
+    SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable);
 }

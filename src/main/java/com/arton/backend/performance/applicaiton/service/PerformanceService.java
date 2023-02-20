@@ -5,6 +5,7 @@ import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceDeleteUseCase;
@@ -108,5 +109,10 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSearch
     @Override
     public Page<SearchResultDto> searchAll(String type, String sort, Pageable pageable) {
         return performanceSearchRepository.findByKeyword(type, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
+    }
+
+    @Override
+    public Page<SearchResultDto> searchInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable) {
+        return performanceSearchRepository.findByDtoInAdmin(searchDto, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
     }
 }

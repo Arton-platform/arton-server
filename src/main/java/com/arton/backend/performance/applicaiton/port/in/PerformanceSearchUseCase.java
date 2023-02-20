@@ -1,5 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.in;
 
+import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.application.data.SearchResultDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,5 @@ public interface PerformanceSearchUseCase {
     Page<SearchResultDto> searchByPlace(String place, String sort, Pageable pageable);
     Page<SearchResultDto> searchByPerformanceType(String type, String sort, Pageable pageable);
     Page<SearchResultDto> searchAll(String type, String sort, Pageable pageable);
+    Page<SearchResultDto> searchInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable);
 }

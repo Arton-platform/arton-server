@@ -1,5 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.out;
 
+import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -15,6 +16,8 @@ public interface PerformanceSearchRepositoryPort {
     SearchPage<PerformanceDocument> findByPlace(String place, String sort, Pageable pageable);
     /** Multimatch 검색 */
     SearchPage<PerformanceDocument> findByKeyword(String keyword, String sort, Pageable pageable);
+    /** 관리자 페이지 검색용*/
+    SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable);
     void saveAll(List<PerformanceDocument> performanceDocuments);
     void save(PerformanceDocument performanceDocument);
 }

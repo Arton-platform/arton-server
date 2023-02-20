@@ -1,5 +1,6 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
+import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
     @Override
     public SearchPage<PerformanceDocument> findByKeyword(String keyword, String sort, Pageable pageable) {
         return performanceSearchRepository.findByKeyword(keyword, sort, pageable);
+    }
+
+    @Override
+    public SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable) {
+        return null;
     }
 
     @Override
