@@ -8,6 +8,12 @@ server:
 
 # ETC
 spring:
+  user:
+    image:
+      dir: arton/image/profiles/
+  performance:
+    image:
+      dir: arton/image/performances/
   servlet:
     max-file-size: 20MB
     max-request-size: 25MB

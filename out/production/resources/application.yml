@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: test
   jpa:
     properties:
       hibernate:
@@ -9,7 +9,6 @@ spring:
   full-bucket: https://elasticbeanstalk-ap-northeast-2-629926164588.s3.ap-northeast-2.amazonaws.com/
   default-image-local: /arton/image/default/default.png
   default-image: https://elasticbeanstalk-ap-northeast-2-629926164588.s3.ap-northeast-2.amazonaws.com/arton/image/default/default.jpeg
-  root-dir: /arton/image/profiles
   terms-dir: arton/terms
   password-mail-key: arton/mail/passwordResetMail.html
 

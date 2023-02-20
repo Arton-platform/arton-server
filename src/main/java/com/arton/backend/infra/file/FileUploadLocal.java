@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,20 +29,22 @@ import java.util.stream.Stream;
  * 이미지 업로드 유틸 로컬
  */
 @Slf4j
-@Profile(value = "dev")
+@Profile(value = {"test"})
 @Service
 @RequiredArgsConstructor
 public class FileUploadLocal implements FileUploadUtils{
     @Value("${spring.default-image-local}")
     private String defaultImageUrl;
-    @Value("${spring.root-dir}")
+    @Value("${spring.user.image.dir}")
     private String rootDir;
+    @Value("${spring.performance.image.dir}")
+    private String rootPerformanceDir;
 
     @Override
     public void delete(Long userId, String dir) {
         // 기본 이미지가 아니라면 삭제 진행
         if (!dir.equals(defaultImageUrl)) {
-            Path dirPath = Paths.get(System.getProperty("user.dir") + rootDir + "/" + userId);
+            Path dirPath = Paths.get(System.getProperty("user.dir") + rootDir + userId);
 
             try {
                 Files.list(dirPath).forEach(file -> {
@@ -63,7 +67,7 @@ public class FileUploadLocal implements FileUploadUtils{
         validateFile(multipartFile);
         String originalFilename = multipartFile.getOriginalFilename();
         String fileName = createStoreFileName(originalFilename);
-        Path uploadPath = Paths.get(System.getProperty("user.dir") + "/" + dirName);
+        Path uploadPath = Paths.get(System.getProperty("user.dir")  + dirName);
         if (!Files.exists(uploadPath)) {
             try {
                 Files.createDirectories(uploadPath);
@@ -130,6 +134,9 @@ public class FileUploadLocal implements FileUploadUtils{
     private void validateFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
             throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+        if (!multipartFile.getContentType().toLowerCase(Locale.ROOT).contains("image")) {
+            throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
         }
     }
 

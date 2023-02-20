@@ -40,6 +40,7 @@ public class PerformanceMapper {
                 .ticketOpenDate(performance.getTicketOpenDate())
                 .ticketEndDate(performance.getTicketEndDate())
                 .purchaseLimit(performance.getPurchaseLimit())
+                .showCategory(performance.getShowCategory())
                 .build();
     }
 
@@ -69,6 +70,7 @@ public class PerformanceMapper {
                 .ticketOpenDate(performance.getTicketOpenDate())
                 .ticketEndDate(performance.getTicketEndDate())
                 .purchaseLimit(performance.getPurchaseLimit())
+                .showCategory(performance.getShowCategory())
                 .build();
     }
 

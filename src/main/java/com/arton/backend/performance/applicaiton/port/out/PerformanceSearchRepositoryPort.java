@@ -16,4 +16,5 @@ public interface PerformanceSearchRepositoryPort {
     /** Multimatch 검색 */
     SearchPage<PerformanceDocument> findByKeyword(String keyword, String sort, Pageable pageable);
     void saveAll(List<PerformanceDocument> performanceDocuments);
+    void save(PerformanceDocument performanceDocument);
 }
