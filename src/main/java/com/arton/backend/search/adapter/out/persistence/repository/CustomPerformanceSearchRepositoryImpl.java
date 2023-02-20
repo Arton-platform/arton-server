@@ -24,6 +24,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.MultiMatchQueryBuilder.Type.BEST_FIELDS;
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -89,11 +90,17 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
 
     @Override
     public SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable) {
-        QueryBuilder query = boolQuery().should(multiMatchQuery("*","performanceType.ngram", "performanceType", "title", "title.ngram", "place", "place.ngram")
-                .type(BEST_FIELDS)
-                .tieBreaker(0.3f));
-        QueryBuilder type = termsQuery("performanceType", Arrays.stream(PerformanceType.values()).map(PerformanceType::getValue));
-        QueryBuilder category = termQuery("showCategory", Arrays.stream(ShowCategory.values()).map(ShowCategory::getValue));
+        // 모든 키워드
+        QueryBuilder query = boolQuery()
+                .should(wildcardQuery("performanceType.ngram", "*"))
+                .should(wildcardQuery("performanceType", "*"))
+                .should(wildcardQuery("title.ngram", "*"))
+                .should(wildcardQuery("title", "*"))
+                .should(wildcardQuery("place", "*"))
+                .should(wildcardQuery("place.ngram", "*"));
+
+        QueryBuilder type = termsQuery("performanceType", Arrays.stream(PerformanceType.values()).map(PerformanceType::getValue).collect(Collectors.toList()));
+        QueryBuilder category = termsQuery("showCategory", Arrays.stream(ShowCategory.values()).map(ShowCategory::getValue).collect(Collectors.toList()));
         if (!ObjectUtils.isEmpty(searchDto)) {
             if (StringUtils.hasText(searchDto.getKeyword())) {
                 System.out.println("searchDto = " + searchDto.getKeyword());
@@ -107,11 +114,6 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
             if (!ObjectUtils.isEmpty(searchDto.getShowCategory())) {
                 category = termQuery("showCategory", searchDto.getShowCategory().getValue());
             }
-        }
-        if (query == null && type == null && category == null)
-        {
-            System.out.println("all null = ");
-            return SearchHitSupport.searchPageFor(elasticsearchOperations.search(Query.findAll(), PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), pageable);
         }
 
         QueryBuilder all = boolQuery().must(query).must(type).must(category);
