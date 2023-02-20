@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
 <body>
-Hello world
+<div>
+    <article class="container">
+        <form id="addForm" th:action th:object="${searchDto}" method="post" enctype="multipart/form-data">
+            <div style="display: inline">
+                <div>
+                    <label for="performanceType">공연타입</label>
+                    <select id="performanceType" name="performanceType" class="form-select">
+                        <option value="">==공연==</option>
+                        <option th:each="type : ${type}"
+                                th:value="${type.name()}"
+                                th:text="${type.getValue()}">뮤지컬
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label for="showCategory">분류</label>
+                    <select id="showCategory" name="showCategory" class="form-select">
+                        <option value="">==상태==</option>
+                        <option th:each="type : ${category}"
+                                th:value="${type.name()}"
+                                th:text="${type.getValue()}">
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label for="keyword">검색어</label>
+                    <input type="text" id="keyword" name="keyword">
+                </div>
+                <div>
+                    <input type="submit" value="검색" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
+                </div>
+            </div>
+        </form>
+    </article>
+</div>
+
+<div class="container">
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>제목</th>
+                <th>공연타입</th>
+                <th>분류</th>
+                <th>장소</th>
+                <th style="width: 40%">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="performance : ${performances}">
+                <td th:text="${performance.getAppPkg()}"></td>
+                <td th:text="${performance.getAppVersion()}"></td>
+                <td th:text="${performance.getOsType()}"></td>
+                <td th:text="${performance.getNickname()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 </body>
+
 </html>

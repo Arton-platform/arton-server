@@ -1,5 +1,6 @@
 package com.arton.backend.performance.adapter.in;
 
+import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.performance.domain.PerformanceType;
@@ -41,8 +42,20 @@ public class PerformanceAdminController {
 
     @PostMapping(value = "/web/performance/add")
     public String postPerformance(PerformanceCreateDto performance) {
-        System.out.println("performance = " + performance.getTicketEndDate());
         performanceAdminSaveUseCase.addPerformance(performance);
+        return "performance/index";
+    }
+
+    @GetMapping("/web/performance")
+    public String goPerformanceHome(Model model) {
+        model.addAttribute("type", PerformanceType.values());
+        model.addAttribute("category", ShowCategory.values());
+        return "performance/index";
+    }
+
+    @PostMapping("/web/performance")
+    public String searchPerformance(PerformanceAdminSearchDto searchDto) {
+
         return "performance/index";
     }
 }
