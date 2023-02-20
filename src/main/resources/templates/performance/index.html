@@ -64,7 +64,7 @@
                 <th>공연타입</th>
                 <th>분류</th>
                 <th>장소</th>
-                <th style="width: 40%">설명</th>
+                <th>기능</th>
             </tr>
             </thead>
             <tbody>
@@ -73,6 +73,14 @@
                 <td th:text="${performance.getPerformanceType()}"></td>
                 <td th:text="${performance.getShowCategory()}"></td>
                 <td th:text="${performance.getPlace()}"></td>
+                <td>
+                    <p class="btn_set">
+                        <a th:href="@{/web/performance/{performanceId}(performanceId=${performance.getId()})}">수정</a>
+                        <a>삭제</a>
+                        <a>복사</a>
+                    </p>
+
+                </td>
             </tr>
             </tbody>
         </table>
