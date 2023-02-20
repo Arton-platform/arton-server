@@ -19,6 +19,7 @@
   </style>
 </head>
 <body>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <div>
     <article class="container">
         <form th:action="@{/web/performance}" th:object="${searchDto}" method="POST">
@@ -60,6 +61,7 @@
         <table class="table table-striped">
             <thead>
             <tr>
+                <th>공연번호</th>
                 <th>제목</th>
                 <th>공연타입</th>
                 <th>분류</th>
@@ -69,6 +71,7 @@
             </thead>
             <tbody>
             <tr th:each="performance : ${performances}">
+                <td id="pId" name="pId" th:text="${performance.getId()}"></td>
                 <td th:text="${performance.getTitle()}"></td>
                 <td th:text="${performance.getPerformanceType()}"></td>
                 <td th:text="${performance.getShowCategory()}"></td>
@@ -76,7 +79,7 @@
                 <td>
                     <p class="btn_set">
                         <a th:href="@{/web/performance/{performanceId}(performanceId=${performance.getId()})}">수정</a>
-                        <a>삭제</a>
+                        <button type="button" th:onclick="deletePerformance([[${performance.id}]]);">삭제</button>
                         <a>복사</a>
                     </p>
 
@@ -139,7 +142,26 @@
         </ul>
     </nav>
 </div> <!-- /container -->
+<!--delete-->
+<th:block layout:fragment="script">
+    <!-- <script> 태그에 th:inline 속성을 javascript로 선언해야만 자바스크립트를 사용할 수 있다. -->
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+        function deletePerformance(idx) {
+          if (confirm(idx + "번 공연을 삭제할까요?")) {
+          var uri = /*[[ @{/web/performance/delete} ]]*/;
+          var html = "";
 
+          html += '<form name="dataForm" action="' + uri + '" method="POST">';
+          html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
+          html += '</form>';
+
+          $("body").append(html);
+          	document.dataForm.submit();
+          }
+        }
+      /*]]>*/
+    </script>
+</th:block>
 </body>
-
 </html>
