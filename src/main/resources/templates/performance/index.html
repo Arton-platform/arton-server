@@ -4,7 +4,7 @@
 <body>
 <div>
     <article class="container">
-        <form id="addForm" th:action th:object="${searchDto}" method="post" enctype="multipart/form-data">
+        <form id="addForm" th:action="@{/web/performance}" th:object="${searchDto}" method="post" enctype="multipart/form-data">
             <div style="display: inline">
                 <div>
                     <label for="performanceType">공연타입</label>
@@ -52,10 +52,10 @@
             </thead>
             <tbody>
             <tr th:each="performance : ${performances}">
-                <td th:text="${performance.getAppPkg()}"></td>
-                <td th:text="${performance.getAppVersion()}"></td>
-                <td th:text="${performance.getOsType()}"></td>
-                <td th:text="${performance.getNickname()}"></td>
+                <td th:text="${performance.getTitle()}"></td>
+                <td th:text="${performance.getPerformanceType()}"></td>
+                <td th:text="${performance.getShowCategory()}"></td>
+                <td th:text="${performance.getPlace()}"></td>
             </tr>
             </tbody>
         </table>

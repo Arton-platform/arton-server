@@ -12,7 +12,7 @@ import static org.springframework.util.ObjectUtils.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SearchResultDto {
+public class   SearchResultDto {
     private Long id;
     private String imageUrl;
     private String title;

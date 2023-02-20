@@ -18,6 +18,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,7 @@ import java.util.Map;
 public class PerformanceAdminController {
     private final PerformanceAdminSaveUseCase performanceAdminSaveUseCase;
     private final PerformanceSearchUseCase performanceSearchService;
-    private PerformanceAdminSearchDto searchDto = new PerformanceAdminSearchDto();
+    private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
 
     @GetMapping("/web/performance/add")
     public String addPerformance(Model model) {
@@ -60,8 +61,8 @@ public class PerformanceAdminController {
 
     @GetMapping("/web/performance")
     public String goPerformanceHome(Model model, @PageableDefault(size = 10) Pageable pageable) {
-        Page<SearchResultDto> performances = performanceSearchService.searchInAdmin(searchDto, pageable); //처음만 init 하면
-        model.addAttribute("searchDto", searchDto);
+        Page<SearchResultDto> performances = performanceSearchService.searchInAdmin(form, pageable); //처음만 init 하면
+        model.addAttribute("searchDto", form);
         model.addAttribute("performances", performances);
         model.addAttribute("type", PerformanceType.values());
         model.addAttribute("category", ShowCategory.values());
@@ -70,9 +71,15 @@ public class PerformanceAdminController {
 
     @PostMapping("/web/performance")
     public String searchPerformance(Model model, @ModelAttribute("searchDto") PerformanceAdminSearchDto searchDto, @PageableDefault(size = 10) Pageable pageable) {
-        this.searchDto = searchDto;
-        Page<SearchResultDto> performances = performanceSearchService.searchInAdmin(searchDto, pageable); //처음만 init 하면
+        this.form = searchDto;
+        if (!ObjectUtils.isEmpty(searchDto))
+        {
+            System.out.println("searchDto = " + searchDto);
+        }
+        Page<SearchResultDto> performances = performanceSearchService.searchInAdmin(form, pageable); //처음만 init 하면
         model.addAttribute("performances", performances);
+        model.addAttribute("type", PerformanceType.values());
+        model.addAttribute("category", ShowCategory.values());
         return "performance/index";
     }
 }

@@ -37,7 +37,7 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceSearchRepo
 
     @Override
     public SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable) {
-        return null;
+        return performanceSearchRepository.findByDtoInAdmin(searchDto, pageable);
     }
 
     @Override

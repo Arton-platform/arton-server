@@ -85,25 +85,29 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
 
     @Override
     public SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable) {
-        if (ObjectUtils.isEmpty(searchDto))
-        {
-            return SearchHitSupport.searchPageFor(elasticsearchOperations.search(Query.findAll(), PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), pageable);
-        }
         QueryBuilder query = null;
         QueryBuilder type = null;
         QueryBuilder category = null;
         if (!ObjectUtils.isEmpty(searchDto) && StringUtils.hasText(searchDto.getKeyword())) {
             if (StringUtils.hasText(searchDto.getKeyword())) {
+                System.out.println("searchDto = " + searchDto.getKeyword());
                 query = boolQuery().should(multiMatchQuery(searchDto.getKeyword(),"performanceType.ngram", "performanceType", "title", "title.ngram", "place", "place.ngram")
                         .type(BEST_FIELDS)
                         .tieBreaker(0.3f));
             }
             if (!ObjectUtils.isEmpty(searchDto.getPerformanceType())) {
+                System.out.println("searchDto = " + searchDto.getPerformanceType().getValue());
                 type = termQuery("performanceType", searchDto.getPerformanceType().getValue());
             }
             if (!ObjectUtils.isEmpty(searchDto.getShowCategory())) {
+                System.out.println("searchDto = " + searchDto.getShowCategory().getValue());
                 category = termQuery("showCategory", searchDto.getShowCategory().getValue());
             }
+        }
+        if (query == null && type == null && category == null)
+        {
+            System.out.println("all null = ");
+            return SearchHitSupport.searchPageFor(elasticsearchOperations.search(Query.findAll(), PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), pageable);
         }
         QueryBuilder all = boolQuery().must(query).must(type).must(category);
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(all);
