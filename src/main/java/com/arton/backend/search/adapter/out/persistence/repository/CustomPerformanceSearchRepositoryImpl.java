@@ -109,6 +109,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
             System.out.println("all null = ");
             return SearchHitSupport.searchPageFor(elasticsearchOperations.search(Query.findAll(), PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), pageable);
         }
+
         QueryBuilder all = boolQuery().must(query).must(type).must(category);
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(all);
         searchQueryBuilder.withPageable(pageable);

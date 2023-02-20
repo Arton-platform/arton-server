@@ -4,11 +4,11 @@
 <body>
 <div>
     <article class="container">
-        <form id="addForm" th:action="@{/web/performance}" th:object="${searchDto}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/web/performance}" th:object="${searchDto}" method="POST">
             <div style="display: inline">
                 <div>
-                    <label for="performanceType">공연타입</label>
-                    <select id="performanceType" name="performanceType" class="form-select">
+                    <label>공연타입</label>
+                    <select th:field="*{performanceType}" class="form-select">
                         <option value="">==공연==</option>
                         <option th:each="type : ${type}"
                                 th:value="${type.name()}"
@@ -17,8 +17,8 @@
                     </select>
                 </div>
                 <div>
-                    <label for="showCategory">분류</label>
-                    <select id="showCategory" name="showCategory" class="form-select">
+                    <label>분류</label>
+                    <select th:field="*{showCategory}" class="form-select">
                         <option value="">==상태==</option>
                         <option th:each="type : ${category}"
                                 th:value="${type.name()}"
@@ -27,8 +27,8 @@
                     </select>
                 </div>
                 <div>
-                    <label for="keyword">검색어</label>
-                    <input type="text" id="keyword" name="keyword">
+                    <label>검색어</label>
+                    <input type="text" th:field="*{keyword}">
                 </div>
                 <div>
                     <input type="submit" value="검색" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
