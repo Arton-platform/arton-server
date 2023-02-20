@@ -2,6 +2,8 @@ package com.arton.backend.search.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
+import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.performance.domain.ShowCategory;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.domain.IndexName;
 import com.arton.backend.search.domain.SortField;
@@ -20,6 +22,8 @@ import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.Arrays;
 
 import static org.elasticsearch.index.query.MultiMatchQueryBuilder.Type.BEST_FIELDS;
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -85,10 +89,12 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
 
     @Override
     public SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable) {
-        QueryBuilder query = null;
-        QueryBuilder type = null;
-        QueryBuilder category = null;
-        if (!ObjectUtils.isEmpty(searchDto) && StringUtils.hasText(searchDto.getKeyword())) {
+        QueryBuilder query = boolQuery().should(multiMatchQuery("*","performanceType.ngram", "performanceType", "title", "title.ngram", "place", "place.ngram")
+                .type(BEST_FIELDS)
+                .tieBreaker(0.3f));
+        QueryBuilder type = termsQuery("performanceType", Arrays.stream(PerformanceType.values()).map(PerformanceType::getValue));
+        QueryBuilder category = termQuery("showCategory", Arrays.stream(ShowCategory.values()).map(ShowCategory::getValue));
+        if (!ObjectUtils.isEmpty(searchDto)) {
             if (StringUtils.hasText(searchDto.getKeyword())) {
                 System.out.println("searchDto = " + searchDto.getKeyword());
                 query = boolQuery().should(multiMatchQuery(searchDto.getKeyword(),"performanceType.ngram", "performanceType", "title", "title.ngram", "place", "place.ngram")
@@ -96,11 +102,9 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
                         .tieBreaker(0.3f));
             }
             if (!ObjectUtils.isEmpty(searchDto.getPerformanceType())) {
-                System.out.println("searchDto = " + searchDto.getPerformanceType().getValue());
                 type = termQuery("performanceType", searchDto.getPerformanceType().getValue());
             }
             if (!ObjectUtils.isEmpty(searchDto.getShowCategory())) {
-                System.out.println("searchDto = " + searchDto.getShowCategory().getValue());
                 category = termQuery("showCategory", searchDto.getShowCategory().getValue());
             }
         }
