@@ -3,11 +3,24 @@ var fileInfoArr=[];
 
 //썸네일 클릭시 삭제.
 function fileRemove(index) {
-    console.log("index: "+index);
-    fileInfoArr.splice(index,1);
+    // console.log("index: "+index);
+    // fileInfoArr.splice(index,1);
+    // var imgId="#img_id_"+index;
+    // $(imgId).remove("");
+    // console.log(fileInfoArr);
+    const dt = new DataTransfer()
+    const input = document.getElementById('images')
+    const { files } = input
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        if (index !== i)
+            dt.items.add(file) // here you exclude the file. thus removing it.
+    }
+
+    input.files = dt.files // Assign the updates list
 
     var imgId="#img_id_"+index;
-    $(imgId).remove();
+    $(imgId).remove("");
     console.log(fileInfoArr);
 }
 
