@@ -7,16 +7,17 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -202,5 +203,36 @@ public class FileUploadS3 implements FileUploadUtils {
             e.printStackTrace();
         }
         return "default.png";
+    }
+
+    @Override
+    public MultipartFile fileToMultipartFile(String url) {
+        File file = new File(url);
+        FileItem fileItem = null;
+        try {
+            fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+        OutputStream outputStream = null;
+        try {
+            outputStream = fileItem.getOutputStream();
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.IO_EXCEPTION.getMessage(), ErrorCode.IO_EXCEPTION);
+        }
+        try {
+            org.apache.commons.io.IOUtils.copy(inputStream, outputStream);
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.IO_EXCEPTION.getMessage(), ErrorCode.IO_EXCEPTION);
+        }
+        MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+        return multipartFile;
     }
 }

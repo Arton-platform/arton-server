@@ -2,6 +2,7 @@ package com.arton.backend.infra.file;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -15,4 +16,5 @@ public interface FileUploadUtils {
     String getDefaultImageUrl();
     String getFileContent(String directory);
     List<String> getFileNameInDirectory(String directory);
+    MultipartFile fileToMultipartFile(String url);
 }

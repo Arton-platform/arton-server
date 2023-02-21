@@ -1,8 +1,8 @@
 package com.arton.backend.administer.performance.adapter.in;
 
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
-import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
-import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminCreateDto;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.domain.PerformanceType;
@@ -15,10 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 관리자만 접근 가능.
@@ -45,7 +42,7 @@ public class PerformanceAdminController {
     }
 
     @PostMapping(value = "/web/performance/add")
-    public String postPerformance(PerformanceCreateDto performance) {
+    public String postPerformance(PerformanceAdminCreateDto performance) {
         performanceAdminSaveUseCase.addPerformance(performance);
         return "redirect:/web/performance";
     }
@@ -80,4 +77,12 @@ public class PerformanceAdminController {
         performanceAdminDeleteUseCase.deletePerformance(idx);
         return "redirect:/web/performance";
     }
+
+    // 공연 수정
+    @GetMapping("/web/performance/{id}")
+    public String goEditHome(Model model, @PathVariable(name = "id") Long id) {
+
+        return "performance/edit";
+    }
+
 }

@@ -1,13 +1,12 @@
 package com.arton.backend.search.application.service;
 
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
-import com.arton.backend.search.application.port.out.PerformanceDocumentDeletePort;
 import com.arton.backend.search.application.port.out.PerformanceDocumentSearchPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

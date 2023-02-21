@@ -1,6 +1,6 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
-import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceSearchDto;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
@@ -8,7 +8,6 @@ import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocu
 import com.arton.backend.search.domain.IndexName;
 import com.arton.backend.search.domain.SortField;
 import lombok.RequiredArgsConstructor;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;

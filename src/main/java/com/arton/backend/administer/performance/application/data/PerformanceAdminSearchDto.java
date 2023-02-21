@@ -1,4 +1,4 @@
-package com.arton.backend.performance.applicaiton.data;
+package com.arton.backend.administer.performance.application.data;
 
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;

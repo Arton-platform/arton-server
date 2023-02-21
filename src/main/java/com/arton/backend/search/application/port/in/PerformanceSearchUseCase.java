@@ -1,11 +1,9 @@
 package com.arton.backend.search.application.port.in;
 
-import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.application.data.SearchResultDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface PerformanceSearchUseCase {
     void saveAllDocuments();

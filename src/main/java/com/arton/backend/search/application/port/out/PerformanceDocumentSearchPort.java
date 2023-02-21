@@ -1,6 +1,6 @@
 package com.arton.backend.search.application.port.out;
 
-import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;

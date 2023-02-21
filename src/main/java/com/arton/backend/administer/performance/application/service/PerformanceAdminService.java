@@ -1,15 +1,20 @@
 package com.arton.backend.administer.performance.application.service;
 
+import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
+import com.arton.backend.administer.performance.application.port.in.PerformanceAdminUseCase;
 import com.arton.backend.image.application.port.out.PerformanceImageDeleteRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.file.FileUploadUtils;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminCreateDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
@@ -28,9 +33,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase {
+public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase, PerformanceAdminUseCase {
     private final PerformanceSavePort performanceSavePort;
     private final PerformanceDeletePort performanceDeletePort;
+    private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceImageSaveRepositoryPort performanceImageSaveRepositoryPort;
     private final PerformanceImageRepositoryPort performanceImageRepositoryPort;
     private final PerformanceImageDeleteRepositoryPort performanceImageDeleteRepositoryPort;
@@ -46,7 +52,7 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
      * @return
      */
     @Override
-    public Performance addPerformance(PerformanceCreateDto performanceCreateDto) {
+    public Performance addPerformance(PerformanceAdminCreateDto performanceCreateDto) {
         Performance performance = performanceSavePort.save(performanceCreateDto.dtoToDomain());
         PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(performance);
         System.out.println("performanceDocument = " + performanceDocument.getId());
@@ -81,5 +87,13 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         performanceDeletePort.deleteById(performanceId);
         // document 제거
         performanceDocumentDeletePort.deleteById(performanceId);
+    }
+
+    @Override
+    public PerformanceAdminEditDto getPerformanceEditDto(Long performanceId) {
+        Performance performance = performanceRepositoryPort.findById(performanceId).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
+        List<String> imageUrls = performanceImageRepositoryPort.findByPerformanceId(performanceId).stream().map(PerformanceImage::getImageUrl).collect(Collectors.toList());
+        // to dto
+        PerformanceAdminEditDto editDto = PerformanceAdminEditDto.domainToDto(performance);
     }
 }

@@ -1,11 +1,9 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
-import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
-
-import java.util.List;
 
 /**
  * 실시간 검색 결과 제공을 위한 repository
