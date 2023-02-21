@@ -95,5 +95,6 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         List<String> imageUrls = performanceImageRepositoryPort.findByPerformanceId(performanceId).stream().map(PerformanceImage::getImageUrl).collect(Collectors.toList());
         // to dto
         PerformanceAdminEditDto editDto = PerformanceAdminEditDto.domainToDto(performance);
+        return editDto;
     }
 }
