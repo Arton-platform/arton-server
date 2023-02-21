@@ -1,34 +1,22 @@
-package com.arton.backend.performance.adapter.in;
+package com.arton.backend.administer.admin.adapter.in.web;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
-import com.arton.backend.performance.applicaiton.port.in.PerformanceAdminSaveUseCase;
+import com.arton.backend.administer.admin.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
-import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchResultDto;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 관리자만 접근 가능.

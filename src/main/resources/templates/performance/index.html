@@ -149,7 +149,7 @@
       /*<![CDATA[*/
         function deletePerformance(idx) {
           if (confirm(idx + "번 공연을 삭제할까요?")) {
-          var uri = /*[[ @{/web/performance/delete} ]]*/;
+          var uri = /*[[ @{/web/performance/revoke} ]]*/;
           var html = "";
 
           html += '<form name="dataForm" action="' + uri + '" method="POST">';

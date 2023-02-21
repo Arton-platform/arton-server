@@ -1,11 +1,11 @@
-package com.arton.backend.performance.applicaiton.service;
+package com.arton.backend.administer.admin.application.service;
 
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
-import com.arton.backend.performance.applicaiton.port.in.PerformanceAdminSaveUseCase;
+import com.arton.backend.administer.admin.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

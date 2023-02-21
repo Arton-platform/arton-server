@@ -1,4 +1,4 @@
-package com.arton.backend.performance.applicaiton.port.in;
+package com.arton.backend.administer.admin.application.port.in;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
 import com.arton.backend.performance.domain.Performance;
