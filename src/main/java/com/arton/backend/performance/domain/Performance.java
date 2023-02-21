@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,6 +102,24 @@ public class Performance {
         this.ticketEndDate = ticketEndDate;
         this.purchaseLimit = purchaseLimit;
         this.showCategory = showCategory;
+    }
+
+    public void editPerformance(PerformanceAdminEditDto editDto) {
+        purchaseLimit = editDto.getPurchaseLimit();
+        performanceType = editDto.getPerformanceType();
+        ticketOpenDate = editDto.getTicketOpenDate();
+        ticketEndDate = editDto.getTicketEndDate();
+        description = editDto.getDescription();
+        title = editDto.getTitle();
+        startDate = editDto.getStartDate().atStartOfDay();
+        endDate = editDto.getEndDate().atTime(LocalTime.MAX);
+        interMission = editDto.getInterMission();
+        limitAge = editDto.getLimitAge();
+        link = editDto.getLink();
+        place = editDto.getPlace();
+        runningTime = editDto.getRunningTime();
+        limitTime = editDto.getLimitTime();
+        showCategory = editDto.getShowCategory();
     }
 
 }

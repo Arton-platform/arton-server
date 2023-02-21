@@ -8,15 +8,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.List;
 
 @Data
 @Schema(description = "관리자 페이지 공연 수정 Dto")
@@ -80,27 +76,6 @@ public class PerformanceAdminEditDto {
                 .runningTime(performance.getRunningTime())
                 .limitTime(performance.getLimitTime())
                 .showCategory(performance.getShowCategory())
-                .build();
-    }
-
-    public Performance dtoToDomain() {
-        return Performance.builder()
-                .performanceId(this.performanceId)
-                .purchaseLimit(this.purchaseLimit)
-                .performanceType(this.performanceType)
-                .ticketOpenDate(this.ticketOpenDate)
-                .ticketEndDate(this.ticketEndDate)
-                .description(this.description)
-                .title(this.title)
-                .startDate(this.startDate.atStartOfDay())
-                .endDate(this.endDate.atTime(LocalTime.MAX))
-                .interMission(this.interMission)
-                .limitAge(this.limitAge)
-                .link(this.link)
-                .place(this.place)
-                .runningTime(this.runningTime)
-                .limitTime(this.limitTime)
-                .showCategory(this.showCategory)
                 .build();
     }
 }

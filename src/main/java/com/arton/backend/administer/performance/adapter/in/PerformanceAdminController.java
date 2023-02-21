@@ -4,6 +4,7 @@ import com.arton.backend.administer.performance.application.data.PerformanceAdmi
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminCreateDto;
+import com.arton.backend.administer.performance.application.port.in.PerformanceAdminEditUseCase;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminUseCase;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
@@ -30,6 +31,7 @@ public class PerformanceAdminController {
     private final PerformanceAdminUseCase performanceAdminUseCase;
     private final PerformanceSearchUseCase performanceSearchService;
     private final PerformanceAdminDeleteUseCase performanceAdminDeleteUseCase;
+    private final PerformanceAdminEditUseCase performanceAdminEditUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
 
     @GetMapping("/web/performance/add")
@@ -85,10 +87,16 @@ public class PerformanceAdminController {
     @GetMapping("/web/performance/{id}")
     public String goEditHome(Model model, @PathVariable(name = "id") Long id) {
         PerformanceAdminEditDto editDto = performanceAdminUseCase.getPerformanceEditDto(id);
-        System.out.println("editDto = " + editDto.getTicketOpenDate());
-        System.out.println("editDto = " + editDto.getTicketEndDate());
         model.addAttribute("editDto", editDto);
         return "performance/editForm";
+    }
+
+    // 공연 수정
+    // 이미지 업로드도 해야 하므로 post
+    @PostMapping("/web/performance/{id}")
+    public String editPerformance(Model model, @PathVariable(name = "id") Long id, PerformanceAdminEditDto editDto) {
+        performanceAdminEditUseCase.editPerformance(id, editDto);
+        return "redirect:/web/performance";
     }
 
 }

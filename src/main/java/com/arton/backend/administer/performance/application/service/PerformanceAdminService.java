@@ -2,6 +2,7 @@ package com.arton.backend.administer.performance.application.service;
 
 import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
+import com.arton.backend.administer.performance.application.port.in.PerformanceAdminEditUseCase;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminUseCase;
 import com.arton.backend.image.application.port.out.PerformanceImageDeleteRepositoryPort;
@@ -20,6 +21,7 @@ import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import com.arton.backend.search.application.port.out.PerformanceDocumentDeletePort;
+import com.arton.backend.search.application.port.out.PerformanceDocumentPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase, PerformanceAdminUseCase {
+public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase, PerformanceAdminUseCase, PerformanceAdminEditUseCase {
     private final PerformanceSavePort performanceSavePort;
     private final PerformanceDeletePort performanceDeletePort;
     private final PerformanceRepositoryPort performanceRepositoryPort;
@@ -96,5 +98,17 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         // to dto
         PerformanceAdminEditDto editDto = PerformanceAdminEditDto.domainToDto(performance);
         return editDto;
+    }
+
+    @Override
+    public void editPerformance(Long id, PerformanceAdminEditDto performanceAdminEditDto) {
+        Performance performance = performanceRepositoryPort.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
+        performance.editPerformance(performanceAdminEditDto);
+        // domain 반영
+        performanceSavePort.save(performance);
+        // document 변환
+        PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(performance);
+        // update
+        performanceDocuemntSavePort.save(performanceDocument);
     }
 }

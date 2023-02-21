@@ -42,7 +42,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
                 .minimumShouldMatch(1);
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
-        setSort(sort, searchQueryBuilder);
+        setSortDESC(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
     }
@@ -57,7 +57,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         // 쿼리에 넣기
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
-        setSort(sort, searchQueryBuilder);
+        setSortDESC(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
     }
@@ -70,7 +70,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
                 .minimumShouldMatch(1);
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
-        setSort(sort, searchQueryBuilder);
+        setSortDESC(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
     }
@@ -82,7 +82,7 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
                 .tieBreaker(0.3f));
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
         searchQueryBuilder.withPageable(pageable);
-        setSort(sort, searchQueryBuilder);
+        setSortDESC(sort, searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
     }
@@ -118,16 +118,17 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         QueryBuilder all = boolQuery().must(query).must(type).must(category);
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(all);
         searchQueryBuilder.withPageable(pageable);
+        setSortASC("id", searchQueryBuilder);
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         return SearchHitSupport.searchPageFor(elasticsearchOperations.search(searchQuery, PerformanceDocument.class, IndexCoordinates.of(IndexName.PERFORMANCE.getValue())), searchQuery.getPageable());
     }
 
     /**
-     * sort 옵션을 지정해준다.
+     * sort 옵션을 DESC 지정해준다.
      * @param sort
      * @param searchQueryBuilder
      */
-    private void setSort(String sort, NativeSearchQueryBuilder searchQueryBuilder) {
+    private void setSortDESC(String sort, NativeSearchQueryBuilder searchQueryBuilder) {
         if (StringUtils.hasText(sort)) {
             SortField sortField = SortField.get(sort);
             if (!ObjectUtils.isEmpty(sortField)) { // 유효한 정렬 조건이면 정렬해주기
@@ -135,6 +136,21 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
             }
         }
     }
+
+    /**
+     * sort 옵션을 ASC 지정해준다.
+     * @param sort
+     * @param searchQueryBuilder
+     */
+    private void setSortASC(String sort, NativeSearchQueryBuilder searchQueryBuilder) {
+        if (StringUtils.hasText(sort)) {
+            SortField sortField = SortField.get(sort);
+            if (!ObjectUtils.isEmpty(sortField)) { // 유효한 정렬 조건이면 정렬해주기
+                searchQueryBuilder.withSorts(SortBuilders.fieldSort(sort).order(SortOrder.ASC));
+            }
+        }
+    }
+
 
     private CriteriaQuery createConditionCriteriaQuery(PerformanceSearchDto searchCondition) {
         CriteriaQuery query = new CriteriaQuery(new Criteria());
