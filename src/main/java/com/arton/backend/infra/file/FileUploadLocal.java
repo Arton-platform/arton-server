@@ -93,6 +93,11 @@ public class FileUploadLocal implements FileUploadUtils{
     }
 
     @Override
+    public void copyFile(Long id, String dirName) {
+
+    }
+
+    @Override
     public String upload(MultipartFile multipartFile, String dirName) {
         validateFile(multipartFile);
         String originalFilename = multipartFile.getOriginalFilename();

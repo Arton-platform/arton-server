@@ -1,10 +1,7 @@
 package com.arton.backend.administer.performance.application.service;
 
 import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminEditUseCase;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminUseCase;
+import com.arton.backend.administer.performance.application.port.in.*;
 import com.arton.backend.image.application.port.out.PerformanceImageDeleteRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
@@ -35,7 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase, PerformanceAdminUseCase, PerformanceAdminEditUseCase {
+public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase, PerformanceAdminUseCase, PerformanceAdminEditUseCase, PerformanceAdminCopyUseCase {
     private final PerformanceSavePort performanceSavePort;
     private final PerformanceDeletePort performanceDeletePort;
     private final PerformanceRepositoryPort performanceRepositoryPort;
@@ -110,5 +107,16 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(performance);
         // update
         performanceDocuemntSavePort.save(performanceDocument);
+    }
+
+    @Override
+    public void copyPerformance(Long performanceId) {
+        Performance performance = performanceRepositoryPort.findById(performanceId).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
+        List<String> images = performanceImageRepositoryPort.findByPerformanceId(performanceId).stream().map(PerformanceImage::getImageUrl).collect(Collectors.toList());
+        // 어차피 엔터티가 아니라 도메인이라 id null 처리해도 문제 없음.
+        performance.clearId();
+        // 새 도메인 저장후 새 id 발급
+        Performance copied = performanceSavePort.save(performance);
+        fileUploadUtils.copyFile(copied.getPerformanceId(), images.get(0));
     }
 }

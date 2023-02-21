@@ -11,6 +11,7 @@ import java.util.List;
 public interface FileUploadUtils {
     void deleteFile(Long userId, String dirName);
     void deleteFiles(Long id, List<String> dirNames);
+    void copyFile(Long id, String dirName);
     String upload(MultipartFile multipartFile, String dirName);
     List<String> uploadMultipleFiles(List<MultipartFile> multipartFiles, String dirName);
     String getDefaultImageUrl();

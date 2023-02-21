@@ -76,9 +76,10 @@
                 </select>
             </div>
             <div>
+                <label>이미지</label>
                 <div class="performance-image-item">
                     <div th:each="image : ${editDto.images}" class="performance-preview-image">
-                        <img class="active-preview" th:src="${image}">
+                        <img class="active-preview" th:src="${image}" width="40%" height="40%">
                     </div>
                 </div>
             </div>

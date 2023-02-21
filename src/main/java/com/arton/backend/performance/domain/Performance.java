@@ -121,5 +121,8 @@ public class Performance {
         limitTime = editDto.getLimitTime();
         showCategory = editDto.getShowCategory();
     }
+    public void clearId() {
+        this.performanceId = null;
+    }
 
 }

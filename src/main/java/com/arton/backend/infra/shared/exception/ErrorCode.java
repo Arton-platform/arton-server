@@ -13,6 +13,7 @@ public enum ErrorCode {
     UNFOLLOWING_INVALID(400, "UNFOLLOWING_INVALID", "잘못된 언팔로우 요청입니다."),
     FILE_EMPTY(400, "FILE_EMPTY", "빈 파일입니다.."),
     FILE_UPLOAD_FAILED(500, "FILE_UPLOAD_FAILED", "파일 업로드에 실패하였습니다."),
+    FILE_COPY_FAILED(500, "FILE_COPY_FAILED", "파일 복사에 실패하였습니다."),
     IMAGE_LOAD_FAILED(500, "IMAGE_LOAD_FAILED", "이미지 로드에 실패하였습니다."),
     PARAMETER_NOT_VALID(400, "PARAMETER_ERR_400", "유효하지 않은 입력값입니다."),
     USER_NOT_FOUND(404, "COMMON-ERR-404", "사용자를 찾을 수 없습니다"),

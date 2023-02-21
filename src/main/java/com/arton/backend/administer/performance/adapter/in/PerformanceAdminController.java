@@ -1,12 +1,9 @@
 package com.arton.backend.administer.performance.adapter.in;
 
 import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
+import com.arton.backend.administer.performance.application.port.in.*;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminCreateDto;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminEditUseCase;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminUseCase;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
@@ -32,6 +29,7 @@ public class PerformanceAdminController {
     private final PerformanceSearchUseCase performanceSearchService;
     private final PerformanceAdminDeleteUseCase performanceAdminDeleteUseCase;
     private final PerformanceAdminEditUseCase performanceAdminEditUseCase;
+    private final PerformanceAdminCopyUseCase performanceAdminCopyUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
 
     @GetMapping("/web/performance/add")
@@ -80,6 +78,13 @@ public class PerformanceAdminController {
     @PostMapping("/web/performance/revoke")
     public String revokePerformance(@RequestParam(required = true, name = "idx") Long idx) {
         performanceAdminDeleteUseCase.deletePerformance(idx);
+        return "redirect:/web/performance";
+    }
+
+    // 공연 복사
+    @PostMapping("/web/performance/copy")
+    public String copyPerformance(@RequestParam(required = true, name = "idx") Long idx) {
+        performanceAdminCopyUseCase.copyPerformance(idx);
         return "redirect:/web/performance";
     }
 

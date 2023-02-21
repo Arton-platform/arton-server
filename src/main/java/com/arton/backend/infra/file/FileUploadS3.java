@@ -32,6 +32,7 @@ import java.util.Locale;
 @Profile(value = {"aws", "local", "dev"})
 @Service
 @RequiredArgsConstructor
+
 public class FileUploadS3 implements FileUploadUtils {
     @Value("${spring.bucket}")
     private String bucket;
@@ -39,6 +40,8 @@ public class FileUploadS3 implements FileUploadUtils {
     private String prefix;
     @Value("${spring.default-image}")
     private String defaultImageUrl;
+    @Value("${spring.performance.image.dir}")
+    private String defaultPerformanceUrl;
     // s3 uploader
     private final AmazonS3Client amazonS3Client;
 
@@ -167,6 +170,26 @@ public class FileUploadS3 implements FileUploadUtils {
     public void deleteFiles(Long id, List<String> dirNames) {
         for (String dirName : dirNames) {
             deleteFile(id, dirName);
+        }
+    }
+
+    @Override
+    public void copyFile(Long id, String dirName) {
+        try {
+            String origin = dirName.substring(prefix.length());
+            String temp = origin.substring(defaultPerformanceUrl.length());
+            int lastIdx = temp.lastIndexOf("/");
+            String copy = defaultPerformanceUrl + id + temp.substring(lastIdx);
+            CopyObjectRequest copyObjRequest = new CopyObjectRequest(
+                    this.bucket,
+                    origin,
+                    this.bucket,
+                    copy
+            );
+            //Copy
+            amazonS3Client.copyObject(copyObjRequest);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.FILE_COPY_FAILED.getMessage(), ErrorCode.FILE_COPY_FAILED);
         }
     }
 
