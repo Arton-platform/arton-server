@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 @Data
@@ -62,8 +65,8 @@ public class PerformanceAdminEditDto {
         return PerformanceAdminEditDto.builder()
                 .purchaseLimit(performance.getPurchaseLimit())
                 .performanceType(performance.getPerformanceType())
-                .ticketOpenDate(performance.getTicketOpenDate())
-                .ticketEndDate(performance.getTicketEndDate())
+                .ticketOpenDate(performance.getTicketOpenDate().truncatedTo(ChronoUnit.MINUTES))
+                .ticketEndDate(performance.getTicketEndDate().truncatedTo(ChronoUnit.MINUTES))
                 .description(performance.getDescription())
                 .title(performance.getTitle())
                 .startDate(performance.getStartDate().toLocalDate())

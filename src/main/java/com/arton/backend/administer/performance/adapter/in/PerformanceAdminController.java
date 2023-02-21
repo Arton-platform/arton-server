@@ -85,6 +85,8 @@ public class PerformanceAdminController {
     @GetMapping("/web/performance/{id}")
     public String goEditHome(Model model, @PathVariable(name = "id") Long id) {
         PerformanceAdminEditDto editDto = performanceAdminUseCase.getPerformanceEditDto(id);
+        System.out.println("editDto = " + editDto.getTicketOpenDate());
+        System.out.println("editDto = " + editDto.getTicketEndDate());
         model.addAttribute("editDto", editDto);
         return "performance/editForm";
     }
