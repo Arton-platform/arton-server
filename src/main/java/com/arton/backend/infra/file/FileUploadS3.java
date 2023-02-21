@@ -146,12 +146,29 @@ public class FileUploadS3 implements FileUploadUtils {
      * @return
      */
     @Override
-    public void delete(Long userId, String dirName) {
+    public void deleteFile(Long userId, String dirName) {
         // 기본 이미지가 아니라면 삭제 진행
         if (!dirName.equals(defaultImageUrl)) {
-            amazonS3Client.deleteObject(bucket, dirName.substring(prefix.length()));
+            try{
+                amazonS3Client.deleteObject(bucket, dirName.substring(prefix.length()));
+            }catch (Exception e) {
+                throw new CustomException(ErrorCode.DELETE_ERROR.getMessage(), ErrorCode.DELETE_ERROR);
+            }
         }
     }
+
+    /**
+     * 기존 deleteFile 이용.
+     * @param id
+     * @param dirNames
+     */
+    @Override
+    public void deleteFiles(Long id, List<String> dirNames) {
+        for (String dirName : dirNames) {
+            deleteFile(id, dirName);
+        }
+    }
+
 
     private void validateFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {

@@ -1,6 +1,7 @@
 package com.arton.backend.administer.admin.application.service;
 
 import com.arton.backend.administer.admin.application.port.in.PerformanceAdminDeleteUseCase;
+import com.arton.backend.image.application.port.out.PerformanceImageDeleteRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
@@ -8,6 +9,7 @@ import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
 import com.arton.backend.administer.admin.application.port.in.PerformanceAdminSaveUseCase;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
@@ -27,8 +29,10 @@ import java.util.stream.Collectors;
 @Transactional
 public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase {
     private final PerformanceSavePort performanceSavePort;
+    private final PerformanceDeletePort performanceDeletePort;
     private final PerformanceImageSaveRepositoryPort performanceImageSaveRepositoryPort;
     private final PerformanceImageRepositoryPort performanceImageRepositoryPort;
+    private final PerformanceImageDeleteRepositoryPort performanceImageDeleteRepositoryPort;
     private final PerformanceSearchRepositoryPort performanceSearchRepositoryPort;
     private final FileUploadUtils fileUploadUtils;
     @Value("${spring.performance.image.dir}")
@@ -70,5 +74,8 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         // imageUrls 삭제
 
         // 연관관계 제거
+        performanceImageDeleteRepositoryPort.deletePerformanceImages(performanceId);
+        // 공연 제거
+        performanceDeletePort.deleteById(performanceId);
     }
 }

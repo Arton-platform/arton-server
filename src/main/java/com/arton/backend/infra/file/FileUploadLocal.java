@@ -41,7 +41,7 @@ public class FileUploadLocal implements FileUploadUtils{
     private String rootPerformanceDir;
 
     @Override
-    public void delete(Long userId, String dir) {
+    public void deleteFile(Long userId, String dir) {
         // 기본 이미지가 아니라면 삭제 진행
         if (!dir.equals(defaultImageUrl)) {
             Path dirPath = Paths.get(System.getProperty("user.dir") + rootDir + userId);
@@ -59,6 +59,30 @@ public class FileUploadLocal implements FileUploadUtils{
             } catch (IOException e) {
                 log.error("Could not list directory: ", e);
             }
+        }
+    }
+
+    /**
+     * 공연 제거용 메소드
+     * @param id
+     * @param dirNames
+     */
+    @Override
+    public void deleteFiles(Long id, List<String> dirNames) {
+        Path dirPath = Paths.get(System.getProperty("user.dir") + rootPerformanceDir + id);
+
+        try {
+            Files.list(dirPath).forEach(file -> {
+                if (!Files.isDirectory(file)) {
+                    try {
+                        Files.delete(file);
+                    } catch (IOException ex) {
+                        log.error("Could not delete file: " + file, ex);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            log.error("Could not list directory: ", e);
         }
     }
 

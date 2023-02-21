@@ -8,7 +8,8 @@ import java.util.List;
  * 파일 업로드, 다운로드와 관련된 유틸.
  */
 public interface FileUploadUtils {
-    void delete(Long userId, String dirName);
+    void deleteFile(Long userId, String dirName);
+    void deleteFiles(Long id, List<String> dirNames);
     String upload(MultipartFile multipartFile, String dirName);
     List<String> uploadMultipleFiles(List<MultipartFile> multipartFiles, String dirName);
     String getDefaultImageUrl();
