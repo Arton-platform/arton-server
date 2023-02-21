@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class FileUploadLocal implements FileUploadUtils{
-    @Value("${spring.default-image-local}")
+    @Value("${spring.default-image}")
     private String defaultImageUrl;
     @Value("${spring.user.image.dir}")
     private String rootDir;
