@@ -8,11 +8,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Schema(description = "관리자 페이지 공연 수정 Dto")
@@ -55,8 +58,8 @@ public class PerformanceAdminEditDto {
     private Integer purchaseLimit;
     @Schema(description = "노출 상태")
     private ShowCategory showCategory;
-//    @Schema(description = "공연 이미지")
-//    private List<MultipartFile> images;
+    @Schema(description = "공연 이미지")
+    private List<String> images;
 
     public static PerformanceAdminEditDto domainToDto(Performance performance) {
         return PerformanceAdminEditDto.builder()
@@ -76,6 +79,7 @@ public class PerformanceAdminEditDto {
                 .runningTime(performance.getRunningTime())
                 .limitTime(performance.getLimitTime())
                 .showCategory(performance.getShowCategory())
+                .images(new ArrayList<>())
                 .build();
     }
 }

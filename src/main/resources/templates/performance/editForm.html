@@ -76,13 +76,11 @@
                 </select>
             </div>
             <div>
-                <label for="images">
-                    <img th:src="@{/img/image_add.png}" style="width:100px; height:100px; cursor: pointer;">
-                </label>
-                <input type="file" name="images" id="images" value="이미지" multiple
-                       onchange="previewImage(this,'View_area')" style="display: none">
-                <span id='View_area'
-                      style='position:relative; color: black; border: 0px solid black;'/>
+                <div class="performance-image-item">
+                    <div th:each="image : ${editDto.images}" class="performance-preview-image">
+                        <img class="active-preview" th:src="${image}">
+                    </div>
+                </div>
             </div>
             <div>
                 <input type="submit" value="수정" class="btn" style="background: #FF6491; color: #FFF2F6;"/>

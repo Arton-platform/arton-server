@@ -113,7 +113,7 @@ public class FileUploadLocal implements FileUploadUtils{
         } catch (IOException e) {
             log.error("Could not save file: " + fileName, e);
         }
-        return fileName;
+        return uploadPath.toAbsolutePath() + "/" + fileName;
     }
 
     @Override
@@ -163,7 +163,7 @@ public class FileUploadLocal implements FileUploadUtils{
 
     @Override
     public MultipartFile fileToMultipartFile(String url) {
-        File file = new File(url);
+        File file = new File(System.getProperty("user.dir") + url);
         FileItem fileItem = null;
         try {
             fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
