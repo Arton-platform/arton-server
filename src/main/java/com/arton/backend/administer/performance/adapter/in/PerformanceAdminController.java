@@ -1,8 +1,9 @@
-package com.arton.backend.administer.admin.adapter.in.web;
+package com.arton.backend.administer.performance.adapter.in;
 
+import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
 import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
-import com.arton.backend.administer.admin.application.port.in.PerformanceAdminSaveUseCase;
+import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PerformanceAdminController {
     private final PerformanceAdminSaveUseCase performanceAdminSaveUseCase;
     private final PerformanceSearchUseCase performanceSearchService;
+    private final PerformanceAdminDeleteUseCase performanceAdminDeleteUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
 
     @GetMapping("/web/performance/add")
@@ -75,6 +77,7 @@ public class PerformanceAdminController {
     // 공연 삭제
     @PostMapping("/web/performance/revoke")
     public String revokePerformance(@RequestParam(required = true, name = "idx") Long idx) {
+        performanceAdminDeleteUseCase.deletePerformance(idx);
         return "redirect:/web/performance";
     }
 }

@@ -82,7 +82,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
         // 이미지 업데이트
         if (multipartFile != null) {
             UserImage userImage = userImageRepository.findUserImageByUser(user.getId()).get();
-            fileUploadUtils.delete(user.getId(), userImage.getImageUrl());
+            fileUploadUtils.deleteFile(user.getId(), userImage.getImageUrl());
             String upload = fileUploadUtils.upload(multipartFile, "arton/image/profiles/" + user.getId());
             userImage.updateImage(upload);
             user.setImage(userImage);
