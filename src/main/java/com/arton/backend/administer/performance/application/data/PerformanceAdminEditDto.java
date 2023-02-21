@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -63,6 +64,7 @@ public class PerformanceAdminEditDto {
 
     public static PerformanceAdminEditDto domainToDto(Performance performance) {
         return PerformanceAdminEditDto.builder()
+                .performanceId(performance.getPerformanceId())
                 .purchaseLimit(performance.getPurchaseLimit())
                 .performanceType(performance.getPerformanceType())
                 .ticketOpenDate(performance.getTicketOpenDate().truncatedTo(ChronoUnit.MINUTES))
@@ -78,6 +80,27 @@ public class PerformanceAdminEditDto {
                 .runningTime(performance.getRunningTime())
                 .limitTime(performance.getLimitTime())
                 .showCategory(performance.getShowCategory())
+                .build();
+    }
+
+    public Performance dtoToDomain() {
+        return Performance.builder()
+                .performanceId(this.performanceId)
+                .purchaseLimit(this.purchaseLimit)
+                .performanceType(this.performanceType)
+                .ticketOpenDate(this.ticketOpenDate)
+                .ticketEndDate(this.ticketEndDate)
+                .description(this.description)
+                .title(this.title)
+                .startDate(this.startDate.atStartOfDay())
+                .endDate(this.endDate.atTime(LocalTime.MAX))
+                .interMission(this.interMission)
+                .limitAge(this.limitAge)
+                .link(this.link)
+                .place(this.place)
+                .runningTime(this.runningTime)
+                .limitTime(this.limitTime)
+                .showCategory(this.showCategory)
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.arton.backend.performance.domain;
 
+import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
 import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.price.domain.PriceGrade;
 import lombok.*;
@@ -101,4 +102,5 @@ public class Performance {
         this.purchaseLimit = purchaseLimit;
         this.showCategory = showCategory;
     }
+
 }
