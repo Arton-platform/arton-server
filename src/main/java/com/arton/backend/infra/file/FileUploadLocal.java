@@ -93,8 +93,8 @@ public class FileUploadLocal implements FileUploadUtils{
     }
 
     @Override
-    public void copyFile(Long id, String dirName) {
-
+    public String copyFile(Long id, String dirName) {
+        return null;
     }
 
     @Override

@@ -174,7 +174,7 @@ public class FileUploadS3 implements FileUploadUtils {
     }
 
     @Override
-    public void copyFile(Long id, String dirName) {
+    public String copyFile(Long id, String dirName) {
         try {
             String origin = dirName.substring(prefix.length());
             String temp = origin.substring(defaultPerformanceUrl.length());
@@ -185,9 +185,10 @@ public class FileUploadS3 implements FileUploadUtils {
                     origin,
                     this.bucket,
                     copy
-            );
+            ).withCannedAccessControlList(CannedAccessControlList.PublicRead);
             //Copy
             amazonS3Client.copyObject(copyObjRequest);
+            return prefix + copy;
         } catch (Exception e) {
             throw new CustomException(ErrorCode.FILE_COPY_FAILED.getMessage(), ErrorCode.FILE_COPY_FAILED);
         }

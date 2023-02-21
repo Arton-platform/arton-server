@@ -117,6 +117,18 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         performance.clearId();
         // 새 도메인 저장후 새 id 발급
         Performance copied = performanceSavePort.save(performance);
-        fileUploadUtils.copyFile(copied.getPerformanceId(), images.get(0));
+        // document 저장
+        PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(copied);
+        performanceDocuemntSavePort.save(performanceDocument);
+        // 이미지 저장
+        List<PerformanceImage> performanceImages = new ArrayList<>();
+        for (String image : images) {
+            String newImageUrl = fileUploadUtils.copyFile(copied.getPerformanceId(), image);
+            performanceImages.add(PerformanceImage.builder()
+                    .performance(copied)
+                    .imageUrl(newImageUrl)
+                    .build());
+        }
+        performanceImageSaveRepositoryPort.saveAll(performanceImages);
     }
 }
