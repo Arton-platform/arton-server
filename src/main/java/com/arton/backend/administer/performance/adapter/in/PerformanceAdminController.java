@@ -4,7 +4,7 @@ import com.arton.backend.administer.performance.application.port.in.PerformanceA
 import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
-import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
+import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
 import com.arton.backend.search.application.data.SearchResultDto;

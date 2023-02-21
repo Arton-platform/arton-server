@@ -11,7 +11,7 @@ import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
-import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
+import com.arton.backend.search.application.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import lombok.RequiredArgsConstructor;
@@ -77,5 +77,7 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         performanceImageDeleteRepositoryPort.deletePerformanceImages(performanceId);
         // 공연 제거
         performanceDeletePort.deleteById(performanceId);
+        // document 제거
+
     }
 }

@@ -1,4 +1,4 @@
-package com.arton.backend.performance.applicaiton.port.out;
+package com.arton.backend.search.application.port.out;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;

@@ -2,7 +2,7 @@ package com.arton.backend.search.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceAdminSearchDto;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
-import com.arton.backend.performance.applicaiton.port.out.PerformanceSearchRepositoryPort;
+import com.arton.backend.search.application.port.out.PerformanceSearchRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
