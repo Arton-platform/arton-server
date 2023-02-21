@@ -2,6 +2,7 @@ package com.arton.backend.image.adapter.out.persistence.repository;
 
 import com.arton.backend.image.adapter.out.persistence.entity.PerformanceImageEntity;
 import com.arton.backend.image.adapter.out.persistence.mapper.PerformanceImageMapper;
+import com.arton.backend.image.application.port.out.PerformanceImageDeleteRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
@@ -19,7 +20,7 @@ import static com.arton.backend.image.adapter.out.persistence.mapper.Performance
 
 @Repository
 @RequiredArgsConstructor
-public class PerformanceImageRepositoryAdapter implements PerformanceImageRepositoryPort, PerformanceImageSaveRepositoryPort {
+public class PerformanceImageRepositoryAdapter implements PerformanceImageRepositoryPort, PerformanceImageSaveRepositoryPort, PerformanceImageDeleteRepositoryPort {
     private final PerformanceImageRepository performanceImageRepository;
 
     @Override
@@ -47,5 +48,23 @@ public class PerformanceImageRepositoryAdapter implements PerformanceImageReposi
         List<PerformanceImageEntity> images = Optional.ofNullable(performanceImageList).orElseGet(Collections::emptyList).stream()
                 .map(PerformanceImageMapper::toEntity).collect(Collectors.toList());
         performanceImageRepository.saveAll(images);
+    }
+
+    /**
+     * 공연 연관관계 제거
+     * @param performanceId
+     */
+    @Override
+    public void deletePerformanceImages(Long performanceId) {
+        performanceImageRepository.deleteAllByPerformance_Id(performanceId);
+    }
+
+    /**
+     * id로 제거
+     * @param id
+     */
+    @Override
+    public void deleteById(Long id) {
+        performanceImageRepository.deleteById(id);
     }
 }

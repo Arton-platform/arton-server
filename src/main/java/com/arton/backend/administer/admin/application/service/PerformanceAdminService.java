@@ -1,5 +1,7 @@
 package com.arton.backend.administer.admin.application.service;
 
+import com.arton.backend.administer.admin.application.port.in.PerformanceAdminDeleteUseCase;
+import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.file.FileUploadUtils;
@@ -18,13 +20,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PerformanceAdminService implements PerformanceAdminSaveUseCase {
+public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase {
     private final PerformanceSavePort performanceSavePort;
     private final PerformanceImageSaveRepositoryPort performanceImageSaveRepositoryPort;
+    private final PerformanceImageRepositoryPort performanceImageRepositoryPort;
     private final PerformanceSearchRepositoryPort performanceSearchRepositoryPort;
     private final FileUploadUtils fileUploadUtils;
     @Value("${spring.performance.image.dir}")
@@ -58,5 +62,13 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase {
             performanceImageSaveRepositoryPort.saveAll(performanceImages);
         }
         return performance;
+    }
+
+    @Override
+    public void deletePerformance(Long performanceId) {
+        List<String> imageUrls = performanceImageRepositoryPort.findByPerformanceId(performanceId).stream().map(PerformanceImage::getImageUrl).collect(Collectors.toList());
+        // imageUrls 삭제
+
+        // 연관관계 제거
     }
 }

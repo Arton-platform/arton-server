@@ -17,6 +17,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 관리자만 접근 가능.
@@ -69,5 +70,11 @@ public class PerformanceAdminController {
         model.addAttribute("type", PerformanceType.values());
         model.addAttribute("category", ShowCategory.values());
         return "performance/index";
+    }
+
+    // 공연 삭제
+    @PostMapping("/web/performance/revoke")
+    public String revokePerformance(@RequestParam(required = true, name = "idx") Long idx) {
+        return "redirect:/web/performance";
     }
 }
