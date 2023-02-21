@@ -57,7 +57,6 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
     public Performance addPerformance(PerformanceAdminCreateDto performanceCreateDto) {
         Performance performance = performanceSavePort.save(performanceCreateDto.dtoToDomain());
         PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(performance);
-        System.out.println("performanceDocument = " + performanceDocument.getId());
         performanceDocuemntSavePort.save(performanceDocument);
         List<MultipartFile> images = performanceCreateDto.getImages();
         boolean isEmpty = images.stream().filter(multipartFile -> !multipartFile.isEmpty()).count() == 0;

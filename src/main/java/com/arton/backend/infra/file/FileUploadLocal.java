@@ -113,7 +113,7 @@ public class FileUploadLocal implements FileUploadUtils{
         } catch (IOException e) {
             log.error("Could not save file: " + fileName, e);
         }
-        return uploadPath.toAbsolutePath() + "/" + fileName;
+        return fileName;
     }
 
     @Override
