@@ -176,7 +176,7 @@ public class AuthService implements AuthUseCase {
         // 이미지 삭제
         UserImage userImage = userImageRepository.findUserImageByUser(userId).orElseThrow(() -> new CustomException(ErrorCode.IMAGE_LOAD_FAILED.getMessage(), ErrorCode.IMAGE_LOAD_FAILED));
         userImageRepository.deleteByUserId(userId);
-        fileUploadUtils.delete(userId, userImage.getImageUrl());
+        fileUploadUtils.deleteFile(userId, userImage.getImageUrl());
         // user 비활성화
         user.changeUserStatus(false);
         user.changeNickname("알수없음"+UUID.randomUUID().toString().replaceAll("-","").substring(0, 8));

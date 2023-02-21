@@ -1,24 +1,27 @@
-package com.arton.backend.performance.applicaiton.data;
+package com.arton.backend.administer.performance.application.data;
 
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Schema(description = "공연 생성을 위한 Dto")
+@Schema(description = "관리자 페이지 공연 수정 Dto")
 @ToString
-public class PerformanceCreateDto implements Serializable {
+@Builder
+public class PerformanceAdminEditDto {
     @Schema(description = "ID")
     private Long performanceId;
     @Schema(description = "제목")
@@ -56,28 +59,27 @@ public class PerformanceCreateDto implements Serializable {
     @Schema(description = "노출 상태")
     private ShowCategory showCategory;
     @Schema(description = "공연 이미지")
-    private List<MultipartFile> images;
+    private List<String> images;
 
-    public Performance dtoToDomain() {
-        return Performance.builder()
-                .purchaseLimit(getPurchaseLimit())
-                .performanceType(getPerformanceType())
-                .ticketOpenDate(getTicketOpenDate())
-                .ticketEndDate(getTicketEndDate())
-                .description(getDescription())
-                .title(getTitle())
-                .startDate(getStartDate().atStartOfDay())
-                .endDate(getEndDate().atTime(LocalTime.MAX))
-                .hit(0L)
-                .interMission(getInterMission())
-                .limitAge(getLimitAge())
-                .link(getLink())
-                .place(getPlace())
-                .runningTime(getRunningTime())
-                .starScore(0)
-                .limitTime(getLimitTime())
-                .musicalDateTime(getStartDate().toString()+"~"+getEndDate().toString())
-                .showCategory(showCategory)
+    public static PerformanceAdminEditDto domainToDto(Performance performance) {
+        return PerformanceAdminEditDto.builder()
+                .performanceId(performance.getPerformanceId())
+                .purchaseLimit(performance.getPurchaseLimit())
+                .performanceType(performance.getPerformanceType())
+                .ticketOpenDate(performance.getTicketOpenDate().truncatedTo(ChronoUnit.MINUTES))
+                .ticketEndDate(performance.getTicketEndDate().truncatedTo(ChronoUnit.MINUTES))
+                .description(performance.getDescription())
+                .title(performance.getTitle())
+                .startDate(performance.getStartDate().toLocalDate())
+                .endDate(performance.getEndDate().toLocalDate())
+                .interMission(performance.getInterMission())
+                .limitAge(performance.getLimitAge())
+                .link(performance.getLink())
+                .place(performance.getPlace())
+                .runningTime(performance.getRunningTime())
+                .limitTime(performance.getLimitTime())
+                .showCategory(performance.getShowCategory())
+                .images(new ArrayList<>())
                 .build();
     }
 }

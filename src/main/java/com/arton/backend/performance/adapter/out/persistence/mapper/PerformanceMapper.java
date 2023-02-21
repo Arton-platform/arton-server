@@ -84,6 +84,7 @@ public class PerformanceMapper {
                 .place(performance.getPlace())
                 .startDate(performance.getStartDate())
                 .title(performance.getTitle())
+                .showCategory(performance.getShowCategory().getValue())
                 .build();
     }
 
@@ -97,6 +98,7 @@ public class PerformanceMapper {
                 .place(performance.getPlace())
                 .startDate(performance.getStartDate())
                 .title(performance.getTitle())
+                .showCategory(performance.getShowCategory().getValue())
                 .build();
     }
 }

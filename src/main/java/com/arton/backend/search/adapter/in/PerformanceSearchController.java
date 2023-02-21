@@ -1,9 +1,9 @@
-package com.arton.backend.performance.adapter.in;
+package com.arton.backend.search.adapter.in;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
-import com.arton.backend.performance.applicaiton.port.in.PerformanceSearchUseCase;
+import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.search.adapter.out.persistence.repository.LogRepository;
 import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchPageDtoV2;

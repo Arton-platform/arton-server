@@ -8,6 +8,7 @@ server:
 
 # ETC
 spring:
+  default-image: https://elasticbeanstalk-ap-northeast-2-629926164588.s3.ap-northeast-2.amazonaws.com/arton/image/default/default.jpeg
   user:
     image:
       dir: arton/image/profiles/

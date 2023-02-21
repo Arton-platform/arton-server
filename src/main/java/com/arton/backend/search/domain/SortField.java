@@ -10,7 +10,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 @Schema(description = "검색 정렬 조건입니다. 내림차순 정렬하여 결과를 반환합니다.")
 public enum SortField {
-    STARTDATE("startDate"), ENDDATE("endDate");
+    STARTDATE("startDate"), ENDDATE("endDate"), ID("id");
 
     private String value;
 
