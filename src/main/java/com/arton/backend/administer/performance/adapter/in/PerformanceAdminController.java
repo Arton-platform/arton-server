@@ -1,9 +1,11 @@
 package com.arton.backend.administer.performance.adapter.in;
 
+import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminCreateDto;
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
+import com.arton.backend.administer.performance.application.port.in.PerformanceAdminUseCase;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PerformanceAdminController {
     private final PerformanceAdminSaveUseCase performanceAdminSaveUseCase;
+    private final PerformanceAdminUseCase performanceAdminUseCase;
     private final PerformanceSearchUseCase performanceSearchService;
     private final PerformanceAdminDeleteUseCase performanceAdminDeleteUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
@@ -81,8 +84,9 @@ public class PerformanceAdminController {
     // 공연 수정
     @GetMapping("/web/performance/{id}")
     public String goEditHome(Model model, @PathVariable(name = "id") Long id) {
-
-        return "performance/edit";
+        PerformanceAdminEditDto editDto = performanceAdminUseCase.getPerformanceEditDto(id);
+        model.addAttribute("editDto", editDto);
+        return "performance/editForm";
     }
 
 }

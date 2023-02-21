@@ -1,10 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
 <body>
-
+<div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="/js/imagePreview.js"></script>
+    <form id="editForm" th:action th:object="${editDto}" method="post" enctype="multipart/form-data">
+        <div style="display: inline">
+            <div>
+                <label for="title">제목</label>
+                <input id="title" name="title" type="text"  class="form-control" th:value="${editDto.title}">
+            </div>
+            <div>
+                <label for="description">설명</label>
+                <input id="description" name="description" type="text"  class="form-control" th:value="${editDto.description}">
+            </div>
+            <div>
+                <label for="startDate">공연시작일</label>
+                <input id="startDate" name="startDate" type="date"  th:value="${editDto.startDate}">
+            </div>
+            <div>
+                <label for="endDate">공연종료일</label>
+                <input id="endDate" name="endDate" type="date"  th:value="${editDto.endDate}">
+            </div>
+            <div>
+                <label for="runningTime">상영시간</label>
+                <input id="runningTime" name="runningTime" type="number"  class="form-control" th:value="${editDto.runningTime}">
+            </div>
+            <div>
+                <label for="interMission">휴식시간</label>
+                <input id="interMission" name="interMission" type="number" class="form-control" th:value="${editDto.interMission}">
+            </div>
+            <div>
+                <label for="limitTime">제한시간</label>
+                <input id="limitTime" name="limitTime" type="number"  class="form-control" th:value="${editDto.description}">
+            </div>
+            <div>
+                <label for="link">예매링크</label>
+                <input id="link" name="link" type="text"  class="form-control" th:value="${editDto.link}">
+            </div>
+            <div>
+                <label for="performanceType">공연타입</label>
+                <select id="performanceType" name="performanceType" class="form-select" required th:value="${editDto.performanceType}">
+                    <option th:each="type : ${T(com.arton.backend.performance.domain.PerformanceType).values()}"
+                            th:value="${type.name()}"
+                            th:text="${type.getValue()}"
+                            th:selected="${type.name()} == ${editDto.performanceType.name()}">
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label for="place">장소</label>
+                <input id="place" name="place" type="text" class="form-control" th:value="${editDto.place}">
+            </div>
+            <div>
+                <label for="ticketOpenDate">티켓팅 오픈일</label>
+                <input id="ticketOpenDate" name="ticketOpenDate" type="datetime-local" th:value="${editDto.ticketOpenDate}">
+            </div>
+            <div>
+                <label for="ticketEndDate">티켓팅 종료일</label>
+                <input id="ticketEndDate" name="ticketEndDate" type="datetime-local" th:value="${editDto.ticketEndDate}">
+            </div>
+            <div>
+                <label for="purchaseLimit">매수 제한</label>
+                <input id="purchaseLimit" name="purchaseLimit" type="number" class="form-control" th:value="${editDto.purchaseLimit}">
+            </div>
+            <div>
+                <label for="showCategory">분류</label>
+                <select id="showCategory" name="showCategory" class="form-select" required>
+                    <option th:each="type : ${T(com.arton.backend.performance.domain.ShowCategory).values()}"
+                            th:value="${type.name()}"
+                            th:text="${type.getValue()}"
+                            th:selected="${type.name()} == ${editDto.showCategory.name()}">
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label for="images">
+                    <img th:src="@{/img/image_add.png}" style="width:100px; height:100px; cursor: pointer;">
+                </label>
+                <input type="file" name="images" id="images" value="이미지" multiple
+                       onchange="previewImage(this,'View_area')" style="display: none">
+                <span id='View_area'
+                      style='position:relative; color: black; border: 0px solid black;'/>
+            </div>
+            <div>
+                <input type="submit" value="수정" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
+
 </html>
