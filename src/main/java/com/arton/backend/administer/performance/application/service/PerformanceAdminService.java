@@ -1,6 +1,7 @@
 package com.arton.backend.administer.performance.application.service;
 
 import com.arton.backend.administer.performance.application.port.in.PerformanceAdminDeleteUseCase;
+import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.image.application.port.out.PerformanceImageDeleteRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
@@ -8,12 +9,12 @@ import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceCreateDto;
-import com.arton.backend.administer.performance.application.port.in.PerformanceAdminSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
-import com.arton.backend.search.application.port.out.PerformanceSearchRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
+import com.arton.backend.search.application.port.out.PerformanceDocumentDeletePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,8 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
     private final PerformanceImageSaveRepositoryPort performanceImageSaveRepositoryPort;
     private final PerformanceImageRepositoryPort performanceImageRepositoryPort;
     private final PerformanceImageDeleteRepositoryPort performanceImageDeleteRepositoryPort;
-    private final PerformanceSearchRepositoryPort performanceSearchRepositoryPort;
+    private final PerformanceDocuemntSavePort performanceDocuemntSavePort;
+    private final PerformanceDocumentDeletePort performanceDocumentDeletePort;
     private final FileUploadUtils fileUploadUtils;
     @Value("${spring.performance.image.dir}")
     private String performanceDir;
@@ -48,7 +50,7 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         Performance performance = performanceSavePort.save(performanceCreateDto.dtoToDomain());
         PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(performance);
         System.out.println("performanceDocument = " + performanceDocument.getId());
-        performanceSearchRepositoryPort.save(performanceDocument);
+        performanceDocuemntSavePort.save(performanceDocument);
         List<MultipartFile> images = performanceCreateDto.getImages();
         boolean isEmpty = images.stream().filter(multipartFile -> !multipartFile.isEmpty()).count() == 0;
         List<PerformanceImage> performanceImages = new ArrayList<>();
@@ -78,6 +80,6 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         // 공연 제거
         performanceDeletePort.deleteById(performanceId);
         // document 제거
-
+        performanceDocumentDeletePort.deleteById(performanceId);
     }
 }

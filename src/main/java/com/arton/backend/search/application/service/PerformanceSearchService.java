@@ -6,7 +6,9 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
-import com.arton.backend.search.application.port.out.PerformanceSearchRepositoryPort;
+import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
+import com.arton.backend.search.application.port.out.PerformanceDocumentDeletePort;
+import com.arton.backend.search.application.port.out.PerformanceDocumentSearchPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +23,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PerformanceSearchService implements PerformanceSearchUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
-    private final PerformanceSearchRepositoryPort performanceSearchRepository;
+    private final PerformanceDocuemntSavePort performanceDocuemntSavePort;
+    private final PerformanceDocumentSearchPort performanceSearchRepository;
 
     public void saveAllDocuments() {
         List<PerformanceDocument> documents = performanceRepositoryPort.findAll().stream().map(PerformanceMapper::domainToDocument).collect(Collectors.toList());
-        performanceSearchRepository.saveAll(documents);
+        performanceDocuemntSavePort.saveAll(documents);
     }
 
     @Override
