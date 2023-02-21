@@ -72,7 +72,7 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
     public void deletePerformance(Long performanceId) {
         List<String> imageUrls = performanceImageRepositoryPort.findByPerformanceId(performanceId).stream().map(PerformanceImage::getImageUrl).collect(Collectors.toList());
         // imageUrls 삭제
-
+        fileUploadUtils.deleteFiles(performanceId, imageUrls);
         // 연관관계 제거
         performanceImageDeleteRepositoryPort.deletePerformanceImages(performanceId);
         // 공연 제거
