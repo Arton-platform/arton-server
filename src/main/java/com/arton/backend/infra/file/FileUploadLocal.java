@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -70,7 +71,6 @@ public class FileUploadLocal implements FileUploadUtils{
     @Override
     public void deleteFiles(Long id, List<String> dirNames) {
         Path dirPath = Paths.get(System.getProperty("user.dir") + rootPerformanceDir + id);
-
         try {
             Files.list(dirPath).forEach(file -> {
                 if (!Files.isDirectory(file)) {
@@ -83,6 +83,12 @@ public class FileUploadLocal implements FileUploadUtils{
             });
         } catch (IOException e) {
             log.error("Could not list directory: ", e);
+        }finally {
+            // delete empty directory
+            File directory = dirPath.toFile();
+            if (directory.isDirectory() && directory.listFiles().length == 0) {
+                directory.delete();
+            }
         }
     }
 

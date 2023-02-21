@@ -47,7 +47,7 @@ public class PerformanceAdminController {
     @PostMapping(value = "/web/performance/add")
     public String postPerformance(PerformanceCreateDto performance) {
         performanceAdminSaveUseCase.addPerformance(performance);
-        return "performance/index";
+        return "redirect:/web/performance";
     }
 
     @GetMapping("/web/performance")
