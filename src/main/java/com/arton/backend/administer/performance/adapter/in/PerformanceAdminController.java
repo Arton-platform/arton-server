@@ -71,7 +71,7 @@ public class PerformanceAdminController {
         model.addAttribute("performances", performances);
         model.addAttribute("type", PerformanceType.values());
         model.addAttribute("category", ShowCategory.values());
-        return "performance/index";
+        return "redirect:/web/performance";
     }
 
     // 공연 삭제
@@ -103,5 +103,4 @@ public class PerformanceAdminController {
         performanceAdminEditUseCase.editPerformance(id, editDto);
         return "redirect:/web/performance";
     }
-
 }
