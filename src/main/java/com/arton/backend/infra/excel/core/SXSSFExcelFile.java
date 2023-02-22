@@ -42,8 +42,7 @@ public abstract class SXSSFExcelFile<T> implements ExcelFile<T>{
 
     protected void validateData(List<T> data) { }
 
-    @Override
-    public abstract void addRows(List<T> rows);
+    protected abstract void renderExcel(List<T> data);
 
     @Override
     public void write(OutputStream outputStream) throws IOException {
