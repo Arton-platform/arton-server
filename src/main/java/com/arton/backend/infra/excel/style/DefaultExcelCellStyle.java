@@ -2,9 +2,7 @@ package com.arton.backend.infra.excel.style;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 
-public enum DefaultExcelCellStyle implements ExcelCellStyle{
-
-
+public enum DefaultExcelCellStyle implements ExcelCellStyle {
 
     @Override
     public void apply(CellStyle cellStyle) {
