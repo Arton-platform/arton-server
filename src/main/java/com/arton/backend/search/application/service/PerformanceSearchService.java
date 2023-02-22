@@ -10,11 +10,14 @@ import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort
 import com.arton.backend.search.application.port.out.PerformanceDocumentSearchPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,5 +57,10 @@ public class PerformanceSearchService implements PerformanceSearchUseCase {
     @Override
     public Page<SearchResultDto> searchInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable) {
         return performanceSearchRepository.findByDtoInAdmin(searchDto, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
+    }
+
+    @Override
+    public Page<SearchResultDto> findAll(Pageable pageable) {
+        return performanceSearchRepository.findAll(pageable).map(SearchResultDto::toResultFromDocument);
     }
 }

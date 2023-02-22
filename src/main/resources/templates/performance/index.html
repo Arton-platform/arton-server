@@ -10,13 +10,13 @@
           rel="stylesheet">
     <title>공연 목록</title>
     <style>
-    div.paging {
-      display: flex;
-      align-items: center; /* 수직 정렬 */
-      flex-direction: row; /* default: row */
-      justify-content: center; /* flex direction에 대해서 정렬방식 선택 */
-    }
-  </style>
+        div.paging {
+            display: flex;
+            align-items: center; /* 수직 정렬 */
+            flex-direction: row; /* default: row */
+            justify-content: center; /* flex direction에 대해서 정렬방식 선택 */
+        }
+    </style>
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
@@ -28,9 +28,9 @@
                     <label>공연타입</label>
                     <select th:field="*{performanceType}" class="form-select">
                         <option value="">==공연==</option>
-                        <option th:each="type : ${type}"
+                        <option th:each="type : ${T(com.arton.backend.performance.domain.PerformanceType).values()}"
                                 th:value="${type.name()}"
-                                th:text="${type.getValue()}">뮤지컬
+                                th:text="${type.getValue()}">
                         </option>
                     </select>
                 </div>
@@ -38,7 +38,7 @@
                     <label>분류</label>
                     <select th:field="*{showCategory}" class="form-select">
                         <option value="">==상태==</option>
-                        <option th:each="type : ${category}"
+                        <option th:each="type : ${T(com.arton.backend.performance.domain.ShowCategory).values()}"
                                 th:value="${type.name()}"
                                 th:text="${type.getValue()}">
                         </option>
@@ -145,35 +145,35 @@
 <!--delete-->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-      /*<![CDATA[*/
+        /*<![CDATA[*/
         function deletePerformance(idx) {
-          if (confirm(idx + "번 공연을 삭제할까요?")) {
-          var uri = /*[[ @{/web/performance/revoke} ]]*/;
-          var html = "";
+            if (confirm(idx + "번 공연을 삭제할까요?")) {
+                var uri = /*[[ @{/web/performance/revoke} ]]*/;
+                var html = "";
 
-          html += '<form name="dataForm" action="' + uri + '" method="POST">';
-          html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
-          html += '</form>';
+                html += '<form name="dataForm" action="' + uri + '" method="POST">';
+                html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
+                html += '</form>';
 
-          $("body").append(html);
-          	document.dataForm.submit();
-          }
+                $("body").append(html);
+                document.dataForm.submit();
+            }
         }
 
         function copyPerformance(idx) {
-          if (confirm(idx + "번 공연을 복사할까요?")) {
-          var uri = /*[[ @{/web/performance/copy} ]]*/;
-          var html = "";
+            if (confirm(idx + "번 공연을 복사할까요?")) {
+                var uri = /*[[ @{/web/performance/copy} ]]*/;
+                var html = "";
 
-          html += '<form name="dataForm" action="' + uri + '" method="POST">';
-          html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
-          html += '</form>';
+                html += '<form name="dataForm" action="' + uri + '" method="POST">';
+                html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
+                html += '</form>';
 
-          $("body").append(html);
-          	document.dataForm.submit();
-          }
+                $("body").append(html);
+                document.dataForm.submit();
+            }
         }
-      /*]]>*/
+        /*]]>*/
     </script>
 </th:block>
 </body>

@@ -32,16 +32,14 @@ public class PerformanceAdminController {
     private final PerformanceAdminCopyUseCase performanceAdminCopyUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
 
-    @GetMapping("/web/performance/add")
-    public String addPerformance(Model model) {
-        model.addAttribute("type", PerformanceType.values());
-        model.addAttribute("category", ShowCategory.values());
-        return "performance/createForm";
-    }
-
     @GetMapping("/")
     public String goHome() {
         return "index";
+    }
+
+    @GetMapping("/web/performance/add")
+    public String addPerformance(Model model) {
+        return "performance/createForm";
     }
 
     @PostMapping(value = "/web/performance/add")
@@ -55,22 +53,14 @@ public class PerformanceAdminController {
         Page<SearchResultDto> performances = performanceSearchService.searchInAdmin(form, pageable); //처음만 init 하면
         model.addAttribute("searchDto", form);
         model.addAttribute("performances", performances);
-        model.addAttribute("type", PerformanceType.values());
-        model.addAttribute("category", ShowCategory.values());
         return "performance/index";
     }
 
     @PostMapping("/web/performance")
     public String searchPerformance(Model model, @ModelAttribute("searchDto") PerformanceAdminSearchDto searchDto, @PageableDefault(size = 10) Pageable pageable) {
         this.form = searchDto;
-        if (!ObjectUtils.isEmpty(searchDto))
-        {
-            System.out.println("searchDto = " + searchDto);
-        }
         Page<SearchResultDto> performances = performanceSearchService.searchInAdmin(form, pageable); //처음만 init 하면
         model.addAttribute("performances", performances);
-        model.addAttribute("type", PerformanceType.values());
-        model.addAttribute("category", ShowCategory.values());
         return "redirect:/web/performance";
     }
 
