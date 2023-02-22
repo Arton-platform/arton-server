@@ -1,7 +1,6 @@
 package com.arton.backend.infra.excel.core;
 
 import com.arton.backend.infra.excel.core.resource.*;
-import com.arton.backend.infra.excel.utils.SuperClassReflectionUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import org.apache.poi.ss.SpreadsheetVersion;
@@ -16,7 +15,7 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 
-import static com.arton.backend.infra.excel.utils.SuperClassReflectionUtils.*;
+import static com.arton.backend.infra.excel.utils.SuperClassReflectionUtils.getField;
 
 public abstract class SXSSFExcelFile<T> implements ExcelFile<T>{
 
