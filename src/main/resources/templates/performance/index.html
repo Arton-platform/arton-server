@@ -51,6 +51,7 @@
                 <div class="submit-class">
                     <input type="submit" value="검색" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
                     <a th:href="@{/web/performance/add}" class="btn" style="background: #FF6491; color: #FFF2F6;">공연등록</a>
+                    <a th:href="@{/web/performance/download}" class="btn" style="background: #FF6491; color: #FFF2F6;">엑셀파일저장</a>
                 </div>
             </div>
         </form>
@@ -79,9 +80,9 @@
                 <td th:text="${performance.getPlace()}"></td>
                 <td>
                     <p class="btn_set">
-                        <a th:href="@{/web/performance/{performanceId}(performanceId=${performance.getId()})}">수정</a>
-                        <button type="button" th:onclick="deletePerformance([[${performance.id}]]);">삭제</button>
-                        <button type="button" th:onclick="copyPerformance([[${performance.id}]]);">복사</button>
+                        <a class="btn" style="background: #FF6491; color: #FFF2F6;" th:href="@{/web/performance/{performanceId}(performanceId=${performance.getId()})}">수정</a>
+                        <button type="button" class="btn" style="background: #FF6491; color: #FFF2F6;" th:onclick="deletePerformance([[${performance.id}]]);">삭제</button>
+                        <button type="button" class="btn" style="background: #FF6491; color: #FFF2F6;" th:onclick="copyPerformance([[${performance.id}]]);">복사</button>
                     </p>
                 </td>
             </tr>

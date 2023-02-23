@@ -29,6 +29,7 @@ public class PerformanceAdminController {
     private final PerformanceAdminDeleteUseCase performanceAdminDeleteUseCase;
     private final PerformanceAdminEditUseCase performanceAdminEditUseCase;
     private final PerformanceAdminCopyUseCase performanceAdminCopyUseCase;
+    private final PerformanceAdminExcelUseCase performanceAdminExcelUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
 
     @GetMapping("/")
@@ -95,7 +96,8 @@ public class PerformanceAdminController {
 
     // excel download
     @GetMapping("/web/performance/download")
-    public void downloadExcel(HttpServletResponse response) {
-
+    public String downloadExcel(HttpServletResponse response) {
+        performanceAdminExcelUseCase.downloadExcel(form, response);
+        return "redirect:/web/performance";
     }
 }

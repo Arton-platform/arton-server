@@ -38,7 +38,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -152,7 +154,11 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
      */
     @Override
     public void downloadExcel(PerformanceAdminSearchDto searchDto, HttpServletResponse response) {
-        List<PerformanceExcelDto> result = performanceDocumentSearchPort.findByDtoInAdminWithoutPaging(searchDto).stream().map(PerformanceExcelDto::toDtoFromDocument).collect(Collectors.toList());
+        List<PerformanceExcelDto> result = Optional
+                .ofNullable(performanceDocumentSearchPort.findByDtoInAdminWithoutPaging(searchDto))
+                .orElseGet(Collections::emptyList)
+                .stream().map(PerformanceExcelDto::toDtoFromDocument)
+                .collect(Collectors.toList());
         // excel type setting
         response.setHeader("Content-Disposition", "attachment; filename=\"" + "performance_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)+".xls" + "\";");
         // 인코딩

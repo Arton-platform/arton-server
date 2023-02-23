@@ -2,6 +2,7 @@ package com.arton.backend.infra.excel.core.resource;
 
 import com.arton.backend.infra.excel.annotation.DefaultBodyStyle;
 import com.arton.backend.infra.excel.annotation.DefaultHeaderStyle;
+import com.arton.backend.infra.excel.annotation.ExcelColumn;
 import com.arton.backend.infra.excel.annotation.ExcelColumnStyle;
 import com.arton.backend.infra.excel.core.resource.collection.PreCalculatedCellStyleMap;
 import com.arton.backend.infra.excel.style.ExcelCellStyle;
@@ -11,11 +12,13 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.arton.backend.infra.excel.utils.SuperClassReflectionUtils.getAllFields;
 import static com.arton.backend.infra.excel.utils.SuperClassReflectionUtils.getAnnotation;
 
 public final class ExcelRenderResourceFactory {
@@ -25,6 +28,25 @@ public final class ExcelRenderResourceFactory {
         Map<String, String> headerNamesMap = new LinkedHashMap<>();
         List<String> fieldNames = new ArrayList<>();
 
+        ExcelColumnStyle classDefinedHeaderStyle = getHeaderColumnStyle(type);
+        ExcelColumnStyle classDefinedBodyStyle = getBodyColumnStyle(type);
+
+        for (Field field : getAllFields(type)) {
+            if (field.isAnnotationPresent(ExcelColumn.class)) {
+                ExcelColumn annotation = field.getAnnotation(ExcelColumn.class);
+                styleMap.put(
+                        String.class,
+                        ExcelCellKey.of(field.getName(), ExcelRenderLocation.HEADER),
+                        getCellStyle(decideAppliedStyleAnnotation(classDefinedHeaderStyle, annotation.headerStyle())), workbook);
+                Class<?> fieldType = field.getType();
+                styleMap.put(
+                        fieldType,
+                        ExcelCellKey.of(field.getName(), ExcelRenderLocation.BODY),
+                        getCellStyle(decideAppliedStyleAnnotation(classDefinedBodyStyle, annotation.bodyStyle())), workbook);
+                fieldNames.add(field.getName());
+                headerNamesMap.put(field.getName(), annotation.headerName());
+            }
+        }
 
         if (styleMap.isEmpty()) {
             throw new CustomException(ErrorCode.EXCEL_ANNOTATION_NOT_FOUND.getMessage(), ErrorCode.EXCEL_ANNOTATION_NOT_FOUND);
