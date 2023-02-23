@@ -7,10 +7,7 @@ import com.arton.backend.infra.excel.annotation.ExcelColumnStyle;
 import com.arton.backend.infra.excel.style.DefaultExcelCellStyle;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.data.SearchResultDto;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.format.DateTimeFormatter;
 
@@ -23,11 +20,10 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @NoArgsConstructor
 @DefaultHeaderStyle(style = @ExcelColumnStyle(excelCellStyleClass = DefaultExcelCellStyle.class, enumName = "GREY_HEADER"))
 @DefaultBodyStyle(style = @ExcelColumnStyle(excelCellStyleClass = DefaultExcelCellStyle.class, enumName = "BODY"))
+@ToString
 public class PerformanceExcelDto {
     @ExcelColumn(headerName = "공연번호")
     private Long id;
-    @ExcelColumn(headerName = "이미지 URL")
-    private String imageUrl;
     @ExcelColumn(headerName = "제목")
     private String title;
     @ExcelColumn(headerName = "장소")
@@ -42,9 +38,8 @@ public class PerformanceExcelDto {
     private String showCategory;
 
     @Builder
-    public PerformanceExcelDto(Long id, String imageUrl, String title, String place, String startDate, String endDate, String performanceType, String showCategory) {
+    public PerformanceExcelDto(Long id, String title, String place, String startDate, String endDate, String performanceType, String showCategory) {
         this.id = id;
-        this.imageUrl = imageUrl;
         this.title = title;
         this.place = place;
         this.startDate = startDate;
@@ -56,7 +51,6 @@ public class PerformanceExcelDto {
     public static PerformanceExcelDto toDtoFromDocument(PerformanceDocument document) {
         return PerformanceExcelDto.builder()
                 .id(document.getId())
-                .imageUrl(document.getImageUrl())
                 .title(document.getTitle())
                 .place(document.getPlace())
                 .startDate(isEmpty(document.getStartDate()) ? null : document.getStartDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))

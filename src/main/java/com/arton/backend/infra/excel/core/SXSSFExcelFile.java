@@ -37,7 +37,7 @@ public abstract class SXSSFExcelFile<T> implements ExcelFile<T>{
         validateData(rows);
         this.wb = new SXSSFWorkbook();
         this.resource = ExcelRenderResourceFactory.prepareRenderResource(type, wb, dataFormatDecider);
-        addRows(rows);
+        renderExcel(rows);
     }
 
     protected void validateData(List<T> data) { }
@@ -66,6 +66,9 @@ public abstract class SXSSFExcelFile<T> implements ExcelFile<T>{
         Row row = sheet.createRow(rowIndex);
         int columnIndex = columnStartIndex;
         for (String dataFieldName : resource.getDataFieldNames()) {
+            if (dataFieldName.equals("title") || dataFieldName.equals("place")) {
+                sheet.setColumnWidth(columnIndex, 25 * 256);
+            }
             Cell cell = row.createCell(columnIndex++);
             try {
                 Field field = getField(data.getClass(), dataFieldName);

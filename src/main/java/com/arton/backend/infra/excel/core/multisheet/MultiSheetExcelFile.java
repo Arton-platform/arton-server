@@ -55,6 +55,4 @@ public final class MultiSheetExcelFile<T> extends SXSSFExcelFile<T> {
         renderHeadersWithNewSheet(sheet, ROW_START_IDX, COL_START_IDX);
         currentIDX++;
     }
-
-
 }

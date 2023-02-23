@@ -159,6 +159,10 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
                 .orElseGet(Collections::emptyList)
                 .stream().map(PerformanceExcelDto::toDtoFromDocument)
                 .collect(Collectors.toList());
+        System.out.println("result = " + result.size());
+        for (PerformanceExcelDto performanceExcelDto : result) {
+            System.out.println("performanceExcelDto = " + performanceExcelDto);
+        }
         // excel type setting
         response.setHeader("Content-Disposition", "attachment; filename=\"" + "performance_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)+".xls" + "\";");
         // 인코딩
