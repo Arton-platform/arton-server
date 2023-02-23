@@ -1,21 +1,20 @@
 package com.arton.backend.administer.performance.adapter.in;
 
-import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
-import com.arton.backend.administer.performance.application.port.in.*;
-import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminCreateDto;
-import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
-import com.arton.backend.performance.domain.PerformanceType;
-import com.arton.backend.performance.domain.ShowCategory;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.port.in.*;
 import com.arton.backend.search.application.data.SearchResultDto;
+import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 관리자만 접근 가능.
@@ -30,18 +29,17 @@ public class PerformanceAdminController {
     private final PerformanceAdminDeleteUseCase performanceAdminDeleteUseCase;
     private final PerformanceAdminEditUseCase performanceAdminEditUseCase;
     private final PerformanceAdminCopyUseCase performanceAdminCopyUseCase;
+    private final PerformanceAdminExcelUseCase performanceAdminExcelUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
-
-    @GetMapping("/web/performance/add")
-    public String addPerformance(Model model) {
-        model.addAttribute("type", PerformanceType.values());
-        model.addAttribute("category", ShowCategory.values());
-        return "performance/createForm";
-    }
 
     @GetMapping("/")
     public String goHome() {
         return "index";
+    }
+
+    @GetMapping("/web/performance/add")
+    public String addPerformance(Model model) {
+        return "performance/createForm";
     }
 
     @PostMapping(value = "/web/performance/add")
@@ -55,23 +53,15 @@ public class PerformanceAdminController {
         Page<SearchResultDto> performances = performanceSearchService.searchInAdmin(form, pageable); //처음만 init 하면
         model.addAttribute("searchDto", form);
         model.addAttribute("performances", performances);
-        model.addAttribute("type", PerformanceType.values());
-        model.addAttribute("category", ShowCategory.values());
         return "performance/index";
     }
 
     @PostMapping("/web/performance")
     public String searchPerformance(Model model, @ModelAttribute("searchDto") PerformanceAdminSearchDto searchDto, @PageableDefault(size = 10) Pageable pageable) {
         this.form = searchDto;
-        if (!ObjectUtils.isEmpty(searchDto))
-        {
-            System.out.println("searchDto = " + searchDto);
-        }
         Page<SearchResultDto> performances = performanceSearchService.searchInAdmin(form, pageable); //처음만 init 하면
         model.addAttribute("performances", performances);
-        model.addAttribute("type", PerformanceType.values());
-        model.addAttribute("category", ShowCategory.values());
-        return "performance/index";
+        return "redirect:/web/performance";
     }
 
     // 공연 삭제
@@ -104,4 +94,10 @@ public class PerformanceAdminController {
         return "redirect:/web/performance";
     }
 
+    // excel download
+    @GetMapping("/web/performance/download")
+    public String downloadExcel(HttpServletResponse response) {
+        performanceAdminExcelUseCase.downloadExcel(form, response);
+        return "performance/index";
+    }
 }

@@ -1,11 +1,15 @@
 package com.arton.backend.administer.performance.application.service;
 
 import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.data.PerformanceExcelDto;
 import com.arton.backend.administer.performance.application.port.in.*;
 import com.arton.backend.image.application.port.out.PerformanceImageDeleteRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
+import com.arton.backend.infra.excel.core.ExcelFile;
+import com.arton.backend.infra.excel.core.multisheet.MultiSheetExcelFile;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
@@ -16,23 +20,40 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import com.arton.backend.search.application.port.out.PerformanceDocumentDeletePort;
 import com.arton.backend.search.application.port.out.PerformanceDocumentPort;
+import com.arton.backend.search.application.port.out.PerformanceDocumentSearchPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.SearchPage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase, PerformanceAdminUseCase, PerformanceAdminEditUseCase, PerformanceAdminCopyUseCase {
+public class PerformanceAdminService implements PerformanceAdminSaveUseCase, PerformanceAdminDeleteUseCase, PerformanceAdminUseCase, PerformanceAdminEditUseCase, PerformanceAdminCopyUseCase, PerformanceAdminExcelUseCase {
     private final PerformanceSavePort performanceSavePort;
     private final PerformanceDeletePort performanceDeletePort;
     private final PerformanceRepositoryPort performanceRepositoryPort;
@@ -42,6 +63,7 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
     private final PerformanceDocuemntSavePort performanceDocuemntSavePort;
     private final PerformanceDocumentDeletePort performanceDocumentDeletePort;
     private final FileUploadUtils fileUploadUtils;
+    private final PerformanceDocumentSearchPort performanceDocumentSearchPort;
     @Value("${spring.performance.image.dir}")
     private String performanceDir;
 
@@ -130,5 +152,33 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
                     .build());
         }
         performanceImageSaveRepositoryPort.saveAll(performanceImages);
+    }
+
+    /**
+     * 엑셀 다운로드
+     * @param searchDto
+     * @param response
+     */
+    @Override
+    public void downloadExcel(PerformanceAdminSearchDto searchDto, HttpServletResponse response) {
+        List<PerformanceExcelDto> result = performanceDocumentSearchPort.findByDtoInAdmin(searchDto, PageRequest.of(0, 10000))
+                .stream().map(search -> PerformanceExcelDto.toDtoFromDocument(search.getContent()))
+                .collect(Collectors.toList());
+        //sort
+        result.sort(PerformanceExcelDto::compareById);
+        // excel type setting
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + "performance_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)+".xls" + "\";");
+        // 인코딩
+        response.setContentType("application/vnd.ms-excel; charset=euc-kr");
+        // get Excel
+        ExcelFile excelFile = new MultiSheetExcelFile(result, PerformanceExcelDto.class);
+        ServletOutputStream outputStream = null;
+        try{
+            outputStream = response.getOutputStream();
+            excelFile.write(outputStream);
+            outputStream.close();
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.EXCEL_INTERNAL_ERROR.getMessage(), ErrorCode.EXCEL_INTERNAL_ERROR);
+        }
     }
 }

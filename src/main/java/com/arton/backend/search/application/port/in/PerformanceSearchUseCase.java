@@ -12,4 +12,5 @@ public interface PerformanceSearchUseCase {
     Page<SearchResultDto> searchByPerformanceType(String type, String sort, Pageable pageable);
     Page<SearchResultDto> searchAll(String type, String sort, Pageable pageable);
     Page<SearchResultDto> searchInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable);
+    Page<SearchResultDto> findAll(Pageable pageable);
 }

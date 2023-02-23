@@ -2,6 +2,8 @@ package com.arton.backend.search.adapter.out.persistence.repository;
 
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.performance.domain.PerformanceType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import java.util.List;
@@ -17,4 +19,6 @@ public interface PerformanceSearchRepository extends ElasticsearchRepository<Per
     List<PerformanceDocument> findByPerformanceType(PerformanceType performanceType);
     /** 장소 검색 */
     List<PerformanceDocument> findByPlaceContains(String place);
+
+    Page<PerformanceDocument> findAllByOrderById(Pageable pageable);
 }
