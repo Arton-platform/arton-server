@@ -98,6 +98,6 @@ public class PerformanceAdminController {
     @GetMapping("/web/performance/download")
     public String downloadExcel(HttpServletResponse response) {
         performanceAdminExcelUseCase.downloadExcel(form, response);
-        return "redirect:/web/performance";
+        return "performance/index";
     }
 }

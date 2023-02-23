@@ -140,7 +140,6 @@ public class CustomPerformanceSearchRepositoryImpl implements CustomPerformanceS
         QueryBuilder category = termsQuery("showCategory", Arrays.stream(ShowCategory.values()).map(ShowCategory::getValue).collect(Collectors.toList()));
         if (!ObjectUtils.isEmpty(searchDto)) {
             if (StringUtils.hasText(searchDto.getKeyword())) {
-                System.out.println("searchDto = " + searchDto.getKeyword());
                 query = boolQuery().should(multiMatchQuery(searchDto.getKeyword(),"performanceType.ngram", "performanceType", "title", "title.ngram", "place", "place.ngram")
                         .type(BEST_FIELDS)
                         .tieBreaker(0.3f));

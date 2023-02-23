@@ -60,4 +60,19 @@ public class PerformanceExcelDto {
                 .build();
     }
 
+    // 공연 번호순 정렬
+    public static int compareById(PerformanceExcelDto lhs, PerformanceExcelDto rhs) {
+            return lhs.id.compareTo(rhs.id);
+    }
+
+    // 공연 번호순 정렬 추가
+    public static int compareByStartDate(PerformanceExcelDto lhs, PerformanceExcelDto rhs) {
+        if (lhs.startDate.equals(rhs.startDate)) {
+            return lhs.id.compareTo(rhs.id);
+        } else {
+            return lhs.startDate.compareTo(rhs.startDate);
+        }
+    }
+
+
 }
