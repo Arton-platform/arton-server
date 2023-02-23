@@ -13,13 +13,16 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "실시간 키워드 정보 V2")
 public class RealTimeKeywordDtoV2 {
+    @Schema(description = "순위")
+    private int rank;
     @Schema(description = "키워드")
     private String keyword;
     @Schema(description = "특정 시간 동안 검색 횟수 증가 비율")
     private Double score;
 
     @Builder
-    public RealTimeKeywordDtoV2(String keyword, Double score) {
+    public RealTimeKeywordDtoV2(int rank, String keyword, Double score) {
+        this.rank = rank;
         this.keyword = keyword;
         this.score = score;
     }
