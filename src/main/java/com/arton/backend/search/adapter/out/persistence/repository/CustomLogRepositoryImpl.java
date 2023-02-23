@@ -6,7 +6,9 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.search.application.data.RealTimeKeywordDtoV2;
 import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchPageDtoV2;
+import com.arton.backend.search.domain.IndexName;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -25,6 +27,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -141,5 +144,22 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
         // base Time
         String basedTime = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm '기준'"));
         return SearchPageDtoV2.builder().basedTime(basedTime).keywords(result).build();
+    }
+
+    @Override
+    public void deleteKeyword(String keyword) {
+        LocalDateTime now = LocalDateTime.now();
+        // 현재 시간 0분 0초 ~ 현재 카운트
+
+        QueryBuilder range = QueryBuilders.rangeQuery("@timestamp").gte(now.truncatedTo(ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .lt(now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+
+        QueryBuilder query = QueryBuilders.boolQuery()
+                .must(matchQuery("message", "/performance/search"))
+                .must(matchPhraseQuery("logger_name", "LOGSTASH"))
+                .must(termQuery("keyword", keyword))
+                .filter(range);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder().query(query);
+        elasticsearchOperations.delete(query, IndexCoordinates.of(IndexName.LOG.getValue()));
     }
 }
