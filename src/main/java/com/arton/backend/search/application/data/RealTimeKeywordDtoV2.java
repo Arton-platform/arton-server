@@ -26,4 +26,8 @@ public class RealTimeKeywordDtoV2 {
         this.keyword = keyword;
         this.score = score;
     }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 }

@@ -1,10 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../static/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link th:href="@{/css/integrated-css.css}"
+          href="../static/css/integrated-css.css"
+          rel="stylesheet">
+    <title>실시간 검색어</title>
 </head>
 <body>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<div class="container">
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>순위</th>
+                <th>키워드</th>
+                <th>기능</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="keyword : ${keywords}">
+                <td th:text="${keyword.getRank()}"></td>
+                <td th:text="${keyword.getKeyword()}"></td>
+                <td>
+                    <p class="btn_set">
+                        <button type="button" class="btn" style="background: #FF6491; color: #FFF2F6;" th:onclick="deleteKeyword([[${keyword.getKeyword()}]]);">삭제</button>
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
+<!--delete-->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function deleteKeyword(keyword) {
+            if (confirm(keyword + " 검색어를 삭제할까요?")) {
+                var uri = /*[[ @{/web/keyword/revoke} ]]*/;
+                var html = "";
+
+                html += '<form name="dataForm" action="' + uri + '" method="POST">';
+                html += 	'<input type="hidden" name="keyword" value="' + keyword + '" />';
+                html += '</form>';
+
+                $("body").append(html);
+                document.dataForm.submit();
+            }
+        }
+        /*]]>*/
+    </script>
+</th:block>
 </body>
 </html>
