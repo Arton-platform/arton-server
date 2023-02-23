@@ -1,10 +1,9 @@
-package com.arton.backend.search.adapter.out.persistence.repository;
+package com.arton.backend.search.application.port.out;
 
 import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchPageDtoV2;
 
-public interface CustomLogRepository {
+public interface LogPort {
     SearchPageDto getRecentTop10Keywords();
     SearchPageDtoV2 getAdvancedTop10Keywords();
-    void deleteKeyword(String keyword);
 }
