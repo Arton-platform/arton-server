@@ -45,6 +45,11 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceDocumentSe
     }
 
     @Override
+    public List<PerformanceDocument> findByDtoInAdminWithoutPaging(PerformanceAdminSearchDto searchDto) {
+        return performanceSearchRepository.findByDtoInAdminWithoutPaging(searchDto);
+    }
+
+    @Override
     public void saveAll(List<PerformanceDocument> performanceDocuments) {
         performanceSearchRepository.saveAll(performanceDocuments);
     }

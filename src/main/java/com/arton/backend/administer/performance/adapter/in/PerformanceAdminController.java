@@ -1,21 +1,20 @@
 package com.arton.backend.administer.performance.adapter.in;
 
-import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
-import com.arton.backend.administer.performance.application.port.in.*;
-import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminCreateDto;
-import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
-import com.arton.backend.performance.domain.PerformanceType;
-import com.arton.backend.performance.domain.ShowCategory;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
+import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
+import com.arton.backend.administer.performance.application.port.in.*;
 import com.arton.backend.search.application.data.SearchResultDto;
+import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 관리자만 접근 가능.
@@ -92,5 +91,11 @@ public class PerformanceAdminController {
     public String editPerformance(Model model, @PathVariable(name = "id") Long id, PerformanceAdminEditDto editDto) {
         performanceAdminEditUseCase.editPerformance(id, editDto);
         return "redirect:/web/performance";
+    }
+
+    // excel download
+    @GetMapping("/web/performance/download")
+    public void downloadExcel(HttpServletResponse response) {
+
     }
 }

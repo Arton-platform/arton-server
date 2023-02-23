@@ -21,6 +21,7 @@ public interface PerformanceDocumentSearchPort {
     SearchPage<PerformanceDocument> findByKeyword(String keyword, String sort, Pageable pageable);
     /** 관리자 페이지 검색용*/
     SearchPage<PerformanceDocument> findByDtoInAdmin(PerformanceAdminSearchDto searchDto, Pageable pageable);
+    List<PerformanceDocument> findByDtoInAdminWithoutPaging(PerformanceAdminSearchDto searchDto);
     Optional<PerformanceDocument> findById(Long id);
     Page<PerformanceDocument> findAll(Pageable pageable);
 }
