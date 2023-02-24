@@ -1,12 +1,15 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
+import com.arton.backend.search.adapter.out.persistence.document.AccessLogDocument;
 import com.arton.backend.search.application.data.RealTimeKeywordDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.search.application.data.RealTimeKeywordDtoV2;
 import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchPageDtoV2;
+import com.arton.backend.search.domain.IndexName;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -25,6 +28,10 @@ import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -138,8 +145,30 @@ public class CustomLogRepositoryImpl implements CustomLogRepository{
         }
         Collections.sort(result,
                 Comparator.comparing(RealTimeKeywordDtoV2::getScore).reversed());
+        int cnt = 1;
+        for (RealTimeKeywordDtoV2 realTimeKeywordDtoV2 : result) {
+            realTimeKeywordDtoV2.setRank(cnt++);
+        }
         // base Time
         String basedTime = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm '기준'"));
         return SearchPageDtoV2.builder().basedTime(basedTime).keywords(result).build();
+    }
+
+    @Override
+    public void deleteKeyword(String keyword) {
+        LocalDateTime now = LocalDateTime.now();
+        // 현재 시간 0분 0초 ~ 현재 카운트
+        QueryBuilder range = QueryBuilders.rangeQuery("@timestamp").gte(now.truncatedTo(ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .lt(now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+
+        QueryBuilder query = QueryBuilders.boolQuery()
+                .must(matchQuery("message", "/performance/search"))
+                .must(matchPhraseQuery("logger_name", "LOGSTASH"))
+                .must(termQuery("keyword", keyword))
+                .filter(range);
+        // 쿼리 전송
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(query);
+        NativeSearchQuery deleteQuery = searchQueryBuilder.build();
+        elasticsearchOperations.delete(deleteQuery, AccessLogDocument.class, IndexCoordinates.of(IndexName.LOG.getValue()));
     }
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PerformanceImageRepository extends JpaRepository<PerformanceImageEntity, Long> {
     List<PerformanceImageEntity> findAllByPerformance_id(Long userId);
+    void deleteAllByPerformance_Id(Long performanceId);
 }

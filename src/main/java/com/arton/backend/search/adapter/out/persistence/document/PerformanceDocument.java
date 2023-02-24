@@ -33,6 +33,8 @@ public class PerformanceDocument{
     /** 뮤지컬 or 콘서트 */
 //    @Field(type = FieldType.Text)
     private String performanceType;
+    /** 분류 */
+    private String showCategory;
     /** 공연 시작일 */
     @Field(type = FieldType.Date, format = {DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis})
     private LocalDateTime startDate;
@@ -41,13 +43,14 @@ public class PerformanceDocument{
     private LocalDateTime endDate;
 
     @Builder
-    public PerformanceDocument(Long id, String title, String musicalDateTime, String place, String imageUrl, String performanceType, LocalDateTime startDate, LocalDateTime endDate) {
+    public PerformanceDocument(Long id, String title, String musicalDateTime, String place, String imageUrl, String performanceType, String showCategory, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.title = title;
         this.musicalDateTime = musicalDateTime;
         this.place = place;
         this.imageUrl = imageUrl;
         this.performanceType = performanceType;
+        this.showCategory = showCategory;
         this.startDate = startDate;
         this.endDate = endDate;
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- Console -->
-    <springProfile name="local">
+    <springProfile name="local,test">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{10} - %msg%n</pattern>
@@ -25,7 +25,7 @@
 
 
     <root>
-        <springProfile name="local">
+        <springProfile name="local,test">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="LOGSTASH-LOCAL" />
         </springProfile>

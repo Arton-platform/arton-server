@@ -11,6 +11,7 @@ import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceE
 
 import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceRepository;
 import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.performance.domain.ShowCategory;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
@@ -112,10 +113,12 @@ public class TestDataInit {
                     .startDate(times[random.nextInt(4)])
                     .ticketOpenDate(times[random.nextInt(4)].minusDays(3L))
                     .ticketEndDate(times[random.nextInt(4)].minusDays(3L))
+                    .endDate(times[random.nextInt(4)].plusDays(4L))
                     .hit((long)random.nextInt(1000)+1)
                     .musicalDateTime(musicalDates[random.nextInt(2)])
                     .purchaseLimit(3)
                     .limitAge(ages[random.nextInt(3)])
+                    .showCategory(ShowCategory.values()[random.nextInt(3)])
                     .build();
             performances.add(performance);
 

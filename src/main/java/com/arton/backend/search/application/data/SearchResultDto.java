@@ -12,7 +12,7 @@ import static org.springframework.util.ObjectUtils.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SearchResultDto {
+public class   SearchResultDto {
     private Long id;
     private String imageUrl;
     private String title;
@@ -20,9 +20,10 @@ public class SearchResultDto {
     private String startDate;
     private String endDate;
     private String performanceType;
+    private String showCategory;
 
     @Builder
-    public SearchResultDto(Long id, String imageUrl, String title, String place, String startDate, String endDate, String performanceType) {
+    public SearchResultDto(Long id, String imageUrl, String title, String place, String startDate, String endDate, String performanceType, String showCategory) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.title = title;
@@ -30,6 +31,7 @@ public class SearchResultDto {
         this.startDate = startDate;
         this.endDate = endDate;
         this.performanceType = performanceType;
+        this.showCategory = showCategory;
     }
 
     public static SearchResultDto toResultFromDocument(PerformanceDocument document) {
@@ -41,6 +43,8 @@ public class SearchResultDto {
                 .startDate(isEmpty(document.getStartDate()) ? null : document.getStartDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
                 .endDate(isEmpty(document.getEndDate()) ? null : document.getEndDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
                 .performanceType(document.getPerformanceType())
+                .showCategory(document.getShowCategory())
                 .build();
     }
+
 }

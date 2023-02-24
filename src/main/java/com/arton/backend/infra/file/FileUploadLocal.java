@@ -4,14 +4,16 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,6 +21,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,20 +30,22 @@ import java.util.stream.Stream;
  * 이미지 업로드 유틸 로컬
  */
 @Slf4j
-@Profile(value = "dev")
+@Profile(value = {"test"})
 @Service
 @RequiredArgsConstructor
 public class FileUploadLocal implements FileUploadUtils{
-    @Value("${spring.default-image-local}")
+    @Value("${spring.default-image}")
     private String defaultImageUrl;
-    @Value("${spring.root-dir}")
+    @Value("${spring.user.image.dir}")
     private String rootDir;
+    @Value("${spring.performance.image.dir}")
+    private String rootPerformanceDir;
 
     @Override
-    public void delete(Long userId, String dir) {
+    public void deleteFile(Long userId, String dir) {
         // 기본 이미지가 아니라면 삭제 진행
         if (!dir.equals(defaultImageUrl)) {
-            Path dirPath = Paths.get(System.getProperty("user.dir") + rootDir + "/" + userId);
+            Path dirPath = Paths.get(System.getProperty("user.dir") + rootDir + userId);
 
             try {
                 Files.list(dirPath).forEach(file -> {
@@ -58,12 +63,46 @@ public class FileUploadLocal implements FileUploadUtils{
         }
     }
 
+    /**
+     * 공연 제거용 메소드
+     * @param id
+     * @param dirNames
+     */
+    @Override
+    public void deleteFiles(Long id, List<String> dirNames) {
+        Path dirPath = Paths.get(System.getProperty("user.dir") + rootPerformanceDir + id);
+        try {
+            Files.list(dirPath).forEach(file -> {
+                if (!Files.isDirectory(file)) {
+                    try {
+                        Files.delete(file);
+                    } catch (IOException ex) {
+                        log.error("Could not delete file: " + file, ex);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            log.error("Could not list directory: ", e);
+        }finally {
+            // delete empty directory
+            File directory = dirPath.toFile();
+            if (directory.isDirectory() && directory.listFiles().length == 0) {
+                directory.delete();
+            }
+        }
+    }
+
+    @Override
+    public String copyFile(Long id, String dirName) {
+        return null;
+    }
+
     @Override
     public String upload(MultipartFile multipartFile, String dirName) {
         validateFile(multipartFile);
         String originalFilename = multipartFile.getOriginalFilename();
         String fileName = createStoreFileName(originalFilename);
-        Path uploadPath = Paths.get(System.getProperty("user.dir") + "/" + dirName);
+        Path uploadPath = Paths.get(System.getProperty("user.dir")  + dirName);
         if (!Files.exists(uploadPath)) {
             try {
                 Files.createDirectories(uploadPath);
@@ -127,9 +166,43 @@ public class FileUploadLocal implements FileUploadUtils{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public MultipartFile fileToMultipartFile(String url) {
+        File file = new File(System.getProperty("user.dir") + url);
+        FileItem fileItem = null;
+        try {
+            fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+        OutputStream outputStream = null;
+        try {
+            outputStream = fileItem.getOutputStream();
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.IO_EXCEPTION.getMessage(), ErrorCode.IO_EXCEPTION);
+        }
+        try {
+            IOUtils.copy(inputStream, outputStream);
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.IO_EXCEPTION.getMessage(), ErrorCode.IO_EXCEPTION);
+        }
+        MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+        return multipartFile;
+    }
+
     private void validateFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
             throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+        if (!multipartFile.getContentType().toLowerCase(Locale.ROOT).contains("image")) {
+            throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
         }
     }
 

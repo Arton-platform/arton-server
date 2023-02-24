@@ -7,29 +7,32 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 이미지 업로드 유틸 S3
  * s3에 올리려면 프로파일 추가하면 됨.
  */
 @Slf4j
-@Profile(value = {"aws", "local"})
+@Profile(value = {"aws", "local", "dev"})
 @Service
 @RequiredArgsConstructor
+
 public class FileUploadS3 implements FileUploadUtils {
     @Value("${spring.bucket}")
     private String bucket;
@@ -37,6 +40,8 @@ public class FileUploadS3 implements FileUploadUtils {
     private String prefix;
     @Value("${spring.default-image}")
     private String defaultImageUrl;
+    @Value("${spring.performance.image.dir}")
+    private String defaultPerformanceUrl;
     // s3 uploader
     private final AmazonS3Client amazonS3Client;
 
@@ -145,16 +150,57 @@ public class FileUploadS3 implements FileUploadUtils {
      * @return
      */
     @Override
-    public void delete(Long userId, String dirName) {
+    public void deleteFile(Long userId, String dirName) {
         // 기본 이미지가 아니라면 삭제 진행
         if (!dirName.equals(defaultImageUrl)) {
-            amazonS3Client.deleteObject(bucket, dirName.substring(prefix.length()));
+            try{
+                amazonS3Client.deleteObject(bucket, dirName.substring(prefix.length()));
+            }catch (Exception e) {
+                throw new CustomException(ErrorCode.DELETE_ERROR.getMessage(), ErrorCode.DELETE_ERROR);
+            }
         }
     }
+
+    /**
+     * 기존 deleteFile 이용.
+     * @param id
+     * @param dirNames
+     */
+    @Override
+    public void deleteFiles(Long id, List<String> dirNames) {
+        for (String dirName : dirNames) {
+            deleteFile(id, dirName);
+        }
+    }
+
+    @Override
+    public String copyFile(Long id, String dirName) {
+        try {
+            String origin = dirName.substring(prefix.length());
+            String temp = origin.substring(defaultPerformanceUrl.length());
+            int lastIdx = temp.lastIndexOf("/");
+            String copy = defaultPerformanceUrl + id + temp.substring(lastIdx);
+            CopyObjectRequest copyObjRequest = new CopyObjectRequest(
+                    this.bucket,
+                    origin,
+                    this.bucket,
+                    copy
+            ).withCannedAccessControlList(CannedAccessControlList.PublicRead);
+            //Copy
+            amazonS3Client.copyObject(copyObjRequest);
+            return prefix + copy;
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.FILE_COPY_FAILED.getMessage(), ErrorCode.FILE_COPY_FAILED);
+        }
+    }
+
 
     private void validateFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
             throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+        if (!multipartFile.getContentType().toLowerCase(Locale.ROOT).contains("image")) {
+            throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
         }
     }
 
@@ -181,5 +227,36 @@ public class FileUploadS3 implements FileUploadUtils {
             e.printStackTrace();
         }
         return "default.png";
+    }
+
+    @Override
+    public MultipartFile fileToMultipartFile(String url) {
+        File file = new File(url);
+        FileItem fileItem = null;
+        try {
+            fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+        OutputStream outputStream = null;
+        try {
+            outputStream = fileItem.getOutputStream();
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.IO_EXCEPTION.getMessage(), ErrorCode.IO_EXCEPTION);
+        }
+        try {
+            org.apache.commons.io.IOUtils.copy(inputStream, outputStream);
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.IO_EXCEPTION.getMessage(), ErrorCode.IO_EXCEPTION);
+        }
+        MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+        return multipartFile;
     }
 }
