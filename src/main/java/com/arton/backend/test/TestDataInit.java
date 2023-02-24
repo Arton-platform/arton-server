@@ -14,7 +14,10 @@ import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
+import com.arton.backend.search.adapter.out.persistence.document.UserDocument;
+import com.arton.backend.search.adapter.out.persistence.repository.UserSearchRepository;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import com.arton.backend.user.domain.*;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +43,7 @@ public class TestDataInit {
     private final ReviewRepository reviewRepository;
     private final UserImageRepository userImageRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserSearchRepository userSearchRepository;
     private String defaultImage = "image/profiles/default.png";
 
     @Transactional
@@ -71,6 +75,9 @@ public class TestDataInit {
         for (UserEntity userEntity : userEntities) {
             UserImageEntity build = UserImageEntity.builder().imageUrl(defaultImage).user(userEntity).build();
             userImageRepository.save(build);
+            User user = UserMapper.toDomain(userEntity);
+            UserDocument userDocument = UserMapper.toDocumentFromDomain(user);
+            userSearchRepository.save(userDocument);
         }
 
         UserEntity base = userRepository.findById(1L).get();

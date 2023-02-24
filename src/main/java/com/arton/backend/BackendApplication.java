@@ -6,6 +6,7 @@ import com.arton.backend.follow.adapter.out.persistence.repository.FollowReposit
 import com.arton.backend.image.adapter.out.persistence.repository.UserImageRepository;
 import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceRepository;
 import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
+import com.arton.backend.search.adapter.out.persistence.repository.UserSearchRepository;
 import com.arton.backend.test.TestDataInit;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
@@ -38,8 +39,8 @@ public class BackendApplication {
 	@Profile("test")
 	@Bean
 	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository, UserRepository userRepository, FollowRepository followRepository,
-									 ReviewRepository reviewRepository, UserImageRepository userImageRepository, PasswordEncoder passwordEncoder) {
-		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository, reviewRepository, userImageRepository, passwordEncoder);
+									 ReviewRepository reviewRepository, UserImageRepository userImageRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository) {
+		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository, reviewRepository, userImageRepository, passwordEncoder, userSearchRepository);
 	}
 
 }
