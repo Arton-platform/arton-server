@@ -52,11 +52,12 @@ public class TestDataInit {
         // test user data setting
         // user
         List<UserEntity> userList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        String[] nicknames = {"고구마", "쿠마", "치킨", "치돌이"};
+        for (int i = 0; i < 100; i++) {
             UserEntity user = UserEntity.builder()
-                    .email(i == 0 ? "j6731000@gmail.com" : "tempaa"+i)
+                    .email(i == 0 ? "j67310@gmail.com" : "test"+i)
                     .password(passwordEncoder.encode("temp"))
-                    .nickname("temp" + i)
+                    .nickname(nicknames[random.nextInt(4)])
                     .gender(i % 2 == 0 ? Gender.MALE : Gender.FEMALE)
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
