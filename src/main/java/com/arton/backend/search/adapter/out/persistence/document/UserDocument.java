@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Document(indexName = "performance")
+@Document(indexName = "user")
 @Mapping(mappingPath = "static/elastic/user-mapping.json")
 @Setting(settingPath = "static/elastic/user-setting.json")
 public class UserDocument {
