@@ -2,7 +2,9 @@ package com.arton.backend.administer.mail.application.service;
 
 import com.arton.backend.administer.mail.application.data.AdminMailResponseDto;
 import com.arton.backend.administer.mail.application.data.AdminMailSearchDto;
+import com.arton.backend.administer.mail.application.data.AdminMailSendDto;
 import com.arton.backend.administer.mail.application.port.in.MailAdminSearchUseCase;
+import com.arton.backend.administer.mail.application.port.in.MailAdminSendUseCase;
 import com.arton.backend.search.application.port.out.UserDocumentSearchPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

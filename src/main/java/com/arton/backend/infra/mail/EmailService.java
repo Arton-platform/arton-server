@@ -1,10 +1,8 @@
 package com.arton.backend.infra.mail;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -45,7 +44,6 @@ public class EmailService implements EmailUseCase{
         } catch (Exception e) {
             throw new CustomException(ErrorCode.MAIL_SEND_ERROR.getMessage(), ErrorCode.MAIL_SEND_ERROR);
         }
-
     }
 
     /**
@@ -71,6 +69,28 @@ public class EmailService implements EmailUseCase{
             //send
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
+            throw new CustomException(ErrorCode.MAIL_SEND_ERROR.getMessage(), ErrorCode.MAIL_SEND_ERROR);
+        }
+    }
+
+    /**
+     * 여러 대상에게 메일 보내기
+     * @param details
+     */
+    @Async
+    @Override
+    public void sendMailWithMultipleReceivers(MailMultiReceiversDto details) {
+        try {
+            int sz = details.getReceivers().size();
+            String[] receivers = details.getReceivers().toArray(new String[sz]);
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(sender);
+            simpleMailMessage.setTo(details.getReceivers().toArray(receivers));
+            simpleMailMessage.setText(details.getMessageBody());
+            simpleMailMessage.setSubject(details.getSubject());
+            // send
+            javaMailSender.send(simpleMailMessage);
+        } catch (Exception e) {
             throw new CustomException(ErrorCode.MAIL_SEND_ERROR.getMessage(), ErrorCode.MAIL_SEND_ERROR);
         }
     }

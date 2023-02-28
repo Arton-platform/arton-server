@@ -1,15 +1,11 @@
 package com.arton.backend.administer.mail.application.data;
 
-import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.adapter.out.persistence.document.UserDocument;
-import com.arton.backend.search.application.data.SearchResultDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static org.springframework.util.ObjectUtils.isEmpty;

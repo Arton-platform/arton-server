@@ -36,4 +36,9 @@ public class MailAdminController {
         model.addAttribute("users", users);
         return "redirect:/web/mail";
     }
+
+//    @PostMapping("/web/mail/send")
+//    public String sendMail() {
+//
+//    }
 }
