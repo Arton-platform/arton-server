@@ -14,7 +14,10 @@ import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
+import com.arton.backend.search.adapter.out.persistence.document.UserDocument;
+import com.arton.backend.search.adapter.out.persistence.repository.UserSearchRepository;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import com.arton.backend.user.domain.*;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +43,7 @@ public class TestDataInit {
     private final ReviewRepository reviewRepository;
     private final UserImageRepository userImageRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserSearchRepository userSearchRepository;
     private String defaultImage = "image/profiles/default.png";
 
     @Transactional
@@ -52,11 +56,12 @@ public class TestDataInit {
         // test user data setting
         // user
         List<UserEntity> userList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        String[] nicknames = {"고구마", "쿠마", "치킨", "치돌이"};
+        for (int i = 0; i < 100; i++) {
             UserEntity user = UserEntity.builder()
-                    .email(i == 0 ? "j6731000@gmail.com" : "tempaa"+i)
+                    .email(i == 0 ? "j67310@gmail.com" : "test"+i)
                     .password(passwordEncoder.encode("temp"))
-                    .nickname("temp" + i)
+                    .nickname(nicknames[random.nextInt(4)])
                     .gender(i % 2 == 0 ? Gender.MALE : Gender.FEMALE)
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
@@ -70,6 +75,9 @@ public class TestDataInit {
         for (UserEntity userEntity : userEntities) {
             UserImageEntity build = UserImageEntity.builder().imageUrl(defaultImage).user(userEntity).build();
             userImageRepository.save(build);
+            User user = UserMapper.toDomain(userEntity);
+            UserDocument userDocument = UserMapper.toDocumentFromDomain(user);
+            userSearchRepository.save(userDocument);
         }
 
         UserEntity base = userRepository.findById(1L).get();

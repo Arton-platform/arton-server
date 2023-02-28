@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @SpringBootTest
@@ -25,4 +27,14 @@ class BackendApplicationTests {
 		System.out.println("now = " + base);
 	}
 
+	@Test
+	void listToArray() {
+		List<String> arr = new ArrayList<>();
+		arr.add("Aa");
+		arr.add("BB");
+		String[] strings = arr.toArray(new String[arr.size()]);
+		for (String string : strings) {
+			System.out.println("string = " + string);
+		}
+	}
 }
