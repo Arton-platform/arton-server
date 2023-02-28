@@ -38,4 +38,12 @@ public class Board {
     public Board() {
 
     }
+
+    public Board(Board board) {
+        this.user = board.getUser();
+        this.hit = board.getHit();
+        this.image = board.getImage();
+        this.createdDate = board.getCreatedDate();
+        this.updateDate = board.getUpdateDate();
+    }
 }

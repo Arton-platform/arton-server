@@ -15,6 +15,9 @@ import com.arton.backend.administer.banner.application.out.BannerSelectAllPort;
 import com.arton.backend.administer.banner.application.out.BannerSelectOntPort;
 import com.arton.backend.administer.banner.application.out.BannerUpdatePort;
 import com.arton.backend.administer.banner.domain.Banner;
+import com.arton.backend.administer.banner.domain.BannerMapper;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,30 +31,33 @@ public class BannerService implements BannerRegistUseCase, BannerSelectAllUseCas
     private final BannerUpdatePort updatePort;
     private final BannerDeletePort deletePort;
 
+    private final BannerMapper mapper;
+
     @Override
     public void registBanner(Banner banner) {
-        // Mapper
-        registPort.registBanner(banner);
+        registPort.registBanner(mapper.toEntity(banner));
     }
 
     @Override
     public Banner selectOneBanner(long id) {
-        selectOnePort.selectOneBanner(id);
-        // Mapper
+        // Optional
+        // mapper
+        selectOnePort.selectOneBanner(id)
+            .orElseThrow(()-> new CustomException(ErrorCode.SELECT_ERROR.getMessage(),ErrorCode.SELECT_ERROR))
         return null;
     }
 
     @Override
     public List<Banner> selectAllBanner() {
+        // Optional
+        // mapper
         selectAllPort.selectAllBanner();
-        // Mapper
         return null;
     }
 
     @Override
     public void updateBanner(Banner banner) {
-        // Mapper
-        updatePort.updateBanner(banner);
+        updatePort.updateBanner(mapper.toEntity(banner));
     }
 
     @Override
