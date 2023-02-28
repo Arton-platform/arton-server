@@ -12,6 +12,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,9 +24,16 @@ public class MailAdminController {
     @GetMapping("/web/mail")
     public String goPerformanceHome(Model model, @PageableDefault(size = 10) Pageable pageable) {
         Page<AdminMailResponseDto> users = mailAdminSearchUseCase.getMailUserList(form, pageable); //처음만 init 하면
-        System.out.println("users = " + users.getSize());
         model.addAttribute("searchDto", form);
         model.addAttribute("users", users);
         return "mail/index";
+    }
+
+    @PostMapping("/web/mail")
+    public String searchMail(Model model, @ModelAttribute("searchDto") AdminMailSearchDto searchDto, @PageableDefault(size = 10) Pageable pageable) {
+        this.form = searchDto;
+        Page<AdminMailResponseDto> users = mailAdminSearchUseCase.getMailUserList(form, pageable); //처음만 init 하면
+        model.addAttribute("users", users);
+        return "redirect:/web/mail";
     }
 }
