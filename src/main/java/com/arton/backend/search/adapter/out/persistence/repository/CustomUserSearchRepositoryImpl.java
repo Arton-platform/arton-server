@@ -43,8 +43,7 @@ public class CustomUserSearchRepositoryImpl implements CustomUserSearchRepositor
         QueryBuilder query = boolQuery()
                 .should(wildcardQuery("nickname.ngram", "*"))
                 .should(wildcardQuery("nickname", "*"))
-                .should(wildcardQuery("email", "*"))
-                .should(wildcardQuery("termsAgree", "*"));
+                .should(wildcardQuery("email", "*"));
 
         QueryBuilder termsAgree = wildcardQuery("termsAgree","*");
 
@@ -84,8 +83,9 @@ public class CustomUserSearchRepositoryImpl implements CustomUserSearchRepositor
             return rangeQuery(field).gte(gte);
         } else if (ObjectUtils.isEmpty(gte) && !ObjectUtils.isEmpty(lt)) {
             return rangeQuery(field).lt(lt);
-        }else
-            return rangeQuery(field).lte(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        } else {
+            return rangeQuery(field).lte(LocalDateTime.now());
+        }
     }
 
     /**
