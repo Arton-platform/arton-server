@@ -29,6 +29,11 @@
                     <input type="text" th:field="*{keyword}">
                     <input type="submit" value="검색" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
                 </div>
+                <div>
+                    <label for="gteDate">가입일</label>
+                    <input id="gteDate" name="gteDate" type="date" th:field="*{gteDate}">
+                    <input id="ltDate" name="ltDate" type="date" th:field="*{ltDate}">
+                </div>
             </div>
         </form>
     </article>
