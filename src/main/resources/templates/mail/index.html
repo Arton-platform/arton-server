@@ -125,39 +125,24 @@
         </ul>
     </nav>
 </div> <!-- /container -->
-<!--delete-->
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        function deletePerformance(idx) {
-            if (confirm(idx + "번 공연을 삭제할까요?")) {
-                var uri = /*[[ @{/web/performance/revoke} ]]*/;
-                var html = "";
 
-                html += '<form name="dataForm" action="' + uri + '" method="POST">';
-                html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
-                html += '</form>';
+<div class="mail-form">
+    <article class="container">
+        <form th:action="@{/web/mail/send}" th:object="${mailDto}" method="POST">
+            <div style="display: inline">
+                <div>
+                    <label>제목</label>
+                    <input type="text" th:field="*{subject}">
+                </div>
+                <div>
+                    <label for="messageBody">내용</label>
+                    <input id="messageBody" name="messageBody" type="textarea" th:field="*{messageBody}">
+                </div>
+            </div>
+            <input type="submit" value="메일발송" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
+        </form>
+    </article>
+</div>
 
-                $("body").append(html);
-                document.dataForm.submit();
-            }
-        }
-
-        function copyPerformance(idx) {
-            if (confirm(idx + "번 공연을 복사할까요?")) {
-                var uri = /*[[ @{/web/performance/copy} ]]*/;
-                var html = "";
-
-                html += '<form name="dataForm" action="' + uri + '" method="POST">';
-                html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
-                html += '</form>';
-
-                $("body").append(html);
-                document.dataForm.submit();
-            }
-        }
-        /*]]>*/
-    </script>
-</th:block>
 </body>
 </html>
