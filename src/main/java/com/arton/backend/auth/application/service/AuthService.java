@@ -14,6 +14,8 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.search.application.port.out.UserDocumentSavePort;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import com.arton.backend.withdrawal.application.port.out.WithdrawalRegistPort;
@@ -57,6 +59,7 @@ public class AuthService implements AuthUseCase {
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
     private final FileUploadUtils fileUploadUtils;
+    private final UserDocumentSavePort userDocumentSavePort;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
 
@@ -115,7 +118,8 @@ public class AuthService implements AuthUseCase {
                 zzimRepository.savePerformances(zzims);
             }
         }
-        userRepository.save(savedUser);
+        User toDoc = userRepository.save(savedUser);
+        userDocumentSavePort.save(toDoc);
         return true;
     }
 
@@ -189,6 +193,8 @@ public class AuthService implements AuthUseCase {
         if (redisTemplate.opsForValue().get(refreshTokenPrefix + id) != null) {
             redisTemplate.delete(refreshTokenPrefix + id);
         }
+        // update document
+        userDocumentSavePort.save(user);
         // 해당 토큰 블랙리스트 저장
         Long expiration = tokenProvider.getExpiration(accessToken);
         redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
@@ -259,7 +265,6 @@ public class AuthService implements AuthUseCase {
         // 비밀번호 변경
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
         user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
         // 메일 정보 전송
         return MailDto.builder()
                 .messageBody(newPassword)

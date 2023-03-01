@@ -1,14 +1,12 @@
 package com.arton.backend.search.adapter.in;
 
-import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
-import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.search.adapter.out.persistence.repository.LogRepository;
 import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchPageDtoV2;
 import com.arton.backend.search.application.data.SearchResultDto;
-import io.swagger.v3.oas.annotations.Hidden;
+import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,7 +24,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,13 +39,6 @@ public class PerformanceSearchController {
     private final PerformanceSearchUseCase performanceSearchService;
     private final LogRepository logRepository;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
-
-    @Hidden
-    @PostMapping("/documents")
-    public ResponseEntity<CommonResponse> saveDocuments() {
-        performanceSearchService.saveAllDocuments();
-        return ResponseEntity.ok(CommonResponse.builder().message("ES에 성공적으로 저장하였습니다.").status(HttpStatus.OK.value()).build());
-    }
 
     @Operation(summary = "검색하기", description = "검색을 합니다.")
     @ApiResponses(value = {

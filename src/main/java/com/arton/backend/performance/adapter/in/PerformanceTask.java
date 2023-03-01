@@ -1,15 +1,14 @@
 package com.arton.backend.performance.adapter.in;
 
+import com.arton.backend.performance.applicaiton.port.in.PerformanceFeedUseCase;
+import com.arton.backend.performance.domain.PerformanceFeed;
+import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.arton.backend.performance.applicaiton.port.in.PerformanceFeedUseCase;
-import com.arton.backend.performance.domain.PerformanceFeed;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -17,6 +16,7 @@ import com.arton.backend.performance.domain.PerformanceFeed;
 public class PerformanceTask {
 
     private final PerformanceFeedUseCase performanceFeedUseCase;
+    private final PerformanceSearchUseCase performanceSearchUseCase;
 
     @Scheduled(cron = "0 0 0 * * ?") // 1일 1회 00:00에 실행
     public void performanceSchedule() {
@@ -27,5 +27,12 @@ public class PerformanceTask {
         performanceFeedUseCase.saveAll(feeds);
         log.info("[SCHEDULE] {}", feeds);
         // 찜 한 대상들에게 전파
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // 1일 1회 00:00에 실행
+    public void saveDocuments() {
+        log.info("[SCHEDULE] {}", "execute performanceDocumentSchedule");
+        performanceSearchUseCase.saveAllDocuments();
+        log.info("[SCHEDULE] finished...");
     }
 }
