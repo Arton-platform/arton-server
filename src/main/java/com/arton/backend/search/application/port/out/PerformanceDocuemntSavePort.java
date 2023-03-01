@@ -1,10 +1,10 @@
 package com.arton.backend.search.application.port.out;
 
-import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
+import com.arton.backend.performance.domain.Performance;
 
 import java.util.List;
 
 public interface PerformanceDocuemntSavePort {
-    void saveAll(List<PerformanceDocument> performanceDocuments);
-    void save(PerformanceDocument performanceDocument);
+    void saveAll(List<Performance> performances);
+    void save(Performance performance);
 }

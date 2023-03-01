@@ -1,6 +1,8 @@
 package com.arton.backend.search.adapter.out.persistence.repository;
 
 import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
+import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import com.arton.backend.search.application.port.out.PerformanceDocumentDeletePort;
@@ -13,6 +15,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper.toDocumentFromDomain;
 
 @Repository
 @RequiredArgsConstructor
@@ -50,13 +55,14 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceDocumentSe
     }
 
     @Override
-    public void saveAll(List<PerformanceDocument> performanceDocuments) {
+    public void saveAll(List<Performance> performances) {
+        List<PerformanceDocument> performanceDocuments = performances.stream().map(PerformanceMapper::toDocumentFromDomain).collect(Collectors.toList());
         performanceSearchRepository.saveAll(performanceDocuments);
     }
 
     @Override
-    public void save(PerformanceDocument performanceDocument) {
-        performanceSearchRepository.save(performanceDocument);
+    public void save(Performance performance) {
+        performanceSearchRepository.save(toDocumentFromDomain(performance));
     }
 
     @Override
