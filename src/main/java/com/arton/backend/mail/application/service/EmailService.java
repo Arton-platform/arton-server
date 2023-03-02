@@ -3,9 +3,9 @@ package com.arton.backend.mail.application.service;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.mail.application.port.in.EmailUseCase;
 import com.arton.backend.mail.application.data.MailDto;
 import com.arton.backend.mail.application.data.MailMultiReceiversDto;
+import com.arton.backend.mail.application.port.in.EmailUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,6 +19,9 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * 메일을 직접 보내는 서비스 로직
+ */
 @Service
 public class EmailService implements EmailUseCase {
     @Autowired
@@ -113,4 +116,5 @@ public class EmailService implements EmailUseCase {
     public void sendMailWithAttachment(MailDto details) {
         return ;
     }
+
 }

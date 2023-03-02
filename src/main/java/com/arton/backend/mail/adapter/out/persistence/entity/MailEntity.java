@@ -17,18 +17,22 @@ public class MailEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    /** 분류명 */
     private String code;
+    /** 메일 내용 */
     private String description;
+    /** 추후 구현시 s3 저장 url */
     private String url;
-    private String title;
+    /** 제목 */
+    private String subject;
 
     @Builder
-    public MailEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String code, String description, String url, String title) {
+    public MailEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String code, String description, String url, String subject) {
         super(createdDate, updatedDate);
         this.id = id;
         this.code = code;
         this.description = description;
         this.url = url;
-        this.title = title;
+        this.subject = subject;
     }
 }
