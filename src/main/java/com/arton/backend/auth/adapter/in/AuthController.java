@@ -134,7 +134,7 @@ public class AuthController {
     @PutMapping("/reset/password")
     public ResponseEntity<CommonResponse> resetPassword(@RequestBody @Valid PasswordResetDto passwordResetDto) {
         MailDto mailDto = authUseCase.resetPassword(passwordResetDto);
-        emailUseCase.sendMailByHTML(mailDto);
+        emailUseCase.sendPasswordMailByHTML(mailDto);
         CommonResponse commonResponse = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공적으로 메일을 보냈습니다.")

@@ -52,7 +52,7 @@ public class EmailService implements EmailUseCase{
      */
     @Async
     @Override
-    public void sendMailByHTML(MailDto details) {
+    public void sendPasswordMailByHTML(MailDto details) {
         try {
             // get mail form
             String fileContent = fileUploadUtils.getFileContent(mailKey);

@@ -37,7 +37,7 @@ public class EmailController {
 
     @PostMapping("/send/html")
     public ResponseEntity<CommonResponse> sendPasswordHtmlForm(@RequestBody MailDto mailDto) {
-        emailUseCase.sendMailByHTML(mailDto);
+        emailUseCase.sendPasswordMailByHTML(mailDto);
         CommonResponse build = CommonResponse.builder()
                 .message("메일을 성공적으로 보냈습니다.")
                 .status(HttpStatus.OK.value())
