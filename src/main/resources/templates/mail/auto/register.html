@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
+<title>수정하기</title>
+<body>
+<div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="/js/imagePreview.js"></script>
+    <form id="registerForm" th:action="@{/web/mail/auto}" th:object="${template}" method="POST">
+        <div style="display: inline">
+            <div>
+                <label for="code">분류명</label>
+                <input id="code" name="code" type="text"  class="form-control">
+            </div>
+            <div>
+                <label for="subject">제목</label>
+                <input id="subject" name="subject" type="text"  class="form-control">
+            </div>
+            <div>
+                <label for="description">템플릿</label>
+                <input id="description" name="description" type="text"  class="form-control">
+            </div>
+            <div>
+                <input type="submit" value="등록" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

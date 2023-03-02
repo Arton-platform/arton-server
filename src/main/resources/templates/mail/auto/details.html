@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>자동 메일 상세보기</title>
+</head>
+<body>
+    <div style="display: inline" th:object="${template}">
+        <div>
+            <label for="code">분류명</label>
+            <input id="code" name="code" type="text"  class="form-control" th:value="${template.code}">
+        </div>
+        <div>
+            <label for="title">제목</label>
+            <input id="title" name="title" type="text"  class="form-control" th:value="${template.subject}">
+        </div>
+        <div>
+            <label for="description">템플릿</label>
+            <input id="description" name="description" type="text"  class="form-control" th:value="${template.description}">
+        </div>
+    </div>
+</body>
+</html>

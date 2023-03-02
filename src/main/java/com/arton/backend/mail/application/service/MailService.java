@@ -1,6 +1,7 @@
 package com.arton.backend.mail.application.service;
 
 import com.arton.backend.mail.application.data.MailTemplateRequestDto;
+import com.arton.backend.mail.application.data.MailTemplateResponseDto;
 import com.arton.backend.mail.application.port.in.MailDeleteUseCase;
 import com.arton.backend.mail.application.port.in.MailSaveUseCase;
 import com.arton.backend.mail.application.port.in.MailUseCase;
@@ -33,6 +34,12 @@ public class MailService implements MailUseCase, MailDeleteUseCase, MailSaveUseC
     @Override
     public Page<Mail> getMailTemplatesWithPaging(Pageable pageable) {
         return mailPort.findAllWithPaging(pageable);
+    }
+
+    @Override
+    public MailTemplateResponseDto getMailTemplateById(Long id) {
+        Mail mail = mailPort.findMailById(id);
+        return MailTemplateResponseDto.toDtoFromDomain(mail);
     }
 
     @Override
