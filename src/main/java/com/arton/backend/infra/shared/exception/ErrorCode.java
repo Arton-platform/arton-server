@@ -24,6 +24,7 @@ public enum ErrorCode {
     EXCEL_ENUM_NULL(400, "EXCEL_ERR_400", "엑셀 ENUM 값이 NULL입니다."),
     EXCEL_INTERNAL_ERROR(500, "EXCEL_ERR_500", "엑셀 작업중 오류가 발생했습니다."),
     USER_NOT_FOUND(404, "COMMON-ERR-404", "사용자를 찾을 수 없습니다"),
+    MAIL_NOT_FOUND(404, "COMMON-ERR-404", "메일을 찾을 수 없습니다"),
     PERFORMANCE_NOT_FOUND(404, "COMMON-ERR-404", "공연을 찾을 수 없습니다"),
     PERFORMANCE_DOCUMENT_NOT_FOUND(404, "COMMON-ERR-404", "공연문서를 찾을 수 없습니다"),
     PASSWORD_NOT_MATCH(401, "NOT_MATCH_401", "패스워드가 일치하지 않습니다."),

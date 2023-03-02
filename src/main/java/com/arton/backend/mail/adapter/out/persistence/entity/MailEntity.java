@@ -20,13 +20,15 @@ public class MailEntity extends BaseEntity {
     private String code;
     private String description;
     private String url;
+    private String title;
 
     @Builder
-    public MailEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String code, String description, String url) {
+    public MailEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String code, String description, String url, String title) {
         super(createdDate, updatedDate);
         this.id = id;
         this.code = code;
         this.description = description;
         this.url = url;
+        this.title = title;
     }
 }
