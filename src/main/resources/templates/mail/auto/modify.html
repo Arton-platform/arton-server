@@ -8,6 +8,10 @@
     <script src="/js/imagePreview.js"></script>
     <form id="modifyForm" th:object="${template}" method="POST">
         <div style="display: inline">
+            <div hidden>
+                <label for="id">번호</label>
+                <input id="id" name="id" type="text"  class="form-control" th:value="${template.id}">
+            </div>
             <div>
                 <label for="code">분류명</label>
                 <input id="code" name="code" type="text"  class="form-control" th:value="${template.code}" disabled>

@@ -1,8 +1,10 @@
 package com.arton.backend.mail.application.service;
 
+import com.arton.backend.mail.application.data.MailTemplateModifyDto;
 import com.arton.backend.mail.application.data.MailTemplateRequestDto;
 import com.arton.backend.mail.application.data.MailTemplateResponseDto;
 import com.arton.backend.mail.application.port.in.MailDeleteUseCase;
+import com.arton.backend.mail.application.port.in.MailModifyUseCase;
 import com.arton.backend.mail.application.port.in.MailSaveUseCase;
 import com.arton.backend.mail.application.port.in.MailUseCase;
 import com.arton.backend.mail.application.port.out.MailDeletePort;
@@ -21,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MailService implements MailUseCase, MailDeleteUseCase, MailSaveUseCase {
+public class MailService implements MailUseCase, MailDeleteUseCase, MailSaveUseCase, MailModifyUseCase {
     private final MailSavePort mailSavePort;
     private final MailDeletePort mailDeletePort;
     private final MailPort mailPort;
@@ -46,5 +48,10 @@ public class MailService implements MailUseCase, MailDeleteUseCase, MailSaveUseC
     public void save(MailTemplateRequestDto requestDto) {
         Mail mail = MailTemplateRequestDto.toDomainFromDto(requestDto);
         mailSavePort.save(mail);
+    }
+
+    @Override
+    public void modify(MailTemplateModifyDto modifyDto) {
+        System.out.println("modifyDto = " + modifyDto);
     }
 }

@@ -6,11 +6,8 @@ import com.arton.backend.administer.mail.application.port.in.MailAdminSearchUseC
 import com.arton.backend.mail.application.data.MailTemplateModifyDto;
 import com.arton.backend.mail.application.data.MailTemplateRequestDto;
 import com.arton.backend.mail.application.data.MailTemplateResponseDto;
-import com.arton.backend.mail.application.port.in.EmailUseCase;
+import com.arton.backend.mail.application.port.in.*;
 import com.arton.backend.mail.application.data.MailMultiReceiversDto;
-import com.arton.backend.mail.application.port.in.MailDeleteUseCase;
-import com.arton.backend.mail.application.port.in.MailSaveUseCase;
-import com.arton.backend.mail.application.port.in.MailUseCase;
 import com.arton.backend.mail.domain.Mail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,6 +27,7 @@ public class MailAdminController {
     private final MailUseCase mailUseCase;
     private final MailDeleteUseCase mailDeleteUseCase;
     private final MailSaveUseCase mailSaveUseCase;
+    private final MailModifyUseCase mailModifyUseCase;
     private AdminMailSearchDto form = new AdminMailSearchDto();
 
     /**
@@ -119,6 +117,7 @@ public class MailAdminController {
     @GetMapping("/web/mail/auto/modify")
     public String goModifyHome(Model model, @RequestParam(required = true, name = "idx") Long idx) {
         MailTemplateResponseDto template = mailUseCase.getMailTemplateById(idx);
+        System.out.println("template = " + template);
         model.addAttribute("template", template);
         return "mail/auto/modify";
     }
@@ -129,6 +128,7 @@ public class MailAdminController {
      */
     @PostMapping("/web/mail/auto/modify")
     public String modifyMailTemplate(@ModelAttribute("modifyDto") MailTemplateModifyDto modifyDto) {
+        mailModifyUseCase.modify(modifyDto);
         return "redirect:/web/mail/auto";
     }
 
