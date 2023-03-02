@@ -1,4 +1,7 @@
-package com.arton.backend.infra.mail;
+package com.arton.backend.mail.application.port.in;
+
+import com.arton.backend.mail.application.data.MailDto;
+import com.arton.backend.mail.application.data.MailMultiReceiversDto;
 
 /**
  * sendMailOnlyText 텍스트만 보내기

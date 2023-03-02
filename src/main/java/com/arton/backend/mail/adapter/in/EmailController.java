@@ -1,6 +1,9 @@
-package com.arton.backend.infra.mail;
+package com.arton.backend.mail.adapter.in;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
+import com.arton.backend.mail.application.port.in.EmailUseCase;
+import com.arton.backend.mail.application.data.MailDto;
+import com.arton.backend.mail.application.data.MailMultiReceiversDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

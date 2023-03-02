@@ -1,7 +1,7 @@
 package com.arton.backend.auth.application.port.in;
 
 import com.arton.backend.auth.application.data.*;
-import com.arton.backend.infra.mail.MailDto;
+import com.arton.backend.mail.application.data.MailDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
