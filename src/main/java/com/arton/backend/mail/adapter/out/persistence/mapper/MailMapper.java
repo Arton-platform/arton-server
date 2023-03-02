@@ -12,7 +12,7 @@ public class MailMapper {
                 .code(mail.getCode())
                 .description(mail.getDescription())
                 .updatedDate(mail.getUpdatedDate())
-                .title(mail.getTitle())
+                .subject(mail.getSubject())
                 .url(mail.getUrl())
                 .build();
     }
@@ -24,7 +24,7 @@ public class MailMapper {
                 .code(mail.getCode())
                 .description(mail.getDescription())
                 .updatedDate(mail.getUpdatedDate())
-                .title(mail.getTitle())
+                .subject(mail.getSubject())
                 .url(mail.getUrl())
                 .build();
     }
