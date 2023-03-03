@@ -9,8 +9,14 @@
     <form id="registerForm" th:action="@{/web/mail/auto}" th:object="${template}" method="POST">
         <div style="display: inline">
             <div>
-                <label for="code">분류명</label>
-                <input id="code" name="code" type="text"  class="form-control">
+                <label for="mailCode">분류명</label>
+                <select id="mailCode" name="mailCode" class="form-select">
+                    <option value="">==발송조건==</option>
+                    <option th:each="type : ${T(com.arton.backend.mail.domain.MailCode).values()}"
+                            th:value="${type.name()}"
+                            th:text="${type.getValue()}">
+                    </option>
+                </select>
             </div>
             <div>
                 <label for="subject">제목</label>

@@ -6,15 +6,15 @@
 <div>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="/js/imagePreview.js"></script>
-    <form id="modifyForm" th:object="${template}" method="POST">
+    <form id="modifyForm" th:action="@{/web/mail/auto/modify}" th:object="${template}" method="POST">
         <div style="display: inline">
             <div hidden>
                 <label for="id">번호</label>
                 <input id="id" name="id" type="text"  class="form-control" th:value="${template.id}">
             </div>
             <div>
-                <label for="code">분류명</label>
-                <input id="code" name="code" type="text"  class="form-control" th:value="${template.code}" disabled>
+                <label for="mailCode">분류명</label>
+                <input id="mailCode" name="mailCode" type="text"  class="form-control" th:value="${template.mailCode.getValue()}" disabled>
             </div>
             <div>
                 <label for="subject">제목</label>

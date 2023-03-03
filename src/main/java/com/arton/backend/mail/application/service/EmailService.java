@@ -32,8 +32,10 @@ public class EmailService implements EmailUseCase {
     private FileUploadUtils fileUploadUtils;
     @Value("${spring.mail.username}")
     private String sender;
-    @Value("${spring.password-mail-key}")
-    private String mailKey;
+    @Value("${spring.mail.passwordTemplate}")
+    private String passwordTemplate;
+    @Value("${spring.mail.commonTemplate}")
+    private String commonTemplate;
 
     @Async
     @Override
@@ -56,9 +58,9 @@ public class EmailService implements EmailUseCase {
     public void sendMailByHTML(MailDto details) {
         try {
             // get mail form
-            String fileContent = fileUploadUtils.getFileContent(mailKey);
-            // input password
-            String mailBody = fileContent.replace("${password}", details.getMessageBody());
+            String fileContent = fileUploadUtils.getFileContent(commonTemplate);
+            // input message
+            String mailBody = fileContent.replace("${content}", details.getMessageBody());
             // send mail
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
@@ -83,7 +85,7 @@ public class EmailService implements EmailUseCase {
     public void sendPasswordMailByHTML(MailDto details) {
         try {
             // get mail form
-            String fileContent = fileUploadUtils.getFileContent(mailKey);
+            String fileContent = fileUploadUtils.getFileContent(passwordTemplate);
             // input password
             String mailBody = fileContent.replace("${password}", details.getMessageBody());
             // send mail

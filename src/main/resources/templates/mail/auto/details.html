@@ -8,8 +8,8 @@
 <body>
     <div style="display: inline" th:object="${template}">
         <div>
-            <label for="code">분류명</label>
-            <input id="code" name="code" type="text"  class="form-control" th:value="${template.code}" disabled>
+            <label for="mailCode">분류명</label>
+            <input id="mailCode" name="mailCode" type="text"  class="form-control" th:value="${template.mailCode.getValue()}" disabled>
         </div>
         <div>
             <label for="subject">제목</label>

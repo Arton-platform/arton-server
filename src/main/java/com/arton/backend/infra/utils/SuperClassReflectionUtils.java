@@ -32,6 +32,12 @@ public final class SuperClassReflectionUtils {
         return fields;
     }
 
+    public static List<Method> getOnlyClassMethods(Class<?> clazz) {
+        List<Method> fields = new ArrayList<>();
+        fields.addAll(Arrays.asList(clazz.getDeclaredMethods()));
+        return fields;
+    }
+
     public static Annotation getAnnotation(Class<?> clazz, Class<? extends Annotation> targetAnnotation) {
         for (Class<?> allClassesIncludingSuperClass : getAllClassesIncludingSuperClasses(clazz, false)) {
             if (allClassesIncludingSuperClass.isAnnotationPresent(targetAnnotation)) {

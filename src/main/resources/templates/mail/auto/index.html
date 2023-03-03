@@ -34,7 +34,7 @@
             <tbody>
             <tr th:each="template : ${templates}">
                 <td th:text="${template.getId()}"></td>
-                <td th:text="${template.getCode()}"></td>
+                <td th:text="${template.getMailCode().getValue()}"></td>
                 <td>
                     <a class="btn" style="background: #FF6491; color: #FFF2F6;" th:href="@{/web/mail/auto/{templateId}(templateId=${template.id})}">상세보기</a>
                     <button type="button" class="btn" style="background: #FF6491; color: #FFF2F6;" th:onclick="modifyMailTemplate([[${template.id}]]);">수정</button>
