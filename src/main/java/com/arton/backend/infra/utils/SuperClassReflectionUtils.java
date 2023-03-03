@@ -5,6 +5,7 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,6 +20,14 @@ public final class SuperClassReflectionUtils {
         List<Field> fields = new ArrayList<>();
         for (Class<?> allClassesIncludingSuperClass : getAllClassesIncludingSuperClasses(clazz, true)) {
             fields.addAll(Arrays.asList(allClassesIncludingSuperClass.getDeclaredFields()));
+        }
+        return fields;
+    }
+
+    public static List<Method> getAllMethods(Class<?> clazz) {
+        List<Method> fields = new ArrayList<>();
+        for (Class<?> allClassesIncludingSuperClass : getAllClassesIncludingSuperClasses(clazz, true)) {
+            fields.addAll(Arrays.asList(allClassesIncludingSuperClass.getDeclaredMethods()));
         }
         return fields;
     }
@@ -40,6 +49,21 @@ public final class SuperClassReflectionUtils {
                         return allClassesIncludingSuperClass.getDeclaredField(name);
                     } catch (NoSuchFieldException e) {
                         throw new CustomException(ErrorCode.EXCEL_FIELD_NOT_FOUND.getMessage(), ErrorCode.EXCEL_FIELD_NOT_FOUND);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Method getMethod(Class<?> clazz, String name) {
+        for (Class<?> allClassesIncludingSuperClass : getAllClassesIncludingSuperClasses(clazz, false)) {
+            for (Field declaredField : allClassesIncludingSuperClass.getDeclaredFields()) {
+                if (declaredField.getName().equals(name)) {
+                    try {
+                        return allClassesIncludingSuperClass.getMethod(name);
+                    }catch (NoSuchMethodException e) {
+                        e.printStackTrace();
                     }
                 }
             }
