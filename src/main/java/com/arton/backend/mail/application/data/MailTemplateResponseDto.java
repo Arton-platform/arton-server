@@ -12,15 +12,15 @@ public class MailTemplateResponseDto {
     /** 분류명 */
     private String code;
     /** 메일 내용 */
-    private String description;
+    private String content;
     /** 제목 */
     private String subject;
 
     @Builder
-    public MailTemplateResponseDto(Long id, String code, String description, String subject) {
+    public MailTemplateResponseDto(Long id, String code, String content, String subject) {
         this.id = id;
         this.code = code;
-        this.description = description;
+        this.content = content;
         this.subject = subject;
     }
 
@@ -28,7 +28,7 @@ public class MailTemplateResponseDto {
         return MailTemplateResponseDto.builder()
                 .id(mail.getId())
                 .code(mail.getCode())
-                .description(mail.getDescription())
+                .content(mail.getContent())
                 .subject(mail.getSubject())
                 .build();
     }

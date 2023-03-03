@@ -9,15 +9,15 @@
     <div style="display: inline" th:object="${template}">
         <div>
             <label for="code">분류명</label>
-            <input id="code" name="code" type="text"  class="form-control" th:value="${template.code}">
+            <input id="code" name="code" type="text"  class="form-control" th:value="${template.code}" disabled>
         </div>
         <div>
-            <label for="title">제목</label>
-            <input id="title" name="title" type="text"  class="form-control" th:value="${template.subject}">
+            <label for="subject">제목</label>
+            <input id="subject" name="subject" type="text"  class="form-control" th:value="${template.subject}" disabled>
         </div>
         <div>
-            <label for="description">템플릿</label>
-            <input id="description" name="description" type="text"  class="form-control" th:value="${template.description}">
+            <label for="content">템플릿</label>
+            <input id="content" name="content" type="text"  class="form-control" th:value="${template.content}" disabled>
         </div>
     </div>
 </body>

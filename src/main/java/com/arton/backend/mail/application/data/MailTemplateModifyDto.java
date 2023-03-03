@@ -8,18 +8,18 @@ import lombok.Data;
 public class MailTemplateModifyDto {
     private Long id;
     /** 메일 내용 */
-    private String description;
+    private String content;
 
     @Builder
-    public MailTemplateModifyDto(Long id, String description) {
+    public MailTemplateModifyDto(Long id, String content) {
         this.id = id;
-        this.description = description;
+        this.content = content;
     }
 
     public static MailTemplateModifyDto toDtoFromDomain(Mail mail) {
         return MailTemplateModifyDto.builder()
                 .id(mail.getId())
-                .description(mail.getDescription())
+                .content(mail.getContent())
                 .build();
     }
 }

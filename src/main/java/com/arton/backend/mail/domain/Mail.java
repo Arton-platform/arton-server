@@ -15,7 +15,7 @@ public class Mail {
     /** 분류명 */
     private String code;
     /** 메일 내용 */
-    private String description;
+    private String content;
     /** 추후 구현시 s3 저장 url */
     private String url;
     /** 제목 */
@@ -30,10 +30,10 @@ public class Mail {
     private LocalDateTime updatedDate;
 
     @Builder
-    public Mail(Long id, String code, String description, String url, String subject, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public Mail(Long id, String code, String content, String url, String subject, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.code = code;
-        this.description = description;
+        this.content = content;
         this.url = url;
         this.subject = subject;
         this.createdDate = createdDate;

@@ -27,7 +27,6 @@
             <thead>
             <tr>
                 <th>번호</th>
-                <th>코드</th>
                 <th>분류명</th>
                 <th>기능</th>
             </tr>
@@ -36,7 +35,6 @@
             <tr th:each="template : ${templates}">
                 <td th:text="${template.getId()}"></td>
                 <td th:text="${template.getCode()}"></td>
-                <td th:text="${template.getDescription()}"></td>
                 <td>
                     <a class="btn" style="background: #FF6491; color: #FFF2F6;" th:href="@{/web/mail/auto/{templateId}(templateId=${template.id})}">상세보기</a>
                     <button type="button" class="btn" style="background: #FF6491; color: #FFF2F6;" th:onclick="modifyMailTemplate([[${template.id}]]);">수정</button>
@@ -109,7 +107,7 @@
         /*<![CDATA[*/
         function deleteMailTemplate(idx) {
             if (confirm(idx + "번 템플릿을 삭제할까요?")) {
-                var uri = /*[[ @{/web/auto/mail/revoke} ]]*/;
+                var uri = /*[[ @{/web/mail/auto/revoke} ]]*/;
                 var html = "";
 
                 html += '<form name="dataForm" action="' + uri + '" method="POST">';
