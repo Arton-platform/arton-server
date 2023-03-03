@@ -1,5 +1,6 @@
 package com.arton.backend.infra.event;
 
+import com.arton.backend.infra.utils.SuperClassReflectionUtils;
 import com.arton.backend.mail.application.data.MailDto;
 import com.arton.backend.mail.application.port.in.EmailUseCase;
 import com.arton.backend.mail.application.port.in.MailUseCase;
@@ -14,6 +15,11 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -38,10 +44,16 @@ public class UserRegisteredEventHandler {
         // 템플릿 존재시 해당 템플릿의 지정 필드의 값을 replace 해주자.
         String content = mail.getContent();
         User user = event.getUser();
-        Field[] declaredFields = User.class.getDeclaredFields();
-        for (Field declaredField : declaredFields) {
-            String name = declaredField.getName();
-            System.out.println("name = " + name);
+        // map key field name value methodName
+        HashMap<String, String> db = new HashMap<>();
+        // get field name
+        List<String> fields = SuperClassReflectionUtils.getAllFields(User.class).stream().map(Field::getName).collect(Collectors.toList());
+        // get method name
+        List<String> methods = SuperClassReflectionUtils.getAllMethods(User.class).stream().map(Method::getName).collect(Collectors.toList());
+        //
+        for (String field : fields) {
+            String old = "${" + field + "}";
+
         }
 
 
