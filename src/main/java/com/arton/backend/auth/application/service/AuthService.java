@@ -7,7 +7,7 @@ import com.arton.backend.auth.application.port.in.*;
 import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
-import com.arton.backend.infra.event.RegisteredEvent;
+import com.arton.backend.infra.event.UserRegisteredEvent;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.mail.application.data.MailDto;
@@ -123,7 +123,7 @@ public class AuthService implements AuthUseCase {
         User toDoc = userRepository.save(savedUser);
         userDocumentSavePort.save(toDoc);
         // 회원가입 메일 발송. aop로 대체해야함.
-        applicationEventPublisher.publishEvent(new RegisteredEvent(toDoc));
+        applicationEventPublisher.publishEvent(new UserRegisteredEvent(toDoc));
         return true;
     }
 

@@ -19,6 +19,7 @@ public class MailEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     /** 분류명 */
+    @Enumerated(EnumType.STRING)
     private MailCode mailCode;
     /** 메일 내용 */
     private String content;

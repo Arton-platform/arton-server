@@ -18,8 +18,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.arton.backend.infra.excel.utils.SuperClassReflectionUtils.getAllFields;
-import static com.arton.backend.infra.excel.utils.SuperClassReflectionUtils.getAnnotation;
+import static com.arton.backend.infra.utils.SuperClassReflectionUtils.getAllFields;
+import static com.arton.backend.infra.utils.SuperClassReflectionUtils.getAnnotation;
 
 public final class ExcelRenderResourceFactory {
 

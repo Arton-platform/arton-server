@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class RegisteredEvent {
+public class UserRegisteredEvent {
     private User user;
 }
