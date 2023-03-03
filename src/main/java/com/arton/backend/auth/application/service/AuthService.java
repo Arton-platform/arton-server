@@ -7,6 +7,7 @@ import com.arton.backend.auth.application.port.in.*;
 import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
+import com.arton.backend.infra.event.RegisteredEvent;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.mail.application.data.MailDto;
@@ -25,6 +26,7 @@ import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -61,6 +63,7 @@ public class AuthService implements AuthUseCase {
     private final UserDocumentSavePort userDocumentSavePort;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * 회원가입
@@ -119,6 +122,8 @@ public class AuthService implements AuthUseCase {
         }
         User toDoc = userRepository.save(savedUser);
         userDocumentSavePort.save(toDoc);
+        // 회원가입 메일 발송. aop로 대체해야함.
+        applicationEventPublisher.publishEvent(new RegisteredEvent(toDoc));
         return true;
     }
 

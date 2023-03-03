@@ -1,6 +1,7 @@
 package com.arton.backend.mail.adapter.out.persistence.entity;
 
 import com.arton.backend.infra.shared.BaseEntity;
+import com.arton.backend.mail.domain.MailCode;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class MailEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     /** 분류명 */
-    private String code;
+    private MailCode mailCode;
     /** 메일 내용 */
     private String content;
     /** 추후 구현시 s3 저장 url */
@@ -27,10 +28,10 @@ public class MailEntity extends BaseEntity {
     private String subject;
 
     @Builder
-    public MailEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String code, String content, String url, String subject) {
+    public MailEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, MailCode mailCode, String content, String url, String subject) {
         super(createdDate, updatedDate);
         this.id = id;
-        this.code = code;
+        this.mailCode = mailCode;
         this.content = content;
         this.url = url;
         this.subject = subject;

@@ -1,6 +1,7 @@
 package com.arton.backend.mail.application.data;
 
 import com.arton.backend.mail.domain.Mail;
+import com.arton.backend.mail.domain.MailCode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,16 +11,16 @@ import lombok.NoArgsConstructor;
 public class MailTemplateResponseDto {
     private Long id;
     /** 분류명 */
-    private String code;
+    private MailCode mailCode;
     /** 메일 내용 */
     private String content;
     /** 제목 */
     private String subject;
 
     @Builder
-    public MailTemplateResponseDto(Long id, String code, String content, String subject) {
+    public MailTemplateResponseDto(Long id, MailCode mailCode, String content, String subject) {
         this.id = id;
-        this.code = code;
+        this.mailCode = mailCode;
         this.content = content;
         this.subject = subject;
     }
@@ -27,7 +28,7 @@ public class MailTemplateResponseDto {
     public static MailTemplateResponseDto toDtoFromDomain(Mail mail) {
         return MailTemplateResponseDto.builder()
                 .id(mail.getId())
-                .code(mail.getCode())
+                .mailCode(mail.getMailCode())
                 .content(mail.getContent())
                 .subject(mail.getSubject())
                 .build();

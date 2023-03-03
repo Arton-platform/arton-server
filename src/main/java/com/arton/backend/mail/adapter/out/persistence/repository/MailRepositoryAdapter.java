@@ -8,10 +8,12 @@ import com.arton.backend.mail.application.port.out.MailDeletePort;
 import com.arton.backend.mail.application.port.out.MailPort;
 import com.arton.backend.mail.application.port.out.MailSavePort;
 import com.arton.backend.mail.domain.Mail;
+import com.arton.backend.mail.domain.MailCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +48,19 @@ public class MailRepositoryAdapter implements MailSavePort, MailDeletePort, Mail
     public Mail findMailById(Long id) {
         MailEntity mailEntity = mailRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MAIL_NOT_FOUND.getMessage(), ErrorCode.MAIL_NOT_FOUND));
         return toDomain(mailEntity);
+    }
+
+    /**
+     * 존재하지 않으면 return null
+     * @param mailCode
+     * @return
+     */
+    @Override
+    public Mail findMailByCode(MailCode mailCode) {
+        MailEntity mailEntity = mailRepository.findByMailCode(mailCode);
+        if (!ObjectUtils.isEmpty(mailEntity))
+            return toDomain(mailEntity);
+        return null;
     }
 
     @Override

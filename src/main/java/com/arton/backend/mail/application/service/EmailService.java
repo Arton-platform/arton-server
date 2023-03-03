@@ -51,6 +51,29 @@ public class EmailService implements EmailUseCase {
         }
     }
 
+    @Async
+    @Override
+    public void sendMailByHTML(MailDto details) {
+        try {
+            // get mail form
+            String fileContent = fileUploadUtils.getFileContent(mailKey);
+            // input password
+            String mailBody = fileContent.replace("${password}", details.getMessageBody());
+            // send mail
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setFrom(sender);
+            helper.setTo(details.getReceiver());
+            helper.setText(mailBody, true); // html type
+            helper.setSubject(details.getSubject());
+            //send
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new CustomException(ErrorCode.MAIL_SEND_ERROR.getMessage(), ErrorCode.MAIL_SEND_ERROR);
+        }
+    }
+
     /**
      * 메일이 발송 될 때 까지 기다리는건 메일 서버 상황에 따라 시간이 오래 걸릴 수 있기 때문에 비동기 처리.
      * @param details

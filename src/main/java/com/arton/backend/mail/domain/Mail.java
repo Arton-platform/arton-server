@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Mail {
     private Long id;
     /** 분류명 */
-    private String code;
+    private MailCode mailCode;
     /** 메일 내용 */
     private String content;
     /** 추후 구현시 s3 저장 url */
@@ -30,9 +30,9 @@ public class Mail {
     private LocalDateTime updatedDate;
 
     @Builder
-    public Mail(Long id, String code, String content, String url, String subject, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public Mail(Long id, MailCode mailCode, String content, String url, String subject, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
-        this.code = code;
+        this.mailCode = mailCode;
         this.content = content;
         this.url = url;
         this.subject = subject;

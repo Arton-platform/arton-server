@@ -9,6 +9,7 @@ import com.arton.backend.mail.application.data.MailMultiReceiversDto;
  */
 public interface EmailUseCase {
     void sendMailOnlyText(MailDto details);
+    void sendMailByHTML(MailDto details);
     void sendPasswordMailByHTML(MailDto details);
     void sendMailWithMultipleReceivers(MailMultiReceiversDto details);
     void sendMailWithAttachment(MailDto details);

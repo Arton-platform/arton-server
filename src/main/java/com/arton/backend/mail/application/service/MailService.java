@@ -11,6 +11,7 @@ import com.arton.backend.mail.application.port.out.MailDeletePort;
 import com.arton.backend.mail.application.port.out.MailPort;
 import com.arton.backend.mail.application.port.out.MailSavePort;
 import com.arton.backend.mail.domain.Mail;
+import com.arton.backend.mail.domain.MailCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +43,11 @@ public class MailService implements MailUseCase, MailDeleteUseCase, MailSaveUseC
     public MailTemplateResponseDto getMailTemplateById(Long id) {
         Mail mail = mailPort.findMailById(id);
         return MailTemplateResponseDto.toDtoFromDomain(mail);
+    }
+
+    @Override
+    public Mail findMailByCode(MailCode mailCode) {
+        return mailPort.findMailByCode(mailCode);
     }
 
     @Override
