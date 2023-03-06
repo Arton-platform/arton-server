@@ -72,8 +72,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     @Override
     public PerformanceDetailDto getOne(Long id) {
         Performance performance = performanceRepositoryPort.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
-        Set<ImageDto> images = performanceImageRepositoryPort.findByPerformanceId(id).stream().map(ImageDto::domainToDto).collect(Collectors.toSet());
-        Set<PriceInfoDto> priceInfo = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toSet());
+        List<ImageDto> images = performanceImageRepositoryPort.findByPerformanceId(id).stream().map(ImageDto::domainToDto).collect(Collectors.toList());
+        List<PriceInfoDto> priceInfo = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toList());
         return PerformanceDetailDto.toDto(performance, images, priceInfo);
     }
 }

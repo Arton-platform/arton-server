@@ -1,6 +1,9 @@
 package com.arton.backend.performance.adapter.in;
 
 import com.arton.backend.infra.shared.common.ResponseData;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.domain.Performance;
@@ -48,8 +51,14 @@ public class PerformanceController {
         return ResponseEntity.ok(allPerformances);
     }
 
+    @Operation(summary = "특정 공연 상세보기", description = "공연을 상세보기 합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "상세 데이터 가져오기 성공",
+                    content = @Content( schema = @Schema(implementation = PerformanceDetailDto.class))),
+            @ApiResponse(responseCode = "404", description = "공연을 찾을 수 없음.",
+                    content = @Content( schema = @Schema(implementation = CustomException.class)))})
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseData<Performance>> getOne(@PathVariable("id") Long id){
+    public ResponseEntity<ResponseData<PerformanceDetailDto>> getOne(@PathVariable("id") Long id){
         ResponseData response = new ResponseData(
                 "SUCCESS"
                 , HttpStatus.OK.value()
