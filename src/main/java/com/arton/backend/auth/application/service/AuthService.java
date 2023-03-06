@@ -3,16 +3,17 @@ package com.arton.backend.auth.application.service;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.data.*;
-import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.auth.application.port.in.AuthUseCase;
 import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.event.UserRegisteredEvent;
+import com.arton.backend.infra.event.UserWithdrewEvent;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.jwt.TokenProvider;
-import com.arton.backend.mail.application.data.MailDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.mail.application.data.MailDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.application.port.out.UserDocumentSavePort;
@@ -37,7 +38,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -202,6 +206,8 @@ public class AuthService implements AuthUseCase {
         // 해당 토큰 블랙리스트 저장
         Long expiration = tokenProvider.getExpiration(accessToken);
         redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
+        // send withdraw mail
+        applicationEventPublisher.publishEvent(new UserWithdrewEvent(user));
         return true;
     }
 

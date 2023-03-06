@@ -6,11 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 회원가입 이벤트
+ * 탈퇴 이벤트
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class UserRegisteredEvent {
+public class UserWithdrewEvent {
     private User user;
 }
