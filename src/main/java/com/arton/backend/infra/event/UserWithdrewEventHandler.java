@@ -40,6 +40,10 @@ public class UserWithdrewEventHandler {
         }
         String content = mail.getContent();
         User user = event.getUser();
+        // 메일 수신 동의 X
+        if (user.getTermsAgree().equals("N")) {
+            return;
+        }
         content = replaceTemplateBody(content, user);
         log.info("[AUTO_MAILING_BODY] {}", content);
         MailDto mailDto = MailDto.builder().subject(mail.getSubject()).receiver(user.getEmail()).messageBody(content).build();
