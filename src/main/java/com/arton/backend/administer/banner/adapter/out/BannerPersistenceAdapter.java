@@ -3,19 +3,16 @@ package com.arton.backend.administer.banner.adapter.out;
 import java.util.List;
 import java.util.Optional;
 
+import com.arton.backend.administer.banner.application.out.*;
 import org.springframework.stereotype.Repository;
 
-import com.arton.backend.administer.banner.application.out.BannerDeletePort;
-import com.arton.backend.administer.banner.application.out.BannerRegistPort;
-import com.arton.backend.administer.banner.application.out.BannerSelectAllPort;
-import com.arton.backend.administer.banner.application.out.BannerSelectOnePort;
 import com.arton.backend.administer.banner.domain.BannerEntity;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class BannerPersistenceAdapter implements BannerRegistPort, BannerSelectOnePort, BannerSelectAllPort, BannerDeletePort {
+public class BannerPersistenceAdapter implements BannerRegistPort, BannerSelectOnePort, BannerSelectAllPort, BannerDeletePort, BannerUpdatePort {
 
     private final BannerRepository repository;
 
@@ -38,5 +35,9 @@ public class BannerPersistenceAdapter implements BannerRegistPort, BannerSelectO
     public void registBanner(BannerEntity bannerEntity) {
         repository.save(bannerEntity);
     }
-    
+
+    @Override
+    public void updateBanner(BannerEntity banner) {
+        repository.save(banner);
+    }
 }

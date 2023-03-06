@@ -1,10 +1,7 @@
 package com.arton.backend.administer.banner.domain;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import com.arton.backend.infra.shared.Board;
 
@@ -13,6 +10,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@Table(name = "Banner")
 public class BannerEntity extends Board{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
