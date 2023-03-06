@@ -1,7 +1,6 @@
 package com.arton.backend.performance.applicaiton.service;
 
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
-import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.data.ImageDto;
