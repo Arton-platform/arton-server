@@ -4,6 +4,7 @@ import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPo
 import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.performance.applicaiton.data.ImageDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceDeleteUseCase;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,8 +73,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     @Override
     public PerformanceDetailDto getOne(Long id) {
         Performance performance = performanceRepositoryPort.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
-        List<String> images = performanceImageRepositoryPort.findByPerformanceId(id).stream().map(PerformanceImage::getImageUrl).collect(Collectors.toList());
-        List<PriceInfoDto> priceInfo = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toList());
+        Set<ImageDto> images = performanceImageRepositoryPort.findByPerformanceId(id).stream().map(ImageDto::domainToDto).collect(Collectors.toSet());
+        Set<PriceInfoDto> priceInfo = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toSet());
         return PerformanceDetailDto.toDto(performance, images, priceInfo);
     }
 }

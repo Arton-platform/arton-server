@@ -5,8 +5,6 @@ import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.data.CommonPerformanceDto;
-import com.arton.backend.performance.applicaiton.data.EndDateBasedPerformanceDto;
-import com.arton.backend.performance.applicaiton.data.StartDateBasedPerformanceDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.user.application.data.MainPageDto;
 import com.arton.backend.user.application.port.in.MainPageUseCase;
@@ -44,8 +42,8 @@ public class MainPageService implements MainPageUseCase {
         List<CommonPerformanceDto> performanceZzims = performanceRepositoryPort.findByIds(performanceIds).stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
         List<CommonArtistDto> artists = artistRepositoryPort.findAll().stream().map(CommonArtistDto::domainToDto).collect(Collectors.toList());
         List<CommonPerformanceDto> popularPerformances = performanceRepositoryPort.findPopularPerformances().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
-        List<EndDateBasedPerformanceDto> endingSoonPerformances = performanceRepositoryPort.findEndingSoonPerformances().stream().map(EndDateBasedPerformanceDto::domainToDto).collect(Collectors.toList());
-        List<StartDateBasedPerformanceDto> startingSoonPerformances = performanceRepositoryPort.findStartingSoonPerformances().stream().map(StartDateBasedPerformanceDto::domainToDto).collect(Collectors.toList());
+        List<CommonPerformanceDto> endingSoonPerformances = performanceRepositoryPort.findEndingSoonPerformances().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
+        List<CommonPerformanceDto> startingSoonPerformances = performanceRepositoryPort.findStartingSoonPerformances().stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
 
         return MainPageDto.builder()
                 .performances(!ObjectUtils.isEmpty(performances) ? performances.subList(0, Math.min(performances.size(), 9)) : performances)

@@ -1,18 +1,31 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
+import com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.applicaiton.data.*;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity;
+import com.arton.backend.price.application.data.PriceInfoDto;
+import com.arton.backend.price.application.data.QPriceInfoDto;
+import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.*;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
+import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.*;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.set;
+import static java.util.stream.Collectors.toList;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,7 +48,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(PerformanceMapper::toDomain)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     /**
@@ -54,7 +67,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(PerformanceMapper::toDomain)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     /**
@@ -73,6 +86,32 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(PerformanceMapper::toDomain)
-                .collect(Collectors.toList());
+                .collect(toList());
+    }
+
+    @Override
+    public List<PerformanceDetailDtoV2> getPerformanceDetails(Long id) {
+        Map<Long, PerformanceDetailDtoV2> resultMap = queryFactory
+                .from(performanceEntity)
+                .join(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
+                .join(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
+                .where(performanceEntity.id.eq(id))
+                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailDtoV2(
+                        performanceEntity.id,
+                        performanceEntity.title,
+                        performanceEntity.place,
+                        performanceEntity.musicalDateTime,
+                        performanceEntity.purchaseLimit,
+                        performanceEntity.limitAge,
+                        performanceEntity.startDate,
+                        performanceEntity.endDate,
+                        set(new QImageDto(performanceImageEntity.imageUrl)),
+                        set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)))
+                ));
+
+        return resultMap.keySet().stream()
+                .map(resultMap::get)
+                .collect(toList());
+
     }
 }

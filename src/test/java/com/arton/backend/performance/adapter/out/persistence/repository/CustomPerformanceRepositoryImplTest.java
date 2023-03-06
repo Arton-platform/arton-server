@@ -1,6 +1,8 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
 import com.arton.backend.performance.domain.Performance;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -63,4 +65,5 @@ class CustomPerformanceRepositoryImplTest {
             Assertions.assertThat(performances.size()).isEqualTo(collect.size());
         }
     }
+
 }

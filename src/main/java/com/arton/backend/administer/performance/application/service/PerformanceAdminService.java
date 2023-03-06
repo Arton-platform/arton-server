@@ -79,12 +79,17 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         List<MultipartFile> images = performanceCreateDto.getImages();
         boolean isEmpty = images.stream().filter(multipartFile -> !multipartFile.isEmpty()).count() == 0;
         List<PerformanceImage> performanceImages = new ArrayList<>();
+        boolean isThumbnail = true;
         // 공연 이미지가 있다면
         if (!isEmpty) {
             for (MultipartFile image : images) {
                 if (image.isEmpty())
                     continue;
                 String upload = fileUploadUtils.upload(image, performanceDir + performance.getPerformanceId());
+                if (isThumbnail) {
+                    performance.setImageUrl(upload);
+                    isThumbnail = !isThumbnail;
+                }
                 performanceImages.add(PerformanceImage.builder()
                         .performance(performance)
                         .imageUrl(upload)
