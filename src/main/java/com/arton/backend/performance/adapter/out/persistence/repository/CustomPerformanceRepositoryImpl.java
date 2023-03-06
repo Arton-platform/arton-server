@@ -1,28 +1,24 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
-import com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.performance.applicaiton.data.*;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
+import com.arton.backend.performance.applicaiton.data.QImageDto;
+import com.arton.backend.performance.applicaiton.data.QPerformanceDetailDtoV2;
 import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity;
-import com.arton.backend.price.application.data.PriceInfoDto;
 import com.arton.backend.price.application.data.QPriceInfoDto;
-import com.querydsl.core.group.GroupBy;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.*;
+import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.performanceImageEntity;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
-import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.*;
+import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.priceGradeEntity;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.set;
 import static java.util.stream.Collectors.toList;

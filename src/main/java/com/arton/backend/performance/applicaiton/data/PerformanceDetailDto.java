@@ -28,12 +28,12 @@ public class PerformanceDetailDto {
     private String ticketOpenDate;
     @Schema(description = "공연 종료일")
     private String ticketEndDate;
-    private Set<ImageDto> images = new LinkedHashSet<>();
-    private Set<PriceInfoDto> prices = new LinkedHashSet<>();
+    private List<ImageDto> images = new ArrayList<>();
+    private List<PriceInfoDto> prices = new ArrayList<>();
 
 
     @Builder
-    public PerformanceDetailDto(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, String ticketOpenDate, String ticketEndDate, Set<ImageDto> images, Set<PriceInfoDto> prices) {
+    public PerformanceDetailDto(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, String ticketOpenDate, String ticketEndDate, List<ImageDto> images, List<PriceInfoDto> prices) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -48,7 +48,7 @@ public class PerformanceDetailDto {
         this.prices = prices;
     }
 
-    public static PerformanceDetailDto toDto(Performance performance, Set<ImageDto> images, Set<PriceInfoDto> prices) {
+    public static PerformanceDetailDto toDto(Performance performance, List<ImageDto> images, List<PriceInfoDto> prices) {
         String[] ticketStartDate = performance.getTicketOpenDate().format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
         String ticketStartTextDay = performance.getTicketOpenDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
         String[] ticketEndDate = performance.getTicketEndDate().format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
@@ -76,11 +76,11 @@ public class PerformanceDetailDto {
         String ticketEndTextDay = performance.getTicketEndDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
         return PerformanceDetailDto.builder()
                 .id(performance.getPerformanceId())
-                .images(new LinkedHashSet<>())
+                .images(new ArrayList<>())
                 .title(performance.getTitle())
                 .place(performance.getPlace())
                 .musicalDateTime(performance.getMusicalDateTime())
-                .prices(new LinkedHashSet<>())
+                .prices(new ArrayList<>())
                 .purchaseLimit(performance.getPurchaseLimit())
                 .limitAge(performance.getLimitAge())
                 .startDate(performance.getStartDate())
