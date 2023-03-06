@@ -14,9 +14,4 @@ spring:
 logging:
   level:
     root: info
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
 
