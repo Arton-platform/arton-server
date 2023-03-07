@@ -25,16 +25,13 @@ public class PerformanceDetailDto {
     private Integer limitAge;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @Schema(description = "티켓팅 오픈일")
     private String ticketOpenDate;
-    @Schema(description = "공연 종료일")
     private String ticketEndDate;
-    private List<ImageDto> images = new ArrayList<>();
-    private List<PriceInfoDto> prices = new ArrayList<>();
-
+    private Set<String> images = new LinkedHashSet<>();
+    private Set<PriceInfoDto> prices = new LinkedHashSet<>();
 
     @Builder
-    public PerformanceDetailDto(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, String ticketOpenDate, String ticketEndDate, List<ImageDto> images, List<PriceInfoDto> prices) {
+    public PerformanceDetailDto(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, String ticketOpenDate, String ticketEndDate, Set<String> images, Set<PriceInfoDto> prices) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -47,39 +44,5 @@ public class PerformanceDetailDto {
         this.ticketEndDate = ticketEndDate;
         this.images = images;
         this.prices = prices;
-    }
-
-
-    public static PerformanceDetailDto toDto(Performance performance, List<ImageDto> images, List<PriceInfoDto> prices) {
-        String ticketOpenDay = null;
-        String ticketEndDay = null;
-        boolean isTicketStart = false;
-        boolean isTicketEnd = false;
-        if (!ObjectUtils.isEmpty(performance.getTicketOpenDate())) {
-            String[] ticketOpenDate = Optional.ofNullable(performance.getTicketOpenDate()).orElseGet(null).format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
-            String textDay = Optional.ofNullable(performance.getTicketOpenDate()).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-            ticketOpenDay = ticketOpenDate[0]+"("+textDay+")"+" "+ticketOpenDate[1];
-            isTicketStart = true;
-        }
-        if (!ObjectUtils.isEmpty(performance.getTicketEndDate())) {
-            String[] ticketEndDate = Optional.ofNullable(performance.getTicketEndDate()).orElseGet(null).format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
-            String textDay = Optional.ofNullable(performance.getTicketEndDate()).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-            ticketEndDay = ticketEndDate[0]+"("+textDay+")"+" "+ticketEndDate[1];
-            isTicketEnd = true;
-        }
-        return PerformanceDetailDto.builder()
-                .id(performance.getPerformanceId())
-                .images(images)
-                .title(performance.getTitle())
-                .place(performance.getPlace())
-                .musicalDateTime(performance.getMusicalDateTime())
-                .prices(prices)
-                .purchaseLimit(performance.getPurchaseLimit())
-                .limitAge(performance.getLimitAge())
-                .startDate(performance.getStartDate())
-                .endDate(performance.getEndDate())
-                .ticketOpenDate(isTicketStart ? ticketOpenDay : "날짜 정보가 없습니다.")
-                .ticketEndDate(isTicketEnd ? ticketEndDay : "날짜 정보가 없습니다.")
-                .build();
     }
 }

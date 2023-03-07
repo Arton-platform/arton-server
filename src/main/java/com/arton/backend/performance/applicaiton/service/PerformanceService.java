@@ -5,7 +5,7 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.data.ImageDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceDeleteUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSaveUseCase;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,17 +71,10 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
 
     @Override
     public PerformanceDetailDto getOne(Long id) {
-        Performance performance = performanceRepositoryPort.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
-        List<ImageDto> images = performanceImageRepositoryPort.findByPerformanceId(id).stream().map(ImageDto::domainToDto).collect(Collectors.toList());
-        List<PriceInfoDto> priceInfo = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toList());
-        return PerformanceDetailDto.toDto(performance, images, priceInfo);
-    }
-
-    @Override
-    public PerformanceDetailDtoV2 getV2(Long id) {
         if (!performanceRepositoryPort.existsById(id)) {
             throw new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND);
         }
-        return performanceRepositoryPort.getV2(id);
+        return performanceRepositoryPort.getV2(id).toDto();
     }
+
 }

@@ -1,6 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.out;
 
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.domain.Performance;
 
 import java.util.List;
@@ -18,5 +18,5 @@ public interface PerformanceRepositoryPort {
     Optional<Performance> findById(Long id);
     boolean existsById(Long id);
     Optional<Performance> findOne(Long id);
-    PerformanceDetailDtoV2 getV2(Long id);
+    PerformanceDetailQueryDslDto getV2(Long id);
 }

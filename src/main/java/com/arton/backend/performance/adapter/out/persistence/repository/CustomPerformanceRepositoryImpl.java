@@ -1,15 +1,13 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
-import com.arton.backend.performance.applicaiton.data.QImageDto;
-import com.arton.backend.performance.applicaiton.data.QPerformanceDetailDtoV2;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
+import com.arton.backend.performance.applicaiton.data.QPerformanceDetailQueryDslDto;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.price.application.data.QPriceInfoDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -87,13 +85,13 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     }
 
     @Override
-    public PerformanceDetailDtoV2 getPerformanceDetails(Long id) {
-        Map<Long, PerformanceDetailDtoV2> resultMap = queryFactory
+    public PerformanceDetailQueryDslDto getPerformanceDetails(Long id) {
+        Map<Long, PerformanceDetailQueryDslDto> resultMap = queryFactory
                 .from(performanceEntity)
                 .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
                 .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
                 .where(performanceEntity.id.eq(id))
-                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailDtoV2(
+                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDto(
                         performanceEntity.id,
                         performanceEntity.title,
                         performanceEntity.place,
@@ -102,12 +100,11 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         performanceEntity.limitAge,
                         performanceEntity.startDate,
                         performanceEntity.endDate,
+                        performanceEntity.ticketOpenDate,
+                        performanceEntity.ticketEndDate,
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)))
                 ));
-        PerformanceDetailDtoV2 performanceDetailDtoV2 = resultMap.get(id);
-        performanceDetailDtoV2.fillData();
-        return performanceDetailDtoV2;
-
+        return resultMap.get(id);
     }
 }
