@@ -1,9 +1,8 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
-import com.arton.backend.performance.applicaiton.data.QImageDto;
-import com.arton.backend.performance.applicaiton.data.QPerformanceDetailDtoV2;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
+import com.arton.backend.performance.applicaiton.data.QPerformanceDetailQueryDslDto;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.price.application.data.QPriceInfoDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -86,13 +85,13 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     }
 
     @Override
-    public List<PerformanceDetailDtoV2> getPerformanceDetails(Long id) {
-        Map<Long, PerformanceDetailDtoV2> resultMap = queryFactory
+    public PerformanceDetailQueryDslDto getPerformanceDetails(Long id) {
+        Map<Long, PerformanceDetailQueryDslDto> resultMap = queryFactory
                 .from(performanceEntity)
-                .join(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
-                .join(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
+                .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
+                .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
                 .where(performanceEntity.id.eq(id))
-                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailDtoV2(
+                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDto(
                         performanceEntity.id,
                         performanceEntity.title,
                         performanceEntity.place,
@@ -101,13 +100,11 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         performanceEntity.limitAge,
                         performanceEntity.startDate,
                         performanceEntity.endDate,
-                        set(new QImageDto(performanceImageEntity.imageUrl)),
+                        performanceEntity.ticketOpenDate,
+                        performanceEntity.ticketEndDate,
+                        set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)))
                 ));
-
-        return resultMap.keySet().stream()
-                .map(resultMap::get)
-                .collect(toList());
-
+        return resultMap.get(id);
     }
 }

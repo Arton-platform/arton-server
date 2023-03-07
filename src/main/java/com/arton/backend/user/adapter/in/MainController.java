@@ -1,7 +1,6 @@
 package com.arton.backend.user.adapter.in;
 
 import com.arton.backend.infra.shared.common.ResponseData;
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
 import com.arton.backend.user.application.data.MainPageDto;
 import com.arton.backend.user.application.port.in.MainPageUseCase;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 
 @RestController

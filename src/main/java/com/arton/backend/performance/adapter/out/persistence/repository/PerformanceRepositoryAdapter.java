@@ -1,7 +1,7 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
-import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
@@ -84,7 +84,17 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return performanceRepository.existsById(id);
+    }
+
+    @Override
     public Optional<Performance> findOne(Long id) {
         return performanceRepository.findById(id).map(PerformanceMapper::toDomain);
+    }
+
+    @Override
+    public PerformanceDetailQueryDslDto getV2(Long id) {
+        return performanceRepository.getPerformanceDetails(id);
     }
 }

@@ -10,6 +10,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, CustomU
     Optional<UserEntity> findByKakaoId(Long kakaoId);
     List<UserEntity> findByEmail(String email);
     Optional<UserEntity> findByNaverId(String naverId);
-
     List<UserEntity> findAllByOrderByIdDesc();
 }
