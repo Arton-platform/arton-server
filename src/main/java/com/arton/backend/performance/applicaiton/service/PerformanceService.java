@@ -5,6 +5,7 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.data.ImageDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceDeleteUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSaveUseCase;
@@ -75,5 +76,13 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
         List<ImageDto> images = performanceImageRepositoryPort.findByPerformanceId(id).stream().map(ImageDto::domainToDto).collect(Collectors.toList());
         List<PriceInfoDto> priceInfo = priceGradeRepositoryPort.findByPerformanceId(id).stream().map(PriceInfoDto::domainToDto).collect(Collectors.toList());
         return PerformanceDetailDto.toDto(performance, images, priceInfo);
+    }
+
+    @Override
+    public PerformanceDetailDtoV2 getV2(Long id) {
+        if (!performanceRepositoryPort.existsById(id)) {
+            throw new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND);
+        }
+        return performanceRepositoryPort.getV2(id);
     }
 }

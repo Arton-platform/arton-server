@@ -4,6 +4,7 @@ import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import com.arton.backend.performance.domain.Performance;
@@ -67,4 +68,13 @@ public class PerformanceController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/v2/{id}")
+    public ResponseEntity<ResponseData<PerformanceDetailDtoV2>> getV2(@PathVariable("id") Long id){
+        ResponseData response = new ResponseData(
+                "SUCCESS"
+                , HttpStatus.OK.value()
+                , performanceService.getV2(id)
+        );
+        return ResponseEntity.ok().body(response);
+    }
 }

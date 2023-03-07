@@ -9,6 +9,7 @@ import com.arton.backend.price.application.data.QPriceInfoDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -86,11 +87,11 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     }
 
     @Override
-    public List<PerformanceDetailDtoV2> getPerformanceDetails(Long id) {
+    public PerformanceDetailDtoV2 getPerformanceDetails(Long id) {
         Map<Long, PerformanceDetailDtoV2> resultMap = queryFactory
                 .from(performanceEntity)
-                .join(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
-                .join(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
+                .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
+                .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
                 .where(performanceEntity.id.eq(id))
                 .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailDtoV2(
                         performanceEntity.id,
@@ -101,13 +102,12 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         performanceEntity.limitAge,
                         performanceEntity.startDate,
                         performanceEntity.endDate,
-                        set(new QImageDto(performanceImageEntity.imageUrl)),
+                        set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)))
                 ));
-
-        return resultMap.keySet().stream()
-                .map(resultMap::get)
-                .collect(toList());
+        PerformanceDetailDtoV2 performanceDetailDtoV2 = resultMap.get(id);
+        performanceDetailDtoV2.fillData();
+        return performanceDetailDtoV2;
 
     }
 }

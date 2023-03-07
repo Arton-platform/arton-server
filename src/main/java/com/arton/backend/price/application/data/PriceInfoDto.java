@@ -4,9 +4,10 @@ import com.arton.backend.price.domain.PriceGrade;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.springframework.util.ObjectUtils;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @EqualsAndHashCode
 @Schema(description = "가격 정보 DTO")
@@ -26,5 +27,9 @@ public class PriceInfoDto {
                 .gradeName(priceGrade.getGradeName())
                 .price(priceGrade.getPrice())
                 .build();
+    }
+
+    public boolean isCompleted() {
+        return !ObjectUtils.isEmpty(gradeName) && !ObjectUtils.isEmpty(price);
     }
 }

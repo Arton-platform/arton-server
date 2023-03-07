@@ -12,6 +12,7 @@ import java.time.format.TextStyle;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -26,13 +27,13 @@ public class PerformanceDetailDtoV2 {
     private Integer limitAge;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Set<ImageDto> images = new LinkedHashSet<>();
+    private Set<String> images = new LinkedHashSet<>();
     private Set<PriceInfoDto> prices = new LinkedHashSet<>();
 
 
     @Builder
     @QueryProjection
-    public PerformanceDetailDtoV2(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, Set<ImageDto> images, Set<PriceInfoDto> prices) {
+    public PerformanceDetailDtoV2(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, Set<String> images, Set<PriceInfoDto> prices) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -45,33 +46,8 @@ public class PerformanceDetailDtoV2 {
         this.prices = prices;
     }
 
-    public static PerformanceDetailDtoV2 toDto(Performance performance, Set<ImageDto> images, Set<PriceInfoDto> prices) {
-        return PerformanceDetailDtoV2.builder()
-                .id(performance.getPerformanceId())
-                .images(images)
-                .title(performance.getTitle())
-                .place(performance.getPlace())
-                .musicalDateTime(performance.getMusicalDateTime())
-                .prices(prices)
-                .purchaseLimit(performance.getPurchaseLimit())
-                .limitAge(performance.getLimitAge())
-                .startDate(performance.getStartDate())
-                .endDate(performance.getEndDate())
-                .build();
+    public void fillData(){
+        prices = prices.stream().filter(PriceInfoDto::isCompleted).collect(Collectors.toSet());
     }
 
-    public static PerformanceDetailDtoV2 toDto(Performance performance) {
-        return PerformanceDetailDtoV2.builder()
-                .id(performance.getPerformanceId())
-                .images(new LinkedHashSet<>())
-                .title(performance.getTitle())
-                .place(performance.getPlace())
-                .musicalDateTime(performance.getMusicalDateTime())
-                .prices(new LinkedHashSet<>())
-                .purchaseLimit(performance.getPurchaseLimit())
-                .limitAge(performance.getLimitAge())
-                .startDate(performance.getStartDate())
-                .endDate(performance.getEndDate())
-                .build();
-    }
 }

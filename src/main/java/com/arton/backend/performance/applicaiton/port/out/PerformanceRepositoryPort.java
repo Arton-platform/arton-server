@@ -1,6 +1,6 @@
 package com.arton.backend.performance.applicaiton.port.out;
 
-import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailDtoV2;
 import com.arton.backend.performance.domain.Performance;
 
 import java.util.List;
@@ -16,5 +16,7 @@ public interface PerformanceRepositoryPort {
     List<Performance> findStartingSoonPerformances();
     List<Performance> findEndingSoonPerformances();
     Optional<Performance> findById(Long id);
+    boolean existsById(Long id);
     Optional<Performance> findOne(Long id);
+    PerformanceDetailDtoV2 getV2(Long id);
 }

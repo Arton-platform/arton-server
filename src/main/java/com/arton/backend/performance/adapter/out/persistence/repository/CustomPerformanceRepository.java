@@ -9,5 +9,5 @@ public interface CustomPerformanceRepository {
     List<Performance> getPerformanceByStartDateASC();
     List<Performance> getPerformanceByEndDateASC();
     List<Performance> getPopularPerformances();
-    List<PerformanceDetailDtoV2> getPerformanceDetails(Long id);
+    PerformanceDetailDtoV2 getPerformanceDetails(Long id);
 }
