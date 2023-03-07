@@ -5,11 +5,16 @@ import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Optional;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -50,10 +55,23 @@ public class CommonPerformanceDto {
     }
 
     public static CommonPerformanceDto domainToDto(Performance performance) {
-        String[] ticketOpenDate = performance.getTicketOpenDate().format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
-        String ticketOpenDay = performance.getTicketOpenDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-        String[] ticketEndDate = performance.getTicketEndDate().format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
-        String ticketEndDay = performance.getTicketEndDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+        String ticketOpenDay = null;
+        String ticketEndDay = null;
+        boolean isTicketStart = false;
+        boolean isTicketEnd = false;
+        if (!ObjectUtils.isEmpty(performance.getTicketOpenDate())) {
+            String[] ticketOpenDate = Optional.ofNullable(performance.getTicketOpenDate()).orElseGet(null).format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
+            String textDay = Optional.ofNullable(performance.getTicketOpenDate()).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+            ticketOpenDay = ticketOpenDate[0]+"("+textDay+")"+" "+ticketOpenDate[1];
+            isTicketStart = true;
+        }
+        if (!ObjectUtils.isEmpty(performance.getTicketEndDate())) {
+            String[] ticketEndDate = Optional.ofNullable(performance.getTicketEndDate()).orElseGet(null).format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
+            String textDay = Optional.ofNullable(performance.getTicketEndDate()).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+            ticketEndDay = ticketEndDate[0]+"("+textDay+")"+" "+ticketEndDate[1];
+            isTicketEnd = true;
+        }
+
         return CommonPerformanceDto.builder()
                 .id(performance.getPerformanceId())
                 .title(performance.getTitle())
@@ -63,8 +81,8 @@ public class CommonPerformanceDto {
                 .startDate(performance.getStartDate())
                 .endDate(performance.getEndDate())
                 .musicalDateTime(performance.getMusicalDateTime())
-                .ticketOpenDate(ticketOpenDate[0]+"("+ticketOpenDay+")"+" "+ticketOpenDate[1])
-                .ticketEndDate(ticketEndDate[0]+"("+ticketEndDay+")"+" "+ticketEndDate[1])
+                .ticketOpenDate(isTicketStart ? ticketOpenDay : "날짜 정보가 없습니다.")
+                .ticketEndDate(isTicketEnd ? ticketEndDay : "날짜 정보가 없습니다.")
                 .build();
     }
 }

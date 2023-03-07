@@ -120,7 +120,7 @@ public class TestDataInit {
                     .place(places[random.nextInt(4)])
                     .startDate(times[random.nextInt(4)])
                     .ticketOpenDate(times[random.nextInt(4)].minusDays(3L))
-                    .ticketEndDate(times[random.nextInt(4)].minusDays(3L))
+//                    .ticketEndDate(times[random.nextInt(4)].minusDays(3L))
                     .endDate(times[random.nextInt(4)].plusDays(4L))
                     .hit((long)random.nextInt(1000)+1)
                     .musicalDateTime(musicalDates[random.nextInt(2)])
