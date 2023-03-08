@@ -1,5 +1,9 @@
 package com.arton.backend.administer.category.application.in;
 
-public class CategoryUpdateUseCase {
+import com.arton.backend.administer.category.domain.dtos.CategoryUpdateDto;
+
+public interface CategoryUpdateUseCase {
+
+    public void update(CategoryUpdateDto updateDto);
     
 }

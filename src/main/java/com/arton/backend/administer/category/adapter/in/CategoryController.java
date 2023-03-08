@@ -18,6 +18,7 @@ import com.arton.backend.administer.category.application.in.CategoryUpdateUseCas
 import com.arton.backend.administer.category.domain.dtos.CategoryDto;
 import com.arton.backend.administer.category.domain.dtos.CategoryRegistDto;
 import com.arton.backend.administer.category.domain.dtos.CategoryUpdateDto;
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 
 import lombok.RequiredArgsConstructor;
@@ -47,21 +48,43 @@ public class CategoryController {
 
     @GetMapping("/find")
     public ResponseData<List<CategoryDto>> categoryfindAll(){
-        return null;
+        return new ResponseData<>(
+            "SUCCESS",
+            HttpStatus.OK.value(),
+            findAllUseCase.findAll()
+        );
     }
     
     @PostMapping("/regist")
-    public void categoryRegist(CategoryRegistDto registDto){
-
+    public CommonResponse categoryRegist(CategoryRegistDto registDto){
+        
+        registUseCase.regist(registDto);
+        
+        return CommonResponse.builder()
+        .message("SUCCESS")
+        .status(HttpStatus.OK.value())
+        .build();
     }
     
     @PatchMapping("/update")
-    public void categoryUpdate(CategoryUpdateDto updateDto){
+    public CommonResponse categoryUpdate(CategoryUpdateDto updateDto){
 
+        updateUseCase.update(updateDto);
+
+        return CommonResponse.builder()
+        .message("SUCCESS")
+        .status(HttpStatus.OK.value())
+        .build();
     }
     
     @DeleteMapping("/delete")
-    public void categoryDelete(Long id){
+    public CommonResponse categoryDelete(Long id){
 
+        deleteUseCase.delete(id);
+
+        return CommonResponse.builder()
+        .message("SUCCESS")
+        .status(HttpStatus.OK.value())
+        .build();
     }
 }

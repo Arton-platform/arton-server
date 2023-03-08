@@ -4,10 +4,8 @@ import java.util.List;
 
 import com.arton.backend.administer.category.domain.dtos.CategoryDto;
 
-public class CategoryFindAllUseCase {
+public interface CategoryFindAllUseCase {
 
-    public List<CategoryDto> findAll() {
-        return null;
-    }
+    public List<CategoryDto> findAll();
     
 }
