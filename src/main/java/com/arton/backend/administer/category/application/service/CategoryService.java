@@ -1,5 +1,6 @@
 package com.arton.backend.administer.category.application.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,6 @@ import com.arton.backend.administer.category.application.out.CategoryDeletePort;
 import com.arton.backend.administer.category.application.out.CategoryFindAllPort;
 import com.arton.backend.administer.category.application.out.CategoryFindOnePort;
 import com.arton.backend.administer.category.application.out.CategoryRegistPort;
-import com.arton.backend.administer.category.application.out.CategoryUpdatePort;
 import com.arton.backend.administer.category.domain.CategoryEntity;
 import com.arton.backend.administer.category.domain.CategoryMapper;
 import com.arton.backend.administer.category.domain.dtos.CategoryDto;
@@ -32,7 +32,6 @@ public class CategoryService implements CategoryFindOneUseCase, CategoryFindAllU
     private final CategoryFindOnePort findOnePort;
     private final CategoryFindAllPort findAllPort;
     private final CategoryRegistPort registPort;
-    private final CategoryUpdatePort updatePort;
     private final CategoryDeletePort deletePort;
     
     @Override
@@ -52,6 +51,7 @@ public class CategoryService implements CategoryFindOneUseCase, CategoryFindAllU
     public List<CategoryDto> findAll() {
 
         return findAllPort.findAll()
+            .orElseGet(ArrayList::new)
             .stream()
             .map((entity) -> new CategoryMapper<CategoryDto>().toDomain(entity))
             .collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class CategoryService implements CategoryFindOneUseCase, CategoryFindAllU
     @Override
     public void update(CategoryUpdateDto updateDto) {
         CategoryEntity entity = new CategoryMapper<CategoryUpdateDto>().toEntity(updateDto);
-        updatePort.update(entity);
+        
     }
 
     @Override

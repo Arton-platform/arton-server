@@ -1,6 +1,5 @@
 package com.arton.backend.administer.banner.application.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,11 +14,9 @@ import com.arton.backend.administer.banner.application.out.BannerDeletePort;
 import com.arton.backend.administer.banner.application.out.BannerRegistPort;
 import com.arton.backend.administer.banner.application.out.BannerSelectAllPort;
 import com.arton.backend.administer.banner.application.out.BannerSelectOnePort;
-import com.arton.backend.administer.banner.application.out.BannerUpdatePort;
 import com.arton.backend.administer.banner.domain.Banner;
+import com.arton.backend.administer.banner.domain.BannerEntity;
 import com.arton.backend.administer.banner.domain.BannerMapper;
-import com.arton.backend.infra.shared.exception.CustomException;
-import com.arton.backend.infra.shared.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +27,6 @@ public class BannerService implements BannerRegistUseCase, BannerSelectAllUseCas
     private final BannerRegistPort registPort;
     private final BannerSelectAllPort selectAllPort;
     private final BannerSelectOnePort selectOnePort;
-    private final BannerUpdatePort updatePort;
     private final BannerDeletePort deletePort;
 
     private final BannerMapper mapper;
@@ -44,20 +40,25 @@ public class BannerService implements BannerRegistUseCase, BannerSelectAllUseCas
     public Banner selectOneBanner(long id) {
         return mapper.toDomain(
             selectOnePort.selectOneBanner(id)
-                .orElseThrow(()-> new CustomException(ErrorCode.SELECT_ERROR.getMessage(),ErrorCode.SELECT_ERROR))
         );
     }
 
     @Override
     public List<Banner> selectAllBanner() {
-        return selectAllPort.selectAllBanner().orElseGet(ArrayList::new).stream()
+        return selectAllPort.selectAllBanner()
+            .stream()
             .map(entity -> mapper.toDomain(entity))
             .collect(Collectors.toList());
     }
 
     @Override
     public void updateBanner(Banner banner) {
-        updatePort.updateBanner(mapper.toEntity(banner));
+        BannerEntity original = selectOnePort.selectOneBanner(banner.getId());
+        original.update(
+            banner.getSeq(),
+            banner.getTitle(),
+            banner.getIsActive()
+        );
     }
 
     @Override
