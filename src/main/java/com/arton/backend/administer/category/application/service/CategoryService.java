@@ -1,6 +1,7 @@
 package com.arton.backend.administer.category.application.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import com.arton.backend.administer.category.application.out.CategoryFindAllPort
 import com.arton.backend.administer.category.application.out.CategoryFindOnePort;
 import com.arton.backend.administer.category.application.out.CategoryRegistPort;
 import com.arton.backend.administer.category.application.out.CategoryUpdatePort;
+import com.arton.backend.administer.category.domain.CategoryEntity;
 import com.arton.backend.administer.category.domain.CategoryMapper;
 import com.arton.backend.administer.category.domain.dtos.CategoryDto;
 import com.arton.backend.administer.category.domain.dtos.CategoryRegistDto;
@@ -32,15 +34,15 @@ public class CategoryService implements CategoryFindOneUseCase, CategoryFindAllU
     private final CategoryRegistPort registPort;
     private final CategoryUpdatePort updatePort;
     private final CategoryDeletePort deletePort;
-    // private final CategoryMapper<> mapper;
     
     @Override
     public CategoryDto findOne(Long id) {
         new CategoryMapper<CategoryDto>().toDomain(
             findOnePort.findById(id)
                 .orElseThrow(()-> new CustomException(
-                    ErrorCode.SELECT_ERROR.getMessage(), 
-                    ErrorCode.SELECT_ERROR)
+                        ErrorCode.SELECT_ERROR.getMessage(), 
+                        ErrorCode.SELECT_ERROR
+                    )
                 )
         );
         return null;
@@ -48,22 +50,28 @@ public class CategoryService implements CategoryFindOneUseCase, CategoryFindAllU
 
     @Override
     public List<CategoryDto> findAll() {
-        // new CategoryMapper<CategoryDto>().toEntity(registDto);
-        return null;
+
+        return findAllPort.findAll()
+            .stream()
+            .map((entity) -> new CategoryMapper<CategoryDto>().toDomain(entity))
+            .collect(Collectors.toList());
     }
 
     @Override
     public void regist(CategoryRegistDto registDto) {
-        new CategoryMapper<CategoryRegistDto>().toEntity(registDto);
+        CategoryEntity entity = new CategoryMapper<CategoryRegistDto>().toEntity(registDto);
+        registPort.regist(entity);
     }
 
     @Override
     public void update(CategoryUpdateDto updateDto) {
-        new CategoryMapper<CategoryUpdateDto>().toEntity(updateDto);
+        CategoryEntity entity = new CategoryMapper<CategoryUpdateDto>().toEntity(updateDto);
+        updatePort.update(entity);
     }
 
     @Override
     public void delete(Long id) {
+        deletePort.delete(id);
     }
 
 }
