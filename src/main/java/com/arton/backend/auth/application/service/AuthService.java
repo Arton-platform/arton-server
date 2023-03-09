@@ -9,6 +9,9 @@ import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.event.UserRegisteredEvent;
 import com.arton.backend.infra.event.UserWithdrewEvent;
+import com.arton.backend.infra.event.aop.PublishEvent;
+import com.arton.backend.infra.event.aop.register.AopUserRegisteredEvent;
+import com.arton.backend.infra.event.aop.register.AopUserWithdrewEvent;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.shared.exception.CustomException;
@@ -76,8 +79,9 @@ public class AuthService implements AuthUseCase {
      * @param signupRequestDto
      * @param multipartFile
      */
+    @PublishEvent(eventType = AopUserRegisteredEvent.class)
     @Override
-    public boolean signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile) {
+    public User signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile) {
         if (checkEmailDup(signupRequestDto.getEmail())) {
             throw new CustomException(ErrorCode.EMAIL_IS_EXIST.getMessage(), ErrorCode.EMAIL_IS_EXIST);
         }
@@ -126,9 +130,7 @@ public class AuthService implements AuthUseCase {
         }
         User toDoc = userRepository.save(savedUser);
         userDocumentSavePort.save(toDoc);
-        // 회원가입 메일 발송. aop로 대체해야함.
-        applicationEventPublisher.publishEvent(new UserRegisteredEvent(toDoc));
-        return true;
+        return toDoc;
     }
 
     @Override
@@ -167,8 +169,9 @@ public class AuthService implements AuthUseCase {
      * @param withdrawalRequestDto
      * @return
      */
+    @PublishEvent(eventType = AopUserWithdrewEvent.class)
     @Override
-    public boolean withdraw(HttpServletRequest request, WithdrawalRequestDto withdrawalRequestDto) {
+    public User withdraw(HttpServletRequest request, WithdrawalRequestDto withdrawalRequestDto) {
         String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
         // token 검증
         if (!tokenProvider.validateToken(accessToken)) {
@@ -206,9 +209,7 @@ public class AuthService implements AuthUseCase {
         // 해당 토큰 블랙리스트 저장
         Long expiration = tokenProvider.getExpiration(accessToken);
         redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
-        // send withdraw mail
-        applicationEventPublisher.publishEvent(new UserWithdrewEvent(user));
-        return true;
+        return user;
     }
 
 
