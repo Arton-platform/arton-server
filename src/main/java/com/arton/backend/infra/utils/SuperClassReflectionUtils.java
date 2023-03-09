@@ -1,10 +1,11 @@
-package com.arton.backend.infra.excel.utils;
+package com.arton.backend.infra.utils;
 
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,6 +21,20 @@ public final class SuperClassReflectionUtils {
         for (Class<?> allClassesIncludingSuperClass : getAllClassesIncludingSuperClasses(clazz, true)) {
             fields.addAll(Arrays.asList(allClassesIncludingSuperClass.getDeclaredFields()));
         }
+        return fields;
+    }
+
+    public static List<Method> getAllMethods(Class<?> clazz) {
+        List<Method> fields = new ArrayList<>();
+        for (Class<?> allClassesIncludingSuperClass : getAllClassesIncludingSuperClasses(clazz, true)) {
+            fields.addAll(Arrays.asList(allClassesIncludingSuperClass.getDeclaredMethods()));
+        }
+        return fields;
+    }
+
+    public static List<Method> getOnlyClassMethods(Class<?> clazz) {
+        List<Method> fields = new ArrayList<>();
+        fields.addAll(Arrays.asList(clazz.getDeclaredMethods()));
         return fields;
     }
 
@@ -47,6 +62,21 @@ public final class SuperClassReflectionUtils {
         return null;
     }
 
+    public static Method getMethod(Class<?> clazz, String name) {
+        for (Class<?> allClassesIncludingSuperClass : getAllClassesIncludingSuperClasses(clazz, false)) {
+            for (Field declaredField : allClassesIncludingSuperClass.getDeclaredFields()) {
+                if (declaredField.getName().equals(name)) {
+                    try {
+                        return allClassesIncludingSuperClass.getMethod(name);
+                    }catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public static List<Class<?>> getAllClassesIncludingSuperClasses(Class<?> clazz, boolean fromSuper) {
         List<Class<?>> classes = new ArrayList<>();
         while (clazz != null) {
@@ -58,5 +88,4 @@ public final class SuperClassReflectionUtils {
         }
         return classes;
     }
-
 }

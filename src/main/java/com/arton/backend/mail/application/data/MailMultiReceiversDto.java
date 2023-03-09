@@ -1,4 +1,4 @@
-package com.arton.backend.infra.mail;
+package com.arton.backend.mail.application.data;
 
 import lombok.*;
 

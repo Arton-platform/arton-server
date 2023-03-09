@@ -1,4 +1,4 @@
-package com.arton.backend.infra.mail;
+package com.arton.backend.mail;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
