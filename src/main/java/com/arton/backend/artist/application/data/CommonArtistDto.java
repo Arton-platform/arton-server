@@ -19,4 +19,5 @@ public class CommonArtistDto {
     public static CommonArtistDto domainToDto(Artist artist) {
         return new CommonArtistDto(artist.getId(), artist.getName(), artist.getProfileImageUrl());
     }
+
 }

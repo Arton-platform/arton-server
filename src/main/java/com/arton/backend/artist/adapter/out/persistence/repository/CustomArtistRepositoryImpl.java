@@ -1,12 +1,18 @@
 package com.arton.backend.artist.adapter.out.persistence.repository;
 
 import com.arton.backend.artist.adapter.out.persistence.entity.ArtistEntity;
+import com.arton.backend.artist.adapter.out.persistence.mapper.ArtistMapper;
+import com.arton.backend.artist.application.data.CommonArtistDto;
+import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity.artistEntity;
 
@@ -26,5 +32,10 @@ public class CustomArtistRepositoryImpl implements CustomArtistRepository{
         return queryFactory.selectFrom(artistEntity)
                 .where(artistEntity.performances.any().performance.performanceType.eq(performanceType))
                 .fetch();
+    }
+
+    @Override
+    public List<ArtistEntity> getArtistByLimit(int offset, int limit) {
+        return queryFactory.selectFrom(artistEntity).offset(offset).limit(limit).fetch();
     }
 }
