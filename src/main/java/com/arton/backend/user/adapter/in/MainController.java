@@ -4,6 +4,8 @@ import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.user.application.data.MainPageDto;
 import com.arton.backend.user.application.port.in.MainPageUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,9 +20,10 @@ public class MainController {
     private final MainPageUseCase mainPageUseCase;
 
     @GetMapping("/home")
-    public ResponseEntity<ResponseData<MainPageDto>> goHome(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ResponseData<MainPageDto>> goHome(@AuthenticationPrincipal UserDetails userDetails, @PageableDefault Pageable pageable) {
         long id = Long.parseLong(userDetails.getUsername());
-        MainPageDto mainPage = mainPageUseCase.getMainPage(id);
+        MainPageDto mainPage = mainPageUseCase.getMainPage(id, (int)pageable.getOffset(), pageable.getPageSize());
+        System.out.println("mainPage = " + pageable.getPageSize());
         ResponseData responseData = new ResponseData("SUCCESS", HttpStatus.OK.value(), mainPage);
         return ResponseEntity.ok(responseData);
     }

@@ -1,14 +1,11 @@
 package com.arton.backend.user.application.service;
 
-import com.arton.backend.artist.application.data.CommonArtistDto;
 import com.arton.backend.auth.application.data.LoginRequestDto;
 import com.arton.backend.user.application.data.MainPageDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,9 +14,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,7 +28,7 @@ class MainPageServiceTest {
 
     @Test
     void getMainPageTest() {
-        MainPageDto mainPage = mainPageService.getMainPage(1L);
+        MainPageDto mainPage = mainPageService.getMainPage(1L, 0, 10);
         System.out.println("mainPage = " + mainPage);
     }
 

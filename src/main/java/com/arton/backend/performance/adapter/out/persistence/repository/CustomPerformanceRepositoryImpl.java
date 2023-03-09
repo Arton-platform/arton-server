@@ -1,5 +1,6 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
+import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.data.QPerformanceDetailQueryDslDto;
@@ -35,10 +36,10 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
      * @return
      */
     @Override
-    public List<Performance> getPerformanceByStartDateASC() {
+    public List<Performance> getPerformanceByStartDateASC(int offset, int limit) {
         return Optional.ofNullable(queryFactory.selectFrom(performanceEntity)
                         .where(performanceEntity.startDate.goe(LocalDateTime.now()))
-                .orderBy(performanceEntity.ticketOpenDate.asc())
+                .orderBy(performanceEntity.ticketOpenDate.asc()).offset(offset).limit(limit)
                 .fetch())
                 .orElseGet(Collections::emptyList)
                 .stream()
@@ -54,10 +55,10 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
      * @return
      */
     @Override
-    public List<Performance> getPerformanceByEndDateASC() {
+    public List<Performance> getPerformanceByEndDateASC(int offset, int limit) {
         return Optional.ofNullable(queryFactory.selectFrom(performanceEntity)
                         .where(performanceEntity.startDate.goe(LocalDateTime.now()))
-                        .orderBy(performanceEntity.ticketEndDate.asc())
+                        .orderBy(performanceEntity.ticketEndDate.asc()).offset(offset).limit(limit)
                         .fetch())
                 .orElseGet(Collections::emptyList)
                 .stream()
@@ -73,15 +74,32 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
      * @return
      */
     @Override
-    public List<Performance> getPopularPerformances() {
+    public List<Performance> getPopularPerformances(int offset, int limit) {
         return Optional.ofNullable(queryFactory.selectFrom(performanceEntity)
                         .where(performanceEntity.startDate.goe(LocalDateTime.now()))
-                        .orderBy(performanceEntity.hit.desc())
+                        .orderBy(performanceEntity.hit.desc()).offset(offset).limit(limit)
                         .fetch())
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(PerformanceMapper::toDomain)
                 .collect(toList());
+    }
+
+    @Override
+    public List<PerformanceEntity> findAllByLimit(int offset, int limit) {
+        return queryFactory.selectFrom(performanceEntity)
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+    }
+
+    @Override
+    public List<PerformanceEntity> findZzimsByLimit(List<Long> ids, int offset, int limit) {
+        return queryFactory.selectFrom(performanceEntity)
+                .where(performanceEntity.id.in(ids))
+                .offset(offset)
+                .limit(limit)
+                .fetch();
     }
 
     @Override
