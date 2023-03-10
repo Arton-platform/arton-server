@@ -23,4 +23,8 @@ public class Terms {
         this.updatedDate = updatedDate;
     }
 
+    public void setUrl(String url){
+        this.url = url;
+    }
+
 }

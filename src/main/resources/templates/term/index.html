@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../static/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link th:href="@{/css/integrated-css.css}"
+          href="../static/css/integrated-css.css"
+          rel="stylesheet">
+    <title>약관 목록</title>
+    <style>
+        div.paging {
+            display: flex;
+            align-items: center; /* 수직 정렬 */
+            flex-direction: row; /* default: row */
+            justify-content: center; /* flex direction에 대해서 정렬방식 선택 */
+        }
+    </style>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<div>
+    <a th:href="@{/web/term/add}" class="btn" style="background: #FF6491; color: #FFF2F6;">약관등록</a>
+</div>
+<div class="container">
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>이름</th>
+                <th>내용</th>
+                <th>기능</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="term : ${terms}">
+                <td id="tId" name="tId" th:text="${term.getId()}"></td>
+                <td th:text="${term.getName()}"></td>
+                <td th:text="${term.getUrl()}"></td>
+                <td>
+                    <p class="btn_set">
+                        <a class="btn" style="background: #FF6491; color: #FFF2F6;" th:href="@{/web/term/{termsId}(termsId=${term.getId()})}">수정</a>
+                        <button type="button" class="btn" style="background: #FF6491; color: #FFF2F6;" th:onclick="deleteTerms([[${term.id}]]);">삭제</button>
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--delete-->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function deleteTerms(idx) {
+            if (confirm(idx + "번 약관을 삭제할까요?")) {
+                var uri = /*[[ @{/web/term/revoke} ]]*/;
+                var html = "";
+
+                html += '<form name="dataForm" action="' + uri + '" method="POST">';
+                html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
+                html += '</form>';
+
+                $("body").append(html);
+                document.dataForm.submit();
+            }
+        }
+
+        /*]]>*/
+    </script>
+</th:block>
+</body>
+</html>
