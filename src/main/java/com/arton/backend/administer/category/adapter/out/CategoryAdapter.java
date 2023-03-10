@@ -10,6 +10,8 @@ import com.arton.backend.administer.category.application.out.CategoryFindAllPort
 import com.arton.backend.administer.category.application.out.CategoryFindOnePort;
 import com.arton.backend.administer.category.application.out.CategoryRegistPort;
 import com.arton.backend.administer.category.domain.CategoryEntity;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +23,9 @@ public class CategoryAdapter implements CategoryFindOnePort, CategoryFindAllPort
 
 
     @Override
-    public Optional<CategoryEntity> findById(Long id) {
-        return repository.findById(id);
+    public CategoryEntity findById(Long id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.SELECT_ERROR.getMessage(), ErrorCode.SELECT_ERROR));
     }
 
     @Override

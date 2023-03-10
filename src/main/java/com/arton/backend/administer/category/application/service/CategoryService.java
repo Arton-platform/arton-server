@@ -20,8 +20,6 @@ import com.arton.backend.administer.category.domain.CategoryMapper;
 import com.arton.backend.administer.category.domain.dtos.CategoryDto;
 import com.arton.backend.administer.category.domain.dtos.CategoryRegistDto;
 import com.arton.backend.administer.category.domain.dtos.CategoryUpdateDto;
-import com.arton.backend.infra.shared.exception.CustomException;
-import com.arton.backend.infra.shared.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,15 +34,9 @@ public class CategoryService implements CategoryFindOneUseCase, CategoryFindAllU
     
     @Override
     public CategoryDto findOne(Long id) {
-        new CategoryMapper<CategoryDto>().toDomain(
+        return new CategoryMapper<CategoryDto>().toDomain(
             findOnePort.findById(id)
-                .orElseThrow(()-> new CustomException(
-                        ErrorCode.SELECT_ERROR.getMessage(), 
-                        ErrorCode.SELECT_ERROR
-                    )
-                )
         );
-        return null;
     }
 
     @Override
@@ -65,8 +57,13 @@ public class CategoryService implements CategoryFindOneUseCase, CategoryFindAllU
 
     @Override
     public void update(CategoryUpdateDto updateDto) {
-        CategoryEntity entity = new CategoryMapper<CategoryUpdateDto>().toEntity(updateDto);
-        
+        CategoryEntity original = findOnePort.findById(updateDto.getId());
+        original.update(
+            updateDto.getLevel(),
+            updateDto.getLines(),
+            updateDto.getWidth(),
+            updateDto.getUrl()
+        );
     }
 
     @Override

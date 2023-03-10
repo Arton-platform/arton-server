@@ -24,4 +24,11 @@ public class CategoryEntity {
     int lines; // 한 페이지에 몇개의 카테고리를 표현할지 결정하는 컬럼
     int width; // 한 카테고리에 몇개의 공연을 표현할지 결정하는 컬럼
     String url; // 분류 클릭시 이동할 페이지
+
+    public void update(int level, int lines, int width, String url){
+        this.level = level;
+        this.lines = lines;
+        this.width = width;
+        this.url = url;
+    }
 }
