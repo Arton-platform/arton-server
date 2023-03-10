@@ -1,5 +1,6 @@
 package com.arton.backend.administer.banner.adapter.out;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,8 @@ import com.arton.backend.administer.banner.application.out.*;
 import org.springframework.stereotype.Repository;
 
 import com.arton.backend.administer.banner.domain.BannerEntity;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,13 +25,16 @@ public class BannerPersistenceAdapter implements BannerRegistPort, BannerSelectO
     }
 
     @Override
-    public Optional<List<BannerEntity>> selectAllBanner() {
-        return Optional.ofNullable(repository.findAll());
+    public List<BannerEntity> selectAllBanner() {
+        
+        return Optional.ofNullable(repository.findAll())
+            .orElseGet(ArrayList::new);
     }
 
     @Override
-    public Optional<BannerEntity> selectOneBanner(long id) {
-        return repository.findById(id);
+    public BannerEntity selectOneBanner(long id) {
+        return repository.findById(id)
+            .orElseThrow(()-> new CustomException(ErrorCode.SELECT_ERROR.getMessage(),ErrorCode.SELECT_ERROR));
     }
 
     @Override
