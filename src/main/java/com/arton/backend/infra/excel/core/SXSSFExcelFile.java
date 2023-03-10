@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 
-import static com.arton.backend.infra.excel.utils.SuperClassReflectionUtils.getField;
+import static com.arton.backend.infra.utils.SuperClassReflectionUtils.getField;
 
 public abstract class SXSSFExcelFile<T> implements ExcelFile<T>{
 

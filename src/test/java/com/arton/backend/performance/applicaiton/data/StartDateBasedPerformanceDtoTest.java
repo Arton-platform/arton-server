@@ -14,12 +14,4 @@ import java.util.stream.Collectors;
 class StartDateBasedPerformanceDtoTest {
     @Autowired
     PerformanceRepositoryPort performanceRepository;
-
-    @Test
-    void getDtoTest() {
-        List<StartDateBasedPerformanceDto> startDateBasedPerformanceDtos = performanceRepository.findAll().stream().map(StartDateBasedPerformanceDto::domainToDto).collect(Collectors.toList());
-        for (StartDateBasedPerformanceDto startDateBasedPerformanceDto : startDateBasedPerformanceDtos) {
-            System.out.println("startDateBasedPerformanceDto = " + startDateBasedPerformanceDto);
-        }
-    }
 }

@@ -23,7 +23,7 @@ class CustomPerformanceRepositoryImplTest {
      */
     @Test
     void getPerformanceByStartDateASCTest() {
-        List<Performance> performanceByStartDateASC = performanceRepository.getPerformanceByStartDateASC();
+        List<Performance> performanceByStartDateASC = performanceRepository.getPerformanceByStartDateASC(0, 10);
         List<PerformanceEntity> collect = performanceRepository.findAll().stream().filter(performanceEntity -> performanceEntity.getStartDate().isAfter(LocalDateTime.now())).collect(Collectors.toList());
         List<PerformanceEntity> total = performanceRepository.findAll().stream().collect(Collectors.toList());
         if (performanceByStartDateASC != null && collect != null) {
@@ -36,7 +36,7 @@ class CustomPerformanceRepositoryImplTest {
 
     @Test
     void getPerformanceByEndDateASCTest() {
-        List<Performance> performances = performanceRepository.getPerformanceByEndDateASC();
+        List<Performance> performances = performanceRepository.getPerformanceByEndDateASC(0, 10);
         List<PerformanceEntity> collect = performanceRepository.findAll().stream().filter(performanceEntity -> performanceEntity.getStartDate().isAfter(LocalDateTime.now())).collect(Collectors.toList());
         if (performances != null && collect != null) {
             System.out.println("collect = " + collect.size());
@@ -51,7 +51,7 @@ class CustomPerformanceRepositoryImplTest {
 
     @Test
     void getPopularPerformanceTest() {
-        List<Performance> performances = performanceRepository.getPopularPerformances();
+        List<Performance> performances = performanceRepository.getPopularPerformances(0, 10);
         List<PerformanceEntity> collect = performanceRepository.findAll().stream().filter(performanceEntity -> performanceEntity.getStartDate().isAfter(LocalDateTime.now())).collect(Collectors.toList());
         if (performances != null && collect != null) {
             System.out.println("collect = " + collect.size());
@@ -63,4 +63,5 @@ class CustomPerformanceRepositoryImplTest {
             Assertions.assertThat(performances.size()).isEqualTo(collect.size());
         }
     }
+
 }

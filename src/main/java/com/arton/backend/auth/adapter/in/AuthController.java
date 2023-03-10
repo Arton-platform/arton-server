@@ -3,8 +3,8 @@ package com.arton.backend.auth.adapter.in;
 import com.arton.backend.auth.application.data.*;
 import com.arton.backend.auth.application.port.in.AuthUseCase;
 import com.arton.backend.auth.application.port.in.OAuthUseCase;
-import com.arton.backend.infra.mail.EmailUseCase;
-import com.arton.backend.infra.mail.MailDto;
+import com.arton.backend.mail.application.port.in.EmailUseCase;
+import com.arton.backend.mail.application.data.MailDto;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -134,7 +134,7 @@ public class AuthController {
     @PutMapping("/reset/password")
     public ResponseEntity<CommonResponse> resetPassword(@RequestBody @Valid PasswordResetDto passwordResetDto) {
         MailDto mailDto = authUseCase.resetPassword(passwordResetDto);
-        emailUseCase.sendMailByHTML(mailDto);
+        emailUseCase.sendPasswordMailByHTML(mailDto);
         CommonResponse commonResponse = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공적으로 메일을 보냈습니다.")

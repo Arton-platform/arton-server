@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PerformanceRepository extends JpaRepository<PerformanceEntity, Long>, CustomPerformanceRepository {
     List<PerformanceEntity> findAllByPerformanceType(PerformanceType performanceType);
+    boolean existsById(Long id);
 }

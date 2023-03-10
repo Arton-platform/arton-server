@@ -125,4 +125,8 @@ public class Performance {
         this.performanceId = null;
     }
 
+    public void setImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
+
 }

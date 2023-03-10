@@ -3,19 +3,23 @@ package com.arton.backend.auth.application.service;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.auth.application.data.*;
-import com.arton.backend.auth.application.port.in.*;
+import com.arton.backend.auth.application.port.in.AuthUseCase;
 import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
+import com.arton.backend.infra.event.UserRegisteredEvent;
+import com.arton.backend.infra.event.UserWithdrewEvent;
+import com.arton.backend.infra.event.aop.PublishEvent;
+import com.arton.backend.infra.event.aop.register.AopUserRegisteredEvent;
+import com.arton.backend.infra.event.aop.register.AopUserWithdrewEvent;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.jwt.TokenProvider;
-import com.arton.backend.infra.mail.MailDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.mail.application.data.MailDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.application.port.out.UserDocumentSavePort;
-import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import com.arton.backend.withdrawal.application.port.out.WithdrawalRegistPort;
@@ -26,6 +30,7 @@ import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,7 +41,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -62,6 +70,7 @@ public class AuthService implements AuthUseCase {
     private final UserDocumentSavePort userDocumentSavePort;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * 회원가입
@@ -70,8 +79,9 @@ public class AuthService implements AuthUseCase {
      * @param signupRequestDto
      * @param multipartFile
      */
+    @PublishEvent(eventType = AopUserRegisteredEvent.class)
     @Override
-    public boolean signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile) {
+    public User signup(SignupRequestDto signupRequestDto, MultipartFile multipartFile) {
         if (checkEmailDup(signupRequestDto.getEmail())) {
             throw new CustomException(ErrorCode.EMAIL_IS_EXIST.getMessage(), ErrorCode.EMAIL_IS_EXIST);
         }
@@ -120,7 +130,7 @@ public class AuthService implements AuthUseCase {
         }
         User toDoc = userRepository.save(savedUser);
         userDocumentSavePort.save(toDoc);
-        return true;
+        return toDoc;
     }
 
     @Override
@@ -159,8 +169,9 @@ public class AuthService implements AuthUseCase {
      * @param withdrawalRequestDto
      * @return
      */
+    @PublishEvent(eventType = AopUserWithdrewEvent.class)
     @Override
-    public boolean withdraw(HttpServletRequest request, WithdrawalRequestDto withdrawalRequestDto) {
+    public User withdraw(HttpServletRequest request, WithdrawalRequestDto withdrawalRequestDto) {
         String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
         // token 검증
         if (!tokenProvider.validateToken(accessToken)) {
@@ -198,7 +209,7 @@ public class AuthService implements AuthUseCase {
         // 해당 토큰 블랙리스트 저장
         Long expiration = tokenProvider.getExpiration(accessToken);
         redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
-        return true;
+        return user;
     }
 
 

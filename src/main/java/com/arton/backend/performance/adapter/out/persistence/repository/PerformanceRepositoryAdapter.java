@@ -1,7 +1,7 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
-import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
@@ -29,6 +29,15 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
+    public List<Performance> findAllByLimit(int offset, int limit) {
+        return Optional.ofNullable(performanceRepository.findAllByLimit(offset, limit))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(PerformanceMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Performance> findAllPerformances() {
         return Optional.ofNullable(performanceRepository.findAll()).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
     }
@@ -49,18 +58,27 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
-    public List<Performance> findPopularPerformances() {
-        return performanceRepository.getPerformanceByEndDateASC();
+    public List<Performance> findByIds(List<Long> ids, int offset, int limit) {
+        return Optional.ofNullable(performanceRepository.findZzimsByLimit(ids, offset, limit))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(PerformanceMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Performance> findStartingSoonPerformances() {
-        return performanceRepository.getPerformanceByStartDateASC();
+    public List<Performance> findPopularPerformances(int offset, int limit) {
+        return performanceRepository.getPerformanceByEndDateASC(offset, limit);
     }
 
     @Override
-    public List<Performance> findEndingSoonPerformances() {
-        return performanceRepository.getPerformanceByEndDateASC();
+    public List<Performance> findStartingSoonPerformances(int offset, int limit) {
+        return performanceRepository.getPerformanceByStartDateASC(offset, limit);
+    }
+
+    @Override
+    public List<Performance> findEndingSoonPerformances(int offset, int limit) {
+        return performanceRepository.getPerformanceByEndDateASC(offset, limit);
     }
 
     @Override
@@ -84,7 +102,17 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return performanceRepository.existsById(id);
+    }
+
+    @Override
     public Optional<Performance> findOne(Long id) {
         return performanceRepository.findById(id).map(PerformanceMapper::toDomain);
+    }
+
+    @Override
+    public PerformanceDetailQueryDslDto getV2(Long id) {
+        return performanceRepository.getPerformanceDetails(id);
     }
 }

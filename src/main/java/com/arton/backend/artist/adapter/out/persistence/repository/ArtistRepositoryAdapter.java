@@ -26,6 +26,15 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort {
     }
 
     @Override
+    public List<Artist> findAllByLimit(int offset, int limit) {
+        return Optional.ofNullable(artistRepository.getArtistByLimit(offset, limit))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(ArtistMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Artist> findByIds(List<Long> ids) {
         return Optional.ofNullable(artistRepository.findAllById(ids)).orElseGet(Collections::emptyList)
                 .stream().map(ArtistMapper::toDomain).collect(Collectors.toList());
