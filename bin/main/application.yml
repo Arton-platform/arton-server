@@ -1,7 +1,8 @@
 spring:
   profiles:
-    active: test
+    active: local
   jpa:
+    show_sql: true
     properties:
       hibernate:
         default_batch_fetch_size: 1000
@@ -13,3 +14,4 @@ spring:
 logging:
   level:
     root: info
+
