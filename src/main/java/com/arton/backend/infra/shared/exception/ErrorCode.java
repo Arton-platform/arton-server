@@ -26,6 +26,7 @@ public enum ErrorCode {
     AUTO_MAIL_ERROR(500, "AUTO_MAIL_ERR_500", "자동 메일 발송중 에러가 발생했습니다."),
     USER_NOT_FOUND(404, "COMMON-ERR-404", "사용자를 찾을 수 없습니다"),
     MAIL_NOT_FOUND(404, "COMMON-ERR-404", "메일을 찾을 수 없습니다"),
+    TERMS_NOT_FOUND(404, "COMMON-ERR-404", "약관을 찾을 수 없습니다"),
     PERFORMANCE_NOT_FOUND(404, "COMMON-ERR-404", "공연을 찾을 수 없습니다"),
     PERFORMANCE_DOCUMENT_NOT_FOUND(404, "COMMON-ERR-404", "공연문서를 찾을 수 없습니다"),
     PASSWORD_NOT_MATCH(401, "NOT_MATCH_401", "패스워드가 일치하지 않습니다."),

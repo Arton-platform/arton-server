@@ -122,6 +122,11 @@ public class FileUploadLocal implements FileUploadUtils{
     }
 
     @Override
+    public String uploadHtml(MultipartFile multipartFile, String dirName) {
+        return null;
+    }
+
+    @Override
     public List<String> uploadMultipleFiles(List<MultipartFile> multipartFiles, String dirName) {
         return null;
     }

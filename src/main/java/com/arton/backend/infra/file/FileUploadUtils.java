@@ -13,6 +13,7 @@ public interface FileUploadUtils {
     void deleteFiles(Long id, List<String> dirNames);
     String copyFile(Long id, String dirName);
     String upload(MultipartFile multipartFile, String dirName);
+    String uploadHtml(MultipartFile multipartFile, String dirName);
     List<String> uploadMultipleFiles(List<MultipartFile> multipartFiles, String dirName);
     String getDefaultImageUrl();
     String getFileContent(String directory);
