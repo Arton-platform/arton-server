@@ -30,4 +30,10 @@ public class BannerEntity extends Board{
         this.title = title;
         this.isActive = isActive;
     }
+
+    public void update(int seq, String title, String isActive){
+        this.seq = seq;
+        this.title = title;
+        this.isActive = isActive;
+    }
 }

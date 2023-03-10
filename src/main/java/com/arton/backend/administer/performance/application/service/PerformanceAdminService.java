@@ -75,8 +75,7 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
     @Override
     public Performance addPerformance(PerformanceAdminCreateDto performanceCreateDto) {
         Performance performance = performanceSavePort.save(performanceCreateDto.dtoToDomain());
-        PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(performance);
-        performanceDocuemntSavePort.save(performanceDocument);
+        performanceDocuemntSavePort.save(performance);
         List<MultipartFile> images = performanceCreateDto.getImages();
         boolean isEmpty = images.stream().filter(multipartFile -> !multipartFile.isEmpty()).count() == 0;
         List<PerformanceImage> performanceImages = new ArrayList<>();
@@ -124,11 +123,9 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         Performance performance = performanceRepositoryPort.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
         performance.editPerformance(performanceAdminEditDto);
         // domain 반영
-        performanceSavePort.save(performance);
-        // document 변환
-        PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(performance);
+        Performance savedPerformance = performanceSavePort.save(performance);
         // update
-        performanceDocuemntSavePort.save(performanceDocument);
+        performanceDocuemntSavePort.save(savedPerformance);
     }
 
     @Override
@@ -140,8 +137,7 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
         // 새 도메인 저장후 새 id 발급
         Performance copied = performanceSavePort.save(performance);
         // document 저장
-        PerformanceDocument performanceDocument = PerformanceMapper.domainToDocument(copied);
-        performanceDocuemntSavePort.save(performanceDocument);
+        performanceDocuemntSavePort.save(copied);
         // 이미지 저장
         List<PerformanceImage> performanceImages = new ArrayList<>();
         for (String image : images) {

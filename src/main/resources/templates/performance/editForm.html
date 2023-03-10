@@ -41,7 +41,7 @@
             </div>
             <div>
                 <label for="performanceType">공연타입</label>
-                <select id="performanceType" name="performanceType" class="form-select" required th:value="${editDto.performanceType}">
+                <select id="performanceType" name="performanceType" class="form-select" required>
                     <option th:each="type : ${T(com.arton.backend.performance.domain.PerformanceType).values()}"
                             th:value="${type.name()}"
                             th:text="${type.getValue()}"

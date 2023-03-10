@@ -1,5 +1,6 @@
 package com.arton.backend.user.adapter.out.persistence.mapper;
 
+import com.arton.backend.search.adapter.out.persistence.document.UserDocument;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.domain.User;
 
@@ -44,6 +45,17 @@ public class UserMapper {
                 .updatedDate(user.getUpdatedDate())
                 .selfDescription(Optional.ofNullable(user.getSelfDescription()).orElse(""))
                 .userStatus(user.getUserStatus())
+                .build();
+    }
+
+    public static UserDocument toDocumentFromDomain(User user) {
+        return UserDocument
+                .builder()
+                .id(user.getId())
+                .createdDate(user.getCreatedDate())
+                .nickname(user.getNickname())
+                .termsAgree(user.getTermsAgree())
+                .email(user.getEmail())
                 .build();
     }
 

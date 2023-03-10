@@ -36,8 +36,6 @@ public class TokenProvider {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
 
-    private static final String SECRET_KEY = "YXJ0b24tc2VydmVyCg=="; // arton-server
-
     private final Key key;
 
     public TokenProvider(@Value("${jwt.secret}") String secretKey) {
@@ -45,15 +43,14 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(decode);
     }
 
-
     public TokenDto generateAccessToken(Authentication authentication, String refreshToken) {
         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+
+        // set expiration time
         long now = (new Date()).getTime();
-        // expiration time
         Date exp = new Date(now + TOKEN_EXPIRE_TIME);
-        log.info("exp {}", exp.getTime());
         Date refreshExp = parseClaims(refreshToken).getExpiration();
-        log.info("refreshExp {}", refreshExp.getTime());
+
         // create access token
         String accessToken = Jwts.builder().setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
@@ -76,12 +73,12 @@ public class TokenProvider {
      */
     public TokenDto generateToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+
+        // set expiration time
         long now = (new Date()).getTime();
-        // expiration time
         Date exp = new Date(now + TOKEN_EXPIRE_TIME);
-        log.info("exp {}", exp.getTime());
         Date refreshExp = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
-        log.info("refreshExp {}", refreshExp.getTime());
+
         // create access token
         String accessToken = Jwts.builder().setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
@@ -132,9 +129,9 @@ public class TokenProvider {
         List<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-        log.info("getAuthenticationByRefreshToken 1");
+
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        log.info("getAuthenticationByRefreshToken 2");
+
         return new UsernamePasswordAuthenticationToken(principal,"",authorities);
     }
 
@@ -181,6 +178,5 @@ public class TokenProvider {
         }
         return null;
     }
-
 
 }

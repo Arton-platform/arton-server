@@ -88,7 +88,7 @@ public class PerformanceMapper {
                 .build();
     }
 
-    public static PerformanceDocument domainToDocument(Performance performance) {
+    public static PerformanceDocument toDocumentFromDomain(Performance performance) {
         return PerformanceDocument.builder()
                 .endDate(performance.getEndDate())
                 .id(performance.getPerformanceId())
