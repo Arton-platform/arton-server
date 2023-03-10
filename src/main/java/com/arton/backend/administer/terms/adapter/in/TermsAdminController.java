@@ -33,14 +33,6 @@ public class TermsAdminController {
         return "redirect:/web/term";
     }
 
-    // 약관 상세보기
-    @GetMapping("/web/term/{id}")
-    public String goEditHome(Model model, @PathVariable(name = "id") Long id) {
-//        PerformanceAdminEditDto editDto = performanceAdminUseCase.getPerformanceEditDto(id);
-//        model.addAttribute("editDto", editDto);
-        return "term/modify";
-    }
-
     // 약관 등록 페이지
     @GetMapping("/web/term/add")
     public String addPerformance(Model model) {

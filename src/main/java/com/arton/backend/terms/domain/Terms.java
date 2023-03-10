@@ -1,5 +1,6 @@
 package com.arton.backend.terms.domain;
 
+import com.arton.backend.administer.terms.application.data.TermsAdminEditDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,9 @@ public class Terms {
 
     public void setUrl(String url){
         this.url = url;
+    }
+    public void setName(String name) {
+        name = name;
     }
 
 }
