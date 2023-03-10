@@ -107,7 +107,24 @@ public class FileUploadS3 implements FileUploadUtils {
      */
     @Override
     public String upload(MultipartFile multipartFile, String dirName) {
-        validateFile(multipartFile);
+        validateImageFile(multipartFile);
+        String storeFileName = dirName + "/" + createStoreFileName(multipartFile.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(multipartFile.getContentType());
+        try(InputStream inputStream = multipartFile.getInputStream()){
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            objectMetadata.setContentLength(bytes.length);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+            amazonS3Client.putObject(new PutObjectRequest(bucket, storeFileName, byteArrayInputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED.getMessage(), ErrorCode.FILE_UPLOAD_FAILED);
+        }
+        return amazonS3Client.getUrl(bucket, storeFileName).toString();
+    }
+
+    @Override
+    public String uploadHtml(MultipartFile multipartFile, String dirName) {
+        validateHtmlFile(multipartFile);
         String storeFileName = dirName + "/" + createStoreFileName(multipartFile.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
@@ -127,7 +144,7 @@ public class FileUploadS3 implements FileUploadUtils {
         List<String> result = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             // 검증
-            validateFile(multipartFile);
+            validateImageFile(multipartFile);
             String storeFileName = dirName + "/" + createStoreFileName(multipartFile.getOriginalFilename());
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(multipartFile.getContentType());
@@ -195,11 +212,20 @@ public class FileUploadS3 implements FileUploadUtils {
     }
 
 
-    private void validateFile(MultipartFile multipartFile) {
+    private void validateImageFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
             throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
         }
         if (!multipartFile.getContentType().toLowerCase(Locale.ROOT).contains("image")) {
+            throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
+        }
+    }
+
+    private void validateHtmlFile(MultipartFile multipartFile) {
+        if (multipartFile.isEmpty()) {
+            throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
+        }
+        if (!multipartFile.getContentType().toLowerCase(Locale.ROOT).contains("html")) {
             throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
         }
     }

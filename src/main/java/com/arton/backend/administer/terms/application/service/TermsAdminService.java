@@ -37,20 +37,9 @@ public class TermsAdminService implements TermsAdminSaveUseCase, TermsAdminUseCa
 
     @Override
     public Terms addTerms(TermsAdminCreateDto createDto) {
-        MultipartFile file = createDto.getFile();
-        String contentType = file.getContentType();
-        if (ObjectUtils.isEmpty(file)) {
-            throw new CustomException(ErrorCode.FILE_EMPTY.getMessage(), ErrorCode.FILE_EMPTY);
-        }
-        if (!contentType.equals("text/html")) {
-            throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
-        }
         Terms terms = createDto.toDomain();
         terms = termsSavePort.save(terms);
-
-        System.out.println("contentType = " + contentType);
-//        String uploadUrl = fileUploadUtils.upload(createDto.getMultipartFile(), dir + savedTerms.getId());
-        String uploadUrl = "temp";
+        String uploadUrl = fileUploadUtils.uploadHtml(createDto.getFile(), dir + terms.getId());
         terms.setUrl(uploadUrl);
         termsSavePort.save(terms);
         return terms;
@@ -67,6 +56,8 @@ public class TermsAdminService implements TermsAdminSaveUseCase, TermsAdminUseCa
 
     @Override
     public void deleteById(Long id) {
+        Terms terms = termsPort.findById(id);
         termsDeletePort.deleteById(id);
+        fileUploadUtils.deleteFile(id, terms.getUrl());
     }
 }
