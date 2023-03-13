@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class BannerPersistenceAdapter implements BannerRegistPort, BannerSelectOnePort, BannerSelectAllPort, BannerDeletePort, BannerUpdatePort {
+public class BannerPersistenceAdapter implements BannerRegistPort, BannerSelectOnePort, BannerSelectAllPort, BannerDeletePort {
 
     private final BannerRepository repository;
 
@@ -42,8 +42,4 @@ public class BannerPersistenceAdapter implements BannerRegistPort, BannerSelectO
         repository.save(bannerEntity);
     }
 
-    @Override
-    public void updateBanner(BannerEntity banner) {
-        repository.save(banner);
-    }
 }
