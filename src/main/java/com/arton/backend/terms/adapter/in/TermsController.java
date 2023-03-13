@@ -1,7 +1,7 @@
-package com.arton.backend.auth.adapter.in;
+package com.arton.backend.terms.adapter.in;
 
-import com.arton.backend.auth.application.data.TermsShowDto;
-import com.arton.backend.auth.application.port.in.TermsUseCase;
+import com.arton.backend.terms.application.data.TermsShowDto;
+import com.arton.backend.terms.application.port.in.TermsUseCase;
 import com.arton.backend.infra.shared.common.ResponseData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -11,6 +11,7 @@ public class TermsMapper {
                 .id(terms.getId())
                 .name(terms.getName())
                 .url(terms.getUrl())
+                .termsCase(terms.getTermsCase())
                 .createdDate(terms.getCreatedDate())
                 .updatedDate(terms.getUpdatedDate())
                 .build();
@@ -22,6 +23,7 @@ public class TermsMapper {
                 .id(terms.getId())
                 .name(terms.getName())
                 .url(terms.getUrl())
+                .termsCase(terms.getTermsCase())
                 .createdDate(terms.getCreatedDate())
                 .updatedDate(terms.getUpdatedDate())
                 .build();

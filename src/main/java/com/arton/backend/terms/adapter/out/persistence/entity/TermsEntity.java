@@ -1,6 +1,7 @@
 package com.arton.backend.terms.adapter.out.persistence.entity;
 
 import com.arton.backend.infra.shared.BaseEntity;
+import com.arton.backend.terms.domain.TermsCase;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,12 +20,15 @@ public class TermsEntity extends BaseEntity {
     private Long id;
     private String name;
     private String url;
+    @Enumerated(EnumType.STRING)
+    private TermsCase termsCase;
 
     @Builder
-    public TermsEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String name, String url) {
+    public TermsEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, String name, String url, TermsCase termsCase) {
         super(createdDate, updatedDate);
         this.id = id;
         this.name = name;
         this.url = url;
+        this.termsCase = termsCase;
     }
 }
