@@ -30,6 +30,7 @@
             <tr>
                 <th>번호</th>
                 <th>이름</th>
+                <th>필수여부</th>
                 <th>내용</th>
                 <th>기능</th>
             </tr>
@@ -38,6 +39,7 @@
             <tr th:each="term : ${terms}">
                 <td id="tId" name="tId" th:text="${term.getId()}"></td>
                 <td th:text="${term.getName()}"></td>
+                <td th:text="${term.getTermsCase().getValue()}"></td>
                 <td>
                     <a th:href="${term.getUrl()}">자세히보기</a>
                 </td>

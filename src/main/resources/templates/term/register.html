@@ -13,6 +13,16 @@
                 <input id="name" name="name" type="text"  class="form-control">
             </div>
             <div>
+                <label for="termsCase">필수여부</label>
+                <select id="termsCase" name="termsCase" class="form-select" required>
+                    <option value="">==선택==</option>
+                    <option th:each="type : ${T(com.arton.backend.terms.domain.TermsCase).values()}"
+                            th:value="${type.name()}"
+                            th:text="${type.getValue()}">
+                    </option>
+                </select>
+            </div>
+            <div>
                 <label>파일등록</label>
                 <input type="file" name="file" id="file" required value="html">
             </div>
