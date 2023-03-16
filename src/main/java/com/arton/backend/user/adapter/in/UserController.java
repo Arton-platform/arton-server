@@ -52,6 +52,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Parameter(name = "userDetails", hidden = true)
     @GetMapping("/my/alert-state")
     public ResponseEntity<ResponseData<Boolean>> alertState(@AuthenticationPrincipal UserDetails userDetails){
         long userId = Long.parseLong(userDetails.getUsername());
@@ -63,6 +64,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Parameter(name = "userDetails", hidden = true)
     @PutMapping("/my/update-alert-state")
     public ResponseEntity<CommonResponse> updateAlertState(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Boolean state){
         long userId = Long.parseLong(userDetails.getUsername());
