@@ -2,6 +2,7 @@ package com.arton.backend.performance.adapter.in;
 
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
@@ -55,7 +56,7 @@ public class PerformanceController {
             @ApiResponse(responseCode = "200", description = "상세 데이터 가져오기 성공",
                     content = @Content( schema = @Schema(implementation = PerformanceDetailDto.class))),
             @ApiResponse(responseCode = "404", description = "공연을 찾을 수 없음.",
-                    content = @Content( schema = @Schema(implementation = CustomException.class)))})
+                    content = @Content( schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/{id}")
     public ResponseEntity<ResponseData<PerformanceDetailDto>> getOne(@PathVariable("id") Long id){
         ResponseData response = new ResponseData(
