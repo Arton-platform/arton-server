@@ -10,20 +10,20 @@ public class ArtistZzimMapper {
     public static ArtistZzim toDomain(ArtistZzimEntity artistZzim) {
         return ArtistZzim.builder()
                 .createdDate(artistZzim.getCreatedDate())
-                .user(artistZzim.getUser().getId())
-                .artist(artistZzim.getArtist().getId())
+                .userId(artistZzim.getUser().getId())
+                .artistId(artistZzim.getArtist().getId())
                 .id(artistZzim.getId())
-                .updateDate(artistZzim.getUpdatedDate())
+                .updatedDate(artistZzim.getUpdatedDate())
                 .build();
     }
 
     public static ArtistZzimEntity toEntity(ArtistZzim artistZzim) {
         return ArtistZzimEntity.builder()
                 .createdDate(artistZzim.getCreatedDate())
-                .user(UserEntity.builder().id(artistZzim.getUser()).build())
-                .artist(ArtistEntity.builder().id(artistZzim.getArtist()).build())
+                .user(UserEntity.builder().id(artistZzim.getUserId()).build())
+                .artist(ArtistEntity.builder().id(artistZzim.getArtistId()).build())
                 .id(artistZzim.getId())
-                .updateDate(artistZzim.getUpdatedDate())
+                .updatedDate(artistZzim.getUpdatedDate())
                 .build();
     }
 }

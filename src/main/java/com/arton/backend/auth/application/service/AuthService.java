@@ -109,7 +109,7 @@ public class AuthService implements AuthUseCase {
             if (artists!=null) {
                 List<ArtistZzim> zzims = new ArrayList<>();
                 for (Artist artist : artists) {
-                    ArtistZzim artistZzim = ArtistZzim.builder().artist(artist.getId()).user(savedUser.getId()).build();
+                    ArtistZzim artistZzim = ArtistZzim.builder().artistId(artist.getId()).userId(savedUser.getId()).build();
                     zzims.add(artistZzim);
                 }
                 zzimRepository.saveArtists(zzims);
