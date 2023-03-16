@@ -2,10 +2,17 @@ package com.arton.backend.user.adapter.in;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
+import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.user.application.data.MyPageDto;
 import com.arton.backend.user.application.data.UserPasswordEditDto;
 import com.arton.backend.user.application.data.UserProfileEditDto;
 import com.arton.backend.user.application.port.in.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +33,14 @@ public class UserController {
     private final UserUseCase userService;
     private final MyPageUseCase myPageService;
 
+
+    @Parameter(name = "userDetails", hidden = true)
+    @Operation(summary = "패스워드 변경", description = "패스워드를 변경합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "패스워드 변경 성공",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "401", description = "정보 불일치",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PatchMapping("/my/password")
     public ResponseEntity<CommonResponse> changePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid UserPasswordEditDto userPasswordEditDto) {
         long userId = Long.parseLong(userDetails.getUsername());
@@ -64,6 +79,15 @@ public class UserController {
      * @param userDetails
      * @return
      */
+    @Parameter(name = "userDetails", hidden = true)
+    @Operation(summary = "마이페이지", description = "마이페이지 정보를 반환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "마이페이지 정보 반환 성공",
+                    content = @Content(schema = @Schema(implementation = MyPageDto.class))),
+            @ApiResponse(responseCode = "404", description = "유저 정보 없음",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "서버 처리 실패",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/my/profile")
     public ResponseEntity<ResponseData<MyPageDto>> getMyPage(@AuthenticationPrincipal UserDetails userDetails) {
         long userId = Long.parseLong(userDetails.getUsername());
@@ -78,6 +102,15 @@ public class UserController {
     /**
      * 유저 누르면 해당 유저의 마이페이지로
      */
+    @Parameter(name = "userDetails", hidden = true)
+    @Operation(summary = "타유저의 페이지", description = "타유저의 정보를 반환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "타유저 정보 반환 성공",
+                    content = @Content(schema = @Schema(implementation = MyPageDto.class))),
+            @ApiResponse(responseCode = "404", description = "유저 정보 없음",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "서버 처리 실패",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/profile/{id}")
     public ResponseEntity<ResponseData<MyPageDto>> getSpecificUserPage(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
         ResponseData response = new ResponseData(
@@ -96,6 +129,15 @@ public class UserController {
      * @param multipartFile
      * @return
      */
+    @Parameter(name = "userDetails", hidden = true)
+    @Operation(summary = "프로필 정보 변경", description = "유저의 프로필 정보를 변경합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "변경 성공",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "404", description = "유저 정보 없음",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "서버 처리 실패",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PutMapping(value = "/my/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CommonResponse> updateUserProfile(@AuthenticationPrincipal UserDetails userDetails, @RequestPart(required = false, name = "data") @Valid UserProfileEditDto userProfileEditDto,
                                                             @RequestPart(required = false, name = "image")MultipartFile multipartFile){

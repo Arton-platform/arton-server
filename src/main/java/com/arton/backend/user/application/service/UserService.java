@@ -21,6 +21,7 @@ import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,8 @@ public class UserService implements UserUseCase, MyPageUseCase {
     private final ReviewMapper reviewMapper;
     private final UserImageSaveRepositoryPort userImageSaveRepository;
     private final UserImageRepositoryPort userImageRepository;
+    @Value("${spring.user.image.dir}")
+    private String imageDir;
 
     @Override
     public void changePassword(Long userId, UserPasswordEditDto editDto) {
@@ -83,7 +86,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
         if (multipartFile != null) {
             UserImage userImage = userImageRepository.findUserImageByUser(user.getId()).get();
             fileUploadUtils.deleteFile(user.getId(), userImage.getImageUrl());
-            String upload = fileUploadUtils.upload(multipartFile, "arton/image/profiles/" + user.getId());
+            String upload = fileUploadUtils.upload(multipartFile, imageDir + user.getId());
             userImage.updateImage(upload);
             user.setImage(userImage);
             userImageSaveRepository.save(userImage);
