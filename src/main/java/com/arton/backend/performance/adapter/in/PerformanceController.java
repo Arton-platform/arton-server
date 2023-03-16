@@ -34,7 +34,7 @@ public class PerformanceController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
                     content = @Content( array = @ArraySchema(schema = @Schema(implementation = PerformanceInterestDto.class))))})
-    @GetMapping("/list/zzim")
+    @GetMapping("/zzim")
     public ResponseEntity<List<PerformanceInterestDto>> getPerformanceZzimList() {
         List<PerformanceInterestDto> allPerformances = performanceService.getZzimList();
         return ResponseEntity.ok(allPerformances);
