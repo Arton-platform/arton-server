@@ -1,5 +1,7 @@
 package com.arton.backend.administer.popup.application.out;
 
-public interface PopUpSelectOnePort {
+import com.arton.backend.administer.popup.domain.PopUpEntity;
 
+public interface PopUpSelectOnePort {
+    PopUpEntity selectOne(Long id) ;
 }

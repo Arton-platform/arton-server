@@ -33,8 +33,7 @@ public class PopUpEntity extends Board {
     private String url;
     private String content;
 
-    public void update(Long id, LocalDateTime starTime, LocalDateTime endTime, boolean isActive, int positionX, int positionY, int size, String url, String content){
-        this.id = id;
+    public void update(LocalDateTime starTime, LocalDateTime endTime, boolean isActive, int positionX, int positionY, int size, String url, String content){
         this.starTime = starTime;
         this.endTime = endTime;
         this.isActive = isActive;
