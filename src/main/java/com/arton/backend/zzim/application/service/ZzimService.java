@@ -1,16 +1,17 @@
 package com.arton.backend.zzim.application.service;
 
+import com.arton.backend.zzim.application.data.ArtistZzimResponseDto;
+import com.arton.backend.zzim.application.data.PerformanceZzimResponseDto;
 import com.arton.backend.zzim.application.port.in.ZzimDeleteDto;
 import com.arton.backend.zzim.application.port.in.ZzimUseCase;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
-import com.arton.backend.zzim.domain.ArtistZzim;
-import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,12 +30,12 @@ public class ZzimService implements ZzimUseCase {
     }
 
     @Override
-    public List<PerformanceZzim> performanceList(Long userId) {
-        return zzimRepository.getPerformanceZzimByUserId(userId);
+    public List<PerformanceZzimResponseDto> performanceList(Long userId) {
+        return zzimRepository.getPerformanceZzimByUserId(userId).stream().map(PerformanceZzimResponseDto::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ArtistZzim> artistList(Long userId) {
-        return zzimRepository.getArtistZzimByUserId(userId);
+    public List<ArtistZzimResponseDto> artistList(Long userId) {
+        return zzimRepository.getArtistZzimByUserId(userId).stream().map(ArtistZzimResponseDto::toDto).collect(Collectors.toList());
     }
 }

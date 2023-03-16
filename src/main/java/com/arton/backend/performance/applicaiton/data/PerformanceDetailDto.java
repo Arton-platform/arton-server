@@ -1,16 +1,12 @@
 package com.arton.backend.performance.applicaiton.data;
 
-import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.price.application.data.PriceInfoDto;
-import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

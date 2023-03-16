@@ -9,22 +9,22 @@ import java.time.LocalDateTime;
 @ToString
 public class ArtistZzim{
     private Long id;
-    private Long artist;
-    private Long user;
+    private Long artistId;
+    private Long userId;
     /** 가입일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
     private LocalDateTime updatedDate;
-    public void setUser(Long user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        this.userId = userId;
     }
 
     @Builder
-    public ArtistZzim(Long id, Long artist, Long user, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public ArtistZzim(Long id, Long artistId, Long userId, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
-        this.artist = artist;
-        this.user = user;
+        this.artistId = artistId;
+        this.userId = userId;
         this.createdDate = createdDate;
-        this.updatedDate = updateDate;
+        this.updatedDate = updatedDate;
     }
 }

@@ -24,6 +24,8 @@ public class ArtistService implements ArtistUseCase {
     @Override
     public List<ArtistInterestDto> showArtistListForZzim(String type) {
         PerformanceType performanceType = PerformanceType.get(type);
+        // required = True
+        // 컨트롤러에서 검증함
         if (performanceType == null) {
             return new ArrayList<>();
         }

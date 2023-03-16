@@ -33,8 +33,8 @@ public class ArtistZzimEntity extends BaseEntity {
     }
 
     @Builder
-    public ArtistZzimEntity(LocalDateTime createdDate, LocalDateTime updateDate, Long id, UserEntity user, ArtistEntity artist) {
-        super(createdDate, updateDate);
+    public ArtistZzimEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, UserEntity user, ArtistEntity artist) {
+        super(createdDate, updatedDate);
         this.id = id;
         this.user = user;
         this.artist = artist;

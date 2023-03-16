@@ -3,9 +3,7 @@ package com.arton.backend.performance.applicaiton.service;
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.performance.applicaiton.data.ImageDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceDeleteUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSaveUseCase;
@@ -14,7 +12,6 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.price.application.data.PriceInfoDto;
 import com.arton.backend.price.application.port.out.PriceGradeRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +30,11 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     private final PriceGradeRepositoryPort priceGradeRepositoryPort;
     private final PerformanceImageRepositoryPort performanceImageRepositoryPort;
 
-
+    /**
+     * 공연 리스트 상세 정보를 보내주자.
+     * CSR 방식으로
+     * @return
+     */
     @Override
     public List<Performance> getAllPerformances() {
         return performanceRepositoryPort.findAllPerformances();
