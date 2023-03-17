@@ -9,6 +9,7 @@ import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.search.application.data.RecentKeywordResponse;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
+import com.arton.backend.search.application.port.in.RecentKeywordDeleteUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordGetUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordSaveUseCase;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
@@ -30,7 +31,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PerformanceSearchService implements PerformanceSearchUseCase, RecentKeywordGetUseCase, RecentKeywordSaveUseCase {
+public class PerformanceSearchService implements PerformanceSearchUseCase, RecentKeywordGetUseCase, RecentKeywordSaveUseCase, RecentKeywordDeleteUseCase {
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceDocuemntSavePort performanceDocuemntSavePort;
     private final PerformanceDocumentSearchPort performanceSearchRepository;
@@ -113,5 +114,34 @@ public class PerformanceSearchService implements PerformanceSearchUseCase, Recen
             listOperations.leftPop(key);
             listOperations.rightPush(key, keyword);
         }
+    }
+
+    @Override
+    public void deleteAll(Long userId) {
+        ListOperations listOperations = redisTemplate.opsForList();
+        String key = searchPrefix + userId;
+        listOperations.trim(key, 0, listOperations.size(key));
+    }
+
+    @Override
+    public void deleteAll(HttpServletRequest request) {
+        Authentication authentication = getAuthentication(request);
+        ListOperations listOperations = redisTemplate.opsForList();
+        String key = searchPrefix + authentication.getName();
+        listOperations.trim(key, 0, listOperations.size(key));
+    }
+
+    @Override
+    public void deleteOneKeyword(Long userId, String keyword) {
+        ListOperations listOperations = redisTemplate.opsForList();
+        // 중복이 없으므로 count 1
+        listOperations.remove(searchPrefix + userId, 1, keyword);
+    }
+
+    @Override
+    public void deleteOneKeyword(HttpServletRequest request, String keyword) {
+        Authentication authentication = getAuthentication(request);
+        ListOperations listOperations = redisTemplate.opsForList();
+        listOperations.remove(searchPrefix + authentication.getName(), 1, keyword);
     }
 }
