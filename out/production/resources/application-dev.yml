@@ -91,6 +91,9 @@ refresh:
   token:
     prefix: "RT:"
 
+search:
+  prefix: "SEARCH:"
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

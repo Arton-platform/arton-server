@@ -5,6 +5,7 @@ import com.arton.backend.mail.application.port.in.EmailUseCase;
 import com.arton.backend.mail.application.port.in.MailUseCase;
 import com.arton.backend.mail.domain.Mail;
 import com.arton.backend.mail.domain.MailCode;
+import com.arton.backend.search.application.port.in.RecentKeywordDeleteUseCase;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class UserWithdrewEventHandler {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, classes = UserWithdrewEvent.class)
     void handle(UserWithdrewEvent event) {
+        User user = event.getUser();
         // 회원가입 템플릿 확인
         Mail mail = mailUseCase.findMailByCode(MailCode.WITHDRAW);
         // 템플릿 없다면 발송 x
@@ -39,7 +41,6 @@ public class UserWithdrewEventHandler {
             return;
         }
         String content = mail.getContent();
-        User user = event.getUser();
         // 메일 수신 동의 X
         if (user.getTermsAgree().equals("N")) {
             return;
