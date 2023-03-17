@@ -41,5 +41,4 @@ public class BannerPersistenceAdapter implements BannerRegistPort, BannerSelectO
     public void registBanner(BannerEntity bannerEntity) {
         repository.save(bannerEntity);
     }
-
 }
