@@ -48,6 +48,7 @@ public class PerformanceSearchController {
     private final LogRepository logRepository;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
+    @Parameter(name = "request", hidden = true)
     @Operation(summary = "검색하기", description = "검색을 합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "검색 성공",
