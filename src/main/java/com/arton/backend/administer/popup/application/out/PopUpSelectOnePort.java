@@ -3,5 +3,5 @@ package com.arton.backend.administer.popup.application.out;
 import com.arton.backend.administer.popup.domain.PopUpEntity;
 
 public interface PopUpSelectOnePort {
-    PopUpEntity selectOne(Long id) ;
+    PopUpEntity findById(Long id);
 }

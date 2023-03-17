@@ -1,6 +1,9 @@
 package com.arton.backend.administer.popup.application.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -30,14 +33,14 @@ public class PopUpService implements PopUpSelectAllUseCase, PopUpSelectOneUseCas
 
     @Override
     public PopUpDto selectOne(Long id) {
-        return mapper.toDomain(
-            selectOnePort.selectOne(id)
-        );
+        return mapper.toDomain(selectOnePort.findById(id));
     }
 
     @Override
     public List<PopUpDto> selectAll() {
-        return null;
+        return selectAllPort.findAll().stream()
+            .map((entity) -> mapper.toDomain(entity))
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -47,7 +50,7 @@ public class PopUpService implements PopUpSelectAllUseCase, PopUpSelectOneUseCas
 
     @Override
     public void update(PopUpDto dto) {
-        PopUpEntity original = selectOnePort.selectOne(dto.getId());
+        PopUpEntity original = selectOnePort.findById(dto.getId());
         original.update(
             dto.getStarTime(),
             dto.getEndTime(),
@@ -62,6 +65,8 @@ public class PopUpService implements PopUpSelectAllUseCase, PopUpSelectOneUseCas
 
     @Override
     public void regist(PopUpDto dto) {
-        
+        registPort.save(
+            mapper.toEntity(dto)
+        );
     }
 }
