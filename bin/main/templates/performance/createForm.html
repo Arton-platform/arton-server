@@ -44,7 +44,7 @@
                 <label for="performanceType">공연타입</label>
                 <select id="performanceType" name="performanceType" class="form-select" required>
                     <option value="">==공연==</option>
-                    <option th:each="type : ${type}"
+                    <option th:each="type : ${T(com.arton.backend.performance.domain.PerformanceType).values()}"
                             th:value="${type.name()}"
                             th:text="${type.getValue()}">뮤지컬
                     </option>
@@ -70,7 +70,7 @@
                 <label for="showCategory">분류</label>
                 <select id="showCategory" name="showCategory" class="form-select" required>
                     <option value="">==상태==</option>
-                    <option th:each="type : ${category}"
+                    <option th:each="type : ${T(com.arton.backend.performance.domain.ShowCategory).values()}"
                             th:value="${type.name()}"
                             th:text="${type.getValue()}">
                     </option>
