@@ -1,5 +1,6 @@
 package com.arton.backend.search.adapter.in;
 
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.search.adapter.out.persistence.repository.LogRepository;
@@ -8,6 +9,7 @@ import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchPageDtoV2;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
+import com.arton.backend.search.application.port.in.RecentKeywordDeleteUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordGetUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordSaveUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,10 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +44,7 @@ public class PerformanceSearchController {
     private final PerformanceSearchUseCase performanceSearchService;
     private final RecentKeywordSaveUseCase recentKeywordSaveUseCase;
     private final RecentKeywordGetUseCase recentKeywordGetUseCase;
+    private final RecentKeywordDeleteUseCase recentKeywordDeleteUseCase;
     private final LogRepository logRepository;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
@@ -105,6 +105,18 @@ public class PerformanceSearchController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Parameter(name = "request", hidden = true)
+    @Operation(summary = "유저의 검색 히스토리 삭제", description = "유저의 검색 기록을 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "기록 삭제성공"),
+            @ApiResponse(responseCode = "401", description = "토큰에러",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "서버오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
+    @DeleteMapping("/search/history")
+    public ResponseEntity recentKeywordHistories(HttpServletRequest request, @RequestParam(name = "keyword", required = true) String keyword) {
+        recentKeywordDeleteUseCase.deleteOneKeyword(request, keyword);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }

@@ -23,7 +23,6 @@ import static com.arton.backend.infra.utils.MailTemplateUtils.replaceTemplateBod
 public class UserWithdrewEventHandler {
     private final MailUseCase mailUseCase;
     private final EmailUseCase emailUseCase;
-    private final RecentKeywordDeleteUseCase recentKeywordDeleteUseCase;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
     /**
@@ -35,7 +34,6 @@ public class UserWithdrewEventHandler {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, classes = UserWithdrewEvent.class)
     void handle(UserWithdrewEvent event) {
         User user = event.getUser();
-        recentKeywordDeleteUseCase.deleteAll(user.getId());
         // 회원가입 템플릿 확인
         Mail mail = mailUseCase.findMailByCode(MailCode.WITHDRAW);
         // 템플릿 없다면 발송 x

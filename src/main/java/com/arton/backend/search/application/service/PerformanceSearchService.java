@@ -118,17 +118,15 @@ public class PerformanceSearchService implements PerformanceSearchUseCase, Recen
 
     @Override
     public void deleteAll(Long userId) {
-        ListOperations listOperations = redisTemplate.opsForList();
         String key = searchPrefix + userId;
-        listOperations.trim(key, 0, listOperations.size(key));
+        redisTemplate.delete(key);
     }
 
     @Override
     public void deleteAll(HttpServletRequest request) {
         Authentication authentication = getAuthentication(request);
-        ListOperations listOperations = redisTemplate.opsForList();
         String key = searchPrefix + authentication.getName();
-        listOperations.trim(key, 0, listOperations.size(key));
+        redisTemplate.delete(key);
     }
 
     @Override
