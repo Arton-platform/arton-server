@@ -101,3 +101,5 @@ application-aws.yml
 application-local.yml
 /server-log/
 .vscode/settings.json
+src/main/java/com/arton/backend/test/skeypad
+src/main/java/com/arton/backend/test/core
