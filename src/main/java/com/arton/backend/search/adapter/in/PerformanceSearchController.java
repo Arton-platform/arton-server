@@ -77,4 +77,12 @@ public class PerformanceSearchController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/document/save")
+    public ResponseEntity saveDummy() {
+        performanceSearchService.saveAllDocuments();
+        return ResponseEntity.ok("성공");
+    }
+
+
+
 }
