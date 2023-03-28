@@ -63,8 +63,8 @@ public class PerformanceSearchService implements PerformanceSearchUseCase, Recen
 
     // 유저의 검색 결과 redis에 저장해서 최근 검색어 보여주자
     @Override
-    public Page<SearchResultDto> searchAll(String type, String sort, Pageable pageable) {
-        return performanceSearchRepository.findByKeyword(type, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent()));
+    public List<SearchResultDto> searchAll(String type, String sort, Pageable pageable) {
+        return performanceSearchRepository.findByKeyword(type, sort, pageable).map(search -> SearchResultDto.toResultFromDocument(search.getContent())).getContent();
     }
 
     @Override
