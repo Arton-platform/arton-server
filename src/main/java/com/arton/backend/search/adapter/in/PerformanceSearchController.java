@@ -1,6 +1,5 @@
 package com.arton.backend.search.adapter.in;
 
-import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.search.adapter.out.persistence.repository.LogRepository;
@@ -12,6 +11,7 @@ import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordDeleteUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordGetUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordSaveUseCase;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -25,16 +25,14 @@ import net.logstash.logback.argument.StructuredArguments;
 import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Tag(name = "PERFORMANCE", description = "공연 검색 API")
 @RestController
@@ -56,9 +54,9 @@ public class PerformanceSearchController {
             @ApiResponse(responseCode = "401", description = "토큰에러",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/search/document")
-    public ResponseEntity<ResponseData<Page<SearchResultDto>>> searchByMultiMatch(HttpServletRequest request, @RequestParam(name = "query", required = true) String query, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<ResponseData<List<SearchResultDto>>> searchByMultiMatch(HttpServletRequest request, @RequestParam(name = "query", required = true) String query, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
         recentKeywordSaveUseCase.save(request, query);
-        Page<SearchResultDto> documents = performanceSearchService.searchAll(query, sort, pageable);
+        List<SearchResultDto> documents = performanceSearchService.searchAll(query, sort, pageable);
         MDC.put("keyword", query);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", query));
         MDC.remove("keyword");
@@ -115,6 +113,12 @@ public class PerformanceSearchController {
     @DeleteMapping("/search/history")
     public ResponseEntity recentKeywordHistories(HttpServletRequest request, @RequestParam(name = "keyword", required = true) String keyword) {
         recentKeywordDeleteUseCase.deleteOneKeyword(request, keyword);
+        return ResponseEntity.noContent().build();
+    }
+    @Hidden
+    @GetMapping("/search/save/document")
+    public ResponseEntity saveDocumentManually() {
+        performanceSearchService.saveAllDocuments();
         return ResponseEntity.noContent().build();
     }
 
