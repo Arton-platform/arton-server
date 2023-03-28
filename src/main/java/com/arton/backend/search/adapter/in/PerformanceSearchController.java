@@ -11,6 +11,7 @@ import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordDeleteUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordGetUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordSaveUseCase;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -112,6 +113,12 @@ public class PerformanceSearchController {
     @DeleteMapping("/search/history")
     public ResponseEntity recentKeywordHistories(HttpServletRequest request, @RequestParam(name = "keyword", required = true) String keyword) {
         recentKeywordDeleteUseCase.deleteOneKeyword(request, keyword);
+        return ResponseEntity.noContent().build();
+    }
+    @Hidden
+    @GetMapping("/search/save/document")
+    public ResponseEntity saveDocumentManually() {
+        performanceSearchService.saveAllDocuments();
         return ResponseEntity.noContent().build();
     }
 
