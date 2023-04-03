@@ -1,0 +1,126 @@
+server:
+  port: 8080
+  tomcat:
+    max-http-form-post-size: 25MB
+  error:
+    include-stacktrace: ON_PARAM
+
+
+# ETC
+spring:
+  default-image: https://elasticbeanstalk-ap-northeast-2-629926164588.s3.ap-northeast-2.amazonaws.com/arton/image/default/default.jpeg
+  user:
+    image:
+      dir: arton/image/profiles/
+  performance:
+    image:
+      dir: arton/image/performances/
+  terms:
+    dir: arton/terms/
+  servlet:
+    max-file-size: 20MB
+    max-request-size: 25MB
+  datasource:
+#    url: jdbc:h2:tcp://localhost/~/arton
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://mate.c1dxsbik81fj.ap-northeast-2.rds.amazonaws.com:3306/arton
+    username: artonDev
+    password: dkxm##2
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    cache:
+      type: REDIS
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+      properties:
+        hibernate:
+          format_sql: true
+          show_Sql: true
+
+  redis:
+    host: localhost
+    port: 6379
+
+  mail:
+    passwordTemplate: arton/mail/passwordResetMail.html
+    commonTemplate: arton/mail/email.html
+    host: smtp.gmail.com
+    port: 587
+    username: qhrehfdk77@gmail.com
+    password: jvcplvyogytleaey
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+    type:
+      descriptor:
+        sql: trace
+
+kakao:
+  client:
+    id: 2aad40910868e3c5fa9594f8de34a07b
+  redirect:
+    url: http://localhost:8080/auth/kakao
+  rest:
+    key: 2aad40910868e3c5fa9594f8de34a07b
+
+jwt:
+  secret: YXJ0b24tc2VydmVyLWp3dC10b2tlbi1zaWduLWtleS1lbHNlLWNlcnQtcDEyLWFhYWFiZGV3cmZkc2Zkc3JlZHNzZHNhCg==
+
+naver:
+  client:
+    id: AaJWCCn6Vl7lPxlbv3YO
+    secret: B5NS6KukYR
+  redirect:
+    url: http://localhost:8080/auth/naver
+
+refresh:
+  token:
+    prefix: "RT:"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: DESC
+    operationsSorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match:
+    - /**
+
+
+
+cloud:
+  aws:
+    s3:
+      bucket: test
+    credentials:
+      access-key: testtest
+      secret-key: testtesttesttest
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+elastic:
+  server:
+    ip: localhost:9200

@@ -1,0 +1,11 @@
+{
+  "properties" : {
+    "id" : {"type" : "keyword"},
+    "nickname" : {"type" : "text", "fields": {
+      "kor": {"type":  "text", "analyzer": "korean"},
+      "ngram":  {"type" : "text", "analyzer":  "my_ngram_analyzer"}
+    }},
+    "email" : {"type" : "keyword"},
+    "termsAgree" : {"type" : "keyword"}
+  }
+}

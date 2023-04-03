@@ -1,0 +1,19 @@
+{
+  "properties" : {
+    "id" : {"type" : "keyword"},
+    "title" : {"type" : "text", "fields": {
+      "kor":  {"type":  "text", "analyzer": "korean"},
+      "ngram":  {"type" : "text", "analyzer":  "my_ngram_analyzer"},
+      "suggest": {"type" :  "text", "analyzer" :  "suggest_analyzer"}}},
+    "musicalDateTime" : {"type" : "keyword"},
+    "place" : {"type" : "text", "fields": {
+      "kor":  {"type":  "text", "analyzer": "korean"},
+      "ngram":  {"type" : "text", "analyzer":  "my_ngram_analyzer"},
+      "suggest": {"type" :  "text", "analyzer" :  "suggest_analyzer"}}},
+    "imageUrl" : {"type" : "text"},
+    "performanceType" : {"type" : "text", "fields": {
+      "kor":  {"type":  "text", "analyzer": "korean"},
+      "ngram":  {"type" : "text", "analyzer":  "my_ngram_analyzer"},
+      "suggest": {"type" :  "text", "analyzer" :  "suggest_analyzer"}}}
+  }
+}
