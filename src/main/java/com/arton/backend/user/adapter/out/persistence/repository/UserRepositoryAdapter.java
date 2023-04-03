@@ -42,6 +42,11 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
+    public Optional<User> findByAppleId(String id) {
+        return userRepository.findByAppleId(id).map(UserMapper::toDomain);
+    }
+
+    @Override
     public Optional<User> findById(Long id) {
         return userRepository.findById(id).map(UserMapper::toDomain);
     }

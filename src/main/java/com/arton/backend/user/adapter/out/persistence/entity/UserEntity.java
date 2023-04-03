@@ -28,6 +28,8 @@ public class UserEntity extends BaseEntity {
     private Long kakaoId;
     /** naver 고유 회원 번호 */
     private String naverId;
+    /** apple 고유 회원 번호 */
+    private String appleId;
     /** 이메일 */
     private String email;
     /** 비밀번호 */
@@ -118,11 +120,12 @@ public class UserEntity extends BaseEntity {
     }
 
     @Builder
-    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, Boolean userStatus, UserImageEntity userImage) {
+    public UserEntity(Long id, Long kakaoId, String naverId, String appleId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, Boolean userStatus, UserImageEntity userImage) {
         super(createdDate, updatedDate);
         this.id = id;
         this.kakaoId = kakaoId;
         this.naverId = naverId;
+        this.appleId = appleId;
         this.email = email;
         this.password = password;
         this.nickname = nickname;

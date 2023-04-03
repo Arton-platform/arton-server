@@ -9,6 +9,7 @@ public interface UserRepositoryPort {
     Optional<User> findByEmail(String email);
     Optional<User> findByKakaoId(Long id);
     Optional<User> findByNaverId(String id);
+    Optional<User> findByAppleId(String id);
     Optional<User> findById(Long id);
     /** 이메일 중복 여부 확인*/
     boolean checkEmailDup(String email);

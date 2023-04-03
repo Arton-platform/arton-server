@@ -15,7 +15,7 @@ public class OAuthSignupDto {
     @Schema(description = "SNS_Type 입니다.\n 0: Kakao\n 1: Naver\n 2: Apple", required = true)
     private String loginType;
     @NotBlank
-    @Schema(description = "KAKAO_ID/NAVER_ID", required = true)
+    @Schema(description = "KAKAO_ID/NAVER_ID/APPLE_ID", required = true)
     private String id;
     @Schema(description = "닉네임", required = true)
     private String nickname;
