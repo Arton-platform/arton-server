@@ -7,6 +7,7 @@ import com.arton.backend.search.application.data.SearchPageDto;
 import com.arton.backend.search.application.data.SearchPageDtoV2;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Tag(name = "PERFORMANCE", description = "공연 검색 API")
 @RestController
@@ -46,7 +48,7 @@ public class PerformanceSearchController {
                     content = @Content( array = @ArraySchema(schema = @Schema(implementation = SearchResultDto.class))))})
     @GetMapping("/search/document")
     public ResponseEntity<ResponseData<Page<SearchResultDto>>> searchByMultiMatch(HttpServletRequest request, @RequestParam(name = "query", required = true) String query, @RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10) Pageable pageable) {
-        Page<SearchResultDto> documents = performanceSearchService.searchAll(query, sort, pageable);
+        List<SearchResultDto> documents = performanceSearchService.searchAll(query, sort, pageable);
         MDC.put("keyword", query);
         log.info("requestURI={}, keyword={}", StructuredArguments.value("requestURI", request.getRequestURI()), StructuredArguments.value("keyword", query));
         MDC.remove("keyword");
@@ -76,11 +78,11 @@ public class PerformanceSearchController {
         ResponseData response = new ResponseData("SUCCESS", HttpStatus.OK.value(), searchPage);
         return ResponseEntity.ok().body(response);
     }
-
-    @GetMapping("/document/save")
-    public ResponseEntity saveDummy() {
+    @Hidden
+    @GetMapping("/search/save/document")
+    public ResponseEntity saveDocumentManually() {
         performanceSearchService.saveAllDocuments();
-        return ResponseEntity.ok("성공");
+        return ResponseEntity.noContent().build();
     }
 
 
