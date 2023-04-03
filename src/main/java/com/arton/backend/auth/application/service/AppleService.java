@@ -78,7 +78,7 @@ public class AppleService implements AppleUseCase {
         String id = signupDto.getId();
         User user = userRepository.findByAppleId(id).orElse(null);
         if (user == null) {
-            /** password is user's own kakao id */
+            /** password is user's own apple id */
             String password = signupDto.getId();
             user = User.builder()
                     .email(hasText(signupDto.getEmail()) ? signupDto.getEmail() : "")
@@ -88,7 +88,7 @@ public class AppleService implements AppleUseCase {
                     .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
                     .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
                     .auth(UserRole.NORMAL)
-                    .signupType(SignupType.KAKAO)
+                    .signupType(SignupType.APPLE)
                     .userStatus(true)
                     .termsAgree("Y")
                     .build();
@@ -96,7 +96,7 @@ public class AppleService implements AppleUseCase {
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
             userImageSaveRepository.save(userImage);
         }
-        return userRepository.findByAppleId(id).orElseThrow(()->new CustomException(ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR));
+        return userRepository.findByAppleId(id).orElseThrow(()->new CustomException(ErrorCode.APPLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.APPLE_SIMPLE_LOGIN_ERROR));
     }
 
 

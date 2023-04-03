@@ -15,6 +15,7 @@ public enum SignupType {
     ARTON("자사"),
     NAVER("네이버"),
     KAKAO("카카오"),
+    APPLE("애플"),
     ;
 
     private String type;
