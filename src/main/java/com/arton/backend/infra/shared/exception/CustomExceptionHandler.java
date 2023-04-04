@@ -1,5 +1,6 @@
 package com.arton.backend.infra.shared.exception;
 
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -21,5 +22,9 @@ public class CustomExceptionHandler {
                 .body(new ErrorResponse(ErrorCode.UNSUPPORTED_MEDIA_ERROR));
     }
 
-
+    @ExceptionHandler(FileSizeLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleFileSizeLimitExceededException(FileSizeLimitExceededException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ErrorCode.EXCEED_LIMITED_SIZE_ERROR));
+    }
 }

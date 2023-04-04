@@ -127,3 +127,10 @@ cloud:
 elastic:
   server:
     ip: localhost:9200
+
+apple:
+  key-path: ${user.home}/cert/apple/arton.p8
+
+image:
+  limit:
+    size: 1024999

@@ -6,29 +6,30 @@ server:
     include-stacktrace: ON_PARAM
 
 
+
 # ETC
 spring:
-  default-image: https://elasticbeanstalk-ap-northeast-2-629926164588.s3.ap-northeast-2.amazonaws.com/arton/image/default/default.jpeg
+  default-image: /arton/image/default/default.png
   user:
     image:
-      dir: arton/image/profiles/
+      dir: /arton/image/profiles/
   performance:
     image:
-      dir: arton/image/performances/
+      dir: /arton/image/performances/
   terms:
     dir: arton/terms/
   servlet:
     max-file-size: 20MB
     max-request-size: 25MB
   datasource:
-#    url: jdbc:h2:tcp://localhost/~/arton
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-    url: jdbc:mysql://mate.c1dxsbik81fj.ap-northeast-2.rds.amazonaws.com:3306/arton
-    username: artonDev
-    password: dkxm##2
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:tcp://localhost/~/arton
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    #    url: jdbc:mysql://mate.c1dxsbik81fj.ap-northeast-2.rds.amazonaws.com:3306/arton
+    #    username: artonDev
+    #    password: dkxm##2
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
 
     cache:
       type: REDIS
@@ -36,11 +37,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
-      properties:
-        hibernate:
-          format_sql: true
-          show_Sql: true
 
   redis:
     host: localhost
@@ -60,14 +56,11 @@ spring:
           starttls:
             enable: true
 
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-    type:
-      descriptor:
-        sql: trace
+
+#logging:
+#  level:
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace
 
 kakao:
   client:
@@ -94,30 +87,13 @@ refresh:
 search:
   prefix: "SEARCH:"
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    groups-order: DESC
-    operationsSorter: method
-    disable-swagger-default-url: true
-    display-request-duration: true
-  api-docs:
-    path: /api-docs
-  show-actuator: true
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  paths-to-match:
-    - /**
-
-
-
 cloud:
   aws:
     s3:
-      bucket: test
+      bucket: elasticbeanstalk-ap-northeast-2-629926164588
     credentials:
-      access-key: testtest
-      secret-key: testtesttesttest
+      access-key: AKIAZFKUGPBWAKWLTYPA
+      secret-key: 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
     region:
       static: ap-northeast-2
       auto: false

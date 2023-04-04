@@ -44,6 +44,7 @@ public enum ErrorCode {
     UNSUPPORTED_MEDIA_ERROR(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), "UNSUPPORTED_ERROR", "지원하지 않는 타입입니다."),
     HIT_INVALID_ERROR(400, "HIT_INVALID_ERROR", "현재 좋아요는 0개 입니다. 0개 미만으로 변경할 수 없습니다."),
     SELECT_ERROR(404, "SELECT_ERROR", "조회에 실패 했습니다."),
+    EXCEED_LIMITED_SIZE_ERROR(400, "EXCEED_LIMITED_SIZE_ERROR", "파일이 제한 용량을 초과합니다."),
     REGIST_ERROR(500, "REGIST_ERROR", "저장에 문제가 발생했습니다."),
     DELETE_ERROR(500, "DELETE_ERROR", "삭제에 문제가 발생했습니다.");
     ;

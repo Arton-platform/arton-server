@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: test
   jpa:
     show_sql: true
     properties:
