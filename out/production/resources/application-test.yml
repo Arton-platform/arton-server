@@ -1,0 +1,112 @@
+server:
+  port: 8080
+  tomcat:
+    max-http-form-post-size: 25MB
+  error:
+    include-stacktrace: ON_PARAM
+
+
+
+# ETC
+spring:
+  default-image: /arton/image/default/default.png
+  user:
+    image:
+      dir: /arton/image/profiles/
+  performance:
+    image:
+      dir: /arton/image/performances/
+  terms:
+    dir: arton/terms/
+  servlet:
+    max-file-size: 20MB
+    max-request-size: 25MB
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/arton
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    #    url: jdbc:mysql://mate.c1dxsbik81fj.ap-northeast-2.rds.amazonaws.com:3306/arton
+    #    username: artonDev
+    #    password: dkxm##2
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    cache:
+      type: REDIS
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  redis:
+    host: localhost
+    port: 6379
+
+  mail:
+    passwordTemplate: arton/mail/passwordResetMail.html
+    commonTemplate: arton/mail/email.html
+    host: smtp.gmail.com
+    port: 587
+    username: qhrehfdk77@gmail.com
+    password: jvcplvyogytleaey
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+#logging:
+#  level:
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace
+
+kakao:
+  client:
+    id: 2aad40910868e3c5fa9594f8de34a07b
+  redirect:
+    url: http://localhost:8080/auth/kakao
+  rest:
+    key: 2aad40910868e3c5fa9594f8de34a07b
+
+jwt:
+  secret: YXJ0b24tc2VydmVyLWp3dC10b2tlbi1zaWduLWtleS1lbHNlLWNlcnQtcDEyLWFhYWFiZGV3cmZkc2Zkc3JlZHNzZHNhCg==
+
+naver:
+  client:
+    id: AaJWCCn6Vl7lPxlbv3YO
+    secret: B5NS6KukYR
+  redirect:
+    url: http://localhost:8080/auth/naver
+
+refresh:
+  token:
+    prefix: "RT:"
+
+search:
+  prefix: "SEARCH:"
+
+cloud:
+  aws:
+    s3:
+      bucket: elasticbeanstalk-ap-northeast-2-629926164588
+    credentials:
+      access-key: AKIAZFKUGPBWAKWLTYPA
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+elastic:
+  server:
+    ip: localhost:9200
+
+apple:
+  key-path: ${user.home}/cert/apple/arton.p8
+
+image:
+  limit:
+    size: 1024999
