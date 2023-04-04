@@ -44,6 +44,8 @@ public class FileUploadS3 implements FileUploadUtils {
     private String defaultPerformanceUrl;
     // s3 uploader
     private final AmazonS3Client amazonS3Client;
+    @Value("${image.limit.size}")
+    private Long imageLimitSize;
 
     @Override
     public String getDefaultImageUrl() {
@@ -218,6 +220,9 @@ public class FileUploadS3 implements FileUploadUtils {
         }
         if (!multipartFile.getContentType().toLowerCase(Locale.ROOT).contains("image")) {
             throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
+        }
+        if (multipartFile.getSize() > imageLimitSize) {
+            throw new CustomException(ErrorCode.EXCEED_LIMITED_SIZE_ERROR.getMessage(), ErrorCode.EXCEED_LIMITED_SIZE_ERROR);
         }
     }
 

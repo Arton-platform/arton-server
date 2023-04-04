@@ -40,6 +40,8 @@ public class FileUploadLocal implements FileUploadUtils{
     private String rootDir;
     @Value("${spring.performance.image.dir}")
     private String rootPerformanceDir;
+    @Value("${image.limit.size}")
+    private Long imageLimitSize;
 
     @Override
     public void deleteFile(Long userId, String dir) {
@@ -208,6 +210,9 @@ public class FileUploadLocal implements FileUploadUtils{
         }
         if (!multipartFile.getContentType().toLowerCase(Locale.ROOT).contains("image")) {
             throw new CustomException(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getMessage(), ErrorCode.UNSUPPORTED_MEDIA_ERROR);
+        }
+        if (multipartFile.getSize() > imageLimitSize) {
+            throw new CustomException(ErrorCode.EXCEED_LIMITED_SIZE_ERROR.getMessage(), ErrorCode.EXCEED_LIMITED_SIZE_ERROR);
         }
     }
 
