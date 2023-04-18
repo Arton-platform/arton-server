@@ -9,6 +9,7 @@ import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
 import com.arton.backend.search.adapter.out.persistence.repository.UserSearchRepository;
 import com.arton.backend.test.TestDataInit;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
+import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -39,8 +40,8 @@ public class BackendApplication {
 	@Profile("test")
 	@Bean
 	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository, UserRepository userRepository, FollowRepository followRepository,
-									 ReviewRepository reviewRepository, UserImageRepository userImageRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository) {
-		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository, reviewRepository, userImageRepository, passwordEncoder, userSearchRepository);
+									 ReviewRepository reviewRepository, UserImageRepository userImageRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, ZzimRepositoryPort zzimRepositoryPort) {
+		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository, reviewRepository, userImageRepository, passwordEncoder, userSearchRepository, zzimRepositoryPort);
 	}
 
 }

@@ -1,14 +1,12 @@
 package com.arton.backend.zzim.application.port.in;
 
-import com.arton.backend.zzim.application.data.ArtistZzimResponseDto;
-import com.arton.backend.zzim.application.data.PerformanceZzimResponseDto;
-import com.arton.backend.zzim.domain.ArtistZzim;
-import com.arton.backend.zzim.domain.PerformanceZzim;
+import com.arton.backend.zzim.application.data.ArtistZzimResponseDtoV2;
+import com.arton.backend.zzim.application.data.PerformanceZzimResponseDtoV2;
 
 import java.util.List;
 
 public interface ZzimUseCase {
     void deleteUsersFavorite(Long userId, ZzimDeleteDto deleteDto);
-    List<PerformanceZzimResponseDto> performanceList(Long userId);
-    List<ArtistZzimResponseDto> artistList(Long userId);
+    List<PerformanceZzimResponseDtoV2> performanceList(Long userId);
+    List<ArtistZzimResponseDtoV2> artistList(Long userId);
 }
