@@ -60,7 +60,7 @@ public class TestDataInit {
         for (int i = 0; i < 100; i++) {
             UserEntity user = UserEntity.builder()
                     .email(i == 0 ? "j67310@gmail.com" : "test"+i)
-                    .password(passwordEncoder.encode("temp"))
+                    .password(passwordEncoder.encode("aaa123"))
                     .nickname(nicknames[random.nextInt(4)])
                     .gender(i % 2 == 0 ? Gender.MALE : Gender.FEMALE)
                     .ageRange(AgeRange.Age10_19)
