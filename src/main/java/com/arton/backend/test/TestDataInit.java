@@ -20,6 +20,10 @@ import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import com.arton.backend.user.domain.*;
+import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
+import com.arton.backend.zzim.domain.ArtistZzim;
+import com.arton.backend.zzim.domain.PerformanceZzim;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -44,6 +48,7 @@ public class TestDataInit {
     private final UserImageRepository userImageRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserSearchRepository userSearchRepository;
+    private final ZzimRepositoryPort zzimRepositoryPort;
     private String defaultImage = "image/profiles/default.png";
 
     @Transactional
@@ -136,5 +141,20 @@ public class TestDataInit {
         artistRepository.saveAll(artistList);
         performanceRepository.saveAll(performances);
         reviewRepository.saveAll(reviews);
+        List<ArtistZzim> artistZzims = new ArrayList<>();
+        List<ArtistEntity> all = artistRepository.findAll();
+        for (ArtistEntity artistEntity : all) {
+            ArtistZzim build = ArtistZzim.builder().artistId(artistEntity.getId()).userId(base.getId()).build();
+            artistZzims.add(build);
+        }
+        zzimRepositoryPort.saveArtists(artistZzims);
+
+        List<PerformanceEntity> all1 = performanceRepository.findAll();
+        List<PerformanceZzim> performanceZzims = new ArrayList<>();
+        for (PerformanceEntity performanceEntity : all1) {
+            PerformanceZzim build = PerformanceZzim.builder().performanceId(performanceEntity.getId()).userId(base.getId()).build();
+            performanceZzims.add(build);
+        }
+        zzimRepositoryPort.savePerformances(performanceZzims);
     }
 }
