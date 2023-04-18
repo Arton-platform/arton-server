@@ -35,6 +35,12 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
     private final UserRepositoryPort userRepository;
     private final UserImageRepositoryPort userImageRepository;
 
+    /**
+     * 팔로잉을 하는 사람
+     * fromUser;
+     * 팔로잉을 받는 사람
+     * toUser;
+     */
     @Override
     public UserFollowDto getFollowers(Long userId, UserFollowSearchDto userFollowSearchDto) {
         findUser(userId);
@@ -47,6 +53,16 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
         // 팔로워 short response
         List<User> followerList = followRepository.getFollowerList(userId, userFollowSearchDto);
         List<UserShortDto> shortResponse = followerList.stream().map(UserShortDto::to).collect(Collectors.toList());
+
+        for (UserShortDto user : shortResponse) {
+            // 해당 유저가 팔로워를 팔로우 하면
+            if (followRepository.isExist(Follow.builder().fromUser(userId).toUser(user.getId()).build())) {
+                user.setFollow(true);
+            } else {
+                user.setFollow(false);
+            }
+        }
+
         return UserFollowDto.builder().id(userId).imageUrl(userImage.getImageUrl()).followers(followersCount).followings(followingsCount).users(shortResponse).build();
     }
 
@@ -62,6 +78,10 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
         // 팔로워 short response
         List<User> followerList = followRepository.getFollowingList(userId, userFollowSearchDto);
         List<UserShortDto> shortResponse = followerList.stream().map(UserShortDto::to).collect(Collectors.toList());
+        // 팔로우 대상은 어차피 전부 다 팔로우 하므로
+        for (UserShortDto user : shortResponse) {
+            user.setFollow(true);
+        }
         return UserFollowDto.builder().id(userId).imageUrl(userImage.getImageUrl()).followers(followersCount).followings(followingsCount).users(shortResponse).build();
     }
 
