@@ -1,8 +1,6 @@
 package com.arton.backend.administer.terms.application.service;
 
-import com.arton.backend.administer.terms.application.data.TermsAdminCreateDto;
-import com.arton.backend.administer.terms.application.data.TermsAdminEditDto;
-import com.arton.backend.administer.terms.application.data.TermsAdminResponseDto;
+import com.arton.backend.administer.terms.application.data.*;
 import com.arton.backend.administer.terms.application.port.in.TermsAdminDeleteUseCase;
 import com.arton.backend.administer.terms.application.port.in.TermsAdminEditUseCase;
 import com.arton.backend.administer.terms.application.port.in.TermsAdminSaveUseCase;
@@ -43,6 +41,12 @@ public class TermsAdminService implements TermsAdminSaveUseCase, TermsAdminUseCa
         return terms;
     }
 
+    @Override
+    public Terms addTermsV2(TermsAdminCreateDtoV2 createDto) {
+        Terms terms = createDto.toDomain();
+        return termsSavePort.save(terms);
+    }
+
     /**
      * 추후 레디스에서 가져오게 변경
      * @return
@@ -50,6 +54,11 @@ public class TermsAdminService implements TermsAdminSaveUseCase, TermsAdminUseCa
     @Override
     public List<TermsAdminResponseDto> getTerms() {
         return Optional.ofNullable(termsPort.findAll()).orElseGet(Collections::emptyList).stream().map(TermsAdminResponseDto::toDtoFromDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TermsAdminResponseDtoV2> getTermsV2() {
+        return Optional.ofNullable(termsPort.findAll()).orElseGet(Collections::emptyList).stream().map(TermsAdminResponseDtoV2::toDtoFromDomain).collect(Collectors.toList());
     }
 
     @Override
@@ -66,6 +75,14 @@ public class TermsAdminService implements TermsAdminSaveUseCase, TermsAdminUseCa
         // update
         String url = fileUploadUtils.uploadHtml(editDto.getFile(), dir + terms.getId());
         terms.setUrl(url);
+        terms.setName(editDto.getName());
+        termsSavePort.save(terms);
+    }
+
+    @Override
+    public void editTermsV2(TermsAdminEditDtoV2 editDto) {
+        Terms terms = termsPort.findById(editDto.getId());
+        terms.setUrl("db");
         terms.setName(editDto.getName());
         termsSavePort.save(terms);
     }
