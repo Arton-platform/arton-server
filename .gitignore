@@ -99,5 +99,6 @@ fabric.properties
 
 application-aws.yml
 application-local.yml
+application-test.yml
 /server-log/
 .vscode/settings.json
