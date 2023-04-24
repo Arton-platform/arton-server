@@ -69,6 +69,12 @@ public class TermsAdminService implements TermsAdminSaveUseCase, TermsAdminUseCa
     }
 
     @Override
+    public void deleteByIdV2(Long id) {
+        Terms terms = termsPort.findById(id);
+        termsDeletePort.deleteById(id);
+    }
+
+    @Override
     public void editTerms(TermsAdminEditDto editDto) {
         Terms terms = termsPort.findById(editDto.getId());
         fileUploadUtils.deleteFile(terms.getId(), terms.getUrl());

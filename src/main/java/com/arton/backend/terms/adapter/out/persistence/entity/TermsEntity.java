@@ -23,6 +23,7 @@ public class TermsEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TermsCase termsCase;
     // DB로 추가하는 의견 반영
+    @Column(length = 5000)
     private String content;
 
     @Builder
