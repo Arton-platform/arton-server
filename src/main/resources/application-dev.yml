@@ -134,3 +134,28 @@ apple:
 image:
   limit:
     size: 1024999
+
+# for actuator
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-components: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: "env,beans"
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+    env:
+      enabled: true
+
+info:
+  app:
+    name: arton
+    company: artonCompany

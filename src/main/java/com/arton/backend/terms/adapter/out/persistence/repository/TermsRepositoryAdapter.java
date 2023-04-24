@@ -8,6 +8,7 @@ import com.arton.backend.terms.application.port.out.TermsDeletePort;
 import com.arton.backend.terms.application.port.out.TermsPort;
 import com.arton.backend.terms.application.port.out.TermsSavePort;
 import com.arton.backend.terms.domain.Terms;
+import com.arton.backend.terms.domain.TermsCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -36,6 +37,11 @@ public class TermsRepositoryAdapter implements TermsPort, TermsSavePort, TermsDe
     @Override
     public List<Terms> findAll() {
         return Optional.ofNullable(termsRepository.findAll()).orElseGet(Collections::emptyList).stream().map(TermsMapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Terms> findByType(TermsCase termsCase) {
+        return Optional.ofNullable(termsRepository.findByTermsCase(termsCase)).orElseGet(Collections::emptyList).stream().map(TermsMapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
