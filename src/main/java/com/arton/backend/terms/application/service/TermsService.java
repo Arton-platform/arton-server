@@ -1,6 +1,7 @@
 package com.arton.backend.terms.application.service;
 
 import com.arton.backend.terms.application.data.TermsShowDto;
+import com.arton.backend.terms.application.data.TermsShowDtoV2;
 import com.arton.backend.terms.application.port.in.TermsUseCase;
 import com.arton.backend.terms.application.port.out.TermsPort;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,11 @@ public class TermsService implements TermsUseCase {
     @Override
     public List<TermsShowDto> getTerms() {
          return Optional.ofNullable(termsPort.findAll()).orElseGet(Collections::emptyList).stream().map(TermsShowDto::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TermsShowDtoV2> getTermsV2() {
+        return Optional.ofNullable(termsPort.findAll()).orElseGet(Collections::emptyList).stream().map(TermsShowDtoV2::toDto).collect(Collectors.toList());
     }
 
 }

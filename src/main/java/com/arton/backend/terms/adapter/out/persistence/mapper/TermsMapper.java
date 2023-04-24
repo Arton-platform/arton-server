@@ -14,6 +14,7 @@ public class TermsMapper {
                 .termsCase(terms.getTermsCase())
                 .createdDate(terms.getCreatedDate())
                 .updatedDate(terms.getUpdatedDate())
+                .content(terms.getContent())
                 .build();
     }
 
@@ -26,6 +27,7 @@ public class TermsMapper {
                 .termsCase(terms.getTermsCase())
                 .createdDate(terms.getCreatedDate())
                 .updatedDate(terms.getUpdatedDate())
+                .content(terms.getContent())
                 .build();
     }
 
