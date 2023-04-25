@@ -1,7 +1,7 @@
 package com.arton.backend.terms.adapter.in;
 
 import com.arton.backend.infra.shared.common.ResponseData;
-import com.arton.backend.terms.application.data.TermsShowDtoV2;
+import com.arton.backend.terms.application.data.TermsShowDto;
 import com.arton.backend.terms.application.port.in.TermsUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -26,27 +26,31 @@ import java.util.List;
 public class TermsController {
     private final TermsUseCase termsService;
 
-//    /**
-//     * 약관 리스트 보여주기
-//     * 선택은 url webview로 넘겨주자.
-//     * @return
-//     */
-//    @GetMapping
-//    @ResponseBody
-//    public ResponseData<List<TermsShowDto>> showTermList() {
-//        List<TermsShowDto> response = termsService.getTerms();
-//        return new ResponseData<>("SUCCESS", HttpStatus.OK.value(), response);
-//    }
-
+    /**
+     * 약관 리스트 보여주기
+     * 선택은 url webview로 넘겨주자.
+     * @return
+     */
     @GetMapping
     @Operation(summary = "약관 페이지", description = "약관 페이지 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "약관 정보 반환 성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = TermsShowDtoV2.class))))})
-    public ResponseEntity<ResponseData<List<TermsShowDtoV2>>> showTermListV2() {
-        List<TermsShowDtoV2> response = termsService.getTermsV2();
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = TermsShowDto.class))))})
+    public ResponseEntity<ResponseData<List<TermsShowDto>>> showTermList() {
+        List<TermsShowDto> response = termsService.getTerms();
         ResponseData responseData = new ResponseData("SUCCESS", HttpStatus.OK.value(), response);
         return ResponseEntity.ok(responseData);
     }
+
+//    @GetMapping
+//    @Operation(summary = "약관 페이지", description = "약관 페이지 정보를 반환합니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "약관 정보 반환 성공",
+//                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = TermsShowDtoV2.class))))})
+//    public ResponseEntity<ResponseData<List<TermsShowDtoV2>>> showTermListV2() {
+//        List<TermsShowDtoV2> response = termsService.getTermsV2();
+//        ResponseData responseData = new ResponseData("SUCCESS", HttpStatus.OK.value(), response);
+//        return ResponseEntity.ok(responseData);
+//    }
 
 }

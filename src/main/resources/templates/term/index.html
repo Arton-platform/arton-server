@@ -40,10 +40,9 @@
                 <td id="tId" name="tId" th:text="${term.getId()}"></td>
                 <td th:text="${term.getName()}"></td>
                 <td th:text="${term.getTermsCase().getValue()}"></td>
-                <td th:text="${term.getContent()}"></td>
-<!--                <td>-->
-<!--                    <a th:href="${term.getUrl()}">자세히보기</a>-->
-<!--                </td>-->
+                <td>
+                    <a th:href="${term.getUrl()}">자세히보기</a>
+                </td>
                 <td>
                     <p class="btn_set">
                         <button type="button" class="btn" style="background: #FF6491; color: #FFF2F6;" th:onclick="deleteTerms([[${term.id}]]);">삭제</button>
