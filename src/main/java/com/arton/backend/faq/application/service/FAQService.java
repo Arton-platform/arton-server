@@ -1,6 +1,8 @@
 package com.arton.backend.faq.application.service;
 
 import com.arton.backend.faq.adapter.out.persistence.FAQMapper;
+import com.arton.backend.faq.application.data.FAQListResponseDTO;
+import com.arton.backend.faq.application.data.FAQResponseDTO;
 import com.arton.backend.faq.application.port.in.FAQUseCase;
 import com.arton.backend.faq.application.port.out.FAQPort;
 import com.arton.backend.faq.domain.FAQ;
@@ -28,9 +30,25 @@ public class FAQService implements FAQUseCase {
     }
 
     @Override
+    public List<FAQListResponseDTO> faqListV2() {
+        return faqPort.faqList().map(faqEntities -> faqEntities
+                .stream()
+                .map(FAQListResponseDTO::toDtoFromEntity)
+                .collect(Collectors.toList()))
+                .orElseGet(ArrayList::new);
+    }
+
+    @Override
     public FAQ getFaqById(long id) {
         return faqPort.findByFaqId(id)
                 .map(faqEntity -> faqMapper.toDomain(faqEntity))
                 .orElseThrow(()-> new CustomException("getFaqById", ErrorCode.SELECT_ERROR));
+    }
+
+    @Override
+    public FAQResponseDTO getFaqByIdV2(long id) {
+        return faqPort.findByFaqId(id)
+                .map(FAQResponseDTO::toDtoFromEntity)
+                .orElseThrow(() -> new CustomException("getFaqById", ErrorCode.SELECT_ERROR));
     }
 }

@@ -3,8 +3,10 @@ package com.arton.backend.announcement.adapter.out.persistence;
 import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name="announcement")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnnouncementEntity extends Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

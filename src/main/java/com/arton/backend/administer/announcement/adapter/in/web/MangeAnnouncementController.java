@@ -46,7 +46,8 @@ public class MangeAnnouncementController {
     // 공지사항 등록
     @PostMapping("/announcement-regist")
     public CommonResponse announcementRegist(Announcement announcement) {
-
+        System.out.println("announcement = " + announcement.getContent());
+        System.out.println("announcement = " + announcement.getTitle());
         manageAnnouncementUseCase.announcementRegist(announcement);
 
         return CommonResponse.builder()

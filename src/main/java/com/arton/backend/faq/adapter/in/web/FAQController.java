@@ -1,5 +1,7 @@
 package com.arton.backend.faq.adapter.in.web;
 
+import com.arton.backend.faq.application.data.FAQListResponseDTO;
+import com.arton.backend.faq.application.data.FAQResponseDTO;
 import com.arton.backend.faq.application.port.in.FAQUseCase;
 import com.arton.backend.faq.domain.FAQ;
 import com.arton.backend.follow.applicaion.data.UserFollowDto;
@@ -35,14 +37,14 @@ public class FAQController {
     @Operation(summary = "FAQ 리스트 가져오기", description = "FAQ 리스트 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "FAQ 리스트 정보 반환 성공",
-                    content = @Content( array = @ArraySchema( schema = @Schema( implementation = FAQ.class))))})
+                    content = @Content( array = @ArraySchema( schema = @Schema( implementation = FAQListResponseDTO.class))))})
     @GetMapping("/list")
-    public ResponseEntity<ResponseData<List<FAQ>>> faqList(){
+    public ResponseEntity<ResponseData<List<FAQListResponseDTO>>> faqList(){
         log.info("[FAQ] {}","faqList");
-        ResponseData<List<FAQ>> response = new ResponseData<>(
+        ResponseData<List<FAQListResponseDTO>> response = new ResponseData<>(
                 "SUCCESS",
                 HttpStatus.OK.value(),
-                faqUseCase.faqList()
+                faqUseCase.faqListV2()
         );
         return ResponseEntity.ok().body(response);
     }
@@ -50,16 +52,16 @@ public class FAQController {
     @Operation(summary = "특정 FAQ 보기", description = "특정 FAQ 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "팔로워 정보 반환 성공",
-                    content = @Content( schema = @Schema(implementation = FAQ.class))),
+                    content = @Content( schema = @Schema(implementation = FAQResponseDTO.class))),
             @ApiResponse(responseCode = "500", description = "서버오류",
                     content = @Content( schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseData<FAQ>> faq(@PathVariable("id") Long id){
+    public ResponseEntity<ResponseData<FAQResponseDTO>> faq(@PathVariable("id") Long id){
         log.info("[FAQ]: faqId : {}", id);
-        ResponseData<FAQ> response = new ResponseData<>(
+        ResponseData<FAQResponseDTO> response = new ResponseData<>(
                 "SUCCESS",
                 HttpStatus.OK.value(),
-                faqUseCase.getFaqById(id)
+                faqUseCase.getFaqByIdV2(id)
         );
         return ResponseEntity.ok().body(response);
     }
