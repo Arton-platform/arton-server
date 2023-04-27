@@ -1,5 +1,7 @@
 package com.arton.backend.announcement.adapter.in.web;
 
+import com.arton.backend.announcement.application.data.AnnouncementListResponseDTO;
+import com.arton.backend.announcement.application.data.AnnouncementResponseDTO;
 import com.arton.backend.announcement.application.port.in.SelectAllUseCase;
 import com.arton.backend.announcement.application.port.in.SelectOneUseCase;
 import com.arton.backend.announcement.domain.Announcement;
@@ -35,14 +37,14 @@ public class AnnounceController {
     @Operation(summary = "공지 리스트 가져오기", description = "공지 리스트 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "FAQ 리스트 정보 반환 성공",
-                    content = @Content( array = @ArraySchema( schema = @Schema( implementation = Announcement.class))))})
+                    content = @Content( array = @ArraySchema( schema = @Schema( implementation = AnnouncementListResponseDTO.class))))})
     @GetMapping("/list")
-    public ResponseEntity<ResponseData<List<Announcement>>> announcementList(){
+    public ResponseEntity<ResponseData<List<AnnouncementListResponseDTO>>> announcementList(){
         log.info("[Announcement] : announcementList {}", "announcementList");
-        ResponseData<List<Announcement>> response = new ResponseData(
+        ResponseData<List<AnnouncementListResponseDTO>> response = new ResponseData(
           "SUCCESS",
                 HttpStatus.OK.value(),
-                selectAllUseCase.announcementList()
+                selectAllUseCase.announcementListV2()
         );
         return ResponseEntity.ok().body(response);
     }
@@ -50,15 +52,15 @@ public class AnnounceController {
     @Operation(summary = "특정 공지 가져오기", description = "특정 공지 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "FAQ 리스트 정보 반환 성공",
-                    content = @Content( array = @ArraySchema( schema = @Schema( implementation = Announcement.class)))),
+                    content = @Content( array = @ArraySchema( schema = @Schema( implementation = AnnouncementResponseDTO.class)))),
     @ApiResponse(responseCode = "500", description = "서버오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseData<List<Announcement>>> loadAnnouncementDetail(@PathVariable("id") Long id){
+    public ResponseEntity<ResponseData<AnnouncementResponseDTO>> loadAnnouncementDetail(@PathVariable("id") Long id){
         log.info("[Announcement] : loadAnnouncementDetail - announcementId : {}", id);
-        ResponseData<List<Announcement>> response = new ResponseData(
+        ResponseData<AnnouncementResponseDTO> response = new ResponseData(
                 "SUCCESS",
                 HttpStatus.OK.value(),
-                selectOneUseCase.loadAnnouncementDetail(id)
+                selectOneUseCase.loadAnnouncementDetailV2(id)
         );
         return ResponseEntity.ok().body(response);
     }

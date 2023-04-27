@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "특정 faq 정보")
+@Schema(description = "FAQ list api 요청 정보")
 public class FAQListResponseDTO {
     private Long id;
     private String title;
