@@ -35,7 +35,7 @@ public class AdminUserController {
     }
 
     @PostMapping("/regist/v2")
-    public CommonResponse registV2(AdminSignupDTO user){
+    public CommonResponse registV2(@RequestBody @Valid AdminSignupDTO user){
         adminUserUseCase.registV2(user);
         return CommonResponse.builder()
                 .message("SUCCESS")

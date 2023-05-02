@@ -2,6 +2,7 @@ package com.arton.backend.administer.admin.application.data;
 
 import com.arton.backend.user.domain.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,17 @@ public class AdminSignupDTO {
     private String gender;
     private int ageRange;
     private String termsAgree;
+
+    @Builder
+    public AdminSignupDTO(String email, String password, String checkPassword, String nickname, String gender, int ageRange, String termsAgree) {
+        this.email = email;
+        this.password = password;
+        this.checkPassword = checkPassword;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.ageRange = ageRange;
+        this.termsAgree = termsAgree;
+    }
 
     public static User toUser(AdminSignupDTO signupRequestDto, PasswordEncoder passwordEncoder){
         return User.builder()
