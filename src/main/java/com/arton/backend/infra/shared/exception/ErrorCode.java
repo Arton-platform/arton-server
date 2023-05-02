@@ -46,7 +46,8 @@ public enum ErrorCode {
     SELECT_ERROR(404, "SELECT_ERROR", "조회에 실패 했습니다."),
     EXCEED_LIMITED_SIZE_ERROR(400, "EXCEED_LIMITED_SIZE_ERROR", "파일이 제한 용량을 초과합니다."),
     REGIST_ERROR(500, "REGIST_ERROR", "저장에 문제가 발생했습니다."),
-    DELETE_ERROR(500, "DELETE_ERROR", "삭제에 문제가 발생했습니다.");
+    DELETE_ERROR(500, "DELETE_ERROR", "삭제에 문제가 발생했습니다."),
+    INTERNAL_SERVER_ERROR(500, "SERVER_ERROR", "서버에 문제가 발생했습니다.");
     ;
 
     private int status;
