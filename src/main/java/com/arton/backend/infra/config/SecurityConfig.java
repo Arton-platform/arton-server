@@ -74,7 +74,8 @@ public class SecurityConfig {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests().antMatchers("/auth/signup/**", "/auth/login/**", "/faq/**", "/announcement/**", "/review/**",
-                "/auth/reset/password", "/auth/check/signup", "/artist/**", "/performance/**", "/terms/**", "/performance-sse/**", "/web/**", "/mail/**","test/**", "/actuator/prometheus/**").permitAll()
+                "/auth/reset/password", "/auth/check/signup", "/artist/**", "/performance/**", "/terms/**", "/performance-sse/**", "/web/**", "/mail/**","test/**").permitAll()
+                .antMatchers("/actuator/**").access("hasRole('ADMIN')")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfig(tokenProvider, redisTemplate));

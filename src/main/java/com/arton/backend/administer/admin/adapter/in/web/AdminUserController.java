@@ -1,13 +1,12 @@
 package com.arton.backend.administer.admin.adapter.in.web;
 import java.util.List;
 
+import com.arton.backend.administer.admin.application.data.AdminSignupDTO;
+import com.arton.backend.auth.application.data.LoginRequestDto;
+import com.arton.backend.auth.application.data.TokenDto;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.arton.backend.administer.admin.application.port.in.AdminUserUseCase;
 import com.arton.backend.infra.shared.common.CommonResponse;
@@ -15,6 +14,8 @@ import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +33,21 @@ public class AdminUserController {
             .status(HttpStatus.OK.value())
             .build();
     }
-    
+
+    @PostMapping("/regist/v2")
+    public CommonResponse registV2(AdminSignupDTO user){
+        adminUserUseCase.registV2(user);
+        return CommonResponse.builder()
+                .message("SUCCESS")
+                .status(HttpStatus.OK.value())
+                .build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
+        return ResponseEntity.ok(adminUserUseCase.login(loginRequestDto));
+    }
+
     // 관리자 조회
     @GetMapping("/find/{id}")
     public ResponseData<User> findAdmin(@PathVariable("id") Long id){
