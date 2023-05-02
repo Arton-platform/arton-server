@@ -71,7 +71,7 @@ public class TestDataInit {
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .userStatus(true)
                     .build();
             userList.add(user);

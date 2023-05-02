@@ -61,7 +61,7 @@ class PerformanceFeedServiceTest {
     void createUser(){
         UserEntity user = UserEntity.builder()
                 .gender(Gender.MALE)
-                .auth(UserRole.NORMAL)
+                .auth(UserRole.ROLE_NORMAL)
                 .nickname(UUID.randomUUID().toString())
                 .email("email@" + UUID.randomUUID())
                 .ageRange(AgeRange.Age30_39)

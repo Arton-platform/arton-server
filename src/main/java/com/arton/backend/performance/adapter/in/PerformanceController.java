@@ -6,6 +6,7 @@ import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceZzimDetailDTO;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -15,6 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +34,25 @@ import java.util.List;
 public class PerformanceController {
     private final PerformanceUseCase performanceService;
 
+//    @Operation(summary = "회원가입시 찜에 필요한 공연 리스트 불러오기", description = "회원가입시 찜에 필요한 공연 리스트를 가져옵니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
+//                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = PerformanceInterestDto.class))))})
+//    @GetMapping("/zzim")
+//    public ResponseEntity<List<PerformanceInterestDto>> getPerformanceZzimList() {
+//        List<PerformanceInterestDto> allPerformances = performanceService.getZzimList();
+//        return ResponseEntity.ok(allPerformances);
+//    }
+
     @Operation(summary = "회원가입시 찜에 필요한 공연 리스트 불러오기", description = "회원가입시 찜에 필요한 공연 리스트를 가져옵니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
-                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = PerformanceInterestDto.class))))})
+                    content = @Content(schema = @Schema(implementation = PerformanceZzimDetailDTO.class)))})
     @GetMapping("/zzim")
-    public ResponseEntity<List<PerformanceInterestDto>> getPerformanceZzimList() {
-        List<PerformanceInterestDto> allPerformances = performanceService.getZzimList();
-        return ResponseEntity.ok(allPerformances);
+    public ResponseEntity<ResponseData<PerformanceZzimDetailDTO>> getPerformanceZzimList(@PageableDefault(size = 9)Pageable pageable) {
+        PerformanceZzimDetailDTO allPerformances = performanceService.getZzimListV2(pageable);
+        ResponseData<PerformanceZzimDetailDTO> response = new ResponseData<>("OK", 200, allPerformances);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "전체 공연 리스트 불러오기", description = "전체 공연 리스트를 가져옵니다.")

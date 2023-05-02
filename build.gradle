@@ -97,6 +97,12 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator' //actuator 추가
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	// 이미지 리사이즈
+	implementation 'com.github.downgoon:marvin:1.5.5'
+	implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+	// MockMultipartFile을 위해
+	compile group: 'org.springframework', name: 'spring-test'
 }
 
 tasks.named('test') {

@@ -35,7 +35,7 @@ public class AdminUserAdapter implements AdminUserPort {
     public Optional<List<UserEntity>> findAll() {
         return Optional.ofNullable(
                 queryFactory.selectFrom(userEntity)
-                        .where(userEntity.auth.eq(UserRole.ADMIN))
+                        .where(userEntity.auth.eq(UserRole.ROLE_ADMIN))
                         .fetch());
     }
 

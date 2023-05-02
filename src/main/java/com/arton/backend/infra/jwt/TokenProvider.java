@@ -99,6 +99,36 @@ public class TokenProvider {
                 .build();
     }
 
+    public TokenDto generateForAdminToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+
+        // set expiration time
+        long now = (new Date()).getTime();
+        // for monitoring token
+        Long max_time = 0x7fffffffffffffffL;
+        Date exp = new Date(max_time.longValue());
+        Date refreshExp = new Date(max_time.longValue());
+
+        // create access token
+        String accessToken = Jwts.builder().setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(exp)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+        String refreshToken = Jwts.builder().setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(refreshExp)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpiresIn(exp.getTime())
+                .refreshTokenExpiresIn(refreshExp.getTime())
+                .build();
+    }
+
     public Authentication getAuthentication(String accessToken) {
         // decode
         Claims claims = parseClaims(accessToken);
