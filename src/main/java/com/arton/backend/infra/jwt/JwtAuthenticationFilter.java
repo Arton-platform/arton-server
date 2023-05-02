@@ -31,7 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // get token
             String token = tokenProvider.parseBearerToken(request);
-            log.info("JwtAuth Filter, Request URI : {}", request.getRequestURI());
+            if (!request.getRequestURI().equals("/actuator/prometheus")) {
+                log.info("JwtAuth Filter, Request URI : {}", request.getRequestURI());
+            }
 
             // 유효 검증
             if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
