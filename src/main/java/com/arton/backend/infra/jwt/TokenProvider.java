@@ -104,8 +104,10 @@ public class TokenProvider {
 
         // set expiration time
         long now = (new Date()).getTime();
-        Date exp = new Date(now + TOKEN_EXPIRE_TIME);
-        Date refreshExp = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+        // for monitoring token
+        Long max_time = 0x7fffffffffffffffL;
+        Date exp = new Date(max_time.longValue());
+        Date refreshExp = new Date(max_time.longValue());
 
         // create access token
         String accessToken = Jwts.builder().setSubject(authentication.getName())

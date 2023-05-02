@@ -19,7 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/web")
 public class AdminUserController {
     
     private final AdminUserUseCase adminUserUseCase;

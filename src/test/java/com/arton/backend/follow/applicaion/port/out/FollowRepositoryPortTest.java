@@ -40,7 +40,7 @@ class FollowRepositoryPortTest {
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .build();
             userList.add(user);
             userRepository.save(user);
@@ -82,7 +82,7 @@ class FollowRepositoryPortTest {
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .build();
             userList.add(user);
             userRepository.save(user);
@@ -125,7 +125,7 @@ class FollowRepositoryPortTest {
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .build();
             userList.add(user);
             userRepository.save(user);
@@ -168,7 +168,7 @@ class FollowRepositoryPortTest {
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .build();
             userList.add(user);
             userRepository.save(user);
@@ -212,7 +212,7 @@ class FollowRepositoryPortTest {
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .build();
             userList.add(user);
             userRepository.save(user);
@@ -257,7 +257,7 @@ class FollowRepositoryPortTest {
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .build();
             userList.add(user);
             userRepository.save(user);
@@ -298,7 +298,7 @@ class FollowRepositoryPortTest {
                     .ageRange(AgeRange.Age10_19)
                     .termsAgree(i % 2 == 0 ? "Y" : "N")
                     .signupType(SignupType.ARTON)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .build();
             userList.add(user);
             userRepository.save(user);

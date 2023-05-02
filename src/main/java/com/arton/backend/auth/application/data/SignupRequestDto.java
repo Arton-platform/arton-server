@@ -48,7 +48,7 @@ public class SignupRequestDto {
                 .ageRange(AgeRange.get(signupRequestDto.getAgeRange()/10))
                 .termsAgree(signupRequestDto.getTermsAgree())
                 .signupType(SignupType.ARTON)
-                .auth(UserRole.NORMAL)
+                .auth(UserRole.ROLE_NORMAL)
                 .userStatus(true)
                 .build();
     }

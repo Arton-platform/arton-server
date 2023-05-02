@@ -135,7 +135,7 @@ public class KaKaoService implements KaKaoUseCase {
                     .kakaoId(id)
                     .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
                     .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .signupType(SignupType.KAKAO)
                     .userStatus(true)
                     .termsAgree("Y")

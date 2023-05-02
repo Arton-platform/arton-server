@@ -166,7 +166,7 @@ public class NaverService implements NaverUseCase {
                     .naverId(id)
                     .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
                     .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .signupType(SignupType.NAVER)
                     .userStatus(true)
                     .termsAgree("Y")

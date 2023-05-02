@@ -35,7 +35,7 @@ public class AdminSignupDTO {
                 .ageRange(AgeRange.get(signupRequestDto.getAgeRange()/10))
                 .termsAgree(signupRequestDto.getTermsAgree())
                 .signupType(SignupType.ARTON)
-                .auth(UserRole.ADMIN)
+                .auth(UserRole.ROLE_ADMIN)
                 .userStatus(true)
                 .build();
     }

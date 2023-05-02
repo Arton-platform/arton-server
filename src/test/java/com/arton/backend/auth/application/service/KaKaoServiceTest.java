@@ -68,7 +68,7 @@ class KaKaoServiceTest {
                     .kakaoId(id)
                     .nickname("aaa")
                     .ageRange(AgeRange.get(30))
-                    .auth(UserRole.NORMAL)
+                    .auth(UserRole.ROLE_NORMAL)
                     .signupType(SignupType.KAKAO)
                     .userStatus(true)
                     .build();

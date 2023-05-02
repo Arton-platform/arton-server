@@ -1,5 +1,5 @@
 package com.arton.backend.user.domain;
 
 public enum UserRole {
-    NORMAL, ADMIN
+    ROLE_NORMAL, ROLE_ADMIN
 }
