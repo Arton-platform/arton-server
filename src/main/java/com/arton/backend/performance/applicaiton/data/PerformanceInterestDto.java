@@ -7,10 +7,8 @@ import lombok.*;
 /**
  * 취향찜에서 관심 공연을 보여주는 DTO
  */
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Schema(description = "공연 찜하기 DTO")
 public class PerformanceInterestDto {
     @Schema(description = "공연 ID")
@@ -19,6 +17,14 @@ public class PerformanceInterestDto {
     private String title;
     @Schema(description = "이미지 링크")
     private String imageUrl;
+
+
+    @Builder
+    public PerformanceInterestDto(Long id, String title, String imageUrl) {
+        this.id = id;
+        this.title = title;
+        this.imageUrl = imageUrl;
+    }
 
     public static PerformanceInterestDto of(Performance performance) {
         return PerformanceInterestDto.builder()

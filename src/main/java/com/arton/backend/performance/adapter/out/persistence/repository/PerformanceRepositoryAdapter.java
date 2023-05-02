@@ -8,6 +8,7 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -48,8 +49,18 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
+    public List<Performance> findAllMusicals(Pageable pageable) {
+        return Optional.ofNullable(performanceRepository.findAllByPerformanceType(PerformanceType.MUSICAL, pageable)).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
     public List<Performance> findAllConcerts() {
         return Optional.ofNullable(performanceRepository.findAllByPerformanceType(PerformanceType.CONCERT)).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Performance> findAllConcerts(Pageable pageable) {
+        return Optional.ofNullable(performanceRepository.findAllByPerformanceType(PerformanceType.CONCERT, pageable)).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
