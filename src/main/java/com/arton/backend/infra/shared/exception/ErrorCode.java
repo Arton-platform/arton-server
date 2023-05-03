@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
-    EMAIL_IS_EXIST(409, "DUP_ERR_400", "해당 이메일은 사용중입니다."),
-    FOLLOWING_IS_EXIST(409, "DUP_ERR_400", "이미 팔로우중인 대상입니다."),
+    EMAIL_IS_EXIST(409, "DUP_ERR_409", "해당 이메일은 사용중입니다."),
+    FOLLOWING_IS_EXIST(409, "DUP_ERR_409", "이미 팔로우중인 대상입니다."),
     FOLLOWING_INVALID(400, "FOLLOWING_INVALID", "잘못된 팔로우 요청입니다."),
     UNFOLLOWING_INVALID(400, "UNFOLLOWING_INVALID", "잘못된 언팔로우 요청입니다."),
     FILE_EMPTY(400, "FILE_EMPTY", "빈 파일입니다.."),
