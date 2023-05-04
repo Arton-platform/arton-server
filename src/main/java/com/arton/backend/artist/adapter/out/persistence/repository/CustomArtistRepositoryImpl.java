@@ -7,6 +7,7 @@ import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
@@ -31,6 +32,15 @@ public class CustomArtistRepositoryImpl implements CustomArtistRepository{
     public List<ArtistEntity> getArtistByPerformanceType(PerformanceType performanceType) {
         return queryFactory.selectFrom(artistEntity)
                 .where(artistEntity.performances.any().performance.performanceType.eq(performanceType))
+                .fetch();
+    }
+
+    @Override
+    public List<ArtistEntity> getArtistByPerformanceType(PerformanceType performanceType, Pageable pageable) {
+        return queryFactory.selectFrom(artistEntity)
+                .where(artistEntity.performances.any().performance.performanceType.eq(performanceType))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 

@@ -5,6 +5,7 @@ import com.arton.backend.artist.adapter.out.persistence.repository.ArtistReposit
 import com.arton.backend.follow.adapter.out.persistence.repository.FollowRepository;
 import com.arton.backend.image.adapter.out.persistence.repository.UserImageRepository;
 import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceRepository;
+import com.arton.backend.performer.adapter.out.persistence.repository.PerformerRepository;
 import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
 import com.arton.backend.search.adapter.out.persistence.repository.UserSearchRepository;
 import com.arton.backend.test.TestDataInit;
@@ -40,8 +41,11 @@ public class BackendApplication {
 	@Profile("dev")
 	@Bean
 	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository, UserRepository userRepository, FollowRepository followRepository,
-									 ReviewRepository reviewRepository, UserImageRepository userImageRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, ZzimRepositoryPort zzimRepositoryPort) {
-		return new TestDataInit(artistRepository, performanceRepository, userRepository, followRepository, reviewRepository, userImageRepository, passwordEncoder, userSearchRepository, zzimRepositoryPort);
+									 ReviewRepository reviewRepository, UserImageRepository userImageRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository,
+									 ZzimRepositoryPort zzimRepositoryPort, PerformerRepository performerRepository) {
+		return new TestDataInit(artistRepository, performanceRepository, userRepository,
+				followRepository, reviewRepository, userImageRepository, passwordEncoder,
+				userSearchRepository, zzimRepositoryPort, performerRepository);
 	}
 
 }

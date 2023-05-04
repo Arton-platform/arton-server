@@ -5,6 +5,7 @@ import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -43,6 +44,12 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort {
     @Override
     public List<Artist> findByPerformanceType(PerformanceType performanceType) {
         return Optional.ofNullable(artistRepository.getArtistByPerformanceType(performanceType)).orElseGet(Collections::emptyList)
+                .stream().map(ArtistMapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Artist> findByPerformanceType(PerformanceType performanceType, Pageable pageable) {
+        return Optional.ofNullable(artistRepository.getArtistByPerformanceType(performanceType, pageable)).orElseGet(Collections::emptyList)
                 .stream().map(ArtistMapper::toDomain).collect(Collectors.toList());
     }
 

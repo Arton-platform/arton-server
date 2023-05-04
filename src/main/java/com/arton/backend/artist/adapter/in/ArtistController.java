@@ -1,5 +1,6 @@
 package com.arton.backend.artist.adapter.in;
 
+import com.arton.backend.artist.application.data.ArtistInterestDetailDTO;
 import com.arton.backend.artist.application.data.ArtistInterestDto;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
 import com.arton.backend.infra.shared.common.ResponseData;
@@ -10,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +36,10 @@ public class ArtistController {
     @Operation(summary = "회원가입시 공연 찜 리스트", description = "회원가입시 공연 찜 리스트를 가져옵니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리스트 불러오기 성공",
-                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = ArtistInterestDto.class))))})
+                    content = @Content( schema = @Schema(implementation = ArtistInterestDetailDTO.class)))})
     @GetMapping("/zzim")
-    public ResponseEntity<ResponseData<List<ArtistInterestDto>>> showAllArtistForZzim(@RequestParam(name = "performanceType", required = true) String performanceType) {
-        List<ArtistInterestDto> artistZzimDtos = artistUseCase.showArtistListForZzim(performanceType);
+    public ResponseEntity<ResponseData<ArtistInterestDetailDTO>> showAllArtistForZzim(@PageableDefault(size = 9)Pageable pageable) {
+        ArtistInterestDetailDTO artistZzimDtos = artistUseCase.showArtistListForZzim(pageable);
         ResponseData response = new ResponseData(
                 "SUCCESS"
                 , HttpStatus.OK.value()

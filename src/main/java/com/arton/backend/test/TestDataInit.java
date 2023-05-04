@@ -12,6 +12,9 @@ import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceE
 import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceRepository;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performance.domain.ShowCategory;
+import com.arton.backend.performer.adapter.out.persistence.entity.PerformerEntity;
+import com.arton.backend.performer.adapter.out.persistence.repository.PerformerRepository;
+import com.arton.backend.performer.domain.Performer;
 import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
 import com.arton.backend.search.adapter.out.persistence.document.UserDocument;
@@ -49,6 +52,7 @@ public class TestDataInit {
     private final PasswordEncoder passwordEncoder;
     private final UserSearchRepository userSearchRepository;
     private final ZzimRepositoryPort zzimRepositoryPort;
+    private final PerformerRepository performerRepository;
     private String defaultImage = "image/profiles/default.png";
 
     @Transactional
@@ -135,6 +139,9 @@ public class TestDataInit {
                     .build();
             performances.add(performance);
 
+            PerformerEntity performerEntity = PerformerEntity.builder().performance(performance).artist(artist).build();
+            performerRepository.save(performerEntity);
+
             reviews.add(ReviewEntity.builder().performance(performance).user(base).content("재밌어요 ㅋㅋ").starScore(4f).build());
         }
 
@@ -155,6 +162,9 @@ public class TestDataInit {
             PerformanceZzim build = PerformanceZzim.builder().performanceId(performanceEntity.getId()).userId(base.getId()).build();
             performanceZzims.add(build);
         }
+
+
+
         zzimRepositoryPort.savePerformances(performanceZzims);
     }
 }
