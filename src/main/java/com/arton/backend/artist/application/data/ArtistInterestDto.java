@@ -6,11 +6,8 @@ import lombok.*;
 /**
  * 찜하기에 보여주는 용도
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class ArtistInterestDto {
     /** 아티스트 id */
     private Long id;
@@ -18,6 +15,13 @@ public class ArtistInterestDto {
     private String profileImageUrl;
     /** 아티스트 이름 */
     private String name;
+
+    @Builder
+    public ArtistInterestDto(Long id, String profileImageUrl, String name) {
+        this.id = id;
+        this.profileImageUrl = profileImageUrl;
+        this.name = name;
+    }
 
     public static ArtistInterestDto of(Artist artist) {
         return ArtistInterestDto.builder()

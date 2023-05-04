@@ -1,14 +1,15 @@
 package com.arton.backend.follow.applicaion.data;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class UserFollowDto {
     /** 현재 유저의 ID */
     private Long id;
@@ -20,4 +21,13 @@ public class UserFollowDto {
     private Long followers;
     /** 팔로잉 혹은 팔로워 */
     private List<UserShortDto> users = new ArrayList<>();
+
+    @Builder
+    public UserFollowDto(Long id, String imageUrl, Long followings, Long followers, List<UserShortDto> users) {
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.followings = followings;
+        this.followers = followers;
+        this.users = users;
+    }
 }

@@ -14,11 +14,8 @@ import java.util.List;
  * ageRange 10, 20, 30, 40, 50
  * marketingAgreement Y, N
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class SignupRequestDto {
     @NotBlank
     private String email;
@@ -38,6 +35,19 @@ public class SignupRequestDto {
     private List<Long> performances = new ArrayList<>();
     /** 아티스트 찜 */
     private List<Long> artists = new ArrayList<>();
+
+    @Builder
+    public SignupRequestDto(String email, String password, String checkPassword, String nickname, String gender, int ageRange, String termsAgree, List<Long> performances, List<Long> artists) {
+        this.email = email;
+        this.password = password;
+        this.checkPassword = checkPassword;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.ageRange = ageRange;
+        this.termsAgree = termsAgree;
+        this.performances = performances;
+        this.artists = artists;
+    }
 
     public static User toUser(SignupRequestDto signupRequestDto, PasswordEncoder passwordEncoder){
         return User.builder()

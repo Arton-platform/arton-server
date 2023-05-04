@@ -29,6 +29,7 @@ public enum ErrorCode {
     TERMS_NOT_FOUND(404, "COMMON-ERR-404", "약관을 찾을 수 없습니다"),
     PERFORMANCE_NOT_FOUND(404, "COMMON-ERR-404", "공연을 찾을 수 없습니다"),
     PERFORMANCE_DOCUMENT_NOT_FOUND(404, "COMMON-ERR-404", "공연문서를 찾을 수 없습니다"),
+    ARTIST_NOT_FOUND(404, "COMMON-ERR-404", "아티스트를 찾을 수 없습니다"),
     PASSWORD_NOT_MATCH(401, "NOT_MATCH_401", "패스워드가 일치하지 않습니다."),
     LOGIN_INFO_NOT_MATCHED(401, "NOT_MATCH_401", "아이디 또는 패스워드가 틀립니다."),
     USER_NOT_AUTHORITY(403, "COMMON-ERR-403", "권한이 없습니다."),

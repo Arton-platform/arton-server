@@ -6,9 +6,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Builder
-@AllArgsConstructor
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyPageDto {
     /** 현재 유저의 ID */
@@ -24,4 +22,16 @@ public class MyPageDto {
     private Long reviewCount;
     /** 유저의 리뷰 목록 */
     private List<MyPageReviewDto> reviews = new ArrayList<>();
+
+    @Builder
+    public MyPageDto(Long id, String nickname, String selfDescription, String profileImageUrl, Long followings, Long followers, Long reviewCount, List<MyPageReviewDto> reviews) {
+        this.id = id;
+        this.nickname = nickname;
+        this.selfDescription = selfDescription;
+        this.profileImageUrl = profileImageUrl;
+        this.followings = followings;
+        this.followers = followers;
+        this.reviewCount = reviewCount;
+        this.reviews = reviews;
+    }
 }

@@ -4,6 +4,8 @@ import com.arton.backend.administer.performance.application.data.PerformanceAdmi
 import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
 import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
 import com.arton.backend.administer.performance.application.port.in.*;
+import com.arton.backend.artist.application.port.in.ArtistUseCase;
+import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 관리자만 접근 가능.
@@ -30,6 +33,7 @@ public class PerformanceAdminController {
     private final PerformanceAdminEditUseCase performanceAdminEditUseCase;
     private final PerformanceAdminCopyUseCase performanceAdminCopyUseCase;
     private final PerformanceAdminExcelUseCase performanceAdminExcelUseCase;
+    private final ArtistUseCase artistUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
 
     @GetMapping("/")
@@ -39,6 +43,7 @@ public class PerformanceAdminController {
 
     @GetMapping("/web/performance/add")
     public String addPerformance(Model model) {
+        model.addAttribute("artists", artistUseCase.findAll());
         return "performance/createForm";
     }
 
