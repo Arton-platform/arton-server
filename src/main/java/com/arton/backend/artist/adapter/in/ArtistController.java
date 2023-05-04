@@ -2,7 +2,9 @@ package com.arton.backend.artist.adapter.in;
 
 import com.arton.backend.artist.application.data.ArtistInterestDetailDTO;
 import com.arton.backend.artist.application.data.ArtistInterestDto;
+import com.arton.backend.artist.application.data.CommonArtistDto;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
+import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.infra.shared.common.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -46,6 +48,12 @@ public class ArtistController {
                 , artistZzimDtos
         );
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CommonArtistDto>> showAllArtistForZzim(@RequestParam(required = false, name = "name") String name) {
+        List<CommonArtistDto> artists = artistUseCase.findByName(name);
+        return ResponseEntity.ok(artists);
     }
 
 

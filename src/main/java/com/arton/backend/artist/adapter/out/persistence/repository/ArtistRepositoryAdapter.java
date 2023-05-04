@@ -49,6 +49,14 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort, ArtistDele
     }
 
     @Override
+    public List<Artist> findByName(String name) {
+        return Optional.ofNullable(artistRepository.findByName(name)).orElseGet(Collections::emptyList)
+                .stream()
+                .map(ArtistMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<Artist> findById(Long id) {
         return artistRepository.findById(id).map(ArtistMapper::toDomain);
     }

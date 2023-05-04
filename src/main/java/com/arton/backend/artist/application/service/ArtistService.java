@@ -2,6 +2,7 @@ package com.arton.backend.artist.application.service;
 
 import com.arton.backend.artist.application.data.ArtistInterestDetailDTO;
 import com.arton.backend.artist.application.data.ArtistInterestDto;
+import com.arton.backend.artist.application.data.CommonArtistDto;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
@@ -46,6 +47,11 @@ public class ArtistService implements ArtistUseCase {
     @Override
     public List<Artist> findAll() {
         return artistRepositoryPort.findAll();
+    }
+
+    @Override
+    public List<CommonArtistDto> findByName(String name) {
+        return artistRepositoryPort.findByName(name).stream().map(CommonArtistDto::domainToDto).collect(Collectors.toList());
     }
 
     @Override
