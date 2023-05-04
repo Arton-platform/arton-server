@@ -44,6 +44,11 @@ public class ArtistService implements ArtistUseCase {
     }
 
     @Override
+    public List<Artist> findAll() {
+        return artistRepositoryPort.findAll();
+    }
+
+    @Override
     public Artist save(Artist artist) {
         return artistRepositoryPort.save(artist);
     }

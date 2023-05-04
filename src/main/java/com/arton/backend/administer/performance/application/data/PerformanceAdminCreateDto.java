@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -57,6 +58,8 @@ public class PerformanceAdminCreateDto implements Serializable {
     private ShowCategory showCategory;
     @Schema(description = "공연 이미지")
     private List<MultipartFile> images;
+    @Schema(description = "아티스트 번호")
+    private List<Long> artistIds = new ArrayList<>();
 
     public Performance dtoToDomain() {
         return Performance.builder()

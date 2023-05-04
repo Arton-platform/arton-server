@@ -11,5 +11,6 @@ import java.util.List;
 public interface ArtistUseCase {
     ArtistInterestDetailDTO showArtistListForZzim(Pageable pageable);
     Page<Artist> findAll(Pageable pageable);
+    List<Artist> findAll();
     Artist save(Artist artist);
 }
