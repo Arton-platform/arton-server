@@ -15,6 +15,9 @@ spring:
   performance:
     image:
       dir: arton/image/performances/
+  artist:
+    image:
+      dir: arton/image/artist/
   terms:
     dir: arton/terms/
   servlet:

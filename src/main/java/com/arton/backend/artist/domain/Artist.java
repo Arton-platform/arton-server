@@ -33,6 +33,10 @@ public class Artist {
         performer.setArtist(this.getId());
     }
 
+    public void setProfileImageUrl(String url) {
+        this.profileImageUrl = url;
+    }
+
     @Builder
     public Artist(Long id, String name, Integer age, String snsId, String profileImageUrl, LocalDateTime createdDate, LocalDateTime updatedDate, List<Performer> performances) {
         this.id = id;

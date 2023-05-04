@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
+<body>
+    <div>
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <script src="/js/imagePreview.js"></script>
+        <script src="/js/dataSend.js"></script>
+        <form id="addForm" th:action th:object="${artist}" method="post" enctype="multipart/form-data">
+            <div style="display: inline">
+            <div>
+                <label for="name">이름</label>
+                <input id="name" name="name" type="text"  class="form-control" placeholder="이름을 입력하세요" required>
+            </div>
+            <div>
+                <label for="age">나이</label>
+                <input id="age" name="age" type="number"  class="form-control" placeholder="나이를 입력하세요">
+            </div>
+            <div>
+                <label for="snsId">SNS ID</label>
+                <input id="snsId" name="snsId" type="text"  class="form-control" placeholder="SNS ID를 입력하세요">
+            </div>
+            <div>
+                <label for="image">
+                    <img th:src="@{/img/image_add.png}" style="width:100px; height:100px; cursor: pointer;">
+                </label>
+                <input type="file" name="image" id="image" value="이미지"
+                       onchange="previewImage(this,'View_area')" style="display: none">
+                <span id='View_area'
+                      style='position:relative; color: black; border: 0px solid black;'/>
+            </div>
+                <div>
+                    <input type="submit" value="등록" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

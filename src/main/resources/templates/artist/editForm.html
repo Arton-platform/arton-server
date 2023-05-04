@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
+<body>
+<div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="/js/imagePreview.js"></script>
+    <form id="editForm" th:object="${editDto}" method="POST" enctype="multipart/form-data">
+        <div style="display: inline">
+            <div>
+                <label for="name">이</label>
+                <input id="name" name="name" type="text"  class="form-control" th:value="${editDto.name}">
+            </div>
+            <div>
+                <label for="age">나이</label>
+                <input id="age" name="age" type="number"  class="form-control" th:value="${editDto.age}">
+            </div>
+            <div>
+                <label for="snsId">SNS_ID</label>
+                <input id="snsId" name="snsId" type="date"  th:value="${editDto.snsId}">
+            </div>
+            <div>
+                <input type="submit" value="수정" class="btn" style="background: #FF6491; color: #FFF2F6;"/>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>
