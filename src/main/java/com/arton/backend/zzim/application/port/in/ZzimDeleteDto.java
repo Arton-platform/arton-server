@@ -5,12 +5,15 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class ZzimDeleteDto {
     private List<Long> artists = new ArrayList<>();
     private List<Long> performances = new ArrayList<>();
+
+    @Builder
+    public ZzimDeleteDto(List<Long> artists, List<Long> performances) {
+        this.artists = artists;
+        this.performances = performances;
+    }
 }

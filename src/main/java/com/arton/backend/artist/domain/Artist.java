@@ -1,5 +1,6 @@
 package com.arton.backend.artist.domain;
 
+import com.arton.backend.administer.artist.application.data.ArtistAdminEditDTO;
 import com.arton.backend.performer.domain.Performer;
 import lombok.*;
 
@@ -35,6 +36,12 @@ public class Artist {
 
     public void setProfileImageUrl(String url) {
         this.profileImageUrl = url;
+    }
+
+    public void editArtist(ArtistAdminEditDTO editDto) {
+        name = editDto.getName();
+        age = editDto.getAge();
+        snsId = editDto.getSnsId();
     }
 
     @Builder

@@ -8,13 +8,12 @@ import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.performance.domain.PerformanceType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,6 +36,11 @@ public class ArtistService implements ArtistUseCase {
                 .collect(Collectors.toList());
 
         return ArtistInterestDetailDTO.builder().concerts(concerts).musicals(musicals).build();
+    }
+
+    @Override
+    public Page<Artist> findAll(Pageable pageable) {
+        return artistRepositoryPort.findAll(pageable);
     }
 
     @Override

@@ -20,7 +20,13 @@
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-
+<div>
+    <article class="container">
+        <div class="submit-class">
+            <a th:href="@{/web/artist/add}" class="btn" style="background: #FF6491; color: #FFF2F6;">아티스트 등록</a>
+        </div>
+    </article>
+</div>
 <div class="container">
     <div>
         <table class="table table-striped">
@@ -31,6 +37,7 @@
                 <th>나이</th>
                 <th>SNS_ID</th>
                 <th>이미지 보기</th>
+                <th>기능</th>
             </tr>
             </thead>
             <tbody>
@@ -39,8 +46,14 @@
                 <td th:text="${artist.getName()}"></td>
                 <td th:text="${artist.getAge()}"></td>
                 <td th:text="${artist.getSnsId()}"></td>
-                <<td>
+                <td>
                     <a th:href="${artist.getProfileImageUrl()}"></a>
+                </td>
+                <td>
+                    <p class="btn_set">
+                        <a class="btn" style="background: #FF6491; color: #FFF2F6;" th:href="@{/web/artist/{artistId}(artistId=${artist.getId()})}">수정</a>
+                        <button type="button" class="btn" style="background: #FF6491; color: #FFF2F6;" th:onclick="deleteArtist([[${artist.id}]]);">삭제</button>
+                    </p>
                 </td>
             </tr>
             </tbody>
@@ -100,5 +113,24 @@
         </ul>
     </nav>
 </div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function deleteArtist(idx) {
+            if (confirm(idx + "번 아티스트를 삭제할까요?")) {
+                var uri = /*[[ @{/web/artist/revoke} ]]*/;
+                var html = "";
+
+                html += '<form name="dataForm" action="' + uri + '" method="POST">';
+                html += 	'<input type="hidden" name="idx" value="' + idx + '" />';
+                html += '</form>';
+
+                $("body").append(html);
+                document.dataForm.submit();
+            }
+        }
+        /*]]>*/
+    </script>
+</th:block>
 </body>
 </html>

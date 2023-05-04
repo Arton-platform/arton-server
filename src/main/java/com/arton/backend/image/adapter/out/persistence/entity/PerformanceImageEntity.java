@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Table(name = "Performance_Image")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(exclude = {"user"})
 public class PerformanceImageEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

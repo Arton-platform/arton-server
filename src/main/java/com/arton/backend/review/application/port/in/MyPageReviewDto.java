@@ -11,10 +11,7 @@ import java.util.Optional;
 /**
  * 마이 페이지에서 보여지는 사용자가 작성한 리뷰 정보
  */
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyPageReviewDto {
     private Long performanceId;
@@ -25,6 +22,18 @@ public class MyPageReviewDto {
     private List<String> images = new ArrayList<>();
     private Long hit;
     private Long reviewCount;
+
+    @Builder
+    public MyPageReviewDto(Long performanceId, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
+        this.performanceId = performanceId;
+        this.title = title;
+        this.starScore = starScore;
+        this.createdDate = createdDate;
+        this.content = content;
+        this.images = images;
+        this.hit = hit;
+        this.reviewCount = reviewCount;
+    }
 
     public static MyPageReviewDto to(Review review) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
