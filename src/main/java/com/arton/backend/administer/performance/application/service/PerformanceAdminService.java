@@ -1,53 +1,40 @@
 package com.arton.backend.administer.performance.application.service;
 
-import com.arton.backend.administer.performance.application.data.PerformanceAdminEditDto;
-import com.arton.backend.administer.performance.application.data.PerformanceAdminSearchDto;
-import com.arton.backend.administer.performance.application.data.PerformanceExcelDto;
+import com.arton.backend.administer.performance.application.data.*;
 import com.arton.backend.administer.performance.application.port.in.*;
 import com.arton.backend.image.application.port.out.PerformanceImageDeleteRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
+import com.arton.backend.infra.event.aop.PublishEvent;
+import com.arton.backend.infra.event.aop.performance.AopPerformanceRegisteredEvent;
+import com.arton.backend.infra.event.aop.register.AopUserRegisteredEvent;
 import com.arton.backend.infra.excel.core.ExcelFile;
 import com.arton.backend.infra.excel.core.multisheet.MultiSheetExcelFile;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.administer.performance.application.data.PerformanceAdminCreateDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
-import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import com.arton.backend.search.application.port.out.PerformanceDocumentDeletePort;
-import com.arton.backend.search.application.port.out.PerformanceDocumentPort;
 import com.arton.backend.search.application.port.out.PerformanceDocumentSearchPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.elasticsearch.core.SearchPage;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,11 +56,13 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
 
     /**
      * 공연 추가하면 ElasticSearch performance 인덱스에 도큐먼트 추가해야함.
+     * 공연 추가하면 출연 아티스트 출연자 테이블에 등록해야함.
      * @param performanceCreateDto
      * @return
      */
+    @PublishEvent(eventType = AopPerformanceRegisteredEvent.class)
     @Override
-    public Performance addPerformance(PerformanceAdminCreateDto performanceCreateDto) {
+    public PerformanceAdminCreateResponseDto addPerformance(PerformanceAdminCreateDto performanceCreateDto) {
         Performance performance = performanceSavePort.save(performanceCreateDto.dtoToDomain());
         performanceDocuemntSavePort.save(performance);
         List<MultipartFile> images = performanceCreateDto.getImages();
@@ -97,7 +86,8 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
             }
             performanceImageSaveRepositoryPort.saveAll(performanceImages);
         }
-        return performance;
+
+        return PerformanceAdminCreateResponseDto.builder().performanceId(performance.getPerformanceId()).artistIds(performanceCreateDto.getArtistIds()).build();
     }
 
     @Override

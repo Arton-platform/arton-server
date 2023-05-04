@@ -33,6 +33,7 @@ public class PerformanceAdminController {
     private final PerformanceAdminEditUseCase performanceAdminEditUseCase;
     private final PerformanceAdminCopyUseCase performanceAdminCopyUseCase;
     private final PerformanceAdminExcelUseCase performanceAdminExcelUseCase;
+    private final ArtistUseCase artistUseCase;
     private PerformanceAdminSearchDto form = new PerformanceAdminSearchDto();
 
     @GetMapping("/")
@@ -42,6 +43,7 @@ public class PerformanceAdminController {
 
     @GetMapping("/web/performance/add")
     public String addPerformance(Model model) {
+        model.addAttribute("artists", artistUseCase.findAll());
         return "performance/createForm";
     }
 

@@ -1,9 +1,9 @@
 package com.arton.backend.performer.domain;
 
-import com.arton.backend.artist.domain.Artist;
-import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.performance.domain.Performance;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
