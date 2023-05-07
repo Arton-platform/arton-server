@@ -33,7 +33,7 @@ import java.util.Locale;
  * s3에 올리려면 프로파일 추가하면 됨.
  */
 @Slf4j
-@Profile(value = {"aws", "local", "dev", "resize"})
+@Profile(value = {"aws", "local", "dev"})
 @Service
 @RequiredArgsConstructor
 
