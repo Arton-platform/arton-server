@@ -1,11 +1,10 @@
 package com.arton.backend.performance.applicaiton.service;
 
 import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
+import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailDto;
-import com.arton.backend.performance.applicaiton.data.PerformanceInterestDto;
-import com.arton.backend.performance.applicaiton.data.PerformanceZzimDetailDTO;
+import com.arton.backend.performance.applicaiton.data.*;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceDeleteUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
@@ -13,6 +12,7 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.price.application.port.out.PriceGradeRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -59,8 +59,21 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
         List<Performance> concerts = performanceRepositoryPort.findAllConcerts(pageable);
 
         List<PerformanceInterestDto> musicalZzim = musicals.stream().map(PerformanceInterestDto::of).collect(Collectors.toList());
+        for (PerformanceInterestDto performanceInterestDto : musicalZzim) {
+            List<Long> imageIds = performanceImageRepositoryPort.findByPerformanceId(performanceInterestDto.getId()).stream().map(PerformanceImage::getId).collect(Collectors.toList());
+
+        }
+
         List<PerformanceInterestDto> concertZzim = concerts.stream().map(PerformanceInterestDto::of).collect(Collectors.toList());
         return PerformanceZzimDetailDTO.builder().musicals(musicalZzim).concerts(concertZzim).build();
+    }
+
+    @Override
+    public PerformanceZzimDetailDTOV2 getZzimListAllRelatedInfos(Pageable pageable) {
+        List<PerformanceDetailDto> musicals = performanceRepositoryPort.getAllRelatedInfosByType(pageable, PerformanceType.MUSICAL).stream().map(PerformanceDetailQueryDslDto::toDto).collect(Collectors.toList());
+        List<PerformanceDetailDto> concerts = performanceRepositoryPort.getAllRelatedInfosByType(pageable, PerformanceType.CONCERT).stream().map(PerformanceDetailQueryDslDto::toDto).collect(Collectors.toList());
+
+        return PerformanceZzimDetailDTOV2.builder().musicals(musicals).concerts(concerts).build();
     }
 
     @Override

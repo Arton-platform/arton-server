@@ -7,14 +7,18 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import marvin.image.MarvinImage;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -103,6 +107,7 @@ public class FileUploadS3 implements FileUploadUtils {
 
     /**
      * s3 file upload
+     * 이미지 업로드는 768px * 768px로 고정
      * @param multipartFile
      * @param dirName
      * @return
@@ -110,10 +115,14 @@ public class FileUploadS3 implements FileUploadUtils {
     @Override
     public String upload(MultipartFile multipartFile, String dirName) {
         validateImageFile(multipartFile);
-        String storeFileName = dirName + "/" + createStoreFileName(multipartFile.getOriginalFilename());
+        String fileName = createStoreFileName(multipartFile.getOriginalFilename());
+        String ext = extractExt(fileName);
+        String storeFileName = dirName + "/" + fileName;
+
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(multipartFile.getContentType());
-        try(InputStream inputStream = multipartFile.getInputStream()){
+        MultipartFile resizeImage = resizeImage(multipartFile, fileName, ext, 768);
+        objectMetadata.setContentType(resizeImage.getContentType());
+        try(InputStream inputStream = resizeImage.getInputStream()){
             byte[] bytes = IOUtils.toByteArray(inputStream);
             objectMetadata.setContentLength(bytes.length);
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
@@ -122,6 +131,35 @@ public class FileUploadS3 implements FileUploadUtils {
             throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED.getMessage(), ErrorCode.FILE_UPLOAD_FAILED);
         }
         return amazonS3Client.getUrl(bucket, storeFileName).toString();
+    }
+
+    MultipartFile resizeImage(MultipartFile file, String fileName, String format, int width) {
+        try {
+            BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+            int originWidth = bufferedImage.getWidth();
+            int originHeight = bufferedImage.getHeight();
+
+            if (originWidth < width) {
+                return file;
+            }
+
+            MarvinImage image = new MarvinImage(bufferedImage);
+
+            Scale scale = new Scale();
+            scale.load();
+            scale.setAttribute("newWidth", width);
+            scale.setAttribute("newHeight", originHeight * width / originWidth);
+            scale.process(image.clone(), image, null, null, false);
+
+            BufferedImage bufferedImageNoAlpha = image.getBufferedImageNoAlpha();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImageNoAlpha, format, byteArrayOutputStream);
+            byteArrayOutputStream.flush(); // memory release
+            return new CustomFile(fileName, file.getOriginalFilename(), file.getContentType(), byteArrayOutputStream.toByteArray());
+
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.IO_EXCEPTION.getMessage(), ErrorCode.IO_EXCEPTION);
+        }
     }
 
     @Override
