@@ -5,9 +5,11 @@ import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceM
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.data.QPerformanceDetailQueryDslDto;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.price.application.data.QPriceInfoDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -124,5 +126,36 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)))
                 ));
         return resultMap.get(id);
+    }
+
+    /**
+     * performance type에 따라 이미지 정보, 가격 정보까지 한번에 리턴하는 DTO
+     * @param pageable
+     * @param performanceType
+     * @return
+     */
+    @Override
+    public List<PerformanceDetailQueryDslDto> getPerformanceDetailsByType(Pageable pageable, PerformanceType performanceType) {
+        return queryFactory
+                .from(performanceEntity)
+                .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
+                .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
+                .where(performanceEntity.performanceType.eq(performanceType))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDto(
+                        performanceEntity.id,
+                        performanceEntity.title,
+                        performanceEntity.place,
+                        performanceEntity.musicalDateTime,
+                        performanceEntity.purchaseLimit,
+                        performanceEntity.limitAge,
+                        performanceEntity.startDate,
+                        performanceEntity.endDate,
+                        performanceEntity.ticketOpenDate,
+                        performanceEntity.ticketEndDate,
+                        set(performanceImageEntity.imageUrl),
+                        set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)))
+                )).values().stream().collect(toList());
     }
 }

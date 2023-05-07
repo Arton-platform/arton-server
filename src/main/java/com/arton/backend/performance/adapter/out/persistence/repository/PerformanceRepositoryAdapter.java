@@ -126,4 +126,9 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     public PerformanceDetailQueryDslDto getV2(Long id) {
         return performanceRepository.getPerformanceDetails(id);
     }
+
+    @Override
+    public List<PerformanceDetailQueryDslDto> getAllRelatedInfosByType(Pageable pageable, PerformanceType performanceType) {
+        return performanceRepository.getPerformanceDetailsByType(pageable, performanceType);
+    }
 }

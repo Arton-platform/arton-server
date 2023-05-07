@@ -86,7 +86,8 @@ public class PerformanceAdminService implements PerformanceAdminSaveUseCase, Per
             }
             performanceImageSaveRepositoryPort.saveAll(performanceImages);
         }
-
+        // 썸네일 지정
+        performance = performanceSavePort.save(performance);
         return PerformanceAdminCreateResponseDto.builder().performanceId(performance.getPerformanceId()).artistIds(performanceCreateDto.getArtistIds()).build();
     }
 

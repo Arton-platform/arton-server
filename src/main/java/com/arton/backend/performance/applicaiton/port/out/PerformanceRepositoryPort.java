@@ -2,6 +2,7 @@ package com.arton.backend.performance.applicaiton.port.out;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.performance.domain.PerformanceType;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface PerformanceRepositoryPort {
     boolean existsById(Long id);
     Optional<Performance> findOne(Long id);
     PerformanceDetailQueryDslDto getV2(Long id);
+
+    List<PerformanceDetailQueryDslDto> getAllRelatedInfosByType(Pageable pageable, PerformanceType performanceType);
 }
