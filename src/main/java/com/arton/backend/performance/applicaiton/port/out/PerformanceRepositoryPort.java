@@ -1,6 +1,7 @@
 package com.arton.backend.performance.applicaiton.port.out;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDtoV2;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,12 @@ public interface PerformanceRepositoryPort {
     boolean existsById(Long id);
     Optional<Performance> findOne(Long id);
     PerformanceDetailQueryDslDto getV2(Long id);
-
+    /**
+     * 아티스트 정보도 같이 가져오기
+     * @param id
+     * @return
+     */
+    PerformanceDetailQueryDslDtoV2 getOneWithArtistInfo(Long id);
     List<PerformanceDetailQueryDslDto> getAllRelatedInfosByType(Pageable pageable, PerformanceType performanceType);
+    List<PerformanceDetailQueryDslDtoV2> getPerformanceWithArtistInfoByType(Pageable pageable, PerformanceType performanceType);
 }

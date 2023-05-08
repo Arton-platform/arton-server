@@ -14,4 +14,5 @@ public interface PerformanceUseCase {
     List<Performance> getMusicals();
     List<Performance> getConcerts();
     PerformanceDetailDto getOne(Long id);
+    PerformanceDetailDtoV2 getOneWithArtistInfo(Long id);
 }

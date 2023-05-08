@@ -2,6 +2,7 @@ package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDtoV2;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
@@ -128,7 +129,17 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
+    public PerformanceDetailQueryDslDtoV2 getOneWithArtistInfo(Long id) {
+        return performanceRepository.getPerformanceDetailsV2(id);
+    }
+
+    @Override
     public List<PerformanceDetailQueryDslDto> getAllRelatedInfosByType(Pageable pageable, PerformanceType performanceType) {
         return performanceRepository.getPerformanceDetailsByType(pageable, performanceType);
+    }
+
+    @Override
+    public List<PerformanceDetailQueryDslDtoV2> getPerformanceWithArtistInfoByType(Pageable pageable, PerformanceType performanceType) {
+        return performanceRepository.getPerformanceAllDetailsByType(pageable, performanceType);
     }
 }

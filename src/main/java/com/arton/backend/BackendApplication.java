@@ -38,7 +38,7 @@ public class BackendApplication {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
-	@Profile("test")
+	@Profile("dev")
 	@Bean
 	public TestDataInit testDataInit(ArtistRepository artistRepository, PerformanceRepository performanceRepository, UserRepository userRepository, FollowRepository followRepository,
 									 ReviewRepository reviewRepository, UserImageRepository userImageRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository,

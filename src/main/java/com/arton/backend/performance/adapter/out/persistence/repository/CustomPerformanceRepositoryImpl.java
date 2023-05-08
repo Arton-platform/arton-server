@@ -1,11 +1,17 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
+import com.arton.backend.artist.application.data.QCommonArtistDto;
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDtoV2;
 import com.arton.backend.performance.applicaiton.data.QPerformanceDetailQueryDslDto;
+import com.arton.backend.performance.applicaiton.data.QPerformanceDetailQueryDslDtoV2;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity;
 import com.arton.backend.price.application.data.QPriceInfoDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +26,7 @@ import java.util.Optional;
 
 import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.performanceImageEntity;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
+import static com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity.*;
 import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.priceGradeEntity;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.set;
@@ -129,6 +136,40 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     }
 
     /**
+     * 출연한 아티스트 정보까지 한번에
+     * @param id
+     * @return
+     */
+    @Override
+    public PerformanceDetailQueryDslDtoV2 getPerformanceDetailsV2(Long id) {
+        Map<Long, PerformanceDetailQueryDslDtoV2> result = queryFactory
+                .from(performanceEntity)
+                .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
+                .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
+                .leftJoin(performerEntity).on(performanceEntity.eq(performerEntity.performance))
+                .where(performanceEntity.id.eq(id))
+                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV2(
+                        performanceEntity.id,
+                        performanceEntity.title,
+                        performanceEntity.place,
+                        performanceEntity.musicalDateTime,
+                        performanceEntity.purchaseLimit,
+                        performanceEntity.limitAge,
+                        performanceEntity.startDate,
+                        performanceEntity.endDate,
+                        performanceEntity.ticketOpenDate,
+                        performanceEntity.ticketEndDate,
+                        set(performanceImageEntity.imageUrl),
+                        set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
+                        set(new QCommonArtistDto(performerEntity.artist.id, performerEntity.artist.name, performerEntity.artist.profileImageUrl)))
+                ));
+        if (result.isEmpty()) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+        return result.get(id);
+    }
+
+    /**
      * performance type에 따라 이미지 정보, 가격 정보까지 한번에 리턴하는 DTO
      * @param pageable
      * @param performanceType
@@ -156,6 +197,39 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         performanceEntity.ticketEndDate,
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)))
+                )).values().stream().collect(toList());
+    }
+
+    /**
+     * 출연한 아티스트 정보까지 한번에
+     * @param pageable
+     * @param performanceType
+     * @return
+     */
+    @Override
+    public List<PerformanceDetailQueryDslDtoV2> getPerformanceAllDetailsByType(Pageable pageable, PerformanceType performanceType) {
+        return queryFactory
+                .from(performanceEntity)
+                .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
+                .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
+                .leftJoin(performerEntity).on(performanceEntity.eq(performerEntity.performance))
+                .where(performanceEntity.performanceType.eq(performanceType))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV2(
+                        performanceEntity.id,
+                        performanceEntity.title,
+                        performanceEntity.place,
+                        performanceEntity.musicalDateTime,
+                        performanceEntity.purchaseLimit,
+                        performanceEntity.limitAge,
+                        performanceEntity.startDate,
+                        performanceEntity.endDate,
+                        performanceEntity.ticketOpenDate,
+                        performanceEntity.ticketEndDate,
+                        set(performanceImageEntity.imageUrl),
+                        set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
+                        set(new QCommonArtistDto(performerEntity.artist.id, performerEntity.artist.name, performerEntity.artist.profileImageUrl)))
                 )).values().stream().collect(toList());
     }
 }

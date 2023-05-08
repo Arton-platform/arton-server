@@ -109,4 +109,12 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
         return performanceRepositoryPort.getV2(id).toDto();
     }
 
+    @Override
+    public PerformanceDetailDtoV2 getOneWithArtistInfo(Long id) {
+        if (!performanceRepositoryPort.existsById(id)) {
+            throw new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND);
+        }
+        return performanceRepositoryPort.getOneWithArtistInfo(id).toDto();
+    }
+
 }
