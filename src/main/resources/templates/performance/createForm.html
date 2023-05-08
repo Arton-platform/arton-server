@@ -80,7 +80,6 @@
             <div>
                 <label for="artistIds">출연자 검색</label>
                 <select name="artistIds" id="artistIds" multiple multiselect-search="true" required>
-                    <option value="">==출연자==</option>
                     <option th:each="artist : ${artists}"
                             th:value="${artist.getId()}"
                             th:text="${artist.getName()}">
