@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/signup/**", "/auth/login/**", "/faq/**", "/announcement/**", "/review/**",
-                "/auth/reset/password", "/auth/check/signup", "/artist/**", "/performance/**", "/terms/**", "/performance-sse/**", "/web/**", "/mail/**","test/**")
+                "/auth/reset/password", "/auth/check/signup", "/artist/**", "/performance/**", "/terms/**", "/performance-sse/**", "/web/**", "/mail/**","test/**", "/performance.html/**")
                 .permitAll()
                 .antMatchers("/actuator/**")
                 .hasRole("ADMIN")

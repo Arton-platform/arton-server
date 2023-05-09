@@ -9,6 +9,9 @@ server:
 
 # ETC
 spring:
+  devtools:
+    livereload:
+      enabled: true
   default-image: /arton/image/default/default.png
   user:
     image:

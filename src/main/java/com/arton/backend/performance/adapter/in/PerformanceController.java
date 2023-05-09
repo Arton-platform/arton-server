@@ -25,6 +25,7 @@ import java.util.List;
 
 @Tag(name = "PERFORMANCE", description = "공연 API")
 @RestController
+@RequestMapping("/performance")
 @RequiredArgsConstructor
 public class PerformanceController {
     private final PerformanceUseCase performanceService;
@@ -43,7 +44,7 @@ public class PerformanceController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
                     content = @Content(schema = @Schema(implementation = PerformanceZzimDetailDTO.class)))})
-    @GetMapping("/performance/zzim")
+    @GetMapping("/zzim")
     public ResponseEntity<ResponseData<PerformanceZzimDetailDTO>> getPerformanceZzimList(@PageableDefault(size = 9)Pageable pageable) {
         PerformanceZzimDetailDTO allPerformances = performanceService.getZzimListV2(pageable);
         ResponseData<PerformanceZzimDetailDTO> response = new ResponseData<>("OK", 200, allPerformances);
@@ -54,7 +55,7 @@ public class PerformanceController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
                     content = @Content(schema = @Schema(implementation = PerformanceZzimDetailDTOV2.class)))})
-    @GetMapping("/performance/zzim/v2")
+    @GetMapping("/zzim/v2")
     public ResponseEntity<ResponseData<PerformanceZzimDetailDTOV2>> getPerformanceZzimListV2(@PageableDefault(size = 9)Pageable pageable) {
         PerformanceZzimDetailDTOV2 allPerformances = performanceService.getZzimListAllRelatedInfos(pageable);
         ResponseData<PerformanceZzimDetailDTOV2> response = new ResponseData<>("OK", 200, allPerformances);
@@ -65,7 +66,7 @@ public class PerformanceController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
                     content = @Content( array = @ArraySchema(schema = @Schema(implementation = PerformanceInterestDto.class))))})
-    @GetMapping("/performance/list")
+    @GetMapping("/list")
     public ResponseEntity<List<PerformanceInterestDto>> getPerformanceList() {
         List<PerformanceInterestDto> allPerformances = performanceService.getZzimList();
         return ResponseEntity.ok(allPerformances);
@@ -93,7 +94,7 @@ public class PerformanceController {
                     content = @Content( schema = @Schema(implementation = PerformanceDetailDtoV2.class))),
             @ApiResponse(responseCode = "404", description = "공연을 찾을 수 없음.",
                     content = @Content( schema = @Schema(implementation = ErrorResponse.class)))})
-    @GetMapping("/performance/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseData<PerformanceDetailDtoV2>> getOne(@PathVariable("id") Long id){
         ResponseData response = new ResponseData(
                 "SUCCESS"
@@ -101,14 +102,5 @@ public class PerformanceController {
                 , performanceService.getOneWithArtistInfo(id)
         );
         return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "특정 공연 상세보기를 html 연결시킵니다.", description = "공연 상세보기 Html")
-    @GetMapping("/performance.html")
-    public ModelAndView goDetailPage(@RequestParam(value = "performanceId", required = true) Long performanceId){
-        ModelAndView model = new ModelAndView();
-        model.setViewName("/performance/detail");
-        model.addObject("performance", performanceService.getOneWithArtistInfo(performanceId));
-        return model;
     }
 }
