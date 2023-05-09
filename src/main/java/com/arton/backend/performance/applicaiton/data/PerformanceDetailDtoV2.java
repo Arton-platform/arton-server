@@ -20,8 +20,8 @@ public class PerformanceDetailDtoV2 {
     private String musicalDateTime;
     private Integer purchaseLimit;
     private Integer limitAge;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private String startDate;
+    private String endDate;
     private String ticketOpenDate;
     private String ticketEndDate;
     private Set<String> images = new LinkedHashSet<>();
@@ -29,7 +29,7 @@ public class PerformanceDetailDtoV2 {
     private Set<CommonArtistDto> artists = new LinkedHashSet<>();
 
     @Builder
-    public PerformanceDetailDtoV2(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, String ticketOpenDate, String ticketEndDate, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists) {
+    public PerformanceDetailDtoV2(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, String startDate, String endDate, String ticketOpenDate, String ticketEndDate, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -44,4 +44,6 @@ public class PerformanceDetailDtoV2 {
         this.prices = prices;
         this.artists = artists;
     }
+
+
 }

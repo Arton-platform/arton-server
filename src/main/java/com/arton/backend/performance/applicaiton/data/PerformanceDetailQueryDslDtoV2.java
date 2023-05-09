@@ -58,20 +58,32 @@ public class PerformanceDetailQueryDslDtoV2 {
         prices = prices.stream().filter(PriceInfoDto::isCompleted).collect(Collectors.toSet());
     }
 
-    private String getTextTicketDay(LocalDateTime time) {
-        String ticketDay = null;
+    private String getTextDayWithOutYear(LocalDateTime time) {
+        String day = null;
         if (!ObjectUtils.isEmpty(time)) {
-            String[] ticketDate = Optional.ofNullable(time).orElseGet(null).format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
+            String[] days = Optional.ofNullable(time).orElseGet(null).format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
             String textDay = Optional.ofNullable(time).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-            ticketDay = ticketDate[0]+"("+textDay+")"+" "+ticketDate[1];
+            day = days[0]+"("+textDay+")"+" "+days[1];
         }
-        return ticketDay;
+        return day;
+    }
+
+    private String getTextDayWithYear(LocalDateTime time) {
+        String day = null;
+        if (!ObjectUtils.isEmpty(time)) {
+            String[] days = Optional.ofNullable(time).orElseGet(null).format(DateTimeFormatter.ofPattern("yyyy MM.dd HH:mm")).split(" ");
+            String textDay = Optional.ofNullable(time).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+            day = days[0] + " " + days[1]+"("+textDay+")"+" "+days[2];
+        }
+        return day;
     }
 
     public PerformanceDetailDtoV2 toDto(){
         fillData();
-        String ticketOpenDay = getTextTicketDay(ticketOpenDate);
-        String ticketEndDay = getTextTicketDay(ticketEndDate);
+        String textStartDay = getTextDayWithYear(startDate);
+        String textEndDay = getTextDayWithYear(endDate);
+        String ticketOpenDay = getTextDayWithYear(ticketOpenDate);
+        String ticketEndDay = getTextDayWithYear(ticketEndDate);
         return PerformanceDetailDtoV2.builder()
                 .id(getId())
                 .images(images)
@@ -82,10 +94,10 @@ public class PerformanceDetailQueryDslDtoV2 {
                 .artists(artists)
                 .purchaseLimit(getPurchaseLimit())
                 .limitAge(getLimitAge())
-                .startDate(getStartDate())
-                .endDate(getEndDate())
-                .ticketOpenDate(StringUtils.hasText(ticketOpenDay) ? ticketOpenDay : "날짜 정보가 없습니다.")
-                .ticketEndDate(StringUtils.hasText(ticketEndDay) ? ticketEndDay : "날짜 정보가 없습니다.")
+                .startDate(StringUtils.hasText(textStartDay) ? textStartDay : "미정")
+                .endDate(StringUtils.hasText(textEndDay) ? textEndDay : "미정")
+                .ticketOpenDate(StringUtils.hasText(ticketOpenDay) ? ticketOpenDay : "미정")
+                .ticketEndDate(StringUtils.hasText(ticketEndDay) ? ticketEndDay : "미정")
                 .build();
     }
 

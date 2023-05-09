@@ -32,4 +32,5 @@ public class PriceInfoDto {
     public boolean isCompleted() {
         return !ObjectUtils.isEmpty(gradeName) && !ObjectUtils.isEmpty(price);
     }
+
 }
