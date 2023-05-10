@@ -1,130 +1,117 @@
 <!DOCTYPE html>
-<html lang="ko"
-	  xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:display="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-	<title>¾ÆÆ®¿Â</title>
-	<style>
-		body{
-		scrollbar-3dlight-color:#FFFFFF;
-		scrollbar-arrow-color:#C3C3C3;
-		scrollbar-track-color:#FFFFFF;
-		scrollbar-darkshadow-color:#FFFFFF;
-		scrollbar-face-color:#FFFFFF;
-		scrollbar-highlight-color:#C3C3C3;
-		scrollbar-shadow-color:#C3C3C3;
-	}
-	</style>
-	<meta name="Title" content="¾ÆÆ®¿Â Æ¼ÄÏ">
+    <style>
+        /*ul li {list-style-type: none; float: left; margin-left: 20px;}*/
+        #header_casting > li {
+            display: inline-block;
+            position: relative;
+            top: 10px;
+            left: 260px;
+        }
+        #header_casting > li > a {
+            display:block; position:relative; padding-bottom:19px;
+            margin: 50px;
+        }
+        #header_casting > li > a > img {
+            width:50px; height:50px;
+        }
+        #header_casting > li > a > span {
+            position:absolute; bottom:0; left:50%; color:#666; line-height:1.462em; white-space:nowrap; transform:translate(-50%, 0)
+        }
+    </style>
+    <title>ì•„íŠ¸ì˜¨</title>
 </head>
 
+<body>
 <div class="wrap_notice" id="wrapBody" th:object="${performance}">
 
-	<!-- °ø¿¬Á¤º¸ ³»¿ë -->
-	<div class="desc">
-		<div class="comment">
-			<p>¾È³çÇÏ¼¼¿ä. °ø¿¬Á¤º¸ ÇÃ·§Æû ¾ÆÆ®¿ÂÀÔ´Ï´Ù.<br><strong th:text="${performance.getTitle()}">°ø¿¬ ÀÌ¸§</strong>&nbsp;°ø¿¬ ¿ÀÇÂ ¾È³»ÀÔ´Ï´Ù.</p>
-		</div>
-		<div class="introduce">
-			<h4>°ø¿¬Á¤º¸</h4>
-			<div class="data">
-				<p>Æ¼ÄÏ ¿ÀÇÂ
-					<br>¡Ø ÀÏÀÚº° Ä³½ºÆÃ ¹× ½ºÄÉÁÙÀº º°µµ °øÁöµÇ¸ç, ¿¹¸ÅÃ³º° ±¸ºÐ¾øÀÌ ¸ðµç ÁÂ¼®ÀÌ ¿¬µ¿µÇ¾î ÆÇ¸ÅµË´Ï´Ù.
-					<br>¼¼Á¾¹®È­È¸°ü È¨ÆäÀÌÁö, ¸á·ÐÆ¼ÄÏ, ÀÎÅÍÆÄÅ© °¢ ¿¹¸ÅÃ³ÀÇ »ó¼¼Á¤º¸¸¦ Âü°í ¹Ù¶ø´Ï´Ù.<br>
-					<br>¡Ø [[${performance.getTitle()}]] ´Â Æ¼ÄÏ ¹è¼Û ¼­ºñ½º¸¦ ÁøÇàÇÏÁö ¾ÊÀ¸¸ç, °ø¿¬ ´çÀÏ ¸ÅÇ¥¼Ò¿¡¼­ ÇöÀå ¼ö·É¸¸ °¡´ÉÇÕ´Ï´Ù.<br>
-					<br>- °ø¿¬¸í : [[${performance.getTitle()}]]
-					<br>- °ø¿¬Àå : [[${performance.getPlace()}]]
-					<br>- °ø¿¬±â°£ : [[${performance.getStartDate()}]] ºÎÅÍ [[${performance.getEndDate()}]] ±îÁö
-<!--					<br>- °ø¿¬½Ã°£ : È­,¸ñ 7½Ã 30ºÐ / ¼ö,±Ý,Åä,°øÈÞÀÏ 2½Ã 30ºÐ, 7½Ã 30ºÐ / ÀÏ 3½Ã ( ¿ù °ø¿¬ ¾øÀ½ )-->
-					<br>- µî±Þ ¹× °¡°Ý : ¹ÌÁ¤
-				</p>
-			</div>
-		</div>
-	</div>
+    <!-- ê³µì—°ì •ë³´ ë‚´ìš© -->
+    <div class="desc">
+        <div class="comment">
+            <p>ì•ˆë…•í•˜ì„¸ìš”. ê³µì—°ì •ë³´ í”Œëž«í¼ ì•„íŠ¸ì˜¨ìž…ë‹ˆë‹¤.<br><strong>[[${performance.getTitle()}]]</strong>&nbsp;ê³µì—° ì˜¤í”ˆ ì•ˆë‚´ìž…ë‹ˆë‹¤.</p>
+        </div>
+        <div class="introduce">
+            <h4>ê³µì—°ì •ë³´</h4>
+            <div class="data">
+                <p>í‹°ì¼“ ì˜¤í”ˆ
+                    <br> ì¼ìžë³„ ìºìŠ¤íŒ… ë° ìŠ¤ì¼€ì¤„ì€ ë³„ë„ ê³µì§€ë˜ë©°, ì˜ˆë§¤ì²˜ë³„ êµ¬ë¶„ì—†ì´ ëª¨ë“  ì¢Œì„ì´ ì—°ë™ë˜ì–´ íŒë§¤ë©ë‹ˆë‹¤.
+                    <br>ì„¸ì¢…ë¬¸í™”íšŒê´€ í™ˆíŽ˜ì´ì§€, ë©œë¡ í‹°ì¼“, ì¸í„°íŒŒí¬ ê° ì˜ˆë§¤ì²˜ì˜ ìƒì„¸ì •ë³´ë¥¼ ì°¸ê³  ë°”ëžë‹ˆë‹¤.<br>
+                    <br> [[${performance.getTitle()}]] ëŠ” í‹°ì¼“ ë°°ì†¡ ì„œë¹„ìŠ¤ë¥¼ ì§„í–‰í•˜ì§€ ì•Šìœ¼ë©°, ê³µì—° ë‹¹ì¼ ë§¤í‘œì†Œì—ì„œ í˜„ìž¥ ìˆ˜ë ¹ë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤.<br>
+                    <br>- ê³µì—°ëª… : [[${performance.getTitle()}]]
+                    <br>- ê³µì—°ìž¥ : [[${performance.getPlace()}]]
+                    <br>- ê³µì—°ê¸°ê°„ : [[${performance.getStartDate()}]] ë¶€í„° [[${performance.getEndDate()}]] ê¹Œì§€
+                    <!--					<br>- ê³µì—°ì‹œê°„ : í™”,ëª© 7ì‹œ 30ë¶„ / ìˆ˜,ê¸ˆ,í† ,ê³µíœ´ì¼ 2ì‹œ 30ë¶„, 7ì‹œ 30ë¶„ / ì¼ 3ì‹œ ( ì›” ê³µì—° ì—†ìŒ )-->
+                    <br>- ë“±ê¸‰ ë° ê°€ê²© : ë¯¸ì •
+                </p>
+            </div>
+        </div>
+    </div>
 
-	<!-- °øÁö»çÇ× -->
-	<div class="section_notice">
-		<div class="board">
-			<div class="detail_top">
-				<h2><img src="" alt="°øÁö»çÇ×"></h2>
-				<div class="info">
+    <!-- ê³µì§€ì‚¬í•­ -->
+    <div class="section_notice">
+        <div class="board">
+            <div class="detail_top">
+                <h2><img src="" alt="ê³µì§€ì‚¬í•­"></h2>
+                <div class="info">
 
-					<span class="poster"><img src="./&#4362;&#4449;&#4354;&#4469;&#4353;&#4449; &#4358;&#4469;&#4526;&#4363;&#4467;&#4354;&#4469;&#4353;&#4449; &#4363;&#4469;&#4523;&#4368;&#4453;&#4369;&#4449;&#4367;&#4467; &#4368;&#4469;&#4367;&#4454;&#4538;_files/P0003461_p.gif" alt="¹ÂÁöÄÃ &lt;¸ðÂ÷¸£Æ®!&gt; 1Â÷ Æ¼ÄÏ¿ÀÇÂ ¾È³» Æ÷½ºÅÍ" onerror="this.src=&#39;http://ticketimage.interpark.com/TicketImage/notice_poster/20/2023050217083743.jpg&#39;"></span>
+                    <!--					<span class="poster"><img src="./&#4362;&#4449;&#4354;&#4469;&#4353;&#4449; &#4358;&#4469;&#4526;&#4363;&#4467;&#4354;&#4469;&#4353;&#4449; &#4363;&#4469;&#4523;&#4368;&#4453;&#4369;&#4449;&#4367;&#4467; &#4368;&#4469;&#4367;&#4454;&#4538;_files/P0003461_p.gif" alt="ë®¤ì§€ì»¬ &lt;ëª¨ì°¨ë¥´íŠ¸!&gt; 1ì°¨ í‹°ì¼“ì˜¤í”ˆ ì•ˆë‚´ í¬ìŠ¤í„°" onerror="this.src=&#39;http://ticketimage.interpark.com/TicketImage/notice_poster/20/2023050217083743.jpg&#39;"></span>-->
 
-					<h3>¹ÂÁöÄÃ &lt;¸ðÂ÷¸£Æ®!&gt; 1Â÷ Æ¼ÄÏ¿ÀÇÂ ¾È³»<span></span></h3>
+                    <h3>[[${performance.getTitle()}]] í‹°ì¼“ì˜¤í”ˆ ì•ˆë‚´<span></span></h3>
 
-					<ul>
-						<li class="open"><strong>Æ¼ÄÏ¿ÀÇÂÀÏ</strong>[[${performance.getTicketOpenDate()}]] - [[${performance.getTicketEndDate()}]]</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div><!-- //top -->
+                    <ul>
+                        <li class="open"><strong>í‹°ì¼“ì˜¤í”ˆì¼</strong> [[${performance.getTicketOpenDate()}]] - [[${performance.getTicketEndDate()}]]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div><!-- //top -->
 
-	<!-- °ø¿¬»ó¼¼ -->
-	<div class="info1">
-		<h4>°ø¿¬¼Ò°³</h4>
-		<div class="data">
-			2023³â ´º Á¦³Ê·¹ÀÌ¼ÇÀÇ Åº»ý! ÃÖÁ¤¿¹ Ã¢ÀÛÁø°ú ¶óÀÌÂ¡ ½ºÅ¸µéÀÇ ¿Ïº®ÇÑ ¸¸³²!
-			<br>´õ¿í °­·ÂÇØÁ® µ¹¾Æ¿Â ·¹Àüµå ¹ÂÁöÄÃ &lt;¸ðÂ÷¸£Æ®!&gt;
-			<br>2010³â À¯·´ ¹ÂÁöÄÃ, ±× °¨µ¿ÀÇ ½ÃÀÛ &lt;¸ðÂ÷¸£Æ®!&gt; Àü ¼¼°è ¹ÂÁöÄÃ ¿ª»ç¿¡ È¹À» ±ß´Ù!
-			<br>-¹ÂÁöÄÃ ¾î¿öÁî 11°³ ºÎ¹® ¼®±Ç, ¼¼Á¾¹®È­È¸°ü ÃÖÀå ±â°£, ÃÖ´Ù È¸Â÷ °ø¿¬±â·Ï(¶óÀÌ¼±½º °ø¿¬ ±âÁØ)
-			<br>-1999³â ¿À½ºÆ®¸®¾Æ ºñ¿£³ª ¼¼°è ÃÊ¿¬ ÈÄ 10°³±¹¿¡¼­ 8°³ ¾ð¾î·Î 2,400È¸ ÀÌ»ó °ø¿¬, 250¸¸ °ü°´ÀÌ ¿­±¤ÇÑ ½ºÅ×µð¼¿·¯ ¹ÂÁöÄÃ!
-			<br>±ØÀÛ°¡ ¹ÌÇÏ¿¤ ÄïÃ¼&amp;ÀÛ°î°¡ ½Çº£½ºÅÍ ¸£º£ÀÌ°¡ ºú¾î³½ ¿ªÀÛ!
-			<br>-½ÅÀÌ ³»¸° ÃµÀç À½¾Ç°¡ ¸ðÂ÷¸£Æ®ÀÇ ÀÎ°£Àû °í³ú¿Í ³»¸éÀÇ °¥µîÀ» ¼¶¼¼ÇÏ°í µå¶ó¸¶Æ½ÇÏ°Ô Ç®¾î³½ ±Øº»
-			<br>-¡®³ª´Â ³ª´Â À½¾Ç¡¯, ¡®È²±Ýº°¡¯, ¡®³» ¿î¸í ÇÇÇÏ°í ½Í¾î¡¯ µî Å¬·¡½ÄÇÏ¸é¼­µµ °­·ÄÇÑ ·Ï ½ºÅ¸ÀÏÀÇ Å³¸µ ³Ñ¹ö
-			<br>-°íÀü°ú Çö´ë¸¦ Ç°Àº ÀÇ»ó°ú ÃÊ¿ùÀû ¹«µåÀÇ ¼¼Æ®·Î ¹ÌÇÐÀûÀÎ Á¤Á¡À» ÂïÀº ¹«´ë ¿¹¼ú
-			<br>½Ã³ñ½Ã½º
-			<br>½ÅÀÌ ³»¸° ÃµÀç, ¸ðÂ÷¸£Æ®!
-			<br>ÃµÀç·Î¼­ÀÇ ¿î¸í°ú ÀÚÀ¯·Î¿î ÀÎ°£ÀÌ°íÇÂ ¿­¸ÁÀÇ ³¡¾ø´Â ´ë¸³
-			<br>½Åµ¿ÀÌ¶ó ºÒ¸®´Â º¼ÇÁ°­ ¾Æ¸¶µ¥¿ì½º ¸ðÂ÷¸£Æ®¿Í ±×ÀÇ ´©ÀÌ ³­³Ú ¸ðÂ÷¸£Æ®´Â
-			<br>¾Æ¹öÁöÀÇ ÁÖµµÇÏ¿¡ À¯·´ Àü¿ªÀ» µ¹¸ç »ó·ùÃþ ±ÍÁ· ¾Õ¿¡¼­ ¿¬ÁÖÈ¸¸¦ °®´Â´Ù.
-			<br>ÇÏÁö¸¸ ¼ºÀÎÀÌ µÈ º¼ÇÁ°­Àº ÀÚ½ÅÀ» ¾ô¸Å´Â °è±Þ»çÈ¸¸¦ °ßµðÁö ¸øÇÏ°í,
-			<br>ÀÚ½ÅÀÇ °í¿ëÁÖÀÎ ÄÝ·Î·¹µµ ´ëÁÖ±³¿Í ¸Å¹ø °¥µîÀ» ÀÏÀ¸Å²´Ù.
-			<br>°á±¹ º¼ÇÁ°­Àº ÀßÃ÷ºÎ¸£Å©¸¦ ¶°³ª ²Þ²ã¿Ô´ø À½¾Ç ¿©Çà±æ¿¡ ¿À¸£Áö¸¸,
-			<br>À½¾Ç ¹Û¿¡ ¸ð¸£´Â ¼øÁøÇÑ ±×ÀÇ ¿©Á¤Àº ¼øÅºÄ¡ ¾Ê´Ù.
-			<br>¾ÆÇÂ ¸öÀ» ÀÌ²ø°í ÀÚ½ÅÀÇ ¿¬ÁÖÈ¸¸¦ º¸·¯ ¿Â ¾î¸Ó´Ï¸¶Àú
-			<br>Á×À½À» ¸ÂÀÌÇÏÀÚ ÀÚ±«°¨¿¡ ºüÁø º¼ÇÁ°­Àº ÀßÃ÷ºÎ¸£Å©·Î µ¹¾Æ°£´Ù.
-			<br>ÀÚ½ÅÀ» ¿Ä¾Æ¸Å·Á´Â ¾Æ¹öÁö ·¹¿ÀÆúÆ®¿Í ÄÝ·Î·¹µµ ´ëÁÖ±³·Î ÀÎÇØ °¥µîÀº °íÁ¶µÇ°í,
-			<br>±×ÀÇ ÃµÀç¼ºÀÎ ¡®¾Æ¸¶µ¥¡¯´Â Á¡Á¡ ¾Ç¸¶·Î º¯ÇØ º¼ÇÁ°­À» ÁË¾î ¿À´Âµ¥¡¦
-		</div>
-	</div>
+    <!-- ê³µì—°ìƒì„¸ -->
+    <div class="info1">
+        <h4>ê³µì—°ì†Œê°œ</h4>
+        <div class="data">
+            2023ë…„ ë‰´ ì œë„ˆë ˆì´ì…˜ì˜ íƒ„ìƒ! ìµœì •ì˜ˆ ì°½ìž‘ì§„ê³¼ ë¼ì´ì§• ìŠ¤íƒ€ë“¤ì˜ ì™„ë²½í•œ ë§Œë‚¨!
+            <br>ë”ìš± ê°•ë ¥í•´ì ¸ ëŒì•„ì˜¨ ë ˆì „ë“œ ë®¤ì§€ì»¬ &lt;ëª¨ì°¨ë¥´íŠ¸!&gt;
+            <br>2010ë…„ ìœ ëŸ½ ë®¤ì§€ì»¬, ê·¸ ê°ë™ì˜ ì‹œìž‘ &lt;ëª¨ì°¨ë¥´íŠ¸!&gt; ì „ ì„¸ê³„ ë®¤ì§€ì»¬ ì—­ì‚¬ì— íšì„ ê¸‹ë‹¤!
+            <br>-ë®¤ì§€ì»¬ ì–´ì›Œì¦ˆ 11ê°œ ë¶€ë¬¸ ì„ê¶Œ, ì„¸ì¢…ë¬¸í™”íšŒê´€ ìµœìž¥ ê¸°ê°„, ìµœë‹¤ íšŒì°¨ ê³µì—°ê¸°ë¡(ë¼ì´ì„ ìŠ¤ ê³µì—° ê¸°ì¤€)
+            <br>-1999ë…„ ì˜¤ìŠ¤íŠ¸ë¦¬ì•„ ë¹„ì—”ë‚˜ ì„¸ê³„ ì´ˆì—° í›„ 10ê°œêµ­ì—ì„œ 8ê°œ ì–¸ì–´ë¡œ 2,400íšŒ ì´ìƒ ê³µì—°, 250ë§Œ ê´€ê°ì´ ì—´ê´‘í•œ ìŠ¤í…Œë””ì…€ëŸ¬ ë®¤ì§€ì»¬!
+            <br>ê·¹ìž‘ê°€ ë¯¸í•˜ì—˜ ì¿¤ì²´&amp;ìž‘ê³¡ê°€ ì‹¤ë² ìŠ¤í„° ë¥´ë² ì´ê°€ ë¹šì–´ë‚¸ ì—­ìž‘!
+            <br>-ì‹ ì´ ë‚´ë¦° ì²œìž¬ ìŒì•…ê°€ ëª¨ì°¨ë¥´íŠ¸ì˜ ì¸ê°„ì  ê³ ë‡Œì™€ ë‚´ë©´ì˜ ê°ˆë“±ì„ ì„¬ì„¸í•˜ê³  ë“œë¼ë§ˆí‹±í•˜ê²Œ í’€ì–´ë‚¸ ê·¹ë³¸
+            <br>-â€˜ë‚˜ëŠ” ë‚˜ëŠ” ìŒì•…â€™, â€˜í™©ê¸ˆë³„â€™, â€˜ë‚´ ìš´ëª… í”¼í•˜ê³  ì‹¶ì–´â€™ ë“± í´ëž˜ì‹í•˜ë©´ì„œë„ ê°•ë ¬í•œ ë¡ ìŠ¤íƒ€ì¼ì˜ í‚¬ë§ ë„˜ë²„
+            <br>-ê³ ì „ê³¼ í˜„ëŒ€ë¥¼ í’ˆì€ ì˜ìƒê³¼ ì´ˆì›”ì  ë¬´ë“œì˜ ì„¸íŠ¸ë¡œ ë¯¸í•™ì ì¸ ì •ì ì„ ì°ì€ ë¬´ëŒ€ ì˜ˆìˆ 
+            <br>ì‹œë†‰ì‹œìŠ¤
+            <br>ì‹ ì´ ë‚´ë¦° ì²œìž¬, ëª¨ì°¨ë¥´íŠ¸!
+            <br>ì²œìž¬ë¡œì„œì˜ ìš´ëª…ê³¼ ìžìœ ë¡œìš´ ì¸ê°„ì´ê³ í”ˆ ì—´ë§ì˜ ëì—†ëŠ” ëŒ€ë¦½
+            <br>ì‹ ë™ì´ë¼ ë¶ˆë¦¬ëŠ” ë³¼í”„ê°• ì•„ë§ˆë°ìš°ìŠ¤ ëª¨ì°¨ë¥´íŠ¸ì™€ ê·¸ì˜ ëˆ„ì´ ë‚œë„¬ ëª¨ì°¨ë¥´íŠ¸ëŠ”
+            <br>ì•„ë²„ì§€ì˜ ì£¼ë„í•˜ì— ìœ ëŸ½ ì „ì—­ì„ ëŒë©° ìƒë¥˜ì¸µ ê·€ì¡± ì•žì—ì„œ ì—°ì£¼íšŒë¥¼ ê°–ëŠ”ë‹¤.
+            <br>í•˜ì§€ë§Œ ì„±ì¸ì´ ëœ ë³¼í”„ê°•ì€ ìžì‹ ì„ ì–½ë§¤ëŠ” ê³„ê¸‰ì‚¬íšŒë¥¼ ê²¬ë””ì§€ ëª»í•˜ê³ ,
+            <br>ìžì‹ ì˜ ê³ ìš©ì£¼ì¸ ì½œë¡œë ˆë„ ëŒ€ì£¼êµì™€ ë§¤ë²ˆ ê°ˆë“±ì„ ì¼ìœ¼í‚¨ë‹¤.
+            <br>ê²°êµ­ ë³¼í”„ê°•ì€ ìž˜ì¸ ë¶€ë¥´í¬ë¥¼ ë– ë‚˜ ê¿ˆê¿”ì™”ë˜ ìŒì•… ì—¬í–‰ê¸¸ì— ì˜¤ë¥´ì§€ë§Œ,
+            <br>ìŒì•… ë°–ì— ëª¨ë¥´ëŠ” ìˆœì§„í•œ ê·¸ì˜ ì—¬ì •ì€ ìˆœíƒ„ì¹˜ ì•Šë‹¤.
+            <br>ì•„í”ˆ ëª¸ì„ ì´ëŒê³  ìžì‹ ì˜ ì—°ì£¼íšŒë¥¼ ë³´ëŸ¬ ì˜¨ ì–´ë¨¸ë‹ˆë§ˆì €
+            <br>ì£½ìŒì„ ë§žì´í•˜ìž ìžê´´ê°ì— ë¹ ì§„ ë³¼í”„ê°•ì€ ìž˜ì¸ ë¶€ë¥´í¬ë¡œ ëŒì•„ê°„ë‹¤.
+            <br>ìžì‹ ì„ ì˜­ì•„ë§¤ë ¤ëŠ” ì•„ë²„ì§€ ë ˆì˜¤í´íŠ¸ì™€ ì½œë¡œë ˆë„ ëŒ€ì£¼êµë¡œ ì¸í•´ ê°ˆë“±ì€ ê³ ì¡°ë˜ê³ ,
+            <br>ê·¸ì˜ ì²œìž¬ì„±ì¸ â€˜ì•„ë§ˆë°â€™ëŠ” ì ì  ì•…ë§ˆë¡œ ë³€í•´ ë³¼í”„ê°•ì„ ì£„ì–´ ì˜¤ëŠ”ë°â€¦
+        </div>
+    </div>
 
-	<!-- Ä³½ºÆÃ -->
-	<div class="casting">
-		<h4>¾ÆÆ¼½ºÆ®</h4>
-		<ul>
-			<li th:each="artist : ${performance.getArtists()}">
-				<img src="">
-				<span th:text="${artist.getName()}"></span>
-			</li>
-		</ul>
-	</div>
-				
-	<div class="txt_guide">
-		<p>Æ¼ÄÏ¿ÀÇÂÀÏÁ¤Àº ±âÈ¹»çÀÇ »çÁ¤¿¡ ÀÇÇØ »çÀü¿¹°í ¾øÀÌ º¯°æ ¶Ç´Â Ãë¼Ò µÉ ¼ö ÀÖ½À´Ï´Ù.</p>
-	</div>
+    <!-- ìºìŠ¤íŒ… -->
+    <div class="casting">
+        <h4>ì•„í‹°ìŠ¤íŠ¸</h4>
+        <ul id="header_casting">
+            <li th:each="artist : ${performance.getArtists()}">
+                <a><img th:src="${artist.getImageUrl()}"><span>[[${artist.getName()}]]</span></a>
+            </li>
+        </ul>
+    </div>
 
-</div><!-- //board -->
-<!--			<div class="aside">-->
-<!--				-->
-<!--				<div class="magazine">-->
-<!--					-->
-<!--				</div>-->
-<!--				-->
+<!--    <div class="txt_guide">-->
+<!--        <p>í‹°ì¼“ì˜¤í”ˆì¼ì •ì€ ê¸°íšì‚¬ì˜ ì‚¬ì •ì— ì˜í•´ ì‚¬ì „ì˜ˆê³  ì—†ì´ ë³€ê²½ ë˜ëŠ” ì·¨ì†Œ ë  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.</p>-->
+<!--    </div>-->
 
-<!--				&lt;!&ndash;±¤°í¹è³Ê&ndash;&gt;-->
-<!--				&lt;!&ndash;¿ÜºÎ¿¬µ¿ À¯·á ±¤°í±¸ÁÂ Ãß°¡ 2017.11.28&ndash;&gt;-->
-<!--				<div class="banner">-->
-<!--				<ins data-revive-zoneid="80" data-revive-id="32fc02fb74640f115edf4326579262d8"></ins>-->
-<!--				<script async="" src="./&#4362;&#4449;&#4354;&#4469;&#4353;&#4449; &#4358;&#4469;&#4526;&#4363;&#4467;&#4354;&#4469;&#4353;&#4449; &#4363;&#4469;&#4523;&#4368;&#4453;&#4369;&#4449;&#4367;&#4467; &#4368;&#4469;&#4367;&#4454;&#4538;_files/asyncjs.php"></script>-->
-<!--				</div>-->
-
-<!--				<div>-->
-<!--					-->
-<!--				</div>-->
-
-<!--			</div>-->
-		<!-- //Æ¼ÄÏ°øÁö -->
+</div>
+</body>
 </html>

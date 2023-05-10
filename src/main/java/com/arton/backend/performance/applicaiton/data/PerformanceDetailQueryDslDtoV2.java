@@ -11,10 +11,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -58,32 +55,59 @@ public class PerformanceDetailQueryDslDtoV2 {
         prices = prices.stream().filter(PriceInfoDto::isCompleted).collect(Collectors.toSet());
     }
 
-    private String getTextDayWithOutYear(LocalDateTime time) {
+    /**
+     * yyyy mm dd (월)
+     * @param time
+     * @return
+     */
+    private String getTextYearDay(LocalDateTime time) {
         String day = null;
         if (!ObjectUtils.isEmpty(time)) {
-            String[] days = Optional.ofNullable(time).orElseGet(null).format(DateTimeFormatter.ofPattern("MM.dd HH:mm")).split(" ");
-            String textDay = Optional.ofNullable(time).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-            day = days[0]+"("+textDay+")"+" "+days[1];
+            String[] days = getSplitDate(time);
+            String textDay = getShortDay(time);
+            day =  days[0] + " " + days[1]+"("+textDay+")";
         }
         return day;
     }
 
-    private String getTextDayWithYear(LocalDateTime time) {
+
+    /**
+     * yyyy mm dd (월) hh:mm
+     * @param time
+     * @return
+     */
+    private String getTextYearDayTime(LocalDateTime time){
         String day = null;
         if (!ObjectUtils.isEmpty(time)) {
-            String[] days = Optional.ofNullable(time).orElseGet(null).format(DateTimeFormatter.ofPattern("yyyy MM.dd HH:mm")).split(" ");
-            String textDay = Optional.ofNullable(time).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+            String[] days = getSplitDate(time);
+            String textDay = getShortDay(time);
             day = days[0] + " " + days[1]+"("+textDay+")"+" "+days[2];
+        }
+        return day;
+    }
+
+    private String[] getSplitDate(LocalDateTime time) {
+        String day[] = {};
+        if (!ObjectUtils.isEmpty(time)) {
+            day =  Optional.ofNullable(time).orElseGet(null).format(DateTimeFormatter.ofPattern("yyyy MM.dd HH:mm")).split(" ");
+        }
+        return day;
+    }
+
+    private String getShortDay(LocalDateTime time) {
+        String day = null;
+        if (!ObjectUtils.isEmpty(time)) {
+            day = Optional.ofNullable(time).orElseGet(null).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
         }
         return day;
     }
 
     public PerformanceDetailDtoV2 toDto(){
         fillData();
-        String textStartDay = getTextDayWithYear(startDate);
-        String textEndDay = getTextDayWithYear(endDate);
-        String ticketOpenDay = getTextDayWithYear(ticketOpenDate);
-        String ticketEndDay = getTextDayWithYear(ticketEndDate);
+        String textStartDay = getTextYearDay(startDate);
+        String textEndDay = getTextYearDay(endDate);
+        String ticketOpenDay = getTextYearDayTime(ticketOpenDate);
+        String ticketEndDay = getTextYearDayTime(ticketEndDate);
         return PerformanceDetailDtoV2.builder()
                 .id(getId())
                 .images(images)
