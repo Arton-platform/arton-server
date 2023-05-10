@@ -80,7 +80,7 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
 
     @Override
     public List<Performance> findPopularPerformances(int offset, int limit) {
-        return performanceRepository.getPerformanceByEndDateASC(offset, limit);
+        return performanceRepository.getPopularPerformances(offset, limit);
     }
 
     @Override
