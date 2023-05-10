@@ -21,6 +21,6 @@ public class PerformanceHtmlController {
     @GetMapping("/performance.html")
     public String goDetailPage(Model model, @RequestParam(value = "performanceId", required = true) Long performanceId){
         model.addAttribute("performance", performanceService.getOneWithArtistInfo(performanceId));
-        return "/performance/detail";
+        return "performance/detail";
     }
 }
