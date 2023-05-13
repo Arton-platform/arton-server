@@ -25,6 +25,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -103,6 +104,9 @@ dependencies {
 	implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
 	// MockMultipartFile을 위해
 	compile group: 'org.springframework', name: 'spring-test'
+
+	// spotify api
+	implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.0.0'
 }
 
 tasks.named('test') {
