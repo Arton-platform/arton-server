@@ -15,10 +15,20 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
     @Value("${elastic.server.ip}")
     private String ip;
 
+    @Value("${elastic.username}")
+    private String username;
+
+    @Value("${elastic.password}")
+    private String password;
+
     @Override
     public RestHighLevelClient elasticsearchClient() {
         // http port 와 통신할 주소
-        ClientConfiguration configuration = ClientConfiguration.builder().connectedTo(ip).build();
+        ClientConfiguration configuration = ClientConfiguration
+                .builder()
+                .connectedTo(ip)
+                .withBasicAuth(username, password)
+                .build();
         return RestClients.create(configuration).rest();
     }
 }

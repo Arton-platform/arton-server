@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8333
   tomcat:
     max-http-form-post-size: 25MB
   error:
@@ -28,15 +28,14 @@ spring:
     max-file-size: 20MB
     max-request-size: 25MB
   datasource:
-    url: jdbc:h2:tcp://localhost/~/arton
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-    #    url: jdbc:mysql://mate.c1dxsbik81fj.ap-northeast-2.rds.amazonaws.com:3306/arton
-    #    username: artonDev
-    #    password: dkxm##2
-    #    driver-class-name: com.mysql.cj.jdbc.Driver
-
+    #    url: jdbc:h2:tcp://localhost/~/arton
+    #    username: sa
+    #    password:
+    #    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://mate.c1dxsbik81fj.ap-northeast-2.rds.amazonaws.com:3306/arton
+    username: artonDev
+    password: dkxm##2
+    driver-class-name: com.mysql.cj.jdbc.Driver
     cache:
       type: REDIS
 
@@ -46,7 +45,7 @@ spring:
 
   redis:
     host: localhost
-    port: 6379
+    port: 6378
 
   mail:
     passwordTemplate: arton/mail/passwordResetMail.html
@@ -96,10 +95,10 @@ search:
 cloud:
   aws:
     s3:
-      bucket: elasticbeanstalk-ap-northeast-2-629926164588
+      bucket: arton
     credentials:
-      access-key: AKIAZFKUGPBWAKWLTYPA
-      secret-key: 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
+      access-key: AKIAXTLZPIETKUGOT7U2
+      secret-key: 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
     region:
       static: ap-northeast-2
       auto: false
@@ -108,7 +107,9 @@ cloud:
 
 elastic:
   server:
-    ip: localhost:9200
+    ip: docker-elk-elasticsearch-1:9200
+  username: elastic
+  password: dkxm##2
 
 apple:
   key-path: ${user.home}/cert/apple/arton.p8
@@ -157,3 +158,9 @@ springdoc:
   default-produces-media-type: application/json
   paths-to-match:
     - /**
+
+spotify:
+  id: 4f1ad3f1f8144bce9f37c7dfa23f613e
+  password: e4693a776ae140c0b63ca798ff7abb0b
+  redirect:
+    url: http://localhost:8080/spotify/code
