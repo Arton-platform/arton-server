@@ -28,14 +28,14 @@ spring:
     max-file-size: 20MB
     max-request-size: 25MB
   datasource:
-    #    url: jdbc:h2:tcp://localhost/~/arton
-    #    username: sa
-    #    password:
-    #    driver-class-name: org.h2.Driver
-    url: jdbc:mysql://mate.c1dxsbik81fj.ap-northeast-2.rds.amazonaws.com:3306/arton
-    username: artonDev
-    password: dkxm##2
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:tcp://localhost/~/arton
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+#    url: jdbc:mysql://mate.c1dxsbik81fj.ap-northeast-2.rds.amazonaws.com:3306/arton
+#    username: artonDev
+#    password: dkxm##2
+#    driver-class-name: com.mysql.cj.jdbc.Driver
     cache:
       type: REDIS
 
@@ -45,7 +45,7 @@ spring:
 
   redis:
     host: localhost
-    port: 6378
+    port: 6379
 
   mail:
     passwordTemplate: arton/mail/passwordResetMail.html
@@ -107,7 +107,7 @@ cloud:
 
 elastic:
   server:
-    ip: docker-elk-elasticsearch-1:9200
+    ip: localhost:9200
   username: elastic
   password: dkxm##2
 

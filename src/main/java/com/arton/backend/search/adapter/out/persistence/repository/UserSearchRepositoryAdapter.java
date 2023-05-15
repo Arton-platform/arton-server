@@ -11,11 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.arton.backend.user.adapter.out.persistence.mapper.UserMapper.*;
+import static com.arton.backend.user.adapter.out.persistence.mapper.UserMapper.toDocumentFromDomain;
 
 @Repository
 @RequiredArgsConstructor
