@@ -25,6 +25,7 @@
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{10} - %msg%n</pattern>
         </encoder>
+        </appender>
     </springProfile>
 
 
