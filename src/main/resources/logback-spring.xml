@@ -21,6 +21,10 @@
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             </encoder>
         </appender>
+        <appender name="CONSOLE-AWS" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{10} - %msg%n</pattern>
+        </encoder>
     </springProfile>
 
 
@@ -31,6 +35,7 @@
         </springProfile>
         <springProfile name="aws">
             <appender-ref ref="LOGSTASH" />
+            <appender-ref ref="CONSOLE-AWS" />
         </springProfile>
     </root>
 </configuration>
