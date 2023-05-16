@@ -11,7 +11,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - 8333:8333
+      - 7333:7333
     depends_on:
       - redis
 
