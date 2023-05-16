@@ -9,6 +9,7 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +20,7 @@ public class OAuthService implements OAuthUseCase {
     private final NaverUseCase naverService;
 
     @Override
+    @Transactional
     public TokenDto signup(HttpServletRequest request, OAuthSignupDto signupDto) {
         if (signupDto.getLoginType().equals("0")) {
             return kakaoService.login(request, signupDto);

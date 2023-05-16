@@ -42,6 +42,7 @@ import static org.springframework.util.StringUtils.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class KaKaoService implements KaKaoUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
