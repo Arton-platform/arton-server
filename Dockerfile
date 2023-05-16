@@ -1,5 +1,5 @@
 FROM openjdk:11
-EXPOSE 7333
+EXPOSE 8333
 RUN mkdir /app
 VOLUME /app
 COPY ./build/libs/*.jar /app/app.jar
