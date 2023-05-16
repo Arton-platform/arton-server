@@ -45,7 +45,7 @@ spring:
 
   redis:
     host: localhost
-    port: 6378
+    port: 6379
 
   mail:
     passwordTemplate: arton/mail/passwordResetMail.html
@@ -107,7 +107,7 @@ cloud:
 
 elastic:
   server:
-    ip: docker-elk-elasticsearch-1:9200
+    ip: localhost:9200
   username: elastic
   password: dkxm##2
 
