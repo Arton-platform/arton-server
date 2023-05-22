@@ -66,6 +66,7 @@ public class SpotifyService {
             Artist[] items = artistPaging.getItems();
             if (!ObjectUtils.isEmpty(items)) {
                 Artist item = items[0];
+                System.out.println("item = " + item);
                 result.addProperty("name", item.getName());
                 result.addProperty("imageUrl", "");
                 if (!ObjectUtils.isEmpty(item.getImages())) {
