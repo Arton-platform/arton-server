@@ -1,13 +1,12 @@
 package com.arton.backend.follow.applicaion.service;
 
 import com.arton.backend.comment.application.port.out.CommentFindPort;
-import com.arton.backend.comment.application.port.out.CommentRegistPort;
 import com.arton.backend.comment.domain.Comment;
 import com.arton.backend.follow.adapter.out.persistence.entity.FollowFeedEntity;
 import com.arton.backend.follow.applicaion.data.FollowFeedMapper;
 import com.arton.backend.follow.applicaion.data.FollowFeedRequestDto;
-import com.arton.backend.follow.applicaion.port.out.FollowFeedPort;
 import com.arton.backend.follow.applicaion.port.in.FollowFeedUseCase;
+import com.arton.backend.follow.applicaion.port.out.FollowFeedPort;
 import com.arton.backend.follow.domain.FeedType;
 import com.arton.backend.follow.domain.FollowFeed;
 import com.arton.backend.infra.shared.exception.CustomException;
@@ -120,14 +119,6 @@ public class FollowFeedService implements FollowFeedUseCase {
     /**
     * @Desc 다른사람이 나를 팔로우 했을때
     */
-//    @Override
-//    public void followMe(FollowFeed followFeed){
-//        String feedContent = followFeed.getFromUser() + " " + FeedType.FOLLOW_ME;
-//        FollowFeedEntity entity = followFeedMapper.toEntity(followFeed, feedContent);
-//        followFeedPort.save(entity);
-//        //TODO:
-//        // Alert User
-//    }
     @Override
     public void followMe(FollowFeedRequestDto followFeed) {
         User fromUser = userRepositoryPort.findById(followFeed.getFromUserId()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
