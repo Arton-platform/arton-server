@@ -1,7 +1,7 @@
 package com.arton.backend.follow.adapter.in;
 
+import com.arton.backend.follow.applicaion.data.FollowFeedRequestDto;
 import com.arton.backend.follow.applicaion.port.in.FollowFeedUseCase;
-import com.arton.backend.follow.domain.FollowFeed;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class FollowFeedController {
     private final FollowFeedUseCase followFeedUseCase;
 
     /**
-     * @param followFeed
+     * @param followFeedRequestDto
      * @Desc 나를 팔로우 할때
      */
     @Operation(
@@ -27,8 +27,8 @@ public class FollowFeedController {
             description = "다른사람이 나를 팔로우 할때"
     )
     @PostMapping("/follow-me")
-    public ResponseEntity<CommonResponse> followMe(@RequestBody FollowFeed followFeed){
-        followFeedUseCase.followMe(followFeed);
+    public ResponseEntity<CommonResponse> followMe(@RequestBody FollowFeedRequestDto followFeedRequestDto){
+        followFeedUseCase.followMe(followFeedRequestDto);
 
         CommonResponse response = CommonResponse.builder()
                 .message("SUCCESS")
@@ -46,7 +46,7 @@ public class FollowFeedController {
             description = "내가 팔로우 한사람이 댓글을 달았을때"
     )
     @PostMapping("/comment-from-follow")
-    public ResponseEntity<CommonResponse> commentFromFollow(@RequestBody FollowFeed followFeed){
+    public ResponseEntity<CommonResponse> commentFromFollow(@RequestBody FollowFeedRequestDto followFeed){
         followFeedUseCase.commentFromFollow(followFeed);
 
         CommonResponse response = CommonResponse.builder()
@@ -65,7 +65,7 @@ public class FollowFeedController {
             description = "팔로우 한사람이 리뷰를 달았을때"
     )
     @PostMapping("/review-from-follow")
-    public ResponseEntity<CommonResponse> reviewFromFollow(@RequestBody FollowFeed followFeed){
+    public ResponseEntity<CommonResponse> reviewFromFollow(@RequestBody FollowFeedRequestDto followFeed){
         followFeedUseCase.reviewFromFollow(followFeed);
 
         CommonResponse response = CommonResponse.builder()
@@ -84,7 +84,7 @@ public class FollowFeedController {
             description = "내가 들록한 리뷰 좋아요를 눌렀을때"
     )
     @PostMapping("/my-review-like")
-    public ResponseEntity<CommonResponse> myReviewLike(@RequestBody FollowFeed followFeed){
+    public ResponseEntity<CommonResponse> myReviewLike(@RequestBody FollowFeedRequestDto followFeed){
         followFeedUseCase.myReviewLike(followFeed);
 
         CommonResponse response = CommonResponse.builder()
@@ -103,7 +103,7 @@ public class FollowFeedController {
             description = "내가 등록한 리뷰에 댓글이 달렸을때"
     )
     @PostMapping("/my-review-commented")
-    public ResponseEntity<CommonResponse> myReviewCommented(@RequestBody FollowFeed followFeed){
+    public ResponseEntity<CommonResponse> myReviewCommented(@RequestBody FollowFeedRequestDto followFeed){
         followFeedUseCase.myReviewCommented(followFeed);
 
         CommonResponse response = CommonResponse.builder()

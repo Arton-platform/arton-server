@@ -1,10 +1,14 @@
 package com.arton.backend.comment.adapter.out.persistence;
 
+import com.arton.backend.comment.application.port.out.CommentFindPort;
 import com.arton.backend.comment.application.port.out.CommentListPort;
 import com.arton.backend.comment.application.port.out.CommentRegistPort;
+import com.arton.backend.comment.domain.Comment;
 import com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity;
 import com.arton.backend.review.adapter.out.persistence.QReviewEntity;
 import com.arton.backend.review.domain.Review;
+import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
+import com.arton.backend.user.domain.SignupType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,9 +18,10 @@ import java.util.List;
 import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
-public class CommentPersistenceAdapter implements CommentListPort, CommentRegistPort {
+public class CommentPersistenceAdapter implements CommentListPort, CommentRegistPort, CommentFindPort {
     private final CommentRepository repository;
     private final EntityManager entityManager;
+    private final CommentMapper commentMapper;
     @Override
     public Optional<List<CommentEntity>> findAllByReviewOrderByCreatedDateDesc(Review review) {
         QPerformanceEntity qPerformance = QPerformanceEntity.performanceEntity;
@@ -37,5 +42,10 @@ public class CommentPersistenceAdapter implements CommentListPort, CommentRegist
     @Override
     public void regist(CommentEntity comment) {
         repository.save(comment);
+    }
+
+    @Override
+    public Optional<Comment> findById(Long id) {
+        return repository.findById(id).map(commentMapper::toDomain);
     }
 }
