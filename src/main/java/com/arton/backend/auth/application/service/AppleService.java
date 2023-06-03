@@ -1,8 +1,10 @@
 package com.arton.backend.auth.application.service;
 
+import com.arton.backend.auth.application.data.KeyAlgDTO;
+import com.arton.backend.auth.application.data.KeyAlgResponseDTO;
 import com.arton.backend.auth.application.data.OAuthSignupDto;
 import com.arton.backend.auth.application.data.TokenDto;
-import com.arton.backend.auth.application.port.in.NaverUseCase;
+import com.arton.backend.auth.application.port.in.AppleUseCase;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
@@ -13,6 +15,8 @@ import com.arton.backend.user.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,11 +31,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -41,7 +51,7 @@ import static org.springframework.util.StringUtils.hasText;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class NaverService implements NaverUseCase {
+public class AppleService implements AppleUseCase {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
     private final UserImageSaveRepositoryPort userImageSaveRepository;
@@ -49,30 +59,22 @@ public class NaverService implements NaverUseCase {
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
-
-    @Value("${naver.client.id}")
-    private String clientId;
-    @Value("${naver.client.secret}")
-    private String clientSecret;
-    @Value("${naver.redirect.url}")
-    private String redirectURL;
     @Value("${spring.default-image}")
     private String defaultImage;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
+
     /**
-     *  token 발행
-     *  email, password 로 만들거임
-     *  여기서 설정하는 값이 userdetails의 id password로 넘어감
-     *  원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
-     *
-     * @return
+     * 애플의 경우 id token을 디코드해서
+     * 유저 고유값을 알아내야함
+     * 애플 id service에서 공개키를 생성후 토큰 디코드하여
+     * 프론트에서 넘긴 정보가 일치하는지 비교하자
      */
     @Override
     public synchronized TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto) {
-        String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
-        JsonNode userInfo = getUserInfo(accessToken).get("response");
-        if (!userInfo.get("id").asText().equals(signupDto.getId())) {
+        String identityToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
+        JsonNode userInfo = getUserInfo(identityToken);
+        if (!userInfo.get("sub").asText().equals(signupDto.getId())) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND);
         }
         User register = signup(signupDto);
@@ -83,64 +85,66 @@ public class NaverService implements NaverUseCase {
         return tokenDto;
     }
 
+
     /**
-     * https://developers.naver.com/docs/login/api/api.md
-     * 토근 받기 참조
-     * @param code
-     * @param state
+     * 토큰 파싱하기
      * @return
      */
-    private String getAccessToken(String code, String state) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "authorization_code");
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("code", code);
-        body.add("state", state);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, httpHeaders);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange("https://nid.naver.com/oauth2.0/token",
-                HttpMethod.POST,
-                request,
-                String.class);
-        String responseBody = response.getBody();
+    private JsonNode getUserInfo(String identityToken) {
+        String[] tokens = identityToken.split("\\.");
+        String encodedHeader = tokens[0];
+        String decodedHeader = new String(Base64.getDecoder().decode(encodedHeader));
         try {
-            return objectMapper.readTree(responseBody).get("access_token").asText();
+            JsonNode headerJson = objectMapper.readTree(decodedHeader);
+            String kid = headerJson.get("kid").asText();
+            String alg = headerJson.get("alg").asText();
+            PublicKey publickey = makePublicKey(kid, alg);
+            Claims body = Jwts.parser().setSigningKey(publickey).parseClaimsJws(identityToken).getBody();
+            return objectMapper.readTree(body.toString());
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
-        return "";
     }
 
-    /**
-     * 동의한 데이터 가져오기
-     *
-     * @param accessToken
-     * @return
-     */
-    private JsonNode getUserInfo(String accessToken) {
+    private KeyAlgResponseDTO getAppleIdKeys() {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Bearer "+accessToken);
-
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me",
+        ResponseEntity<KeyAlgResponseDTO> response = restTemplate.exchange("https://appleid.apple.com/auth/keys",
                 HttpMethod.GET,
                 request,
-                String.class);
-
-        String responseBody = response.getBody();
-        log.info("responseBody for userInfo {}", responseBody);
-        try {
-            return objectMapper.readTree(responseBody);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+                KeyAlgResponseDTO.class);
+        if (response.getStatusCode().isError()) {
+            throw new CustomException(ErrorCode.APPLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.APPLE_SIMPLE_LOGIN_ERROR);
         }
-        return null;
+        return response.getBody();
+    }
+
+    private PublicKey makePublicKey(String keyId, String alg) {
+        KeyAlgResponseDTO response = getAppleIdKeys();
+        PublicKey publicKey = null;
+        for (KeyAlgDTO value : response.getKeys()) {
+            if ((value.getKid().equals(keyId)) && (value.getAlg().equals(alg))) {
+                // make public key
+                String n = value.getN();
+                String e = value.getE();
+//                Base64.getUrlDecoder().decode(nStr.substring(1, nStr.length() - 1));
+                byte[] nBytes = Base64.getUrlDecoder().decode(n);
+                byte[] eBytes = Base64.getUrlDecoder().decode(e);
+                BigInteger bigIntegerN = new BigInteger(1, nBytes);
+                BigInteger bigIntegerE = new BigInteger(1, eBytes);
+                try{
+                    RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(bigIntegerN, bigIntegerE);
+                    KeyFactory keyFactory = KeyFactory.getInstance(value.getKty());
+                    publicKey = keyFactory.generatePublic(publicKeySpec);
+                } catch (NoSuchAlgorithmException ex) {
+                    throw new CustomException(ErrorCode.INVALID_ALGORITHM_REQUEST.getMessage(), ErrorCode.INVALID_ALGORITHM_REQUEST);
+                } catch (InvalidKeySpecException ex) {
+                    throw new CustomException(ErrorCode.INVALID_KEYSPEC_REQUEST.getMessage(), ErrorCode.INVALID_KEYSPEC_REQUEST);
+                }
+            }
+        }
+        return publicKey;
     }
 
     /**
@@ -154,7 +158,7 @@ public class NaverService implements NaverUseCase {
 
     private User signup(OAuthSignupDto signupDto) {
         String id = signupDto.getId();
-        User user = userRepository.findByPlatformId(id, SignupType.NAVER).orElse(null);
+        User user = userRepository.findByPlatformId(id, SignupType.APPLE).orElse(null);
         if (user == null) {
             /** password is user's own kakao id */
             String password = id;
@@ -166,7 +170,7 @@ public class NaverService implements NaverUseCase {
                     .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
                     .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
                     .auth(UserRole.ROLE_NORMAL)
-                    .signupType(SignupType.NAVER)
+                    .signupType(SignupType.APPLE)
                     .userStatus(true)
                     .termsAgree("Y")
                     .build();
@@ -174,7 +178,7 @@ public class NaverService implements NaverUseCase {
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
             userImageSaveRepository.save(userImage);
         }
-        return userRepository.findByPlatformId(id, SignupType.NAVER).orElseThrow(() -> new CustomException(ErrorCode.NAVER_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.NAVER_SIMPLE_LOGIN_ERROR));
+        return userRepository.findByPlatformId(id, SignupType.APPLE).orElseThrow(() -> new CustomException(ErrorCode.APPLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.APPLE_SIMPLE_LOGIN_ERROR));
     }
 
     private Gender getGender(String gender){
@@ -184,6 +188,4 @@ public class NaverService implements NaverUseCase {
             return Gender.FEMALE;
         return Gender.ETC;
     }
-
-
 }

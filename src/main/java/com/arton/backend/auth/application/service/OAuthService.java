@@ -2,6 +2,7 @@ package com.arton.backend.auth.application.service;
 
 import com.arton.backend.auth.application.data.OAuthSignupDto;
 import com.arton.backend.auth.application.data.TokenDto;
+import com.arton.backend.auth.application.port.in.AppleUseCase;
 import com.arton.backend.auth.application.port.in.KaKaoUseCase;
 import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.auth.application.port.in.OAuthUseCase;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 public class OAuthService implements OAuthUseCase {
     private final KaKaoUseCase kakaoService;
     private final NaverUseCase naverService;
+    private final AppleUseCase appleService;
 
     @Override
     @Transactional
@@ -27,7 +29,7 @@ public class OAuthService implements OAuthUseCase {
         } else if (signupDto.getLoginType().equals("1")) {
             return naverService.login(request, signupDto);
         } else if (signupDto.getLoginType().equals("2")) {
-
+            return appleService.login(request, signupDto);
         }
         throw new CustomException(ErrorCode.PARAMETER_NOT_VALID.getMessage(), ErrorCode.PARAMETER_NOT_VALID);
     }

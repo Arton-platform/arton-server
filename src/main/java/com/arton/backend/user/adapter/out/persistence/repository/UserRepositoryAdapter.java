@@ -32,13 +32,8 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public Optional<User> findByKakaoId(Long id) {
-        return userRepository.findByKakaoId(id).map(UserMapper::toDomain);
-    }
-
-    @Override
-    public Optional<User> findByNaverId(String id) {
-        return userRepository.findByNaverId(id).map(UserMapper::toDomain);
+    public Optional<User> findByPlatformId(String id, SignupType signupType) {
+        return userRepository.findByPlatformIdAndSignUpType(id, signupType).map(UserMapper::toDomain);
     }
 
     @Override

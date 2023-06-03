@@ -24,10 +24,8 @@ public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    /** 카카오 고유 회원 번호 */
-    private Long kakaoId;
-    /** naver 고유 회원 번호 */
-    private String naverId;
+    /** 플랫폼 고유 회원 번호 */
+    private String platformId;
     /** 이메일 */
     private String email;
     /** 비밀번호 */
@@ -118,11 +116,10 @@ public class UserEntity extends BaseEntity {
     }
 
     @Builder
-    public UserEntity(Long id, Long kakaoId, String naverId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, Boolean userStatus, UserImageEntity userImage) {
+    public UserEntity(Long id, String platformId, String email, String password, String nickname, Gender gender, AgeRange ageRange, UserRole auth, SignupType signupType, String termsAgree, List<PerformanceZzimEntity> performanceZzims, List<ArtistZzimEntity> artistZzims, LocalDateTime createdDate, LocalDateTime updatedDate, String selfDescription, Boolean userStatus, UserImageEntity userImage) {
         super(createdDate, updatedDate);
         this.id = id;
-        this.kakaoId = kakaoId;
-        this.naverId = naverId;
+        this.platformId = platformId;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
