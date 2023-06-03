@@ -33,7 +33,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public Optional<User> findByPlatformId(String id, SignupType signupType) {
-        return userRepository.findByPlatformIdAndSignUpType(id, signupType).map(UserMapper::toDomain);
+        return userRepository.findByPlatformIdAndSignupType(id, signupType).map(UserMapper::toDomain);
     }
 
     @Override

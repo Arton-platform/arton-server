@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long>, CustomUserRepository {
     List<UserEntity> findByEmail(String email);
-    Optional<UserEntity> findByPlatformIdAndSignUpType(String platformId, SignupType signupType);
+    Optional<UserEntity> findByPlatformIdAndSignupType(String platformId, SignupType signupType);
     List<UserEntity> findAllByOrderByIdDesc();
 }
