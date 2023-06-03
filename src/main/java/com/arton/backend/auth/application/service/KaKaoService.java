@@ -27,9 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +35,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static org.springframework.util.StringUtils.*;
+import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j
 @Service
@@ -81,7 +79,7 @@ public class KaKaoService implements KaKaoUseCase {
         }
         User register = signup(signupDto);
         // Generate ArtOn JWT
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), String.valueOf(register.getKakaoId()));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getPlatformId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
@@ -124,8 +122,8 @@ public class KaKaoService implements KaKaoUseCase {
      * @return
      */
     private User signup(OAuthSignupDto signupDto) {
-        long id = Long.parseLong(signupDto.getId());
-        User user = userRepository.findByKakaoId(id).orElse(null);
+        String id = signupDto.getId();
+        User user = userRepository.findByPlatformId(id, SignupType.KAKAO).orElse(null);
         if (user == null) {
             /** password is user's own kakao id */
             String password = signupDto.getId();
@@ -133,7 +131,7 @@ public class KaKaoService implements KaKaoUseCase {
                     .email(hasText(signupDto.getEmail()) ? signupDto.getEmail() : "")
                     .gender(hasText(signupDto.getGender()) ? Gender.get(signupDto.getGender().toUpperCase(Locale.ROOT)) : Gender.ETC)
                     .password(passwordEncoder.encode(password))
-                    .kakaoId(id)
+                    .platformId(id)
                     .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
                     .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
                     .auth(UserRole.ROLE_NORMAL)
@@ -145,7 +143,7 @@ public class KaKaoService implements KaKaoUseCase {
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
             userImageSaveRepository.save(userImage);
         }
-        return userRepository.findByKakaoId(id).orElseThrow(()->new CustomException(ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR));
+        return userRepository.findByPlatformId(id, SignupType.KAKAO).orElseThrow(()->new CustomException(ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR));
     }
 
 
