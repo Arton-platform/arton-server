@@ -16,6 +16,7 @@ public enum SignupType {
     NAVER("네이버"),
     KAKAO("카카오"),
     APPLE("애플"),
+    GOOGLE("구글"),
     ;
 
     private String type;
