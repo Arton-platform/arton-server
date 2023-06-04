@@ -20,6 +20,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
@@ -60,6 +62,7 @@ public class GoogleService implements GoogleUseCase {
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
+    private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
     @Value("${spring.default-image}")
     private String defaultImage;
     @Value("${refresh.token.prefix}")
@@ -74,7 +77,9 @@ public class GoogleService implements GoogleUseCase {
     @Override
     public synchronized TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto) {
         String identityToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
+        log.info("google token : {}", identityToken);
         JsonNode userInfo = getUserInfo(identityToken);
+        log.info("get info success");
         if (!userInfo.get("iss").asText().equals("https://accounts.google.com")) {
             throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
         }
@@ -105,7 +110,8 @@ public class GoogleService implements GoogleUseCase {
             String alg = headerJson.get("alg").asText();
             PublicKey publickey = makePublicKey(kid, alg);
             Claims body = Jwts.parser().setSigningKey(publickey).parseClaimsJws(identityToken).getBody();
-            return objectMapper.readTree(body.toString());
+            String bodyJson = objectMapper.writeValueAsString(body);
+            return objectMapper.readTree(bodyJson);
         } catch (JsonProcessingException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
@@ -120,7 +126,7 @@ public class GoogleService implements GoogleUseCase {
                 request,
                 KeyAlgResponseDTO.class);
         if (response.getStatusCode().isError()) {
-            throw new CustomException(ErrorCode.APPLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.APPLE_SIMPLE_LOGIN_ERROR);
+            throw new CustomException(ErrorCode.GOOGLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.GOOGLE_SIMPLE_LOGIN_ERROR);
         }
         return response.getBody();
     }

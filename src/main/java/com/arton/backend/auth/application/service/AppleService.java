@@ -100,7 +100,8 @@ public class AppleService implements AppleUseCase {
             String alg = headerJson.get("alg").asText();
             PublicKey publickey = makePublicKey(kid, alg);
             Claims body = Jwts.parser().setSigningKey(publickey).parseClaimsJws(identityToken).getBody();
-            return objectMapper.readTree(body.toString());
+            String bodyJson = objectMapper.writeValueAsString(body);
+            return objectMapper.readTree(bodyJson);
         } catch (JsonProcessingException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
