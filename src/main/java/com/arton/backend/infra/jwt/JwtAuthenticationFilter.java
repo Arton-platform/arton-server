@@ -37,11 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (!request.getRequestURI().equals("/actuator/prometheus")) {
                 log.info("JwtAuth Filter, Request URI : {}", request.getRequestURI());
             }
-            if (request.getRequestURI().equals("/auth/signup/oauth")){
-                return;
-            }
             // 유효 검증
-            if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+            if (!request.getRequestURI().equals("/auth/signup/oauth") && StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
                 // logout 여부 확인
                 String isLogout = (String)redisTemplate.opsForValue().get(token);
                 if (ObjectUtils.isEmpty(isLogout)){
