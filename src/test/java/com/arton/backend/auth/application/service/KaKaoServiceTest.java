@@ -65,7 +65,7 @@ class KaKaoServiceTest {
             user = User.builder().email("aa")
                     .gender(Gender.MALE)
                     .password(passwordEncoder.encode("aaaa"))
-                    .kakaoId(id)
+                    .platformId(Long.toString(id))
                     .nickname("aaa")
                     .ageRange(AgeRange.get(30))
                     .auth(UserRole.ROLE_NORMAL)

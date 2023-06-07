@@ -7,6 +7,7 @@ import com.neovisionaries.i18n.CountryCode;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +23,8 @@ import se.michaelthelin.spotify.requests.data.search.simplified.SearchArtistsReq
 import java.io.IOException;
 import java.util.Optional;
 
-@Service
-public class SpotifyService {
+@Component
+public class SpotifyService{
 
     private final String id;
     private final String password;
@@ -66,7 +67,7 @@ public class SpotifyService {
             Artist[] items = artistPaging.getItems();
             if (!ObjectUtils.isEmpty(items)) {
                 Artist item = items[0];
-                System.out.println("item = " + item);
+                System.out.println("artist info = " + item);
                 result.addProperty("name", item.getName());
                 result.addProperty("imageUrl", "");
                 if (!ObjectUtils.isEmpty(item.getImages())) {
@@ -75,9 +76,8 @@ public class SpotifyService {
             }
             return result;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     public String search(String keyword) {
