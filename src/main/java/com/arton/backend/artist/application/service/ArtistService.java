@@ -3,16 +3,21 @@ package com.arton.backend.artist.application.service;
 import com.arton.backend.artist.application.data.ArtistInterestDetailDTO;
 import com.arton.backend.artist.application.data.ArtistInterestDto;
 import com.arton.backend.artist.application.data.CommonArtistDto;
+import com.arton.backend.artist.application.data.SpotifyRegistDTO;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
+import com.arton.backend.artist.application.port.in.SpotifyEnrollUseCase;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
+import com.arton.backend.infra.spotify.SpotifyService;
 import com.arton.backend.performance.domain.PerformanceType;
+import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +26,9 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ArtistService implements ArtistUseCase {
+public class ArtistService implements ArtistUseCase, SpotifyEnrollUseCase {
     private final ArtistRepositoryPort artistRepositoryPort;
+    private final SpotifyService spotifyService;
 
     @Override
     public ArtistInterestDetailDTO showArtistListForZzim(Pageable pageable) {
@@ -57,5 +63,19 @@ public class ArtistService implements ArtistUseCase {
     @Override
     public Artist save(Artist artist) {
         return artistRepositoryPort.save(artist);
+    }
+
+    @Override
+    public void enrollArtistBySpotify(SpotifyRegistDTO spotifyRegistDTO) {
+        String names = spotifyRegistDTO.getNames();
+        String regexNames = names.replaceAll("[^a-zA-Z0-9ㄱ-ㅎ가-힣,]", "");
+        String[] split = regexNames.split(",");
+        for (String name : split) {
+            if (!StringUtils.hasText(name))
+                continue;
+            JsonObject artistsAsync = spotifyService.getArtistsAsync(name);
+            Artist artist = Artist.builder().age(0).profileImageUrl(artistsAsync.get("imageUrl").getAsString()).name(name).build();
+            artistRepositoryPort.save(artist);
+        }
     }
 }

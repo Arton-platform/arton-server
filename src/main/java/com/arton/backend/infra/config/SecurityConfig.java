@@ -79,6 +79,8 @@ public class SecurityConfig {
                 .permitAll()
                 .antMatchers("/actuator/**")
                 .hasRole("ADMIN")
+                .antMatchers("/spotify/**")
+                .hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfig(tokenProvider, redisTemplate));
