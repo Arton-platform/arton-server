@@ -4,8 +4,11 @@ import com.arton.backend.administer.performance.application.data.PerformanceAdmi
 import com.arton.backend.infra.jwt.TokenProvider;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.search.adapter.out.persistence.document.PerformanceDocument;
 import com.arton.backend.search.application.data.RecentKeywordResponse;
 import com.arton.backend.search.application.data.SearchResultDto;
 import com.arton.backend.search.application.port.in.PerformanceSearchUseCase;
@@ -13,6 +16,7 @@ import com.arton.backend.search.application.port.in.RecentKeywordDeleteUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordGetUseCase;
 import com.arton.backend.search.application.port.in.RecentKeywordSaveUseCase;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
+import com.arton.backend.search.application.port.out.PerformanceDocumentDeletePort;
 import com.arton.backend.search.application.port.out.PerformanceDocumentSearchPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,6 +40,7 @@ public class PerformanceSearchService implements PerformanceSearchUseCase, Recen
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceDocuemntSavePort performanceDocuemntSavePort;
     private final PerformanceDocumentSearchPort performanceSearchRepository;
+    private final PerformanceDocumentDeletePort performanceDocumentDeletePort;
     private final TokenProvider tokenProvider;
     private final RedisTemplate redisTemplate;
     @Value("${search.prefix}")
@@ -42,6 +48,11 @@ public class PerformanceSearchService implements PerformanceSearchUseCase, Recen
 
     public void saveAllDocuments() {
         List<Performance> performances = performanceRepositoryPort.findAll();
+        List<Long> repoIds = performances.stream().map(Performance::getPerformanceId).collect(Collectors.toList());
+        List<PerformanceDocument> documents = performanceSearchRepository.findAll();
+        List<Long> docIds = documents.stream().map(PerformanceDocument::getId).collect(Collectors.toList());
+        List<Long> toDeleteIds = docIds.stream().filter(doc -> !repoIds.contains(doc)).collect(Collectors.toList());
+        performanceDocumentDeletePort.deleteByIds(toDeleteIds);
         performanceDocuemntSavePort.saveAll(performances);
     }
 

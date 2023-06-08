@@ -24,4 +24,5 @@ public interface PerformanceDocumentSearchPort {
     List<PerformanceDocument> findByDtoInAdminWithoutPaging(PerformanceAdminSearchDto searchDto);
     Optional<PerformanceDocument> findById(Long id);
     Page<PerformanceDocument> findAll(Pageable pageable);
+    List<PerformanceDocument> findAll();
 }

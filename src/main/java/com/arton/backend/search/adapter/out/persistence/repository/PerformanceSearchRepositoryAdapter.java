@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper.toDocumentFromDomain;
 
@@ -71,6 +72,11 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceDocumentSe
     }
 
     @Override
+    public void deleteByIds(List<Long> ids) {
+        performanceSearchRepository.deleteAllById(ids);
+    }
+
+    @Override
     public Optional<PerformanceDocument> findById(Long id) {
         return performanceSearchRepository.findById(id);
     }
@@ -78,5 +84,11 @@ public class PerformanceSearchRepositoryAdapter implements PerformanceDocumentSe
     @Override
     public Page<PerformanceDocument> findAll(Pageable pageable) {
         return performanceSearchRepository.findAllByOrderById(pageable);
+    }
+
+    @Override
+    public List<PerformanceDocument> findAll() {
+        return StreamSupport.stream(performanceSearchRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 }
