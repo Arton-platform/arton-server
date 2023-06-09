@@ -2,8 +2,10 @@ package com.arton.backend.faq.adapter.out.persistence;
 
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name="faq")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FAQEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
