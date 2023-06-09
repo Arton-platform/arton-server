@@ -12,22 +12,18 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FAQCreateDTO {
     @NotBlank
-    private Long userId;
-    @NotBlank
     private String title;
     @NotBlank
     private String content;
 
     @Builder
-    public FAQCreateDTO(Long userId, String title, String content) {
-        this.userId = userId;
+    public FAQCreateDTO(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
     public FAQ toDomainFromDTO() {
         return FAQ.builder()
-                .userId(this.userId)
                 .content(this.content)
                 .title(this.title)
                 .build();

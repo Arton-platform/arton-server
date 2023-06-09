@@ -27,4 +27,8 @@ public class FAQ {
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
     }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 }

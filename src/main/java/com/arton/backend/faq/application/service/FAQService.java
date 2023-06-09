@@ -65,10 +65,8 @@ public class FAQService implements FAQUseCase, FAQCreateUseCase, FAQDeleteUseCas
     @Override
     public void createFaq(long userId, FAQCreateDTO faqCreateDTO) {
         User user = userRepositoryPort.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND));
-        if (!user.getId().equals(userId)) {
-            throw new CustomException(ErrorCode.USER_NOT_AUTHORITY.getMessage(), ErrorCode.USER_NOT_AUTHORITY);
-        }
         FAQ faq = faqCreateDTO.toDomainFromDTO();
+        faq.setUserId(user.getId());
         faqSavePort.save(faq);
     }
 
