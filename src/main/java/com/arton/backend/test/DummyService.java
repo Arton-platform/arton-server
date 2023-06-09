@@ -44,7 +44,7 @@ public class DummyService {
         int userSize = all.size();
         List<FAQEntity> faqEntities = new ArrayList<>();
         for (int i = 0; i<100; i++) {
-            FAQEntity build = FAQEntity.builder().hit(random.nextInt(userSize))
+            FAQEntity build = FAQEntity.builder()
                     .title("dummy faq title" + random.nextInt(100))
                     .content("dummy faq content" + random.nextInt(100))
                     .user(all.get(random.nextInt(userSize))).build();

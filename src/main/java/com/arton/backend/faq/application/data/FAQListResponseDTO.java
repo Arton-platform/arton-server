@@ -14,17 +14,20 @@ import lombok.NoArgsConstructor;
 public class FAQListResponseDTO {
     private Long id;
     private String title;
+    private Long userId;
 
     @Builder
-    public FAQListResponseDTO(Long id, String title) {
+    public FAQListResponseDTO(Long id, String title, Long userId) {
         this.id = id;
         this.title = title;
+        this.userId = userId;
     }
 
     public static FAQListResponseDTO toDtoFromDomain(FAQ faq) {
         return FAQListResponseDTO.builder()
                 .id(faq.getFaqId())
                 .title(faq.getTitle())
+                .userId(faq.getUserId())
                 .build();
     }
 
@@ -32,6 +35,7 @@ public class FAQListResponseDTO {
         return FAQListResponseDTO.builder()
                 .id(faq.getFaqId())
                 .title(faq.getTitle())
+                .userId(faq.getUser().getId())
                 .build();
     }
 }

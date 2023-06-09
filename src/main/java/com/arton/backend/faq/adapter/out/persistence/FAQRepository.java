@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface FAQRepository extends JpaRepository<FAQEntity, Long> {
     Optional<List<FAQEntity>> findAllByOrderByCreatedDateDesc();
+    Optional<FAQEntity> findByFaqIdAndUserId(long id, long userId);
 }
