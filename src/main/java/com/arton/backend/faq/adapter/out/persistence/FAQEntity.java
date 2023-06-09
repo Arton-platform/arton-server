@@ -1,7 +1,6 @@
 package com.arton.backend.faq.adapter.out.persistence;
 
-import com.arton.backend.infra.shared.Board;
-import com.arton.backend.image.domain.Image;
+import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,18 +11,22 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name="faq")
-public class FAQEntity extends Board {
+public class FAQEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long faqId;
     private String title;
     private String content;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     @Builder
-    public FAQEntity(long faqId, String title, String content, UserEntity user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
-        super(user, hit, image, createdDate, updateDate);
+    public FAQEntity(LocalDateTime createdDate, LocalDateTime updatedDate, long faqId, String title, String content, UserEntity user) {
+        super(createdDate, updatedDate);
         this.faqId = faqId;
         this.title = title;
         this.content = content;
+        this.user = user;
     }
 }

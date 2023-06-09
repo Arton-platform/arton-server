@@ -1,7 +1,7 @@
 package com.arton.backend.faq.adapter.out.persistence;
 
-import com.arton.backend.faq.adapter.out.persistence.FAQEntity;
 import com.arton.backend.faq.domain.FAQ;
+import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,11 +11,9 @@ public class FAQMapper {
                 .faqId(entity.getFaqId())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .hit(entity.getHit())
-                .image(entity.getImage())
-                .user(entity.getUser())
+                .userId(entity.getUser().getId())
                 .createdDate(entity.getCreatedDate())
-                .updateDate(entity.getUpdateDate())
+                .updatedDate(entity.getUpdatedDate())
                 .build();
     }
 
@@ -24,11 +22,9 @@ public class FAQMapper {
                 .faqId(faq.getFaqId())
                 .title(faq.getTitle())
                 .content(faq.getContent())
-                .hit(faq.getHit())
-                .image(faq.getImage())
-                .user(faq.getUser())
+                .user(UserEntity.builder().id(faq.getUserId()).build())
                 .createdDate(faq.getCreatedDate())
-                .updateDate(faq.getUpdateDate())
+                .updatedDate(faq.getUpdatedDate())
                 .build();
     }
 }
