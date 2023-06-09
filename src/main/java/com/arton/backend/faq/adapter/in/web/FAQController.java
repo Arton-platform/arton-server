@@ -83,7 +83,7 @@ public class FAQController {
                     content = @Content( schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "서버오류",
                     content = @Content( schema = @Schema(implementation = ErrorResponse.class)))})
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<CommonResponse> add(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody FAQCreateDTO faqCreateDTO){
         log.info("[FAQCreateDTO]: {}", faqCreateDTO);
         long userId = Long.parseLong(userDetails.getUsername());
