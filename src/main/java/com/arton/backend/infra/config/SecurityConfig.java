@@ -6,6 +6,7 @@ import com.arton.backend.infra.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -74,13 +75,24 @@ public class SecurityConfig {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/signup/**", "/auth/login/**", "/faq/**", "/announcement/**", "/review/**",
-                "/auth/reset/password", "/auth/check/signup", "/artist/**", "/performance/**", "/terms/**", "/performance-sse/**", "/web/**", "/mail/**","test/**", "/performance.html/**", "/dummy/**")
-                .permitAll()
-                .antMatchers("/actuator/**")
-                .hasRole("ADMIN")
-                .antMatchers("/spotify/**")
-                .hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/faq/**").permitAll()
+                .antMatchers("/auth/signup/**").permitAll()
+                .antMatchers("/auth/login/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/announcement/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/review/**").permitAll()
+                .antMatchers("/auth/reset/password").permitAll()
+                .antMatchers("/auth/check/signup").permitAll()
+                .antMatchers(HttpMethod.GET, "/artist/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/performance/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/terms/**").permitAll()
+                .antMatchers("/performance-sse/**").permitAll()
+                .antMatchers("/web/**").permitAll()
+                .antMatchers("/mail/**").permitAll()
+                .antMatchers("/test/**").permitAll()
+                .antMatchers("/performance.html/**").permitAll()
+                .antMatchers("/dummy/**").permitAll()
+                .antMatchers("/actuator/**").hasRole("ADMIN")
+                .antMatchers("/spotify/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfig(tokenProvider, redisTemplate));
