@@ -1,10 +1,8 @@
 package com.arton.backend.artist.application.service;
 
-import com.arton.backend.artist.application.data.ArtistInterestDetailDTO;
-import com.arton.backend.artist.application.data.ArtistInterestDto;
-import com.arton.backend.artist.application.data.CommonArtistDto;
-import com.arton.backend.artist.application.data.SpotifyRegistDTO;
+import com.arton.backend.artist.application.data.*;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
+import com.arton.backend.artist.application.port.in.CrawlerEnrollUseCase;
 import com.arton.backend.artist.application.port.in.SpotifyEnrollUseCase;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.domain.Artist;
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ArtistService implements ArtistUseCase, SpotifyEnrollUseCase {
+public class ArtistService implements ArtistUseCase, SpotifyEnrollUseCase, CrawlerEnrollUseCase {
     private final ArtistRepositoryPort artistRepositoryPort;
     private final SpotifyService spotifyService;
 
@@ -77,5 +75,11 @@ public class ArtistService implements ArtistUseCase, SpotifyEnrollUseCase {
             Artist artist = Artist.builder().age(0).profileImageUrl(artistsAsync.get("imageUrl").getAsString()).name(name).build();
             artistRepositoryPort.save(artist);
         }
+    }
+
+    @Override
+    public void enrollArtistByCrawler(CrawlerRegistDTO crawlerRegistDTO) {
+        Artist artist = crawlerRegistDTO.mapToDomainFromDTO();
+        artistRepositoryPort.save(artist);
     }
 }

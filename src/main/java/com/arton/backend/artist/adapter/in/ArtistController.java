@@ -2,8 +2,10 @@ package com.arton.backend.artist.adapter.in;
 
 import com.arton.backend.artist.application.data.ArtistInterestDetailDTO;
 import com.arton.backend.artist.application.data.CommonArtistDto;
+import com.arton.backend.artist.application.data.CrawlerRegistDTO;
 import com.arton.backend.artist.application.data.SpotifyRegistDTO;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
+import com.arton.backend.artist.application.port.in.CrawlerEnrollUseCase;
 import com.arton.backend.artist.application.port.in.SpotifyEnrollUseCase;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
@@ -29,6 +31,7 @@ import java.util.List;
 public class ArtistController {
     private final ArtistUseCase artistUseCase;
     private final SpotifyEnrollUseCase spotifyEnrollUseCase;
+    private final CrawlerEnrollUseCase crawlerEnrollUseCase;
     /**
      * 회원가입
      * 뮤지컬/콘서트 종류에 따라 아티스트 리스트를 보여준다.
@@ -58,6 +61,13 @@ public class ArtistController {
     @PostMapping("/spotify")
     public ResponseEntity<CommonResponse> enrollBySpotify(@Valid @RequestBody SpotifyRegistDTO spotifyRegistDTO){
         spotifyEnrollUseCase.enrollArtistBySpotify(spotifyRegistDTO);
+        CommonResponse response = CommonResponse.builder().status(200).message("아티스트 등록에 성공하였습니다.").build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/artist/crawl/add")
+    public ResponseEntity<CommonResponse> enrollByCrawler(@Valid @RequestBody CrawlerRegistDTO crawlerRegistDTO){
+        crawlerEnrollUseCase.enrollArtistByCrawler(crawlerRegistDTO);
         CommonResponse response = CommonResponse.builder().status(200).message("아티스트 등록에 성공하였습니다.").build();
         return ResponseEntity.ok(response);
     }
