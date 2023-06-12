@@ -79,7 +79,10 @@ public class ArtistService implements ArtistUseCase, SpotifyEnrollUseCase, Crawl
 
     @Override
     public void enrollArtistByCrawler(CrawlerRegistDTO crawlerRegistDTO) {
-        Artist artist = crawlerRegistDTO.mapToDomainFromDTO();
-        artistRepositoryPort.save(artist);
+        Boolean checkDup = artistRepositoryPort.checkDup(crawlerRegistDTO.getName(), crawlerRegistDTO.getProfileImageUrl());
+        if (!checkDup) {
+            Artist artist = crawlerRegistDTO.mapToDomainFromDTO();
+            artistRepositoryPort.save(artist);
+        }
     }
 }

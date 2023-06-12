@@ -79,6 +79,11 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort, ArtistDele
     }
 
     @Override
+    public Boolean checkDup(String name, String profileImageUrl) {
+        return artistRepository.existsByNameAndProfileImageUrl(name, profileImageUrl);
+    }
+
+    @Override
     public void deleteById(Long id) {
         artistRepository.deleteById(id);
     }
