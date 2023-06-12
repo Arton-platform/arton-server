@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ArtistRepository extends JpaRepository<ArtistEntity, Long>, CustomArtistRepository {
     List<ArtistEntity> findByName(String name);
+    Boolean existsByNameAndProfileImageUrl(String name, String profileImageUrl);
 }
