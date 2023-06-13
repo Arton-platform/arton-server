@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CrawlerRegistDTO {
+public class CrawlerArtistRegistDTO {
     /**
      * 아티스트 이름
      */
@@ -22,12 +22,12 @@ public class CrawlerRegistDTO {
     @NotBlank
     private String profileImageUrl;
     @NotBlank
-    private Integer age;
+    private String age;
     @NotBlank
     private String snsId;
 
     @Builder
-    public CrawlerRegistDTO(String name, String profileImageUrl, Integer age, String snsId) {
+    public CrawlerArtistRegistDTO(String name, String profileImageUrl, String age, String snsId) {
         this.name = name;
         this.profileImageUrl = profileImageUrl;
         this.age = age;
@@ -38,7 +38,7 @@ public class CrawlerRegistDTO {
         return Artist.builder()
                 .name(this.name)
                 .profileImageUrl(this.profileImageUrl)
-                .age(this.age)
+                .age(Integer.parseInt(this.age))
                 .snsId(this.snsId).build();
     }
 }

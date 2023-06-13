@@ -2,7 +2,7 @@ package com.arton.backend.artist.adapter.in;
 
 import com.arton.backend.artist.application.data.ArtistInterestDetailDTO;
 import com.arton.backend.artist.application.data.CommonArtistDto;
-import com.arton.backend.artist.application.data.CrawlerRegistDTO;
+import com.arton.backend.artist.application.data.CrawlerArtistRegistDTO;
 import com.arton.backend.artist.application.data.SpotifyRegistDTO;
 import com.arton.backend.artist.application.port.in.ArtistUseCase;
 import com.arton.backend.artist.application.port.in.CrawlerEnrollUseCase;
@@ -19,8 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -66,8 +64,8 @@ public class ArtistController {
     }
 
     @PostMapping("/artist/crawl/add")
-    public ResponseEntity<CommonResponse> enrollByCrawler(@Valid @RequestBody CrawlerRegistDTO crawlerRegistDTO){
-        crawlerEnrollUseCase.enrollArtistByCrawler(crawlerRegistDTO);
+    public ResponseEntity<CommonResponse> enrollByCrawler(@Valid @RequestBody CrawlerArtistRegistDTO crawlerArtistRegistDTO){
+        crawlerEnrollUseCase.enrollArtistByCrawler(crawlerArtistRegistDTO);
         CommonResponse response = CommonResponse.builder().status(200).message("아티스트 등록에 성공하였습니다.").build();
         return ResponseEntity.ok(response);
     }

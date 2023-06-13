@@ -92,6 +92,12 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     }
 
     @Override
+    public Performance addByCrawler(CrawlerPerformanceCreateDTO crawlerPerformanceCreateDTO) {
+        System.out.println("crawlerPerformanceCreateDTO = " + crawlerPerformanceCreateDTO);
+        return null;
+    }
+
+    @Override
     public void deletePerformance(Performance performance) {
         performanceDeletePort.deletePerformance(performance);
     }
