@@ -90,13 +90,15 @@ public class ArtistService implements ArtistUseCase, SpotifyEnrollUseCase, Crawl
     @Override
     public List<Artist> enrollArtistsByCrawler(List<Artist> artistList) {
         List<Artist> artists = new ArrayList<>();
-        for (Artist artist : artists) {
+        for (Artist artist : artistList) {
             Artist found = artistRepositoryPort.findByNameAndUrl(artist.getName(), artist.getProfileImageUrl()).orElse(null);
             // 기존재시 찾은거 등록
             if (found != null) {
                 artists.add(found);
             }else {
+                System.out.println(" save artist");
                 Artist save = artistRepositoryPort.save(artist);
+                System.out.println("save = " + save.getName());
                 artists.add(save);
             }
         }

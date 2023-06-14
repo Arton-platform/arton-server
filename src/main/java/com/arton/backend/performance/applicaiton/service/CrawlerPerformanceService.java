@@ -61,8 +61,10 @@ public class CrawlerPerformanceService implements CrawlerPerformanceSaveUseCase 
             // 미존재시 등록 시작.
             // add
             Performance performance = performanceSavePort.save(crawlerPerformanceCreateDTO.toDomainFromDTO());
+            System.out.println(" add pass");
             // document synchronize
             performanceDocuemntSavePort.save(performance);
+            System.out.println("document save pass");
             // get images
             String descriptionUrl = crawlerPerformanceCreateDTO.getDescription();
             String imageUrl = crawlerPerformanceCreateDTO.getImageUrl();
@@ -89,6 +91,7 @@ public class CrawlerPerformanceService implements CrawlerPerformanceSaveUseCase 
             }
             // save artist and performers
             List<Artist> artists = Optional.ofNullable(crawlerPerformanceCreateDTO.getArtists()).orElseGet(Collections::emptyList).stream().map(CrawlerArtistRegistDTO::mapToDomainFromDTO).collect(Collectors.toList());
+            System.out.println("artists.size() = " + artists.size());
             List<Artist> artistList = new ArrayList<>();
             if (!ObjectUtils.isEmpty(artists)) {
                 artistList = artistService.enrollArtistsByCrawler(artists);

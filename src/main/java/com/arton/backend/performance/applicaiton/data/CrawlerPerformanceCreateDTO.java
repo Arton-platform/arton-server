@@ -42,6 +42,7 @@ public class CrawlerPerformanceCreateDTO {
         LocalDateTime convertedEndDate = LocalDateTimeConverter.strToDate(endDate);
         return Performance.builder()
                 .purchaseLimit(4)
+                .imageUrl(imageUrl)
                 .performanceType(PerformanceType.get(performanceType))
                 .description(getDescription())
                 .title(getTitle())
