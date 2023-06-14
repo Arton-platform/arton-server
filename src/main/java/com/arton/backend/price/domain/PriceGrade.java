@@ -32,4 +32,8 @@ public class PriceGrade {
         this.createdDate = createdDate;
         this.updatedDate = updateDate;
     }
+
+    public void assignPriceToPerformance(Performance performance) {
+        this.performance = performance;
+    }
 }

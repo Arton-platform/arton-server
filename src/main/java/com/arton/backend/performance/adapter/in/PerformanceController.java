@@ -5,6 +5,7 @@ import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.performance.applicaiton.data.*;
+import com.arton.backend.performance.applicaiton.port.in.CrawlerPerformanceSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,8 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PerformanceController {
     private final PerformanceUseCase performanceService;
-    private final PerformanceSaveUseCase performanceSaveUseCase;
-    private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
+    private final CrawlerPerformanceSaveUseCase crawlerPerformanceSaveUseCase;
 
 //    @Operation(summary = "회원가입시 찜에 필요한 공연 리스트 불러오기", description = "회원가입시 찜에 필요한 공연 리스트를 가져옵니다.")
 //    @ApiResponses(value = {
@@ -112,8 +112,7 @@ public class PerformanceController {
 
     @PostMapping("/crawler")
     public ResponseEntity<CommonResponse> addByCrawler(@RequestBody CrawlerPerformanceCreateDTO crawlerPerformanceCreateDTO) {
-        log.info("crawler request {}", crawlerPerformanceCreateDTO);
-        performanceSaveUseCase.addByCrawler(crawlerPerformanceCreateDTO);
+        crawlerPerformanceSaveUseCase.addByCrawler(crawlerPerformanceCreateDTO);
         CommonResponse response = CommonResponse.builder().message("성공적으로 등록하였습니다").status(200).build();
         return ResponseEntity.ok(response);
     }

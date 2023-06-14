@@ -1,7 +1,6 @@
 package com.arton.backend.performance.applicaiton.service;
 
-import com.arton.backend.image.application.port.out.PerformanceImageRepositoryPort;
-import com.arton.backend.image.domain.PerformanceImage;
+import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.data.*;
@@ -14,7 +13,10 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.price.application.port.out.PriceGradeRepositoryPort;
+import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +31,10 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceSavePort performanceSavePort;
     private final PerformanceDeletePort performanceDeletePort;
+    private final PerformanceDocuemntSavePort performanceDocuemntSavePort;
+    private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
     private final PriceGradeRepositoryPort priceGradeRepositoryPort;
-    private final PerformanceImageRepositoryPort performanceImageRepositoryPort;
+    private final PerformanceImageSaveRepositoryPort performanceImageSaveRepositoryPort;
 
     /**
      * 공연 리스트 상세 정보를 보내주자.
@@ -57,13 +61,7 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     public PerformanceZzimDetailDTO getZzimListV2(Pageable pageable) {
         List<Performance> musicals = performanceRepositoryPort.findAllMusicals(pageable);
         List<Performance> concerts = performanceRepositoryPort.findAllConcerts(pageable);
-
         List<PerformanceInterestDto> musicalZzim = musicals.stream().map(PerformanceInterestDto::of).collect(Collectors.toList());
-        for (PerformanceInterestDto performanceInterestDto : musicalZzim) {
-            List<Long> imageIds = performanceImageRepositoryPort.findByPerformanceId(performanceInterestDto.getId()).stream().map(PerformanceImage::getId).collect(Collectors.toList());
-
-        }
-
         List<PerformanceInterestDto> concertZzim = concerts.stream().map(PerformanceInterestDto::of).collect(Collectors.toList());
         return PerformanceZzimDetailDTO.builder().musicals(musicalZzim).concerts(concertZzim).build();
     }
@@ -89,12 +87,6 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     @Override
     public Performance save(Performance performance) {
         return performanceSavePort.save(performance);
-    }
-
-    @Override
-    public Performance addByCrawler(CrawlerPerformanceCreateDTO crawlerPerformanceCreateDTO) {
-        System.out.println("crawlerPerformanceCreateDTO = " + crawlerPerformanceCreateDTO);
-        return null;
     }
 
     @Override

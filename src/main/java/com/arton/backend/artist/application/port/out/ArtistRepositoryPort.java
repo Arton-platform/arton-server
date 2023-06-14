@@ -18,5 +18,6 @@ public interface ArtistRepositoryPort {
     List<Artist> findByPerformanceType(PerformanceType performanceType);
     List<Artist> findByPerformanceType(PerformanceType performanceType, Pageable pageable);
     Artist save(Artist artist);
+    List<Artist> saveAll(List<Artist> artists);
     Boolean checkDup(String name, String profileImageUrl);
 }
