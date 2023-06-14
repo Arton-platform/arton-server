@@ -63,6 +63,11 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort, ArtistDele
     }
 
     @Override
+    public Optional<Artist> findByNameAndUrl(String name, String url) {
+        return artistRepository.findByNameAndProfileImageUrl(name, url).map(ArtistMapper::toDomain);
+    }
+
+    @Override
     public List<Artist> findByPerformanceType(PerformanceType performanceType) {
         return Optional.ofNullable(artistRepository.getArtistByPerformanceType(performanceType)).orElseGet(Collections::emptyList)
                 .stream().map(ArtistMapper::toDomain).collect(Collectors.toList());

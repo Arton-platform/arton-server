@@ -15,6 +15,7 @@ public interface ArtistRepositoryPort {
     List<Artist> findByIds(List<Long> ids);
     List<Artist> findByName(String name);
     Optional<Artist> findById(Long id);
+    Optional<Artist> findByNameAndUrl(String name, String url);
     List<Artist> findByPerformanceType(PerformanceType performanceType);
     List<Artist> findByPerformanceType(PerformanceType performanceType, Pageable pageable);
     Artist save(Artist artist);

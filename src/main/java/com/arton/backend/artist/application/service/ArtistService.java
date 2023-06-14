@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,5 +85,21 @@ public class ArtistService implements ArtistUseCase, SpotifyEnrollUseCase, Crawl
             Artist artist = crawlerArtistRegistDTO.mapToDomainFromDTO();
             artistRepositoryPort.save(artist);
         }
+    }
+
+    @Override
+    public List<Artist> enrollArtistsByCrawler(List<Artist> artistList) {
+        List<Artist> artists = new ArrayList<>();
+        for (Artist artist : artists) {
+            Artist found = artistRepositoryPort.findByNameAndUrl(artist.getName(), artist.getProfileImageUrl()).orElse(null);
+            // 기존재시 찾은거 등록
+            if (found != null) {
+                artists.add(found);
+            }else {
+                Artist save = artistRepositoryPort.save(artist);
+                artists.add(save);
+            }
+        }
+        return artists;
     }
 }
