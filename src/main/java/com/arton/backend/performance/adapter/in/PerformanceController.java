@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,7 @@ import java.util.List;
 public class PerformanceController {
     private final PerformanceUseCase performanceService;
     private final PerformanceSaveUseCase performanceSaveUseCase;
+    private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
 //    @Operation(summary = "회원가입시 찜에 필요한 공연 리스트 불러오기", description = "회원가입시 찜에 필요한 공연 리스트를 가져옵니다.")
 //    @ApiResponses(value = {
@@ -109,6 +112,7 @@ public class PerformanceController {
 
     @PostMapping("/crawler")
     public ResponseEntity<CommonResponse> addByCrawler(@RequestBody CrawlerPerformanceCreateDTO crawlerPerformanceCreateDTO) {
+        log.info("crawler request {}", crawlerPerformanceCreateDTO);
         performanceSaveUseCase.addByCrawler(crawlerPerformanceCreateDTO);
         CommonResponse response = CommonResponse.builder().message("성공적으로 등록하였습니다").status(200).build();
         return ResponseEntity.ok(response);
