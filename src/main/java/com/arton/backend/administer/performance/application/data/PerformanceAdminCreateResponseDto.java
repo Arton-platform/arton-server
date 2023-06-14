@@ -14,7 +14,7 @@ import java.util.List;
 public class PerformanceAdminCreateResponseDto implements Serializable {
     @Schema(description = "ID")
     private Long performanceId;
-    @Schema(description = "제목")
+    @Schema(description = "아티스트 ID")
     private List<Long> artistIds = new ArrayList<>();
 
 

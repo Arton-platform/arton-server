@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -111,6 +112,16 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     @Override
     public Optional<Performance> findById(Long id) {
         return performanceRepository.findById(id).map(PerformanceMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Performance> findByTitleAndStartDate(String title, LocalDateTime startDate) {
+        return performanceRepository.findByTitleAndStartDateEquals(title, startDate).map(PerformanceMapper::toDomain);
+    }
+
+    @Override
+    public boolean existByTitleAndStartDate(String title, LocalDateTime startDate) {
+        return performanceRepository.existsByTitleAndStartDateEquals(title, startDate);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.arton.backend.artist.adapter.out.persistence.repository;
 
+import com.arton.backend.artist.adapter.out.persistence.entity.ArtistEntity;
 import com.arton.backend.artist.adapter.out.persistence.mapper.ArtistMapper;
 import com.arton.backend.artist.application.port.out.ArtistDeletePort;
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
@@ -62,6 +63,11 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort, ArtistDele
     }
 
     @Override
+    public Optional<Artist> findByNameAndUrl(String name, String url) {
+        return artistRepository.findByNameAndProfileImageUrl(name, url).map(ArtistMapper::toDomain);
+    }
+
+    @Override
     public List<Artist> findByPerformanceType(PerformanceType performanceType) {
         return Optional.ofNullable(artistRepository.getArtistByPerformanceType(performanceType)).orElseGet(Collections::emptyList)
                 .stream().map(ArtistMapper::toDomain).collect(Collectors.toList());
@@ -76,6 +82,12 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort, ArtistDele
     @Override
     public Artist save(Artist artist) {
         return toDomain(artistRepository.save(toEntity(artist)));
+    }
+
+    @Override
+    public List<Artist> saveAll(List<Artist> artists) {
+        List<ArtistEntity> artistsEntity = artists.stream().map(ArtistMapper::toEntity).collect(Collectors.toList());
+        return artistRepository.saveAll(artistsEntity).stream().map(ArtistMapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
