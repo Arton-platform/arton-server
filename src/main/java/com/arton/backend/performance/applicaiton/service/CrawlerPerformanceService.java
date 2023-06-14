@@ -1,7 +1,6 @@
 package com.arton.backend.performance.applicaiton.service;
 
 import com.arton.backend.artist.application.data.CrawlerArtistRegistDTO;
-import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
 import com.arton.backend.artist.application.service.ArtistService;
 import com.arton.backend.artist.domain.Artist;
 import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
@@ -9,13 +8,10 @@ import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.infra.utils.LocalDateTimeConverter;
 import com.arton.backend.performance.applicaiton.data.CrawlerPerformanceCreateDTO;
 import com.arton.backend.performance.applicaiton.port.in.CrawlerPerformanceSaveUseCase;
-import com.arton.backend.performance.applicaiton.port.out.PerformanceDeletePort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
-import com.arton.backend.performer.adapter.out.persistence.repository.PerformerRepositoryAdapter;
-import com.arton.backend.performer.application.port.out.PerformerSavePort;
-import com.arton.backend.performer.domain.Performer;
+import com.arton.backend.performer.application.service.PerformerService;
 import com.arton.backend.price.application.data.CrawlerPriceCreateDTO;
 import com.arton.backend.price.application.port.out.PriceGradeSavePort;
 import com.arton.backend.price.domain.PriceGrade;
@@ -29,7 +25,10 @@ import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,8 +40,8 @@ public class CrawlerPerformanceService implements CrawlerPerformanceSaveUseCase 
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
     private final PriceGradeSavePort priceGradeSavePort;
     private final PerformanceImageSaveRepositoryPort performanceImageSaveRepositoryPort;
-    private final ArtistRepositoryPort artistRepositoryPort;
-    private final PerformerSavePort performerSavePort;
+    private final ArtistService artistService;
+    private final PerformerService performerService;
 
     /**
      * 하나의 공연에 대해 모든 과정이 완료되어야함.
@@ -59,6 +58,7 @@ public class CrawlerPerformanceService implements CrawlerPerformanceSaveUseCase 
         if (exist) {
             return;
         } else {
+            // 미존재시 등록 시작.
             // add
             Performance performance = performanceSavePort.save(crawlerPerformanceCreateDTO.toDomainFromDTO());
             // document synchronize
@@ -87,22 +87,13 @@ public class CrawlerPerformanceService implements CrawlerPerformanceSaveUseCase 
                     performance.getPriceGradeList().add(savedPrice);
                 }
             }
-            // save artist
-            List<CrawlerArtistRegistDTO> artists = crawlerPerformanceCreateDTO.getArtists();
+            // save artist and performers
+            List<Artist> artists = Optional.ofNullable(crawlerPerformanceCreateDTO.getArtists()).orElseGet(Collections::emptyList).stream().map(CrawlerArtistRegistDTO::mapToDomainFromDTO).collect(Collectors.toList());
             List<Artist> artistList = new ArrayList<>();
             if (!ObjectUtils.isEmpty(artists)) {
-                for (CrawlerArtistRegistDTO artistDto : artists) {
-                    artistList.add(artistDto.mapToDomainFromDTO());
-                }
-                artistList = artistRepositoryPort.saveAll(artistList);
+                artistList = artistService.enrollArtistsByCrawler(artists);
+                performerService.savePerformers(performance, artistList);
             }
-            // set performer
-            // 출연자가 없으면 출연자 테이블은 없음.
-            List<Performer> performers = new ArrayList<>();
-            for (Artist artist : artistList) {
-                performers.add(Performer.builder().performance(performance.getPerformanceId()).artist(artist.getId()).build());
-            }
-            performerSavePort.saveAll(performers);
             // update
             performanceSavePort.save(performance);
         }
