@@ -40,7 +40,6 @@ public class CrawlerPerformanceCreateDTO {
     public Performance toDomainFromDTO() {
         LocalDateTime convertedStartDate = LocalDateTimeConverter.strToDate(startDate);
         LocalDateTime convertedEndDate = LocalDateTimeConverter.strToDate(endDate);
-
         return Performance.builder()
                 .purchaseLimit(4)
                 .performanceType(PerformanceType.get(performanceType))
@@ -49,6 +48,7 @@ public class CrawlerPerformanceCreateDTO {
                 .startDate(convertedStartDate)
                 .endDate(convertedEndDate)
                 .hit(0L)
+                .interMission(0)
                 .limitAge(Integer.parseInt(getLimitAge()))
                 .link(getLink().isEmpty() ? "" : getLink())
                 .place(getPlace())
