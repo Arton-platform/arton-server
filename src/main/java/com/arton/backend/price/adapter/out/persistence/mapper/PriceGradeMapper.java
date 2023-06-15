@@ -9,7 +9,7 @@ import com.arton.backend.price.domain.PriceGrade;
 public class PriceGradeMapper {
     public static PriceGrade toDomain(PriceGradeEntity priceGrade) {
         return PriceGrade.builder()
-                .performance(PerformanceMapper.toDomain(priceGrade.getPerformance()))
+                .performance(Performance.builder().performanceId(priceGrade.getPerformance().getId()).build())
                 .createdDate(priceGrade.getCreatedDate())
                 .id(priceGrade.getId())
                 .gradeName(priceGrade.getGradeName())
