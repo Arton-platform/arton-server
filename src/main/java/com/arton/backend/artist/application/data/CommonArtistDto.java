@@ -4,6 +4,7 @@ import com.arton.backend.artist.domain.Artist;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.springframework.util.ObjectUtils;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,6 +27,10 @@ public class CommonArtistDto {
 
     public static CommonArtistDto domainToDto(Artist artist) {
         return new CommonArtistDto(artist.getId(), artist.getName(), artist.getProfileImageUrl());
+    }
+
+    public boolean isCompleted() {
+        return !ObjectUtils.isEmpty(name) && !ObjectUtils.isEmpty(imageUrl) && !ObjectUtils.isEmpty(id);
     }
 
 }
