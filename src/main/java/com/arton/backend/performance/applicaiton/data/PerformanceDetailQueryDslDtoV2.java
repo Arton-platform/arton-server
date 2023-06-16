@@ -1,6 +1,7 @@
 package com.arton.backend.performance.applicaiton.data;
 
 import com.arton.backend.artist.application.data.CommonArtistDto;
+import com.arton.backend.performer.adapter.out.persistence.entity.PerformerEntity;
 import com.arton.backend.price.application.data.PriceInfoDto;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -70,7 +71,6 @@ public class PerformanceDetailQueryDslDtoV2 {
         }
         return day;
     }
-
 
     /**
      * yyyy mm dd (월) hh:mm

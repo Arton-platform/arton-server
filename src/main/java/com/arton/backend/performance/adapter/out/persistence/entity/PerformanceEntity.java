@@ -1,5 +1,6 @@
 package com.arton.backend.performance.adapter.out.persistence.entity;
 
+import com.arton.backend.image.adapter.out.persistence.entity.PerformanceImageEntity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;

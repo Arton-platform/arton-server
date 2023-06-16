@@ -1,18 +1,17 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
+import com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity;
 import com.arton.backend.artist.application.data.QCommonArtistDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
-import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDtoV2;
-import com.arton.backend.performance.applicaiton.data.QPerformanceDetailQueryDslDto;
-import com.arton.backend.performance.applicaiton.data.QPerformanceDetailQueryDslDtoV2;
+import com.arton.backend.performance.applicaiton.data.*;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity;
 import com.arton.backend.price.application.data.QPriceInfoDto;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity.*;
 import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.performanceImageEntity;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
 import static com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity.*;
@@ -147,6 +147,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
                 .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
                 .leftJoin(performerEntity).on(performanceEntity.eq(performerEntity.performance))
+                .fetchJoin()
                 .where(performanceEntity.id.eq(id))
                 .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV2(
                         performanceEntity.id,
@@ -159,14 +160,23 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         performanceEntity.endDate,
                         performanceEntity.ticketOpenDate,
                         performanceEntity.ticketEndDate,
-                        set(performanceImageEntity.imageUrl),
+                        set(performanceEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
-                        set(new QCommonArtistDto(performerEntity.artist.id, performerEntity.artist.name, performerEntity.artist.profileImageUrl)))
-                ));
+                        set(new QCommonArtistDto(performerEntity.artist.id, performerEntity.artist.name, performerEntity.artist.profileImageUrl)
+                        ))));
         if (result.isEmpty()) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
         return result.get(id);
+    }
+
+    /**
+     * 출연자 목록이 있는지 검사한다.
+     * @param id
+     * @return
+     */
+    private boolean hasPerformer(Long id) {
+        return queryFactory.selectFrom(performanceEntity).where(performanceEntity.id.eq(id)).fetchOne() == null;
     }
 
     /**

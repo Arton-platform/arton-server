@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper.*;
+import static com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper.toDomain;
+import static com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper.toEntity;
 
 @Repository
 @RequiredArgsConstructor
