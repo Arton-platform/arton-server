@@ -69,14 +69,14 @@ public class CrawlerPerformanceService implements CrawlerPerformanceSaveUseCase 
             String descriptionUrl = crawlerPerformanceCreateDTO.getDescription();
             String imageUrl = crawlerPerformanceCreateDTO.getImageUrl();
             List<PerformanceImage> performanceImages = new ArrayList<>();
-            // add description url
-            performanceImages.add(PerformanceImage.builder()
-                    .performance(performance)
-                    .imageUrl(descriptionUrl).build());
             // add image url
             performanceImages.add(PerformanceImage.builder()
                     .performance(performance)
                     .imageUrl(imageUrl).build());
+            // add description url
+            performanceImages.add(PerformanceImage.builder()
+                    .performance(performance)
+                    .imageUrl(descriptionUrl).build());
             // save image
             performanceImageSaveRepositoryPort.saveAll(performanceImages);
             // save prices
@@ -91,7 +91,6 @@ public class CrawlerPerformanceService implements CrawlerPerformanceSaveUseCase 
             }
             // save artist and performers
             List<Artist> artists = Optional.ofNullable(crawlerPerformanceCreateDTO.getArtists()).orElseGet(Collections::emptyList).stream().map(CrawlerArtistRegistDTO::mapToDomainFromDTO).collect(Collectors.toList());
-            System.out.println("artists.size() = " + artists.size());
             List<Artist> artistList = new ArrayList<>();
             if (!ObjectUtils.isEmpty(artists)) {
                 artistList = artistService.enrollArtistsByCrawler(artists);

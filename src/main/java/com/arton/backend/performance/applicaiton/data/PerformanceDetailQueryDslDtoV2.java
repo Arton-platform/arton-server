@@ -5,6 +5,7 @@ import com.arton.backend.price.application.data.PriceInfoDto;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -108,9 +109,17 @@ public class PerformanceDetailQueryDslDtoV2 {
         String textEndDay = getTextYearDay(endDate);
         String ticketOpenDay = getTextYearDayTime(ticketOpenDate);
         String ticketEndDay = getTextYearDayTime(ticketEndDate);
+        List<String> imageList = new ArrayList<>();
+        for (String image : images) {
+            imageList.add(image);
+        }
+        int iterSize = 2 - imageList.size();
+        for (int i = 0; i < iterSize; i++) {
+            imageList.add("");
+        }
         return PerformanceDetailDtoV2.builder()
                 .id(getId())
-                .images(images)
+                .images(imageList)
                 .title(getTitle())
                 .place(getPlace())
                 .musicalDateTime(getMusicalDateTime())
