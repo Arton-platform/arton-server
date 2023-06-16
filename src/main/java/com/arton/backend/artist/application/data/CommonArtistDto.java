@@ -1,6 +1,7 @@
 package com.arton.backend.artist.application.data;
 
 import com.arton.backend.artist.domain.Artist;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -29,6 +30,7 @@ public class CommonArtistDto {
         return new CommonArtistDto(artist.getId(), artist.getName(), artist.getProfileImageUrl());
     }
 
+    @JsonIgnore
     public boolean isCompleted() {
         return !ObjectUtils.isEmpty(name) && !ObjectUtils.isEmpty(imageUrl) && !ObjectUtils.isEmpty(id);
     }

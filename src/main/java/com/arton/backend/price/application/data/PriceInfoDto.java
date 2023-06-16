@@ -1,6 +1,7 @@
 package com.arton.backend.price.application.data;
 
 import com.arton.backend.price.domain.PriceGrade;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -29,6 +30,7 @@ public class PriceInfoDto {
                 .build();
     }
 
+    @JsonIgnore
     public boolean isCompleted() {
         return !ObjectUtils.isEmpty(gradeName) && !ObjectUtils.isEmpty(price);
     }
