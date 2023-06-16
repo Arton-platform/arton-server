@@ -54,6 +54,7 @@ public class PerformanceDetailQueryDslDtoV2 {
     }
 
     private void fillData(){
+        artists = artists.stream().filter(CommonArtistDto::isCompleted).collect(Collectors.toSet());
         prices = prices.stream().filter(PriceInfoDto::isCompleted).collect(Collectors.toSet());
     }
 

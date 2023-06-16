@@ -147,6 +147,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
                 .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
                 .leftJoin(performerEntity).on(performanceEntity.eq(performerEntity.performance))
+                .leftJoin(artistEntity).on(performerEntity.artist.eq(artistEntity))
                 .fetchJoin()
                 .where(performanceEntity.id.eq(id))
                 .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV2(
@@ -160,23 +161,13 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         performanceEntity.endDate,
                         performanceEntity.ticketOpenDate,
                         performanceEntity.ticketEndDate,
-                        set(performanceEntity.imageUrl),
+                        set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
-                        set(new QCommonArtistDto(performerEntity.artist.id, performerEntity.artist.name, performerEntity.artist.profileImageUrl)
-                        ))));
+                        set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)))));
         if (result.isEmpty()) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
         return result.get(id);
-    }
-
-    /**
-     * 출연자 목록이 있는지 검사한다.
-     * @param id
-     * @return
-     */
-    private boolean hasPerformer(Long id) {
-        return queryFactory.selectFrom(performanceEntity).where(performanceEntity.id.eq(id)).fetchOne() == null;
     }
 
     /**
@@ -223,6 +214,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
                 .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
                 .leftJoin(performerEntity).on(performanceEntity.eq(performerEntity.performance))
+                .leftJoin(artistEntity).on(performerEntity.artist.eq(artistEntity))
                 .where(performanceEntity.performanceType.eq(performanceType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -239,7 +231,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         performanceEntity.ticketEndDate,
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
-                        set(new QCommonArtistDto(performerEntity.artist.id, performerEntity.artist.name, performerEntity.artist.profileImageUrl)))
+                        set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)))
                 )).values().stream().collect(toList());
     }
 }
