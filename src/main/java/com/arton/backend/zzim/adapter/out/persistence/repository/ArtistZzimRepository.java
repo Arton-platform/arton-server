@@ -18,4 +18,6 @@ public interface ArtistZzimRepository extends JpaRepository<ArtistZzimEntity, Lo
     @Query("DELETE FROM ArtistZzimEntity az WHERE az.user.id = :id")
     void deleteAllByUserId(@Param("id") Long userId);
     List<ArtistZzimEntity> findAllByUserId(Long userId);
+    boolean existsByUserIdAndArtistId(Long userId, Long artistId);
+    void deleteByUserIdAndArtistId(Long userId, Long artistId);
 }

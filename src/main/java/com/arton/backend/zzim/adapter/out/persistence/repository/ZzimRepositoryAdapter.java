@@ -22,6 +22,16 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
     private final PerformanceZzimRepository performanceZzimRepository;
 
     @Override
+    public ArtistZzim zzimArtist(ArtistZzim artistZzim) {
+        return ArtistZzimMapper.toDomain(artistZzimRepository.save(ArtistZzimMapper.toEntity(artistZzim)));
+    }
+
+    @Override
+    public PerformanceZzim zzimPerformance(PerformanceZzim performanceZzim) {
+        return PerformanceZzimMapper.toDomain(performanceZzimRepository.save(PerformanceZzimMapper.toEntity(performanceZzim)));
+    }
+
+    @Override
     public List<ArtistZzim> saveArtists(List<ArtistZzim> artistZzims) {
         List<ArtistZzimEntity> response = Optional.ofNullable(artistZzims).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toEntity).collect(Collectors.toList());
         return Optional.ofNullable(artistZzimRepository.saveAll(response)).orElseGet(Collections::emptyList).stream().map(ArtistZzimMapper::toDomain).collect(Collectors.toList());
@@ -54,6 +64,11 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
         return artistZzimRepository.deleteUsersFavoriteArtists(userId, ids);
     }
 
+    @Override
+    public void deleteUserFavoriteArtist(Long userId, Long artistId) {
+        artistZzimRepository.deleteByUserIdAndArtistId(userId, artistId);
+    }
+
     /**
      * @param userId
      * @param ids performance zzim ids
@@ -62,6 +77,11 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
     @Override
     public long deleteUserFavoritePerformances(Long userId, List<Long> ids) {
         return performanceZzimRepository.deleteUsersFavoritePerformances(userId, ids);
+    }
+
+    @Override
+    public void deleteUserFavoritePerformance(Long userId, Long performanceId) {
+        performanceZzimRepository.deleteByUserIdAndPerformanceId(userId, performanceId);
     }
 
     @Override
@@ -77,5 +97,15 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
     @Override
     public void deleteAllFavorites(Long userId) {
         artistZzimRepository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public boolean checkArtistZzimDup(Long userId, Long artistId) {
+        return artistZzimRepository.existsByUserIdAndArtistId(userId, artistId);
+    }
+
+    @Override
+    public boolean checkPerformanceZzimDup(Long userId, Long performanceId) {
+        return performanceZzimRepository.existsByUserIdAndPerformanceId(userId, performanceId);
     }
 }

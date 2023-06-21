@@ -3,7 +3,7 @@ package com.arton.backend.zzim.adapter.out.persistence.entity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
-import com.arton.backend.zzim.adapter.out.repository.PerformanceZzimCompoundKey;
+import com.arton.backend.zzim.domain.PerformanceZzimCompoundKey;
 import lombok.*;
 
 import javax.persistence.*;

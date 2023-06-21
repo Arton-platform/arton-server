@@ -129,4 +129,15 @@ public class Performance {
         this.imageUrl = imageUrl;
     }
 
+    public void addHit(){
+        this.hit++;
+    }
+
+    public void decreaseHit(){
+        if (this.hit>0)
+        {
+            this.hit--;
+        }
+    }
+
 }

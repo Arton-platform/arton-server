@@ -11,7 +11,7 @@ import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import com.arton.backend.zzim.adapter.out.persistence.entity.ArtistZzimEntity;
 import com.arton.backend.zzim.adapter.out.persistence.repository.ArtistZzimRepository;
 import com.arton.backend.zzim.adapter.out.persistence.repository.PerformanceZzimRepository;
-import com.arton.backend.zzim.application.port.in.ZzimDeleteDto;
+import com.arton.backend.zzim.application.data.ZzimDeleteDto;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import com.fasterxml.jackson.databind.ObjectMapper;
