@@ -18,4 +18,5 @@ public interface PerformanceZzimRepository extends JpaRepository<PerformanceZzim
     @Query("DELETE FROM PerformanceZzimEntity pz WHERE pz.user.id = :id")
     void deleteAllByUserId(@Param("id") Long userId);
     List<PerformanceZzimEntity> findAllByUserId(Long userId);
+    boolean existsByUserIdAndPerformanceId(Long userId, Long performanceId);
 }

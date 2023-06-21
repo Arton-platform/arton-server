@@ -2,7 +2,9 @@ package com.arton.backend.zzim.adapter.in;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
+import com.arton.backend.zzim.application.data.ZzimCreateDto;
 import com.arton.backend.zzim.application.data.ZzimDeleteDto;
+import com.arton.backend.zzim.application.port.in.ZzimCreateUseCase;
 import com.arton.backend.zzim.application.port.in.ZzimUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +29,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ZzimController {
     private final ZzimUseCase zzimService;
+    private final ZzimCreateUseCase zzimCreateUseCase;
 
     /**
      * Android 에서는 DELETE와 함께 본문을 전송할 수 없음
@@ -84,12 +87,26 @@ public class ZzimController {
             @ApiResponse(responseCode = "200", description = "공연 찜하기 성공",
                     content = @Content(schema = @Schema(implementation = String.class)))})
     @PostMapping("/performance")
-    public ResponseEntity zzimPerformance(@AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity zzimPerformance(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ZzimCreateDto zzimCreateDto){
         long userId = Long.parseLong(userDetails.getUsername());
-
-
-
+        zzimCreateUseCase.createPerformanceZzim(userId, zzimCreateDto);
         return ResponseEntity.ok(CommonResponse.builder().message("공연 찜 성공").status(HttpStatus.OK.value()).build());
+    }
+
+    /**
+     * 해당 아티스트를 찜 한다
+     * 하트 표시
+     */
+    @Parameter(name = "userDetails", hidden = true)
+    @Operation(summary = "아티스트 찜하기", description = "해당 아티스트를 찜합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "아티스트 찜하기 성공",
+                    content = @Content(schema = @Schema(implementation = String.class)))})
+    @PostMapping("/artist")
+    public ResponseEntity zzimArtist(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ZzimCreateDto zzimCreateDto){
+        long userId = Long.parseLong(userDetails.getUsername());
+        zzimCreateUseCase.createArtistZzim(userId, zzimCreateDto);
+        return ResponseEntity.ok(CommonResponse.builder().message("아티스트 찜 성공").status(HttpStatus.OK.value()).build());
     }
 
 }

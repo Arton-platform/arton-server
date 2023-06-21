@@ -1,4 +1,4 @@
-package com.arton.backend.zzim.adapter.out.repository;
+package com.arton.backend.zzim.domain;
 
 import lombok.*;
 
