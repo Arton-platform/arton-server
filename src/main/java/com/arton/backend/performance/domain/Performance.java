@@ -133,4 +133,11 @@ public class Performance {
         this.hit++;
     }
 
+    public void decreaseHit(){
+        if (this.hit>0)
+        {
+            this.hit--;
+        }
+    }
+
 }

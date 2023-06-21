@@ -16,7 +16,9 @@ public interface ZzimRepositoryPort {
     List<PerformanceZzim> savePerformances(List<PerformanceZzim> performanceZzims);
     List<PerformanceZzim> getPerformanceZzimByUserId(Long userId);
     long deleteUserFavoriteArtists(Long userId, List<Long> ids);
+    void deleteUserFavoriteArtist(Long userId, Long artistId);
     long deleteUserFavoritePerformances(Long userId, List<Long> ids);
+    void deleteUserFavoritePerformance(Long userId, Long performanceId);
     void deleteAllFavoriteArtist(Long userId);
     void deleteAllFavoritePerformance(Long userId);
     void deleteAllFavorites(Long userId);

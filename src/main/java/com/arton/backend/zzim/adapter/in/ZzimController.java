@@ -6,6 +6,7 @@ import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.zzim.application.data.ZzimCreateDto;
 import com.arton.backend.zzim.application.data.ZzimDeleteDto;
 import com.arton.backend.zzim.application.port.in.ZzimCreateUseCase;
+import com.arton.backend.zzim.application.port.in.ZzimDeleteUseCase;
 import com.arton.backend.zzim.application.port.in.ZzimUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class ZzimController {
     private final ZzimUseCase zzimService;
     private final ZzimCreateUseCase zzimCreateUseCase;
+    private final ZzimDeleteUseCase zzimDeleteUseCase;
 
     /**
      * Android 에서는 DELETE와 함께 본문을 전송할 수 없음
@@ -99,6 +101,25 @@ public class ZzimController {
     }
 
     /**
+     * 찜한 공연을 단건 취소한다.
+     * 하트 감소
+     */
+    @Parameter(name = "userDetails", hidden = true)
+    @Operation(summary = "찜한 공연 취소", description = "해당 공연 찜을 취소합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "공연 찜 취소 성공"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 공연",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "찜한 공연이 아닙니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
+    @DeleteMapping("/performance/{performanceId}")
+    public ResponseEntity unZzimPerformance(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "performanceId") Long performanceId){
+        long userId = Long.parseLong(userDetails.getUsername());
+        zzimDeleteUseCase.deletePerformanceZzim(userId, performanceId);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
      * 해당 아티스트를 찜 한다
      * 하트 표시
      */
@@ -116,6 +137,22 @@ public class ZzimController {
         long userId = Long.parseLong(userDetails.getUsername());
         zzimCreateUseCase.createArtistZzim(userId, zzimCreateDto);
         return ResponseEntity.ok(CommonResponse.builder().message("아티스트 찜 성공").status(HttpStatus.OK.value()).build());
+    }
+
+    /**
+     * 찜한 아티스를 단건 취소한다.
+     */
+    @Parameter(name = "userDetails", hidden = true)
+    @Operation(summary = "찜한 아티스트 취소", description = "해당 아티스트 찜을 취소합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "아티스트 찜 취소 성공"),
+            @ApiResponse(responseCode = "404", description = "찜한 아티스트가 아닙니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
+    @DeleteMapping("/artist/{artistId}")
+    public ResponseEntity unZzimArtist(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "artistId") Long artistId){
+        long userId = Long.parseLong(userDetails.getUsername());
+        zzimDeleteUseCase.deleteArtistZzim(userId, artistId);
+        return ResponseEntity.noContent().build();
     }
 
 }

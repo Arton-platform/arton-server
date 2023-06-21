@@ -19,4 +19,5 @@ public interface ArtistZzimRepository extends JpaRepository<ArtistZzimEntity, Lo
     void deleteAllByUserId(@Param("id") Long userId);
     List<ArtistZzimEntity> findAllByUserId(Long userId);
     boolean existsByUserIdAndArtistId(Long userId, Long artistId);
+    void deleteByUserIdAndArtistId(Long userId, Long artistId);
 }

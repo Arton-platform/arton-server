@@ -64,6 +64,11 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
         return artistZzimRepository.deleteUsersFavoriteArtists(userId, ids);
     }
 
+    @Override
+    public void deleteUserFavoriteArtist(Long userId, Long artistId) {
+        artistZzimRepository.deleteByUserIdAndArtistId(userId, artistId);
+    }
+
     /**
      * @param userId
      * @param ids performance zzim ids
@@ -72,6 +77,11 @@ public class ZzimRepositoryAdapter implements ZzimRepositoryPort {
     @Override
     public long deleteUserFavoritePerformances(Long userId, List<Long> ids) {
         return performanceZzimRepository.deleteUsersFavoritePerformances(userId, ids);
+    }
+
+    @Override
+    public void deleteUserFavoritePerformance(Long userId, Long performanceId) {
+        performanceZzimRepository.deleteByUserIdAndPerformanceId(userId, performanceId);
     }
 
     @Override

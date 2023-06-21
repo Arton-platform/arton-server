@@ -8,19 +8,18 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
-import com.arton.backend.user.domain.User;
 import com.arton.backend.zzim.application.data.ArtistZzimResponseDtoV2;
 import com.arton.backend.zzim.application.data.PerformanceZzimResponseDtoV2;
 import com.arton.backend.zzim.application.data.ZzimCreateDto;
 import com.arton.backend.zzim.application.data.ZzimDeleteDto;
 import com.arton.backend.zzim.application.port.in.ZzimCreateUseCase;
+import com.arton.backend.zzim.application.port.in.ZzimDeleteUseCase;
 import com.arton.backend.zzim.application.port.in.ZzimUseCase;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import com.arton.backend.zzim.domain.ArtistZzim;
 import com.arton.backend.zzim.domain.PerformanceZzim;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.cluster.ClusterState;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ZzimService implements ZzimUseCase, ZzimCreateUseCase {
+public class ZzimService implements ZzimUseCase, ZzimCreateUseCase, ZzimDeleteUseCase {
 
     private final ZzimRepositoryPort zzimRepository;
     private final PerformanceRepositoryPort performanceRepositoryPort;
@@ -88,6 +87,30 @@ public class ZzimService implements ZzimUseCase, ZzimCreateUseCase {
         zzimRepository.zzimPerformance(PerformanceZzim.builder().performanceId(performance.getPerformanceId()).userId(userId).build());
         // update performance
         performance.addHit();
+        performanceSavePort.save(performance);
+    }
+
+    @Override
+    public void deleteArtistZzim(Long userId, Long artistId) {
+        // 실제 찜 했는지 체크
+        boolean isExist = zzimRepository.checkArtistZzimDup(userId, artistId);
+        if (!isExist){
+            throw new CustomException(ErrorCode.ZZIM_NOT_FOUND.getMessage(), ErrorCode.ZZIM_NOT_FOUND);
+        }
+        zzimRepository.deleteUserFavoriteArtist(userId, artistId);
+    }
+
+    @Override
+    public void deletePerformanceZzim(Long userId, Long performanceId) {
+        // 실제 찜 했는지 체크
+        boolean isExist = zzimRepository.checkPerformanceZzimDup(userId, performanceId);
+        if (!isExist){
+            throw new CustomException(ErrorCode.ZZIM_NOT_FOUND.getMessage(), ErrorCode.ZZIM_NOT_FOUND);
+        }
+        zzimRepository.deleteUserFavoritePerformance(userId, performanceId);
+        // 공연 업데이트
+        Performance performance = performanceRepositoryPort.findById(performanceId).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
+        performance.decreaseHit();
         performanceSavePort.save(performance);
     }
 }
