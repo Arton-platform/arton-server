@@ -1,4 +1,4 @@
-package com.arton.backend.zzim.application.port.in;
+package com.arton.backend.zzim.application.data;
 
 import lombok.*;
 

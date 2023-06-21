@@ -1,13 +1,10 @@
 package com.arton.backend.zzim.application.service;
 
 import com.arton.backend.artist.application.port.out.ArtistRepositoryPort;
-import com.arton.backend.performance.applicaiton.data.CommonPerformanceDto;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
-import com.arton.backend.zzim.application.data.ArtistZzimResponseDto;
 import com.arton.backend.zzim.application.data.ArtistZzimResponseDtoV2;
-import com.arton.backend.zzim.application.data.PerformanceZzimResponseDto;
 import com.arton.backend.zzim.application.data.PerformanceZzimResponseDtoV2;
-import com.arton.backend.zzim.application.port.in.ZzimDeleteDto;
+import com.arton.backend.zzim.application.data.ZzimDeleteDto;
 import com.arton.backend.zzim.application.port.in.ZzimUseCase;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import com.arton.backend.zzim.domain.ArtistZzim;

@@ -2,6 +2,7 @@ package com.arton.backend.zzim.application.port.in;
 
 import com.arton.backend.zzim.application.data.ArtistZzimResponseDtoV2;
 import com.arton.backend.zzim.application.data.PerformanceZzimResponseDtoV2;
+import com.arton.backend.zzim.application.data.ZzimDeleteDto;
 
 import java.util.List;
 

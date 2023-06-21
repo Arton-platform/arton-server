@@ -1,7 +1,8 @@
 package com.arton.backend.zzim.adapter.in;
 
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
-import com.arton.backend.zzim.application.port.in.ZzimDeleteDto;
+import com.arton.backend.zzim.application.data.ZzimDeleteDto;
 import com.arton.backend.zzim.application.port.in.ZzimUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -72,4 +73,23 @@ public class ZzimController {
         );
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * 해당 공연을 찜 한다
+     * 하트 표시
+     */
+    @Parameter(name = "userDetails", hidden = true)
+    @Operation(summary = "공연 찜하기", description = "해당 공연을 찜합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "공연 찜하기 성공",
+                    content = @Content(schema = @Schema(implementation = String.class)))})
+    @PostMapping("/performance")
+    public ResponseEntity zzimPerformance(@AuthenticationPrincipal UserDetails userDetails){
+        long userId = Long.parseLong(userDetails.getUsername());
+
+
+
+        return ResponseEntity.ok(CommonResponse.builder().message("공연 찜 성공").status(HttpStatus.OK.value()).build());
+    }
+
 }
