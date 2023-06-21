@@ -2,6 +2,7 @@ package com.arton.backend.zzim.adapter.in;
 
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
+import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.zzim.application.data.ZzimCreateDto;
 import com.arton.backend.zzim.application.data.ZzimDeleteDto;
 import com.arton.backend.zzim.application.port.in.ZzimCreateUseCase;
@@ -85,7 +86,11 @@ public class ZzimController {
     @Operation(summary = "공연 찜하기", description = "해당 공연을 찜합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "공연 찜하기 성공",
-                    content = @Content(schema = @Schema(implementation = String.class)))})
+                    content = @Content(schema = @Schema(implementation = String.class))),
+    @ApiResponse(responseCode = "404", description = "존재하지 않는 공연",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "이미 찜한 공연",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/performance")
     public ResponseEntity zzimPerformance(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ZzimCreateDto zzimCreateDto){
         long userId = Long.parseLong(userDetails.getUsername());
@@ -100,8 +105,12 @@ public class ZzimController {
     @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "아티스트 찜하기", description = "해당 아티스트를 찜합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "아티스트 찜하기 성공",
-                    content = @Content(schema = @Schema(implementation = String.class)))})
+            @ApiResponse(responseCode = "20", description = "아티스트 찜하기 성공",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 아티스트",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "이미 찜한 아티스트",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/artist")
     public ResponseEntity zzimArtist(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ZzimCreateDto zzimCreateDto){
         long userId = Long.parseLong(userDetails.getUsername());
