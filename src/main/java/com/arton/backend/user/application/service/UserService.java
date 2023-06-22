@@ -83,13 +83,15 @@ public class UserService implements UserUseCase, MyPageUseCase {
     public void updateUserProfile(long userId, UserProfileEditDto userProfileEditDto, MultipartFile multipartFile) {
         User user = findUser(userId);
         // 이미지 업데이트
+        // 무조건 기본적으로 디폴트 이미지 넣어서 매핑시켜주기 때문에
+        // UserImage null 이 아님.
         if (multipartFile != null) {
-            UserImage userImage = userImageRepository.findUserImageByUser(user.getId()).get();
+            UserImage userImage = userImageRepository.findUserImageByUser(user.getId()).orElseGet(null);
             fileUploadUtils.deleteFile(user.getId(), userImage.getImageUrl());
             String upload = fileUploadUtils.upload(multipartFile, imageDir + user.getId());
             userImage.updateImage(upload);
-            user.setImage(userImage);
-            userImageSaveRepository.save(userImage);
+            UserImage savedImage = userImageSaveRepository.save(userImage);
+            user.setImage(savedImage);
         }
         user.updateProfile(userProfileEditDto);
         userRepository.save(user);

@@ -1,6 +1,5 @@
 package com.arton.backend.user.adapter.in;
 
-import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.user.application.data.MainPageDto;
