@@ -15,7 +15,7 @@ public class ReviewCreateDto {
     @NotBlank
     private String content;
     @NotBlank
-    private float starScore;
+    private Float starScore;
 
     public Review toDomain() {
         return Review.builder()
