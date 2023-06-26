@@ -7,16 +7,16 @@ import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.review.adapter.out.persistence.ReviewMapper;
-import com.arton.backend.review.application.port.in.MyPageReviewDto;
+import com.arton.backend.review.adapter.out.persistence.mapper.ReviewMapper;
+import com.arton.backend.review.application.data.MyPageReviewDto;
+import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
-import com.arton.backend.review.domain.Review;
-import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
 import com.arton.backend.user.application.data.MyPageDto;
 import com.arton.backend.user.application.data.UserPasswordEditDto;
 import com.arton.backend.user.application.data.UserProfileEditDto;
-import com.arton.backend.user.application.port.in.*;
+import com.arton.backend.user.application.port.in.MyPageUseCase;
+import com.arton.backend.user.application.port.in.UserUseCase;
 import com.arton.backend.user.application.port.out.UserRepositoryPort;
 import com.arton.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -118,14 +117,10 @@ public class UserService implements UserUseCase, MyPageUseCase {
         Long followersCount = followRepositoryPort.getFollowersCount(userId);
         Long followingsCount = followRepositoryPort.getFollowingsCount(userId);
         Long userReviewCount = reviewCountPort.getUserReviewCount(userId);
+        // 수정된 리뷰 수집기.
+        // 대댓글 연동해서 갯수 구현 해야함.
+        List<MyPageReviewDto> reviews = reviewListPort.getUserReviewList(userId).stream().map(MyPageReviewQueryDSLDto::toMyPageDTO).collect(Collectors.toList());
 
-        List<Review> userReviews = reviewListPort.userReviewList(UserMapper.toEntity(user)).map(reviews ->
-                reviews.stream().map(review -> reviewMapper.toDomain(review))
-                        .collect(Collectors.toList())).orElseGet(Collections::emptyList);
-        List<MyPageReviewDto> collect = userReviews.stream().map(MyPageReviewDto::to).collect(Collectors.toList());
-        for (MyPageReviewDto myPageReviewDto : collect) {
-            myPageReviewDto.setReviewCount(reviewCountPort.getPerformanceReviewCount(myPageReviewDto.getPerformanceId()));
-        }
         return MyPageDto.builder()
                 .id(userId)
                 .nickname(nickname)
@@ -134,7 +129,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
                 .followers(followersCount)
                 .followings(followingsCount)
                 .reviewCount(userReviewCount)
-                .reviews(collect)
+                .reviews(reviews)
                 .build();
     }
 }

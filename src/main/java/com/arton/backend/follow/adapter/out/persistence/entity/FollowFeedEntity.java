@@ -2,9 +2,8 @@ package com.arton.backend.follow.adapter.out.persistence.entity;
 
 import com.arton.backend.comment.adapter.out.persistence.CommentEntity;
 import com.arton.backend.infra.shared.BaseEntity;
-import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
+import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
-import com.arton.backend.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package com.arton.backend.review.application.port.in;
 
-import com.arton.backend.review.domain.Review;
+import com.arton.backend.review.application.data.ReviewCreateDto;
 
 public interface ReviewRegistUseCase {
-    Review regist(Review review);
+    void regist(long userId, ReviewCreateDto reviewCreateDto);
 }

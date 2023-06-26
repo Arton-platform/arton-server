@@ -1,6 +1,6 @@
 package com.arton.backend.user.application.data;
 
-import com.arton.backend.review.application.port.in.MyPageReviewDto;
+import com.arton.backend.review.application.data.MyPageReviewDto;
 import lombok.*;
 
 import java.util.ArrayList;

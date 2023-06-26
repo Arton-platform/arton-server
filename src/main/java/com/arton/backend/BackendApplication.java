@@ -6,14 +6,13 @@ import com.arton.backend.follow.adapter.out.persistence.repository.FollowReposit
 import com.arton.backend.image.adapter.out.persistence.repository.UserImageRepository;
 import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceRepository;
 import com.arton.backend.performer.adapter.out.persistence.repository.PerformerRepository;
-import com.arton.backend.review.adapter.out.persistence.ReviewRepository;
+import com.arton.backend.review.adapter.out.persistence.repository.ReviewRepository;
 import com.arton.backend.search.adapter.out.persistence.repository.UserSearchRepository;
 import com.arton.backend.test.TestDataInit;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

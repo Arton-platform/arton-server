@@ -40,8 +40,8 @@ public class CommentController {
                 .build();
 
         Review review = Review.builder()
-                .reviewId(reviewId)
-                .performance(performance)
+                .id(reviewId)
+                .performanceId(performance.getId())
                 .build();
         ResponseData<List<Comment>> response = new ResponseData(
                 "SUCCESS",

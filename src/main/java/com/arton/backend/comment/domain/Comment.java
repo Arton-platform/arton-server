@@ -3,7 +3,7 @@ package com.arton.backend.comment.domain;
 import com.arton.backend.infra.shared.Board;
 import com.arton.backend.image.domain.Image;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
-import com.arton.backend.review.adapter.out.persistence.ReviewEntity;
+import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
