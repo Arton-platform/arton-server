@@ -27,4 +27,8 @@ public class Review {
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
     }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 }

@@ -1,5 +1,6 @@
 package com.arton.backend.review.application.service;
 
+import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.port.in.ReviewCountUseCase;
 import com.arton.backend.review.application.port.in.ReviewListUseCase;
@@ -29,7 +30,9 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     }
 
     @Override
-    public void regist(Review review) {
+    public void regist(long userId, ReviewCreateDto reviewCreateDto) {
+        Review review = reviewCreateDto.toDomain();
+        review.setUserId(userId);
         reviewRegistPort.regist(review);
     }
 
