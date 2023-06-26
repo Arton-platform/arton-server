@@ -1,6 +1,9 @@
 package com.arton.backend.review.domain;
 
+import com.arton.backend.review.application.data.ReviewEditDto;
 import lombok.*;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
@@ -32,5 +35,20 @@ public class Review {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public void addHit() {
+        this.hit++;
+    }
+
+    public void editReview(ReviewEditDto editDto) {
+        if (editDto != null) {
+            if (StringUtils.hasText(editDto.getContent()) && !editDto.getContent().equals(content)) {
+                this.content = editDto.getContent();
+            }
+            if (editDto.getStartScore() != null && !editDto.getStartScore().equals(starScore)) {
+                this.starScore = editDto.getStartScore();
+            }
+        }
     }
 }

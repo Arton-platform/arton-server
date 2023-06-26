@@ -67,4 +67,9 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     public boolean userHasReview(long reviewId, long userId) {
         return repository.existsByIdAndUserId(reviewId, userId);
     }
+
+    @Override
+    public Optional<Review> findByIdAndUserId(long reviewId, long userId) {
+        return repository.findByIdAndUserId(reviewId, userId).map(reviewMapper::toDomain);
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long>, CustomReviewRepository {
     List<ReviewEntity> findAllByPerformanceIdOrderByStarScoreDesc(long performanceId);
@@ -17,4 +18,5 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long>, Cus
     @Query("DELETE from ReviewEntity review where review.user.id =: userId")
     void deleteAllByUserId(@Param("userId") long userId);
     boolean existsByIdAndUserId(long id, long userId);
+    Optional<ReviewEntity> findByIdAndUserId(long id, long userId);
 }

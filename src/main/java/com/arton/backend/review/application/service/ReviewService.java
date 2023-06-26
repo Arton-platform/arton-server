@@ -4,10 +4,8 @@ import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewDto;
-import com.arton.backend.review.application.port.in.ReviewCountUseCase;
-import com.arton.backend.review.application.port.in.ReviewDeleteUseCase;
-import com.arton.backend.review.application.port.in.ReviewListUseCase;
-import com.arton.backend.review.application.port.in.ReviewRegistUseCase;
+import com.arton.backend.review.application.data.ReviewEditDto;
+import com.arton.backend.review.application.port.in.*;
 import com.arton.backend.review.application.port.out.*;
 import com.arton.backend.review.domain.Review;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, ReviewCountUseCase, ReviewDeleteUseCase {
+public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, ReviewCountUseCase, ReviewDeleteUseCase, ReviewEditUseCase {
     private final ReviewListPort reviewListPort;
     private final ReviewRegistPort reviewRegistPort;
     private final ReviewCountPort reviewCountPort;
@@ -62,5 +60,13 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     public void deleteAllReviews(long userId) {
         // delete
         reviewDeletePort.deleteUserAllReview(userId);
+    }
+
+    @Override
+    public void edit(long userId, ReviewEditDto reviewEditDto) {
+        Review review = reviewFindPort.findByIdAndUserId(reviewEditDto.getId(), userId).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
+        review.editReview(reviewEditDto);
+        // update
+        reviewRegistPort.regist(review);
     }
 }
