@@ -1,31 +1,30 @@
 package com.arton.backend.review.domain;
 
-import com.arton.backend.infra.shared.Board;
-import com.arton.backend.image.domain.Image;
-import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
-import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Review extends Board {
-    private long reviewId;
-    private PerformanceEntity performance;
+public class Review {
+    private long id;
+    private long performanceId;
+    private long userId;
     private String content;
     private float starScore;
+    /** 가입일 */
+    private LocalDateTime createdDate;
+    /** 업데이트일 */
+    private LocalDateTime updatedDate;
 
     @Builder
-    public Review(long reviewId, PerformanceEntity performance, String content, float starScore, UserEntity user, int hit, Image image, LocalDateTime createdDate, LocalDateTime updateDate) {
-        super(user, hit, image, createdDate, updateDate);
-        this.reviewId = reviewId;
-        this.performance = performance;
+    public Review(long id, long performanceId, long userId, String content, float starScore, LocalDateTime createdDate, LocalDateTime updatedDate) {
+        this.id = id;
+        this.performanceId = performanceId;
+        this.userId = userId;
         this.content = content;
         this.starScore = starScore;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
     }
 }
