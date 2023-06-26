@@ -14,6 +14,7 @@ public enum ErrorCode {
     FOLLOWING_IS_EXIST(409, "DUP_ERR_409", "이미 팔로우중인 대상입니다."),
     FOLLOWING_INVALID(400, "FOLLOWING_INVALID", "잘못된 팔로우 요청입니다."),
     UNFOLLOWING_INVALID(400, "UNFOLLOWING_INVALID", "잘못된 언팔로우 요청입니다."),
+    BAD_REQUEST(400, "BAD_REQUEST", "잘못된 요청입니다."),
     FILE_EMPTY(400, "FILE_EMPTY", "빈 파일입니다.."),
     FILE_UPLOAD_FAILED(500, "FILE_UPLOAD_FAILED", "파일 업로드에 실패하였습니다."),
     FILE_COPY_FAILED(500, "FILE_COPY_FAILED", "파일 복사에 실패하였습니다."),

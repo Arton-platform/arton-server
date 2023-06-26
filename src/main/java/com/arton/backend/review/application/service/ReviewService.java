@@ -2,6 +2,7 @@ package com.arton.backend.review.application.service;
 
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
+import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.data.ReviewEditDto;
@@ -26,6 +27,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final ReviewCountPort reviewCountPort;
     private final ReviewDeletePort reviewDeletePort;
     private final ReviewFindPort reviewFindPort;
+    private final PerformanceRepositoryPort performanceRepositoryPort;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
     @Override
@@ -38,8 +40,10 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
         log.info("review regist {}", reviewCreateDto);
         // validation
         if (reviewCreateDto.getPerformanceId() == null || reviewCreateDto.getStarScore() == null){
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ErrorCode.BAD_REQUEST.getMessage(), ErrorCode.BAD_REQUEST);
         }
+        // performance check
+        performanceRepositoryPort.findById(reviewCreateDto.getPerformanceId()).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
         Review review = reviewCreateDto.toDomain();
         review.setUserId(userId);
         reviewRegistPort.regist(review);
