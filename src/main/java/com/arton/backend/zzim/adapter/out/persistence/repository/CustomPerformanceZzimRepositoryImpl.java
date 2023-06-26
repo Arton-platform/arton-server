@@ -45,7 +45,7 @@ public class CustomPerformanceZzimRepositoryImpl implements CustomPerformanceZzi
     public long deleteUsersFavoritePerformances(Long userId, List<Long> ids) {
         return queryFactory.delete(performanceZzimEntity)
                 .where(performanceZzimEntity.user.id.eq(userId),
-                        performanceZzimEntity.id.in(ids))
+                        performanceZzimEntity.performance.id.in(ids))
                 .execute();
     }
 }

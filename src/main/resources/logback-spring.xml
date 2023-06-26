@@ -28,7 +28,6 @@
         </appender>
     </springProfile>
 
-
     <root>
         <springProfile name="local,test">
             <appender-ref ref="CONSOLE"/>
