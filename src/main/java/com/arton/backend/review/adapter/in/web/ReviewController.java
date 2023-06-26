@@ -5,6 +5,7 @@ import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewDto;
+import com.arton.backend.review.application.port.in.ReviewDeleteUseCase;
 import com.arton.backend.review.application.port.in.ReviewListUseCase;
 import com.arton.backend.review.application.port.in.ReviewRegistUseCase;
 import com.arton.backend.review.domain.Review;
@@ -31,6 +32,7 @@ import java.util.List;
 public class ReviewController {
     private final ReviewListUseCase reviewListUseCase;
     private final ReviewRegistUseCase reviewRegistUseCase;
+    private final ReviewDeleteUseCase reviewDeleteUseCase;
 
     @Operation(summary = "공연 리뷰 페이지", description = "공연의 리뷰 정보를 반환합니다.")
     @ApiResponses(value = {
@@ -56,5 +58,18 @@ public class ReviewController {
         // enroll
         reviewRegistUseCase.regist(userId, reviewCreateDto);
         return ResponseEntity.ok().body(CommonResponse.builder().status(200).message("리뷰를 성공적으로 등록하였습니다.").build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") long id) {
+        long userId = Long.parseLong(userDetails.getUsername());
+        reviewDeleteUseCase.delete(userId, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<CommonResponse> edit(@AuthenticationPrincipal UserDetails userDetails) {
+
+        return ResponseEntity.ok().body(CommonResponse.builder().status(200).message("성공적으로 리뷰를 수정하였습니다.").build());
     }
 }

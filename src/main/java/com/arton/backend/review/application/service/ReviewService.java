@@ -1,13 +1,14 @@
 package com.arton.backend.review.application.service;
 
+import com.arton.backend.infra.shared.exception.CustomException;
+import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.port.in.ReviewCountUseCase;
+import com.arton.backend.review.application.port.in.ReviewDeleteUseCase;
 import com.arton.backend.review.application.port.in.ReviewListUseCase;
 import com.arton.backend.review.application.port.in.ReviewRegistUseCase;
-import com.arton.backend.review.application.port.out.ReviewCountPort;
-import com.arton.backend.review.application.port.out.ReviewListPort;
-import com.arton.backend.review.application.port.out.ReviewRegistPort;
+import com.arton.backend.review.application.port.out.*;
 import com.arton.backend.review.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,12 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, ReviewCountUseCase {
+public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, ReviewCountUseCase, ReviewDeleteUseCase {
     private final ReviewListPort reviewListPort;
     private final ReviewRegistPort reviewRegistPort;
     private final ReviewCountPort reviewCountPort;
+    private final ReviewDeletePort reviewDeletePort;
+    private final ReviewFindPort reviewFindPort;
 
     @Override
     public List<ReviewDto> reviewList(Long performanceId) {
@@ -44,5 +47,20 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     @Override
     public Long userReviewCount(Long id) {
         return reviewCountPort.getUserReviewCount(id);
+    }
+
+    @Override
+    public void delete(long userId, long reviewId) {
+        boolean userHasReview = reviewFindPort.userHasReview(reviewId, userId);
+        if (!userHasReview) {
+            throw new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND);
+        }
+        reviewDeletePort.deleteReview(reviewId);
+    }
+
+    @Override
+    public void deleteAllReviews(long userId) {
+        // delete
+        reviewDeletePort.deleteUserAllReview(userId);
     }
 }

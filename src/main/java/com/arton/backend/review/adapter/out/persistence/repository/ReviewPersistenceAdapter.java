@@ -2,9 +2,7 @@ package com.arton.backend.review.adapter.out.persistence.repository;
 
 import com.arton.backend.review.adapter.out.persistence.mapper.ReviewMapper;
 import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
-import com.arton.backend.review.application.port.out.ReviewCountPort;
-import com.arton.backend.review.application.port.out.ReviewListPort;
-import com.arton.backend.review.application.port.out.ReviewRegistPort;
+import com.arton.backend.review.application.port.out.*;
 import com.arton.backend.review.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPort, ReviewCountPort {
+public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPort, ReviewCountPort, ReviewDeletePort, ReviewFindPort {
     private final ReviewRepository repository;
     private final ReviewMapper reviewMapper;
     @Override
@@ -53,5 +51,20 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     @Override
     public Long getPerformanceReviewCount(Long performanceId) {
         return repository.countAllByPerformance_Id(performanceId);
+    }
+
+    @Override
+    public void deleteUserAllReview(long userId) {
+        repository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public void deleteReview(long reviewId) {
+        repository.deleteById(reviewId);
+    }
+
+    @Override
+    public boolean userHasReview(long reviewId, long userId) {
+        return repository.existsByIdAndUserId(reviewId, userId);
     }
 }
