@@ -48,7 +48,7 @@ public class CustomArtistZzimRepositoryImpl implements CustomArtistZzimRepositor
     public long deleteUsersFavoriteArtists(Long userId, List<Long> ids) {
         return queryFactory.delete(artistZzimEntity)
                 .where(getEq(userId),
-                        artistZzimEntity.id.in(ids))
+                        artistZzimEntity.artist.id.in(ids))
                 .execute();
     }
 }
