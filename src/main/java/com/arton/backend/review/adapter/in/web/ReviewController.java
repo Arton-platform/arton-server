@@ -1,7 +1,9 @@
 package com.arton.backend.review.adapter.in.web;
 
+import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
+import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.port.in.ReviewListUseCase;
 import com.arton.backend.review.application.port.in.ReviewRegistUseCase;
 import com.arton.backend.review.domain.Review;
@@ -32,8 +34,8 @@ public class ReviewController {
             @ApiResponse(responseCode = "200", description = "타유저 정보 반환 성공",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Review.class))))})
     @GetMapping("/list/{id}")
-    public ResponseEntity<ResponseData<List<Review>>> reviewList(@PathVariable(value = "id" ,required = true) Long id){
-        ResponseData<List<Review>> response = new ResponseData<>(
+    public ResponseEntity<ResponseData<List<ReviewDto>>> reviewList(@PathVariable(value = "id" ,required = true) Long id){
+        ResponseData<List<ReviewDto>> response = new ResponseData<>(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 reviewListUseCase.reviewList(id)
@@ -46,12 +48,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "200", description = "리뷰 등록 성공",
                     content = @Content(schema = @Schema(implementation = Review.class)))})
     @PostMapping("/regist")
-    public ResponseEntity<ResponseData<Review>> regist(@RequestBody Review review){
-        ResponseData<Review> response = new ResponseData<>(
-                "SUCCESS",
-                HttpStatus.OK.value(),
-                reviewRegistUseCase.regist(review)
-        );
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<CommonResponse> regist(@RequestBody Review review){
+        return ResponseEntity.ok().body(CommonResponse.builder().status(200).message("리뷰를 성공적으로 등록하였습니다.").build());
     }
 }

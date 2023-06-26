@@ -1,9 +1,9 @@
 package com.arton.backend.review.application.port.in;
 
-import com.arton.backend.review.domain.Review;
+import com.arton.backend.review.application.data.ReviewDto;
 
 import java.util.List;
 
 public interface ReviewListUseCase {
-    List<Review> reviewList(Long id);
+    List<ReviewDto> reviewList(Long id);
 }
