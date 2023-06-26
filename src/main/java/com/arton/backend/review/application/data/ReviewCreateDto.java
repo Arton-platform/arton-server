@@ -10,11 +10,9 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewCreateDto {
-    @NotBlank
     private Long performanceId;
     @NotBlank
     private String content;
-    @NotBlank
     private Float starScore;
 
     public Review toDomain() {

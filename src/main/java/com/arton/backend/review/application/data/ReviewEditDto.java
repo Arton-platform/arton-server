@@ -9,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewEditDto {
-    @NotBlank
     private Long id;
     private String content;
     private Float startScore;
