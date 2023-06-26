@@ -1,6 +1,7 @@
 package com.arton.backend.review.adapter.out.persistence.repository;
 
 import com.arton.backend.review.adapter.out.persistence.mapper.ReviewMapper;
+import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
 import com.arton.backend.review.application.port.out.ReviewRegistPort;
@@ -32,6 +33,11 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(reviewMapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MyPageReviewQueryDSLDto> getUserReviewList(long userId) {
+        return repository.getReviewDetail(userId);
     }
 
     @Override

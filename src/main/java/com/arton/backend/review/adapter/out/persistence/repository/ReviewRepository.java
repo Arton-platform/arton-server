@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
+public interface ReviewRepository extends JpaRepository<ReviewEntity, Long>, CustomReviewRepository {
     List<ReviewEntity> findAllByPerformanceIdOrderByStarScoreDesc(long performanceId);
     List<ReviewEntity> findAllByUserIdOrderByCreatedDateDesc(long userId);
     Long countAllByUser_Id(Long userId);
