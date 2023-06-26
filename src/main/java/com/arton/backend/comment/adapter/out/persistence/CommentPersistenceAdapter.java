@@ -30,8 +30,6 @@ public class CommentPersistenceAdapter implements CommentListPort, CommentRegist
                 .orderBy(qCommentEntity.createdDate.desc())
                 .fetch()
         );
-//        return null;
-//        return repository.findAllByPerformanceAndReviewOrderByCreatedDateDesc(review);
     }
 
     @Override
