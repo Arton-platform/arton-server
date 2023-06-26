@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,6 +14,7 @@ public class ReviewCreateDto {
     private Long performanceId;
     @NotBlank
     private String content;
+    @PositiveOrZero
     private Float starScore;
 
     public Review toDomain() {
