@@ -20,24 +20,26 @@ public class MyPageReviewDto {
     private String nickname;
     private String title;
     private float starScore;
-    private String createdDate;
+    private String updatedDate;
     private String content;
     private List<String> images = new ArrayList<>();
     private Long hit;
     private Long reviewCount;
 
     @Builder
-    public MyPageReviewDto(Long id, Long performanceId, Long userId, String nickname, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
+    public MyPageReviewDto(Long id, Long performanceId, Long userId, String nickname, String title, float starScore, String updatedDate, String content, List<String> images, Long hit, Long reviewCount) {
         this.id = id;
         this.performanceId = performanceId;
         this.userId = userId;
         this.nickname = nickname;
         this.title = title;
         this.starScore = starScore;
-        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
         this.content = content;
         this.images = images;
         this.hit = hit;
         this.reviewCount = reviewCount;
     }
+
+
 }

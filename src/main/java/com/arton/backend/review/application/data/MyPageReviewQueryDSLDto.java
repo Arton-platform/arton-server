@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 마이 페이지에서 보여지는 사용자가 작성한 리뷰 정보
@@ -21,14 +21,13 @@ public class MyPageReviewQueryDSLDto {
     private String nickname;
     private String title;
     private float starScore;
-    private String updatedDate;
+    private LocalDateTime updatedDate;
     private String content;
     private Long hit;
-    private Long reviewCount;
 
     @Builder
     @QueryProjection
-    public MyPageReviewQueryDSLDto(Long reviewId, Long performanceId, Long userId, String nickname, String title, float starScore, String updatedDate, String content, Long hit, Long reviewCount) {
+    public MyPageReviewQueryDSLDto(Long reviewId, Long performanceId, Long userId, String nickname, String title, float starScore, LocalDateTime updatedDate, String content, Long hit) {
         this.reviewId = reviewId;
         this.performanceId = performanceId;
         this.userId = userId;
@@ -38,6 +37,25 @@ public class MyPageReviewQueryDSLDto {
         this.updatedDate = updatedDate;
         this.content = content;
         this.hit = hit;
-        this.reviewCount = reviewCount;
+    }
+
+    /**
+     * my page 리뷰 화면에 맞는 DTO로 변경
+     * review count는 현재 대댓글 구현을 안해서 우선 0으로 가자..
+     */
+    public MyPageReviewDto toMyPageDTO() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        return MyPageReviewDto.builder()
+                .id(reviewId)
+                .performanceId(performanceId)
+                .userId(userId)
+                .nickname(nickname)
+                .title(title)
+                .starScore(starScore)
+                .updatedDate(updatedDate.format(formatter))
+                .content(content)
+                .hit(hit)
+                .reviewCount(0L)
+                .build();
     }
 }

@@ -22,6 +22,7 @@ public class ReviewCreateDto {
                 .performanceId(performanceId)
                 .content(content)
                 .starScore(starScore)
+                .hit(0L)
                 .build();
     }
 }

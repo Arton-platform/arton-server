@@ -3,7 +3,10 @@ package com.arton.backend.review.adapter.out.persistence.entity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,14 +30,16 @@ public class ReviewEntity extends BaseEntity {
 
     private String content;
     private float starScore;
+    private Long hit;
 
     @Builder
-    public ReviewEntity(LocalDateTime createdDate, LocalDateTime updatedDate, long id, PerformanceEntity performance, UserEntity user, String content, float starScore) {
+    public ReviewEntity(LocalDateTime createdDate, LocalDateTime updatedDate, long id, PerformanceEntity performance, UserEntity user, String content, float starScore, Long hit) {
         super(createdDate, updatedDate);
         this.id = id;
         this.performance = performance;
         this.user = user;
         this.content = content;
         this.starScore = starScore;
+        this.hit = hit;
     }
 }

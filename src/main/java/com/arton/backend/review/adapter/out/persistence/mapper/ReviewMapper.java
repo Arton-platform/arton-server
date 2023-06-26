@@ -18,6 +18,7 @@ public class ReviewMapper {
                 .updatedDate(entity.getUpdatedDate())
                 .performanceId(entity.getPerformance().getId())
                 .userId(entity.getUser().getId())
+                .hit(entity.getHit())
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class ReviewMapper {
                 .createdDate(review.getCreatedDate())
                 .performance(PerformanceEntity.builder().id(review.getPerformanceId()).build())
                 .user(UserEntity.builder().id(review.getUserId()).build())
+                .hit(review.getHit())
                 .build();
     }
 }
