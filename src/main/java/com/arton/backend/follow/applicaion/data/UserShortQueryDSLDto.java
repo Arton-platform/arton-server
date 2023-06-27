@@ -22,4 +22,14 @@ public class UserShortQueryDSLDto {
         this.selfDescription = selfDescription;
         this.imageUrl = imageUrl;
     }
+
+    public UserShortDto to(boolean isFollow) {
+        return UserShortDto.builder()
+                .id(getId())
+                .nickname(getNickname())
+                .selfDescription(getSelfDescription())
+                .imageUrl(getImageUrl())
+                .isFollow(isFollow)
+                .build();
+    }
 }

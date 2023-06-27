@@ -1,6 +1,7 @@
 package com.arton.backend.follow.applicaion.port.out;
 
 import com.arton.backend.follow.applicaion.data.UserFollowSearchDto;
+import com.arton.backend.follow.applicaion.data.UserShortQueryDSLDto;
 import com.arton.backend.follow.domain.Follow;
 import com.arton.backend.user.domain.User;
 
@@ -18,5 +19,7 @@ public interface FollowRepositoryPort {
      * @return
      */
     List<User> getFollowingList(Long userId, UserFollowSearchDto userFollowSearchDto);
+    List<UserShortQueryDSLDto> getFollowingListV2(Long userId, UserFollowSearchDto userFollowSearchDto);
     List<User> getFollowerList(Long userId, UserFollowSearchDto userFollowSearchDto);
+    List<UserShortQueryDSLDto> getFollowerListV2(Long userId, UserFollowSearchDto userFollowSearchDto);
 }
