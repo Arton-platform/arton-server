@@ -6,26 +6,31 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Review {
-    private long id;
-    private long performanceId;
-    private long userId;
+    private Long id;
+    private Long performanceId;
+    private Long userId;
+    private Long parentId;
+    private List<Long> commentsId = new ArrayList<>();
     private String content;
-    private float starScore;
+    private Float starScore;
     private Long hit;
     /** 가입일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
     private LocalDateTime updatedDate;
 
-    @Builder
-    public Review(long id, long performanceId, long userId, String content, float starScore, Long hit, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public Review(Long id, Long performanceId, Long userId, Long parentId, List<Long> commentsId, String content, Float starScore, Long hit, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.performanceId = performanceId;
         this.userId = userId;
+        this.parentId = parentId;
+        this.commentsId = commentsId;
         this.content = content;
         this.starScore = starScore;
         this.hit = hit;
@@ -33,7 +38,7 @@ public class Review {
         this.updatedDate = updatedDate;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
