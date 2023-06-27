@@ -1,8 +1,10 @@
 package com.arton.backend.review.domain;
 
 import com.arton.backend.review.application.data.ReviewEditDto;
-import lombok.*;
-import org.springframework.util.ObjectUtils;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
