@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, ReviewCountUseCase, ReviewDeleteUseCase, ReviewEditUseCase {
+public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, ReviewCountUseCase, ReviewDeleteUseCase, ReviewEditUseCase, ReviewHitRemoveUseCase, ReviewHitAddUseCase {
     private final ReviewListPort reviewListPort;
     private final ReviewRegistPort reviewRegistPort;
     private final ReviewCountPort reviewCountPort;
@@ -98,5 +98,15 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
         review.editReview(reviewEditDto);
         // update
         reviewRegistPort.regist(review);
+    }
+
+    @Override
+    public void addHit(long userId, long reviewId) {
+
+    }
+
+    @Override
+    public void removeHit(long userId, long reviewId) {
+
     }
 }

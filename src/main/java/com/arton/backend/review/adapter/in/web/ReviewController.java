@@ -6,10 +6,7 @@ import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.data.ReviewEditDto;
-import com.arton.backend.review.application.port.in.ReviewDeleteUseCase;
-import com.arton.backend.review.application.port.in.ReviewEditUseCase;
-import com.arton.backend.review.application.port.in.ReviewListUseCase;
-import com.arton.backend.review.application.port.in.ReviewRegistUseCase;
+import com.arton.backend.review.application.port.in.*;
 import com.arton.backend.review.domain.Review;
 import com.arton.backend.user.application.data.MyPageDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +34,8 @@ public class ReviewController {
     private final ReviewRegistUseCase reviewRegistUseCase;
     private final ReviewDeleteUseCase reviewDeleteUseCase;
     private final ReviewEditUseCase reviewEditUseCase;
+    private final ReviewHitRemoveUseCase reviewHitRemoveUseCase;
+    private final ReviewHitAddUseCase reviewHitAddUseCase;
 
     @Operation(summary = "공연 리뷰 페이지", description = "공연의 리뷰 정보를 반환합니다.")
     @ApiResponses(value = {
@@ -52,6 +51,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "공연 리뷰 등록", description = "공연 리뷰를 등록합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 등록 성공",
@@ -64,6 +64,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(CommonResponse.builder().status(200).message("리뷰를 성공적으로 등록하였습니다.").build());
     }
 
+    @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "공연 리뷰 삭제", description = "공연 리뷰를 삭제합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "리뷰 삭제 성공"),
@@ -75,6 +76,7 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
+    @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "공연 리뷰 수정", description = "공연 리뷰를 수정합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 수정 성공",
@@ -100,4 +102,30 @@ public class ReviewController {
         );
         return ResponseEntity.ok().body(response);
     }
+
+    @Operation(summary = "리뷰 좋아요 누르기", description = "해당 리뷰를 좋아요 표시합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "리뷰 좋아요 성공"),
+            @ApiResponse(responseCode = "404", description = "리뷰 존재하지 않음",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class))))})
+    @PostMapping("/hit/{id}")
+    public ResponseEntity addHit(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(value = "id" ,required = true) Long id){
+        long userId = Long.parseLong(userDetails.getUsername());
+        reviewHitAddUseCase.addHit(userId, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "리뷰 좋아요 해제", description = "해당 리뷰 좋아요를 해제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "리뷰 좋아요 해제 성공"),
+            @ApiResponse(responseCode = "404", description = "리뷰 존재하지 않음",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class))))})
+    @DeleteMapping("/hit/{id}")
+    public ResponseEntity removeHit(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(value = "id" ,required = true) Long id){
+        long userId = Long.parseLong(userDetails.getUsername());
+        reviewHitRemoveUseCase.removeHit(userId, id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
