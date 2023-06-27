@@ -21,20 +21,20 @@ public class MyPageReviewQueryDSLDto {
     private String nickname;
     private String title;
     private float starScore;
-    private LocalDateTime updatedDate;
+    private LocalDateTime createdDate;
     private String content;
     private Long hit;
 
     @Builder
     @QueryProjection
-    public MyPageReviewQueryDSLDto(Long reviewId, Long performanceId, Long userId, String nickname, String title, float starScore, LocalDateTime updatedDate, String content, Long hit) {
+    public MyPageReviewQueryDSLDto(Long reviewId, Long performanceId, Long userId, String nickname, String title, float starScore, LocalDateTime createdDate, String content, Long hit) {
         this.reviewId = reviewId;
         this.performanceId = performanceId;
         this.userId = userId;
         this.nickname = nickname;
         this.title = title;
         this.starScore = starScore;
-        this.updatedDate = updatedDate;
+        this.createdDate = createdDate;
         this.content = content;
         this.hit = hit;
     }
@@ -52,7 +52,7 @@ public class MyPageReviewQueryDSLDto {
                 .nickname(nickname)
                 .title(title)
                 .starScore(starScore)
-                .updatedDate(updatedDate.format(formatter))
+                .createdDate(createdDate.format(formatter))
                 .content(content)
                 .hit(hit)
                 .reviewCount(0L)

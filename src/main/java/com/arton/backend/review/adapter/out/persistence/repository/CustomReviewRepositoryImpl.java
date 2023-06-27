@@ -28,7 +28,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                 userEntity.nickname,
                 performanceEntity.title,
                 reviewEntity.starScore,
-                reviewEntity.updatedDate,
+                reviewEntity.createdDate,
                 reviewEntity.content,
                 reviewEntity.hit))
                 .from(reviewEntity)
