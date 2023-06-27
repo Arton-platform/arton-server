@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface ReviewHitFindPort {
     Optional<ReviewHit> findByUserAndReview(Long userId, Long reviewId);
+    boolean existByUserAndReview(Long userId, Long reviewId);
 }

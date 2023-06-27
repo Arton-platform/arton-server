@@ -29,6 +29,11 @@ public class ReviewHitRepositoryAdapter implements ReviewHitFindPort, ReviewHitD
     }
 
     @Override
+    public boolean existByUserAndReview(Long userId, Long reviewId) {
+        return reviewHitRepository.existsByUserIdAndReviewId(userId, reviewId);
+    }
+
+    @Override
     public ReviewHit save(ReviewHit reviewHit) {
         return toDomain(reviewHitRepository.save(toEntity(reviewHit)));
     }

@@ -9,6 +9,11 @@ import com.arton.backend.review.application.data.ReviewEditDto;
 import com.arton.backend.review.application.port.in.*;
 import com.arton.backend.review.application.port.out.*;
 import com.arton.backend.review.domain.Review;
+import com.arton.backend.reviewhit.application.port.out.ReviewHitDeletePort;
+import com.arton.backend.reviewhit.application.port.out.ReviewHitFindPort;
+import com.arton.backend.reviewhit.application.port.out.ReviewHitSavePort;
+import com.arton.backend.reviewhit.application.service.ReviewHitService;
+import com.arton.backend.reviewhit.domain.ReviewHit;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +33,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final ReviewDeletePort reviewDeletePort;
     private final ReviewFindPort reviewFindPort;
     private final PerformanceRepositoryPort performanceRepositoryPort;
+    private final ReviewHitService reviewHitService;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
     @Override
@@ -102,11 +108,25 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
 
     @Override
     public void addHit(long userId, long reviewId) {
-
+        // review 있는지
+        Review review = reviewFindPort.findById(reviewId).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
+        // review hit
+        reviewHitService.addHit(userId, reviewId);
+        // review count
+        review.addHit();
+        //update
+        reviewRegistPort.regist(review);
     }
 
     @Override
     public void removeHit(long userId, long reviewId) {
-
+        // review 있는지
+        Review review = reviewFindPort.findById(reviewId).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
+        // review hit
+        reviewHitService.removeHit(userId, reviewId);
+        // review count
+        review.decreaseHit();
+        //update
+        reviewRegistPort.regist(review);
     }
 }

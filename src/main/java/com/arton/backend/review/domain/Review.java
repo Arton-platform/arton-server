@@ -49,6 +49,12 @@ public class Review {
         this.hit++;
     }
 
+    public void decreaseHit() {
+        if (this.hit>0){
+            this.hit--;
+        }
+    }
+
     public void editReview(ReviewEditDto editDto) {
         if (editDto != null) {
             if (StringUtils.hasText(editDto.getContent()) && !editDto.getContent().equals(content)) {
