@@ -51,7 +51,7 @@ class CommentServiceTest {
         performanceRepository.save(p);
 
         ReviewEntity r = ReviewEntity.builder()
-                .reviewId(1L)
+                .id(1L)
                 .content("content")
                 .performance(p)
                 .build();
@@ -71,7 +71,7 @@ class CommentServiceTest {
                 .build();
 
         ReviewEntity r = ReviewEntity.builder()
-                .reviewId(1L)
+                .id(1L)
                 .content("content")
                 .performance(p)
                 .build();

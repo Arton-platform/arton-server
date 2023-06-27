@@ -45,7 +45,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> logException(Exception e) {
-        log.error("UNDEFINED ERROR!! {}" , e.toString());
+        log.error("UNDEFINED ERROR!! {}" , e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR));
     }

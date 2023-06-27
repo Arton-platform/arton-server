@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * 마이 페이지에서 보여지는 사용자가 작성한 리뷰 정보
+ * 리뷰 상세를 누르기전에 굳이 대댓글을 보여줄 필요가 없음.
  */
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

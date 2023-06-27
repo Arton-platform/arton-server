@@ -40,7 +40,7 @@ public class ReviewController {
 
     @Operation(summary = "공연 리뷰 페이지", description = "공연의 리뷰 정보를 반환합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "타유저 정보 반환 성공",
+            @ApiResponse(responseCode = "200", description = "리뷰 반환 성공",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class))))})
     @GetMapping("/list/{id}")
     public ResponseEntity<ResponseData<List<ReviewDto>>> reviewList(@PathVariable(value = "id" ,required = true) Long id){
@@ -85,5 +85,19 @@ public class ReviewController {
         long userId = Long.parseLong(userDetails.getUsername());
         reviewEditUseCase.edit(userId, reviewEditDto);
         return ResponseEntity.ok().body(CommonResponse.builder().status(200).message("성공적으로 리뷰를 수정하였습니다.").build());
+    }
+
+    @Operation(summary = "리뷰 정보 반환", description = "해당 리뷰의 정보(대댓글 포함)를 반환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "리뷰 반환 성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class))))})
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseData<List<ReviewDto>>> getSpecificReview(@PathVariable(value = "id" ,required = true) Long id){
+        ResponseData<List<ReviewDto>> response = new ResponseData<>(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                reviewListUseCase.reviewList(id)
+        );
+        return ResponseEntity.ok().body(response);
     }
 }
