@@ -35,6 +35,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                 .from(reviewEntity)
                 .leftJoin(performanceEntity).on(performanceEntity.eq(reviewEntity.performance))
                 .leftJoin(userEntity).on(userEntity.eq(reviewEntity.user))
+                .leftJoin(reviewEntity).on(reviewEntity.eq(reviewEntity.parent))
                 .fetchJoin()
                 .where(reviewEntity.user.id.eq(userId))
                 .groupBy(reviewEntity.id,
