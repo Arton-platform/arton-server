@@ -87,8 +87,7 @@ public class FollowController {
     @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "유저 팔로워 제거하기", description = "유저의 팔로워를 제거합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "팔로워 제거 성공",
-                    content = @Content( schema = @Schema(implementation = ResponseData.class))),
+            @ApiResponse(responseCode = "200", description = "팔로워 제거 성공"),
             @ApiResponse(responseCode = "404", description = "유저 찾을 수 없음.",
                     content = @Content( schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.",
@@ -96,12 +95,8 @@ public class FollowController {
     @DeleteMapping("/user/my/follower/{id}")
     public ResponseEntity<ResponseData<Long>> removeFollower(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
         long userId = Long.parseLong(userDetails.getUsername());
-        ResponseData response = new ResponseData(
-                "SUCCESS",
-                HttpStatus.OK.value(),
-                unFollowService.removeFollower(userId, id)
-        );
-        return ResponseEntity.ok(response);
+        unFollowService.removeFollower(userId, id);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -113,8 +108,7 @@ public class FollowController {
     @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "유저 팔로잉 제거하기", description = "유저의 팔로잉을 제거합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "팔로우 해제 성공",
-                    content = @Content( schema = @Schema(implementation = ResponseData.class))),
+            @ApiResponse(responseCode = "200", description = "팔로우 해제 성공"),
             @ApiResponse(responseCode = "404", description = "유저 찾을 수 없음.",
                     content = @Content( schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.",
@@ -122,12 +116,8 @@ public class FollowController {
     @DeleteMapping("/user/my/following/{id}")
     public ResponseEntity<ResponseData<Long>> removeFollowing(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
         long userId = Long.parseLong(userDetails.getUsername());
-        ResponseData response = new ResponseData(
-                "SUCCESS",
-                HttpStatus.OK.value(),
-                unFollowService.unfollow(userId, id)
-        );
-        return ResponseEntity.ok(response);
+        unFollowService.unfollow(userId, id);
+        return ResponseEntity.noContent().build();
     }
 
     /**
