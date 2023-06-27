@@ -1,9 +1,6 @@
 package com.arton.backend.follow.applicaion.service;
 
-import com.arton.backend.follow.applicaion.data.PostFollowDto;
-import com.arton.backend.follow.applicaion.data.UserFollowDto;
-import com.arton.backend.follow.applicaion.data.UserFollowSearchDto;
-import com.arton.backend.follow.applicaion.data.UserShortDto;
+import com.arton.backend.follow.applicaion.data.*;
 import com.arton.backend.follow.applicaion.port.in.*;
 import com.arton.backend.follow.applicaion.port.out.FollowRegistRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
@@ -20,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,15 +49,15 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
         // 유저의 팔로잉수
         Long followingsCount = followRepository.getFollowingsCount(userId);
         // 팔로워 short response
-        List<User> followerList = followRepository.getFollowerList(userId, userFollowSearchDto);
-        List<UserShortDto> shortResponse = followerList.stream().map(UserShortDto::to).collect(Collectors.toList());
+        List<UserShortQueryDSLDto> followerList = followRepository.getFollowerListV2(userId, userFollowSearchDto);
+        List<UserShortDto> shortResponse = new ArrayList<>();
 
-        for (UserShortDto user : shortResponse) {
+        for (UserShortQueryDSLDto user : followerList) {
             // 해당 유저가 팔로워를 팔로우 하면
             if (followRepository.isExist(Follow.builder().fromUser(userId).toUser(user.getId()).build())) {
-                user.setFollow(true);
+                shortResponse.add(user.to(true));
             } else {
-                user.setFollow(false);
+                shortResponse.add(user.to(false));
             }
         }
 
@@ -76,11 +74,12 @@ public class FollowService implements FollowUseCase, UnFollowUseCase, FollowRegi
         // 유저의 팔로잉수
         Long followingsCount = followRepository.getFollowingsCount(userId);
         // 팔로워 short response
-        List<User> followerList = followRepository.getFollowingList(userId, userFollowSearchDto);
-        List<UserShortDto> shortResponse = followerList.stream().map(UserShortDto::to).collect(Collectors.toList());
+//        List<User> followerList = followRepository.getFollowingList(userId, userFollowSearchDto);
+        List<UserShortQueryDSLDto> followerList = followRepository.getFollowingListV2(userId, userFollowSearchDto);
+        List<UserShortDto> shortResponse = new ArrayList<>();
         // 팔로우 대상은 어차피 전부 다 팔로우 하므로
-        for (UserShortDto user : shortResponse) {
-            user.setFollow(true);
+        for (UserShortQueryDSLDto user : followerList) {
+            shortResponse.add(user.to(true));
         }
         return UserFollowDto.builder().id(userId).imageUrl(userImage.getImageUrl()).followers(followersCount).followings(followingsCount).users(shortResponse).build();
     }

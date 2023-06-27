@@ -1,6 +1,7 @@
 package com.arton.backend.follow.adapter.out.persistence.repository;
 
 import com.arton.backend.follow.applicaion.data.UserFollowSearchDto;
+import com.arton.backend.follow.applicaion.data.UserShortQueryDSLDto;
 import com.arton.backend.follow.applicaion.port.out.FollowRegistRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
 import com.arton.backend.follow.applicaion.port.out.UnFollowRepositoryPort;
@@ -96,6 +97,11 @@ public class FollowRepositoryAdapter implements FollowRepositoryPort, UnFollowRe
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UserShortQueryDSLDto> getFollowingListV2(Long userId, UserFollowSearchDto userFollowSearchDto) {
+        return followRepository.getFollowingsV2(userId, userFollowSearchDto);
+    }
+
 
     @Override
     public List<User> getFollowerList(Long userId, UserFollowSearchDto userFollowSearchDto) {
@@ -104,6 +110,11 @@ public class FollowRepositoryAdapter implements FollowRepositoryPort, UnFollowRe
                 .stream()
                 .map(UserMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserShortQueryDSLDto> getFollowerListV2(Long userId, UserFollowSearchDto userFollowSearchDto) {
+        return followRepository.getFollowersV2(userId, userFollowSearchDto);
     }
 
 }
