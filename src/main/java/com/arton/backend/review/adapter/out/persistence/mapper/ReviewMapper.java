@@ -6,6 +6,8 @@ import com.arton.backend.review.domain.Review;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class ReviewMapper {
 
@@ -19,6 +21,8 @@ public class ReviewMapper {
                 .performanceId(entity.getPerformance().getId())
                 .userId(entity.getUser().getId())
                 .hit(entity.getHit())
+                .parentId(entity.getParent().getId())
+                .commentsId(entity.getChildren().stream().map(ReviewEntity::getId).collect(Collectors.toList()))
                 .build();
     }
 
@@ -32,6 +36,8 @@ public class ReviewMapper {
                 .performance(PerformanceEntity.builder().id(review.getPerformanceId()).build())
                 .user(UserEntity.builder().id(review.getUserId()).build())
                 .hit(review.getHit())
+                .parent(ReviewEntity.builder().id(review.getParentId()).build())
+                .children(review.getCommentsId().stream().map(childId -> ReviewEntity.builder().id(childId).build()).collect(Collectors.toList()))
                 .build();
     }
 }
