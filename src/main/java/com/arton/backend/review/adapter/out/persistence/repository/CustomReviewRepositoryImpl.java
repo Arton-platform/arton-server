@@ -30,12 +30,22 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                 reviewEntity.starScore,
                 reviewEntity.createdDate,
                 reviewEntity.content,
-                reviewEntity.hit))
+                reviewEntity.hit,
+                        reviewEntity.count()))
                 .from(reviewEntity)
                 .leftJoin(performanceEntity).on(performanceEntity.eq(reviewEntity.performance))
                 .leftJoin(userEntity).on(userEntity.eq(reviewEntity.user))
                 .fetchJoin()
                 .where(reviewEntity.user.id.eq(userId))
+                .groupBy(reviewEntity.id,
+                        performanceEntity.id,
+                        userEntity.id,
+                        userEntity.nickname,
+                        performanceEntity.title,
+                        reviewEntity.starScore,
+                        reviewEntity.createdDate,
+                        reviewEntity.content,
+                        reviewEntity.hit)
                 .fetch();
     }
 }
