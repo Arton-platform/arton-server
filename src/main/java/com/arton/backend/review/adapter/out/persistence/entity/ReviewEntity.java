@@ -43,6 +43,7 @@ public class ReviewEntity extends BaseEntity {
     private float starScore;
     private Long hit;
 
+    @Builder
     public ReviewEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, PerformanceEntity performance, UserEntity user, ReviewEntity parent, List<ReviewEntity> children, String content, float starScore, Long hit) {
         super(createdDate, updatedDate);
         this.id = id;
