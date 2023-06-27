@@ -25,6 +25,7 @@ public class Review {
     /** 업데이트일 */
     private LocalDateTime updatedDate;
 
+    @Builder
     public Review(Long id, Long performanceId, Long userId, Long parentId, List<Long> commentsId, String content, Float starScore, Long hit, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.performanceId = performanceId;
