@@ -19,4 +19,5 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long>, Cus
     void deleteAllByUserId(@Param("userId") long userId);
     boolean existsByIdAndUserId(long id, long userId);
     Optional<ReviewEntity> findByIdAndUserId(long id, long userId);
+    Optional<ReviewEntity> findByParentId(long parentId);
 }

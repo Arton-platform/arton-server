@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface ReviewFindPort {
     boolean userHasReview(long reviewId, long userId);
     Optional<Review> findByIdAndUserId(long reviewId, long userId);
+    Optional<Review> findByParentId(long parentId);
 }

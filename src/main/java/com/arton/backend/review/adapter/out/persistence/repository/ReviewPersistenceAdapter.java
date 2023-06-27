@@ -72,4 +72,9 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     public Optional<Review> findByIdAndUserId(long reviewId, long userId) {
         return repository.findByIdAndUserId(reviewId, userId).map(reviewMapper::toDomain);
     }
+
+    @Override
+    public Optional<Review> findByParentId(long parentId) {
+        return repository.findByParentId(parentId).map(reviewMapper::toDomain);
+    }
 }

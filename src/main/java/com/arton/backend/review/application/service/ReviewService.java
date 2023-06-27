@@ -44,8 +44,19 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
         }
         // performance check
         performanceRepositoryPort.findById(reviewCreateDto.getPerformanceId()).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
+        // parent check
+        Review parent = null;
+        if (reviewCreateDto.getParentId() != null){
+            parent = reviewFindPort.findByParentId(reviewCreateDto.getParentId()).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
+            if (parent.getPerformanceId() != reviewCreateDto.getPerformanceId()) {
+                throw new CustomException(ErrorCode.REVIEW_PERFORMANCE_NOT_MATCHED.getMessage(), ErrorCode.REVIEW_PERFORMANCE_NOT_MATCHED);
+            }
+        }
         Review review = reviewCreateDto.toDomain();
         review.setUserId(userId);
+        if (parent != null) {
+            review.updateParent(parent);
+        }
         reviewRegistPort.regist(review);
     }
 
