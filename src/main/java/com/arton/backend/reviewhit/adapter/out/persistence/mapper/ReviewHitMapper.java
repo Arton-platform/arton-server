@@ -4,7 +4,7 @@ import com.arton.backend.reviewhit.adapter.out.persistence.entitiy.ReviewHitEnti
 import com.arton.backend.reviewhit.domain.ReviewHit;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class ReviewHitMapper {
     public static ReviewHit toDomain(ReviewHitEntity reviewHit) {
         return ReviewHit.builder()
