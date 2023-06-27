@@ -106,6 +106,8 @@ public class ReviewController {
     @Operation(summary = "리뷰 좋아요 누르기", description = "해당 리뷰를 좋아요 표시합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "리뷰 좋아요 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)))),
             @ApiResponse(responseCode = "404", description = "리뷰 존재하지 않음",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class))))})
     @PostMapping("/hit/{id}")
@@ -118,6 +120,8 @@ public class ReviewController {
     @Operation(summary = "리뷰 좋아요 해제", description = "해당 리뷰 좋아요를 해제합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "리뷰 좋아요 해제 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)))),
             @ApiResponse(responseCode = "404", description = "리뷰 존재하지 않음",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class))))})
     @DeleteMapping("/hit/{id}")
