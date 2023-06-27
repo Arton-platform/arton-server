@@ -47,6 +47,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
         // parent check
         Review parent = null;
         if (reviewCreateDto.getParentId() != null){
+            log.info("parent review {}", reviewCreateDto.getParentId());
             parent = reviewFindPort.findByParentId(reviewCreateDto.getParentId()).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
             if (parent.getPerformanceId() != reviewCreateDto.getPerformanceId()) {
                 throw new CustomException(ErrorCode.REVIEW_PERFORMANCE_NOT_MATCHED.getMessage(), ErrorCode.REVIEW_PERFORMANCE_NOT_MATCHED);
