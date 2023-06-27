@@ -1,11 +1,11 @@
 package com.arton.backend.follow.applicaion.data;
 
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.poi.ss.formula.functions.Dec2Bin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "팔로우/팔로잉 DTO")
-public class UserFollowDto {
+public class UserFollowQueryDSLDto {
     /** 현재 유저의 ID */
     @Schema(description = "유저 ID")
     private Long id;
@@ -27,10 +27,11 @@ public class UserFollowDto {
     @Schema(description = "유저의 팔로워 수")
     private Long followers;
     /** 팔로잉 혹은 팔로워 */
-    private List<UserShortDto> users = new ArrayList<>();
+    private List<UserShortQueryDSLDto> users = new ArrayList<>();
 
     @Builder
-    public UserFollowDto(Long id, String imageUrl, Long followings, Long followers, List<UserShortDto> users) {
+    @QueryProjection
+    public UserFollowQueryDSLDto(Long id, String imageUrl, Long followings, Long followers, List<UserShortQueryDSLDto> users) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.followings = followings;
