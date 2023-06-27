@@ -82,9 +82,6 @@ public class TestDataInit {
         for (UserEntity userEntity : userEntities) {
             UserImageEntity build = UserImageEntity.builder().imageUrl(defaultImage).user(userEntity).build();
             userImageRepository.save(build);
-            User user = UserMapper.toDomain(userEntity);
-            UserDocument userDocument = UserMapper.toDocumentFromDomain(user);
-            userSearchRepository.save(userDocument);
         }
 
         UserEntity base = userRepository.findById(1L).get();
@@ -139,30 +136,9 @@ public class TestDataInit {
 
             PerformerEntity performerEntity = PerformerEntity.builder().performance(performance).artist(artist).build();
             performerRepository.save(performerEntity);
-
-            reviews.add(ReviewEntity.builder().performance(performance).user(base).content("재밌어요 ㅋㅋ").starScore(4f).build());
         }
-
         artistRepository.saveAll(artistList);
         performanceRepository.saveAll(performances);
         reviewRepository.saveAll(reviews);
-        List<ArtistZzim> artistZzims = new ArrayList<>();
-        List<ArtistEntity> all = artistRepository.findAll();
-        for (ArtistEntity artistEntity : all) {
-            ArtistZzim build = ArtistZzim.builder().artistId(artistEntity.getId()).userId(base.getId()).build();
-            artistZzims.add(build);
-        }
-        zzimRepositoryPort.saveArtists(artistZzims);
-
-        List<PerformanceEntity> all1 = performanceRepository.findAll();
-        List<PerformanceZzim> performanceZzims = new ArrayList<>();
-        for (PerformanceEntity performanceEntity : all1) {
-            PerformanceZzim build = PerformanceZzim.builder().performanceId(performanceEntity.getId()).userId(base.getId()).build();
-            performanceZzims.add(build);
-        }
-
-
-
-        zzimRepositoryPort.savePerformances(performanceZzims);
     }
 }

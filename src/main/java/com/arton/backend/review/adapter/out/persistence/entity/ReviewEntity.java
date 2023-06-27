@@ -4,10 +4,7 @@ import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.review.domain.Review;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +13,8 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "review")
 public class ReviewEntity extends BaseEntity {
@@ -42,17 +41,4 @@ public class ReviewEntity extends BaseEntity {
     private String content;
     private float starScore;
     private Long hit;
-
-    @Builder
-    public ReviewEntity(LocalDateTime createdDate, LocalDateTime updatedDate, Long id, PerformanceEntity performance, UserEntity user, ReviewEntity parent, List<ReviewEntity> children, String content, float starScore, Long hit) {
-        super(createdDate, updatedDate);
-        this.id = id;
-        this.performance = performance;
-        this.user = user;
-        this.parent = parent;
-        this.children = children;
-        this.content = content;
-        this.starScore = starScore;
-        this.hit = hit;
-    }
 }

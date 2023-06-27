@@ -8,4 +8,5 @@ public interface ReviewFindPort {
     boolean userHasReview(long reviewId, long userId);
     Optional<Review> findByIdAndUserId(long reviewId, long userId);
     Optional<Review> findByParentId(long parentId);
+    Optional<Review> findById(long id);
 }

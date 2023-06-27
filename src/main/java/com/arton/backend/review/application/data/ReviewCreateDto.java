@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.ArrayList;
 
 /**
  * parentId를 명시하면 대댓글이고 아니라면 해당 댓글이 root가 됨.
@@ -26,6 +27,8 @@ public class ReviewCreateDto {
                 .performanceId(performanceId)
                 .content(content)
                 .starScore(starScore)
+                .parentId(parentId)
+                .commentsId(new ArrayList<>())
                 .hit(0L)
                 .build();
     }

@@ -60,6 +60,6 @@ public class Review {
 
     public void updateParent(Review parent) {
         if (parent != null)
-            this.parentId = parent.getParentId();
+            this.parentId = parent.getId();
     }
 }
