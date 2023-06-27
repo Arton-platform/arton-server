@@ -11,6 +11,7 @@ public enum ErrorCode {
     ZZIM_IS_EXIST(409, "DUP_ERR_409", "이미 찜하고 있습니다."),
     ZZIM_NOT_FOUND(404, "COMMON-ERR-404", "찜 목록에 존재하지 않습니다!"),
     REVIEW_NOT_FOUND(404, "COMMON-ERR-404", "유저의 리뷰가 존재하지 않습니다!"),
+    REVIEW_PERFORMANCE_NOT_MATCHED(400, "COMMON-ERR-404", "댓글을 등록하려고 하는 공연과 요청 공연 ID가 매치하지 않습니다!"),
     FOLLOWING_IS_EXIST(409, "DUP_ERR_409", "이미 팔로우중인 대상입니다."),
     FOLLOWING_INVALID(400, "FOLLOWING_INVALID", "잘못된 팔로우 요청입니다."),
     UNFOLLOWING_INVALID(400, "UNFOLLOWING_INVALID", "잘못된 언팔로우 요청입니다."),
