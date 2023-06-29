@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReviewForPerformanceQueryDslDetailDto {
+public class CommonReviewQueryDslDto {
     private Long id;
     private Long performanceId;
     private Long userId;
@@ -31,7 +31,7 @@ public class ReviewForPerformanceQueryDslDetailDto {
 
     @Builder
     @QueryProjection
-    public ReviewForPerformanceQueryDslDetailDto(Long id, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, LocalDateTime createdDate, String content, Long hit) {
+    public CommonReviewQueryDslDto(Long id, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, LocalDateTime createdDate, String content, Long hit) {
         this.id = id;
         this.performanceId = performanceId;
         this.userId = userId;

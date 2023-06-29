@@ -36,34 +36,6 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final ReviewHitService reviewHitService;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
-
-    /**
-     * Post post = checkMemberUtil.isPresentPost(postId);
-     *     if (null == post) {
-     *       return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
-     *     }
-     *
-     *     List<Comment> commentList = commentCustomRepository.findAllByPost(post);
-     *
-     *     List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
-     *     Map<Long, CommentResponseDto> map = new HashMap<>();
-     *
-     *     commentList.stream().forEach(c -> {
-     *               CommentResponseDto cdto = new CommentResponseDto(c);
-     *               if(c.getParent() != null){
-     *                 cdto.setParentId(c.getParent().getId());
-     *               }
-     *               map.put(cdto.getId(), cdto);
-     *               if (c.getParent() != null) map.get(c.getParent().getId()).getChildren().add(cdto);
-     *               else commentResponseDtoList.add(cdto);
-     *             }
-     *       );
-     *     return ResponseDto.success(commentResponseDtoList);
-     * @param performanceId
-     * @return
-     */
-
-
     @Override
     public List<ReviewDto> reviewList(Long performanceId) {
         Performance performance = performanceRepositoryPort.findById(performanceId).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));

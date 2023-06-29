@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 마이 페이지에서 보여지는 사용자가 작성한 리뷰 정보
+ * 리뷰 공통 정보
  * 리뷰 상세를 누르기전에 굳이 대댓글을 보여줄 필요가 없음.
+ * 이 부분은 프론트와 논의가 필요.
  */
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

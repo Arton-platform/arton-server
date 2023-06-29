@@ -2,7 +2,7 @@ package com.arton.backend.performance.applicaiton.data;
 
 import com.arton.backend.artist.application.data.CommonArtistDto;
 import com.arton.backend.price.application.data.PriceInfoDto;
-import com.arton.backend.review.application.data.ReviewForPerformanceQueryDslDetailDto;
+import com.arton.backend.review.application.data.CommonReviewQueryDslDto;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -34,11 +34,11 @@ public class PerformanceDetailQueryDslDtoV3 {
     private Set<String> images = new LinkedHashSet<>();
     private Set<PriceInfoDto> prices = new LinkedHashSet<>();
     private Set<CommonArtistDto> artists = new LinkedHashSet<>();
-    private Set<ReviewForPerformanceQueryDslDetailDto> reviews = new LinkedHashSet<>();
+    private Set<CommonReviewQueryDslDto> reviews = new LinkedHashSet<>();
 
     @Builder
     @QueryProjection
-    public PerformanceDetailQueryDslDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Boolean zzim, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<ReviewForPerformanceQueryDslDetailDto> reviews) {
+    public PerformanceDetailQueryDslDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Boolean zzim, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<CommonReviewQueryDslDto> reviews) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -59,7 +59,7 @@ public class PerformanceDetailQueryDslDtoV3 {
     private void fillData(){
         artists = artists.stream().filter(CommonArtistDto::isCompleted).collect(Collectors.toSet());
         prices = prices.stream().filter(PriceInfoDto::isCompleted).collect(Collectors.toSet());
-        reviews = reviews.stream().filter(ReviewForPerformanceQueryDslDetailDto::isCompleted).collect(Collectors.toSet());
+        reviews = reviews.stream().filter(CommonReviewQueryDslDto::isCompleted).collect(Collectors.toSet());
     }
 
     /**
@@ -130,7 +130,7 @@ public class PerformanceDetailQueryDslDtoV3 {
                 .musicalDateTime(getMusicalDateTime())
                 .prices(prices)
                 .artists(artists)
-                .reviews(reviews.stream().map(ReviewForPerformanceQueryDslDetailDto::toDto).collect(Collectors.toSet()))
+                .reviews(reviews.stream().map(CommonReviewQueryDslDto::toDto).collect(Collectors.toSet()))
                 .purchaseLimit(getPurchaseLimit())
                 .limitAge(getLimitAge())
                 .startDate(StringUtils.hasText(textStartDay) ? textStartDay : "미정")

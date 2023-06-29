@@ -2,7 +2,7 @@ package com.arton.backend.review.adapter.out.persistence.repository;
 
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.mapper.ReviewMapper;
-import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
+import com.arton.backend.review.application.data.CommonReviewQueryDslDto;
 import com.arton.backend.review.application.port.out.*;
 import com.arton.backend.review.domain.Review;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     }
 
     @Override
-    public List<MyPageReviewQueryDSLDto> getUserReviewList(long userId) {
+    public List<CommonReviewQueryDslDto> getUserReviewList(long userId) {
         return repository.getUserReviewList(userId);
     }
 

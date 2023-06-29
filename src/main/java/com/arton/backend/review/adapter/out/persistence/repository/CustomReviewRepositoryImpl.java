@@ -2,8 +2,8 @@ package com.arton.backend.review.adapter.out.persistence.repository;
 
 
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
-import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
-import com.arton.backend.review.application.data.QMyPageReviewQueryDSLDto;
+import com.arton.backend.review.application.data.CommonReviewQueryDslDto;
+import com.arton.backend.review.application.data.QCommonReviewQueryDslDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,8 +27,8 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
      * @return
      */
     @Override
-    public List<MyPageReviewQueryDSLDto> getUserReviewList(long userId) {
-        return jpaQueryFactory.select(new QMyPageReviewQueryDSLDto(
+    public List<CommonReviewQueryDslDto> getUserReviewList(long userId) {
+        return jpaQueryFactory.select(new QCommonReviewQueryDslDto(
                 reviewEntity.id,
                 performanceEntity.id,
                 userEntity.id,
