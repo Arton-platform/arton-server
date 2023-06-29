@@ -2,7 +2,7 @@ package com.arton.backend.performance.applicaiton.data;
 
 import com.arton.backend.artist.application.data.CommonArtistDto;
 import com.arton.backend.price.application.data.PriceInfoDto;
-import com.arton.backend.review.application.data.ReviewForPerformanceDetailDto;
+import com.arton.backend.review.application.data.MyPageReviewDto;
 import com.arton.backend.review.application.data.ReviewForPerformanceQueryDslDetailDto;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;

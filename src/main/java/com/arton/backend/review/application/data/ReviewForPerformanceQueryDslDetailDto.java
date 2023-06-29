@@ -10,27 +10,35 @@ import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewForPerformanceQueryDslDetailDto {
     private Long id;
+    private Long performanceId;
     private Long userId;
     private String profileImageUrl;
     private String nickname;
+    private String title;
     private float starScore;
     private LocalDateTime createdDate;
     private String content;
+//    private List<String> images = new ArrayList<>();
     private Long hit;
+//    private Long reviewCount;
 
     @Builder
     @QueryProjection
-    public ReviewForPerformanceQueryDslDetailDto(Long id, Long userId, String profileImageUrl, String nickname, float starScore, LocalDateTime createdDate, String content, Long hit) {
+    public ReviewForPerformanceQueryDslDetailDto(Long id, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, LocalDateTime createdDate, String content, Long hit) {
         this.id = id;
+        this.performanceId = performanceId;
         this.userId = userId;
         this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
+        this.title = title;
         this.starScore = starScore;
         this.createdDate = createdDate;
         this.content = content;
@@ -58,16 +66,20 @@ public class ReviewForPerformanceQueryDslDetailDto {
         return day;
     }
 
-    public ReviewForPerformanceDetailDto toDto() {
-        return ReviewForPerformanceDetailDto.builder()
+    public MyPageReviewDto toDto() {
+        return MyPageReviewDto.builder()
                 .id(id)
+                .performanceId(performanceId)
                 .userId(userId)
+                .profileImageUrl(profileImageUrl)
                 .nickname(nickname)
+                .title(title)
                 .starScore(starScore)
                 .createdDate(createdDate != null ? getTextYearDay(createdDate) : "미정")
                 .content(content)
+                .images(new ArrayList<>())
                 .hit(hit)
-                .count(0L)
+                .reviewCount(0L)
                 .build();
     }
 }

@@ -120,7 +120,7 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
         }
         PerformanceDetailDtoV3 performanceDetailDto = performanceRepositoryPort.getOneWithArtistReviewInfo(userId, id).toDto();
         performanceDetailDto.getReviews().stream().forEach(reviewForPerformanceDetailDto -> {
-            reviewForPerformanceDetailDto.setCount(reviewCountPort.getChildReviewCount(reviewForPerformanceDetailDto.getId()));
+            reviewForPerformanceDetailDto.setReviewCount(reviewCountPort.getChildReviewCount(reviewForPerformanceDetailDto.getId()));
         });
         return performanceDetailDto;
     }
