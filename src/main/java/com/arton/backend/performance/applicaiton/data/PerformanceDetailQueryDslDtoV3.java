@@ -60,6 +60,7 @@ public class PerformanceDetailQueryDslDtoV3 {
         artists = artists.stream().filter(CommonArtistDto::isCompleted).collect(Collectors.toSet());
         prices = prices.stream().filter(PriceInfoDto::isCompleted).collect(Collectors.toSet());
         reviews = reviews.stream().filter(CommonReviewQueryDslDto::isCompleted).collect(Collectors.toList());
+        reviews = reviews.stream().distinct().collect(Collectors.toList());
     }
 
     /**
