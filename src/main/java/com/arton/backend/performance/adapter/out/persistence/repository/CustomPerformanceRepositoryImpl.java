@@ -1,6 +1,7 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.artist.application.data.QCommonArtistDto;
+import com.arton.backend.image.adapter.out.persistence.entity.QUserImageEntity;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 import static com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity.artistEntity;
 import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.performanceImageEntity;
+import static com.arton.backend.image.adapter.out.persistence.entity.QUserImageEntity.*;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
 import static com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity.performerEntity;
 import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.priceGradeEntity;
@@ -183,6 +185,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .leftJoin(artistEntity).on(performerEntity.artist.eq(artistEntity))
                 .leftJoin(reviewEntity).on(performanceEntity.eq(reviewEntity.performance))
                 .leftJoin(userEntity).on(reviewEntity.user.eq(userEntity))
+                .leftJoin(userImageEntity).on(userEntity.eq(userImageEntity.user))
                 .fetchJoin()
                 .where(performanceEntity.id.eq(id))
                 .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV3(
@@ -203,7 +206,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)),
-                        set(new QReviewForPerformanceQueryDslDetailDto(reviewEntity.id, userEntity.id, userEntity.nickname, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit)))));
+                        set(new QReviewForPerformanceQueryDslDetailDto(reviewEntity.id, userEntity.id, userImageEntity.imageUrl,userEntity.nickname, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit)))));
         if (result.isEmpty()) {
             System.out.println("result = is empty");
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
