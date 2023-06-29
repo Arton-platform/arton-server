@@ -188,6 +188,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .leftJoin(userImageEntity).on(userEntity.eq(userImageEntity.user))
                 .fetchJoin()
                 .where(performanceEntity.id.eq(id))
+                .orderBy(reviewEntity.parent.id.asc().nullsFirst(), reviewEntity.createdDate.asc())
                 .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV3(
                         performanceEntity.id,
                         performanceEntity.title,
@@ -206,7 +207,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)),
-                        set(new QCommonReviewQueryDslDto(reviewEntity.id, performanceEntity.id, userEntity.id, userImageEntity.imageUrl,userEntity.nickname,  performanceEntity.title, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit)))));
+                        set(new QCommonReviewQueryDslDto(reviewEntity.id, reviewEntity.parent.id, performanceEntity.id, userEntity.id, userImageEntity.imageUrl,userEntity.nickname,  performanceEntity.title, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit)))));
         if (result.isEmpty()) {
             System.out.println("result = is empty");
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);

@@ -13,7 +13,6 @@ public interface PerformanceUseCase {
     PerformanceZzimDetailDTOV2 getZzimListAllRelatedInfos(Pageable pageable);
     List<Performance> getMusicals();
     List<Performance> getConcerts();
-    PerformanceDetailDto getOne(Long id);
     PerformanceDetailDtoV2 getOneWithArtistInfo(Long id);
     PerformanceDetailDtoV3 getOneWithArtistReviewInfo(Long userId, Long id);
 }

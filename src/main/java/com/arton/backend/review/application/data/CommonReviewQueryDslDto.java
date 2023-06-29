@@ -17,6 +17,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommonReviewQueryDslDto {
     private Long id;
+    private Long parentId;
     private Long performanceId;
     private Long userId;
     private String profileImageUrl;
@@ -29,10 +30,12 @@ public class CommonReviewQueryDslDto {
     private Long hit;
 //    private Long reviewCount;
 
+
     @Builder
     @QueryProjection
-    public CommonReviewQueryDslDto(Long id, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, LocalDateTime createdDate, String content, Long hit) {
+    public CommonReviewQueryDslDto(Long id, Long parentId, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, LocalDateTime createdDate, String content, Long hit) {
         this.id = id;
+        this.parentId = parentId;
         this.performanceId = performanceId;
         this.userId = userId;
         this.profileImageUrl = profileImageUrl;
@@ -68,6 +71,8 @@ public class CommonReviewQueryDslDto {
     public CommonReviewDto toDto() {
         return CommonReviewDto.builder()
                 .id(id)
+                .parentId(parentId)
+                .childs(new ArrayList<>())
                 .performanceId(performanceId)
                 .userId(userId)
                 .profileImageUrl(profileImageUrl)

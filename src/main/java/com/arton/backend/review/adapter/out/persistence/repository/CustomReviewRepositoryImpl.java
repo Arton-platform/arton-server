@@ -27,34 +27,12 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
      * @return
      */
     @Override
-    public List<CommonReviewQueryDslDto> getUserReviewList(long userId) {
-        return jpaQueryFactory.select(new QCommonReviewQueryDslDto(
-                reviewEntity.id,
-                performanceEntity.id,
-                userEntity.id,
-                userImageEntity.imageUrl,
-                userEntity.nickname,
-                performanceEntity.title,
-                reviewEntity.starScore,
-                reviewEntity.createdDate,
-                reviewEntity.content,
-                reviewEntity.hit))
-                .from(reviewEntity)
-                .leftJoin(performanceEntity).on(performanceEntity.eq(reviewEntity.performance))
-                .leftJoin(userEntity).on(userEntity.eq(reviewEntity.user))
-                .leftJoin(userImageEntity).on(userEntity.eq(userImageEntity.user))
+    public List<ReviewEntity> getUserReviewList(long userId) {
+        return jpaQueryFactory.selectFrom(reviewEntity)
+                .leftJoin(reviewEntity.parent)
                 .fetchJoin()
-                .where(reviewEntity.user.id.eq(userId), reviewEntity.parent.isNull())
-                .groupBy(reviewEntity.id,
-                        performanceEntity.id,
-                        userEntity.id,
-                        userImageEntity.imageUrl,
-                        userEntity.nickname,
-                        performanceEntity.title,
-                        reviewEntity.starScore,
-                        reviewEntity.createdDate,
-                        reviewEntity.content,
-                        reviewEntity.hit)
+                .where(reviewEntity.user.id.eq(userId))
+                .orderBy(reviewEntity.parent.id.asc().nullsFirst(), reviewEntity.createdDate.asc())
                 .fetch();
     }
 

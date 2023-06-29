@@ -5,6 +5,7 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
+import com.arton.backend.review.application.data.CommonReviewDto;
 import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.data.ReviewEditDto;
@@ -37,13 +38,13 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
     @Override
-    public List<ReviewDto> reviewList(Long performanceId) {
+    public List<CommonReviewDto> reviewList(Long performanceId) {
         Performance performance = performanceRepositoryPort.findById(performanceId).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
         List<ReviewEntity> reviews = reviewListPort.reviewList(performanceId);
-        List<ReviewDto> reviewResponse = new ArrayList<>();
-        Map<Long, ReviewDto> map = new HashMap<>();
+        List<CommonReviewDto> reviewResponse = new ArrayList<>();
+        Map<Long, CommonReviewDto> map = new HashMap<>();
         reviews.stream().forEach(c -> {
-                    ReviewDto reviewDto = ReviewDto.toDtoFromEntity(c);
+                    CommonReviewDto reviewDto = CommonReviewDto.toDtoFromEntity(c);
                     if (c.getParent() != null) {
                         reviewDto.setParentId(c.getParent().getId());
                     }
@@ -59,13 +60,13 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     }
 
     @Override
-    public List<ReviewDto> getReviewChilds(Long reviewId) {
+    public List<CommonReviewDto> getReviewChilds(Long reviewId) {
         reviewFindPort.findById(reviewId).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
         List<ReviewEntity> reviews = reviewListPort.getReviewChilds(reviewId);
-        List<ReviewDto> reviewResponse = new ArrayList<>();
-        Map<Long, ReviewDto> map = new HashMap<>();
+        List<CommonReviewDto> reviewResponse = new ArrayList<>();
+        Map<Long, CommonReviewDto> map = new HashMap<>();
         reviews.stream().forEach(c -> {
-                    ReviewDto reviewDto = ReviewDto.toDtoFromEntity(c);
+            CommonReviewDto reviewDto = CommonReviewDto.toDtoFromEntity(c);
                     if (c.getParent() != null) {
                         reviewDto.setParentId(c.getParent().getId());
                     }

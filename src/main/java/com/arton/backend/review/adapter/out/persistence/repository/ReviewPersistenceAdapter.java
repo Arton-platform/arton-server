@@ -37,7 +37,7 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     }
 
     @Override
-    public List<CommonReviewQueryDslDto> getUserReviewList(long userId) {
+    public List<ReviewEntity> getUserReviewList(long userId) {
         return repository.getUserReviewList(userId);
     }
 

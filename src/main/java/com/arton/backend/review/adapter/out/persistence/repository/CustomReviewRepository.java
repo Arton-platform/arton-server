@@ -1,12 +1,11 @@
 package com.arton.backend.review.adapter.out.persistence.repository;
 
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
-import com.arton.backend.review.application.data.CommonReviewQueryDslDto;
 
 import java.util.List;
 
 public interface CustomReviewRepository {
-    List<CommonReviewQueryDslDto> getUserReviewList(long userId);
+    List<ReviewEntity> getUserReviewList(long userId);
 
     /**
      * 특정 공연의 모든 댓글 정보를 반환합니다.

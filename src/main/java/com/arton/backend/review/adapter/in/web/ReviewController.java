@@ -3,12 +3,10 @@ package com.arton.backend.review.adapter.in.web;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import com.arton.backend.infra.shared.exception.ErrorResponse;
+import com.arton.backend.review.application.data.CommonReviewDto;
 import com.arton.backend.review.application.data.ReviewCreateDto;
-import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.data.ReviewEditDto;
 import com.arton.backend.review.application.port.in.*;
-import com.arton.backend.review.domain.Review;
-import com.arton.backend.user.application.data.MyPageDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -40,10 +38,10 @@ public class ReviewController {
     @Operation(summary = "공연 리뷰 페이지", description = "공연의 리뷰 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 반환 성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class))))})
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommonReviewDto.class))))})
     @GetMapping("/list/{id}")
-    public ResponseEntity<ResponseData<List<ReviewDto>>> reviewList(@PathVariable(value = "id" ,required = true) Long id){
-        ResponseData<List<ReviewDto>> response = new ResponseData<>(
+    public ResponseEntity<ResponseData<List<CommonReviewDto>>> reviewList(@PathVariable(value = "id" ,required = true) Long id){
+        ResponseData<List<CommonReviewDto>> response = new ResponseData<>(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 reviewListUseCase.reviewList(id)
@@ -54,10 +52,10 @@ public class ReviewController {
     @Operation(summary = "특정 리뷰 대댓글", description = "특정 리뷰의 대댓글 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 대댓글 반환 성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class))))})
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommonReviewDto.class))))})
     @GetMapping("/{id}/child")
-    public ResponseEntity<ResponseData<List<ReviewDto>>> getReviewChilds(@PathVariable(value = "id" ,required = true) Long id){
-        ResponseData<List<ReviewDto>> response = new ResponseData<>(
+    public ResponseEntity<ResponseData<List<CommonReviewDto>>> getReviewChilds(@PathVariable(value = "id" ,required = true) Long id){
+        ResponseData<List<CommonReviewDto>> response = new ResponseData<>(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 reviewListUseCase.getReviewChilds(id)
@@ -106,10 +104,10 @@ public class ReviewController {
     @Operation(summary = "리뷰 정보 반환", description = "해당 리뷰의 정보(대댓글 포함)를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 반환 성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class))))})
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommonReviewDto.class))))})
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseData<List<ReviewDto>>> getSpecificReview(@PathVariable(value = "id" ,required = true) Long id){
-        ResponseData<List<ReviewDto>> response = new ResponseData<>(
+    public ResponseEntity<ResponseData<List<CommonReviewDto>>> getSpecificReview(@PathVariable(value = "id" ,required = true) Long id){
+        ResponseData<List<CommonReviewDto>> response = new ResponseData<>(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 reviewListUseCase.reviewList(id)
