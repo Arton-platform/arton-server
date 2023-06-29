@@ -6,10 +6,7 @@ import com.arton.backend.review.application.data.CommonReviewDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,12 +26,12 @@ public class PerformanceDetailDtoV3 {
     private List<String> images = new ArrayList<>();
     private Set<PriceInfoDto> prices = new LinkedHashSet<>();
     private Set<CommonArtistDto> artists = new LinkedHashSet<>();
-    private Set<CommonReviewDto> reviews = new LinkedHashSet<>();
+    private List<CommonReviewDto> reviews = new ArrayList<>();
     private Long reviewCount;
     private Boolean isZzim;
 
     @Builder
-    public PerformanceDetailDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, String startDate, String endDate, String ticketOpenDate, String ticketEndDate, List<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<CommonReviewDto> reviews, Long reviewCount, Boolean isZzim) {
+    public PerformanceDetailDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, String startDate, String endDate, String ticketOpenDate, String ticketEndDate, List<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, List<CommonReviewDto> reviews, Long reviewCount, Boolean isZzim) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -53,7 +50,7 @@ public class PerformanceDetailDtoV3 {
         this.isZzim = isZzim;
     }
 
-    public void setReviews(Set<CommonReviewDto> reviews) {
+    public void setReviews(List<CommonReviewDto> reviews) {
         this.reviews = reviews;
     }
 }
