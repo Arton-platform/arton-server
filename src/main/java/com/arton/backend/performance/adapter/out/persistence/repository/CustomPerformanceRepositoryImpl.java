@@ -9,9 +9,7 @@ import com.arton.backend.performance.applicaiton.data.*;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.price.application.data.QPriceInfoDto;
-import com.arton.backend.review.adapter.out.persistence.entity.QReviewEntity;
-import com.arton.backend.review.application.data.QReviewForPerformanceDetailDto;
-import com.arton.backend.user.adapter.out.persistence.entity.QUserEntity;
+import com.arton.backend.review.application.data.QReviewForPerformanceQueryDslDetailDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +26,8 @@ import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanc
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
 import static com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity.performerEntity;
 import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.priceGradeEntity;
-import static com.arton.backend.review.adapter.out.persistence.entity.QReviewEntity.*;
-import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.*;
+import static com.arton.backend.review.adapter.out.persistence.entity.QReviewEntity.reviewEntity;
+import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.userEntity;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.set;
 import static java.util.stream.Collectors.toList;
@@ -198,7 +196,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)),
-                        set(new QReviewForPerformanceDetailDto(reviewEntity.id, userEntity.id, userEntity.nickname, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit, reviewEntity.children.size().count())))));
+                        set(new QReviewForPerformanceQueryDslDetailDto(reviewEntity.id, userEntity.id, userEntity.nickname, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit, reviewEntity.children.size().count())))));
         if (result.isEmpty()) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }

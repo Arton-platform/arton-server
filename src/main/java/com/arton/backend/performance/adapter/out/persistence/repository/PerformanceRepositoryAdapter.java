@@ -148,7 +148,7 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
 
     @Override
     public PerformanceDetailQueryDslDtoV3 getOneWithArtistReviewInfo(Long id) {
-        return null;
+        return performanceRepository.getPerformanceDetailsV3(id);
     }
 
     @Override
