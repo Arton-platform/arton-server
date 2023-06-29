@@ -38,7 +38,7 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
 
     @Override
     public List<MyPageReviewQueryDSLDto> getUserReviewList(long userId) {
-        return repository.getReviewDetail(userId);
+        return repository.getUserReviewList(userId);
     }
 
     @Override

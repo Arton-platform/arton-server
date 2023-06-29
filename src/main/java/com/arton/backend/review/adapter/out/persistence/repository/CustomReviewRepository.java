@@ -6,7 +6,7 @@ import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
 import java.util.List;
 
 public interface CustomReviewRepository {
-    List<MyPageReviewQueryDSLDto> getReviewDetail(long userId);
+    List<MyPageReviewQueryDSLDto> getUserReviewList(long userId);
 
     /**
      * 특정 공연의 모든 댓글 정보를 반환합니다.

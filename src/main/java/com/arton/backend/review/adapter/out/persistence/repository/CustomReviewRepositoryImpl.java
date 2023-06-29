@@ -22,7 +22,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<MyPageReviewQueryDSLDto> getReviewDetail(long userId) {
+    public List<MyPageReviewQueryDSLDto> getUserReviewList(long userId) {
         return jpaQueryFactory.select(new QMyPageReviewQueryDSLDto(
                 reviewEntity.id,
                 performanceEntity.id,
@@ -50,6 +50,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                         reviewEntity.createdDate,
                         reviewEntity.content,
                         reviewEntity.hit)
+                .having(reviewEntity.parent.isNull())
                 .fetch();
     }
 
@@ -68,7 +69,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
         return jpaQueryFactory.selectFrom(reviewEntity)
                 .leftJoin(reviewEntity.parent)
                 .fetchJoin()
-                .where(reviewEntity.id.eq(reviewId))
+                .where(reviewEntity.id.eq(reviewId).or(reviewEntity.parent.id.eq(reviewId)))
                 .orderBy(reviewEntity.parent.id.asc().nullsFirst(), reviewEntity.createdDate.asc())
                 .fetch();
     }
