@@ -1,12 +1,12 @@
 package com.arton.backend.performance.applicaiton.data;
 
 import com.arton.backend.artist.application.data.CommonArtistDto;
-import com.arton.backend.performer.adapter.out.persistence.entity.PerformerEntity;
 import com.arton.backend.price.application.data.PriceInfoDto;
+import com.arton.backend.review.application.data.ReviewForPerformanceDetailDto;
+import com.arton.backend.review.application.data.ReviewForPerformanceQueryDslDetailDto;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.apache.commons.compress.utils.Lists;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString
 @Schema(description = "공연 상세 페이지 QueryDSL DTO V2(아티스트 정보 포함)")
-public class PerformanceDetailQueryDslDtoV2 {
+public class PerformanceDetailQueryDslDtoV3 {
     private Long id;
     private String title;
     private String place;
@@ -34,10 +34,11 @@ public class PerformanceDetailQueryDslDtoV2 {
     private Set<String> images = new LinkedHashSet<>();
     private Set<PriceInfoDto> prices = new LinkedHashSet<>();
     private Set<CommonArtistDto> artists = new LinkedHashSet<>();
+    private Set<ReviewForPerformanceQueryDslDetailDto> reviews = new LinkedHashSet<>();
 
     @Builder
     @QueryProjection
-    public PerformanceDetailQueryDslDtoV2(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists) {
+    public PerformanceDetailQueryDslDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<ReviewForPerformanceQueryDslDetailDto> reviews) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -51,11 +52,13 @@ public class PerformanceDetailQueryDslDtoV2 {
         this.images = images;
         this.prices = prices;
         this.artists = artists;
+        this.reviews = reviews;
     }
 
     private void fillData(){
         artists = artists.stream().filter(CommonArtistDto::isCompleted).collect(Collectors.toSet());
         prices = prices.stream().filter(PriceInfoDto::isCompleted).collect(Collectors.toSet());
+        reviews = reviews.stream().filter(ReviewForPerformanceQueryDslDetailDto::isCompleted).collect(Collectors.toSet());
     }
 
     /**
@@ -104,7 +107,7 @@ public class PerformanceDetailQueryDslDtoV2 {
         return day;
     }
 
-    public PerformanceDetailDtoV2 toDto(){
+    public PerformanceDetailDtoV3 toDto(){
         fillData();
         String textStartDay = getTextYearDay(startDate);
         String textEndDay = getTextYearDay(endDate);
@@ -118,7 +121,7 @@ public class PerformanceDetailQueryDslDtoV2 {
         for (int i = 0; i < iterSize; i++) {
             imageList.add("");
         }
-        return PerformanceDetailDtoV2.builder()
+        return PerformanceDetailDtoV3.builder()
                 .id(getId())
                 .images(imageList)
                 .title(getTitle())
@@ -126,6 +129,7 @@ public class PerformanceDetailQueryDslDtoV2 {
                 .musicalDateTime(getMusicalDateTime())
                 .prices(prices)
                 .artists(artists)
+                .reviews(reviews.stream().map(ReviewForPerformanceQueryDslDetailDto::toDto).collect(Collectors.toSet()))
                 .purchaseLimit(getPurchaseLimit())
                 .limitAge(getLimitAge())
                 .startDate(StringUtils.hasText(textStartDay) ? textStartDay : "미정")

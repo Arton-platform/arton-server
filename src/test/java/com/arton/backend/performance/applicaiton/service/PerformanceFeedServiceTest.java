@@ -2,7 +2,7 @@ package com.arton.backend.performance.applicaiton.service;
 
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceRepository;
-import com.arton.backend.performance.adapter.out.repository.PerformanceFeedRepository;
+import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceFeedRepository;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
@@ -11,7 +11,6 @@ import com.arton.backend.user.domain.Gender;
 import com.arton.backend.user.domain.UserRole;
 import com.arton.backend.zzim.adapter.out.persistence.entity.PerformanceZzimEntity;
 import com.arton.backend.zzim.adapter.out.persistence.repository.PerformanceZzimRepository;
-import org.hibernate.id.UUIDGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

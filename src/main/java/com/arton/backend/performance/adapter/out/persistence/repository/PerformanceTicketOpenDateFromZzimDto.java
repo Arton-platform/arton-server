@@ -1,4 +1,4 @@
-package com.arton.backend.performance.adapter.out.repository;
+package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.user.adapter.out.persistence.entity.UserEntity;

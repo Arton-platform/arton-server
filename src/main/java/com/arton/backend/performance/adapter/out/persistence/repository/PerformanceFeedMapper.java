@@ -1,10 +1,8 @@
-package com.arton.backend.performance.adapter.out.repository;
+package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
 import com.arton.backend.user.adapter.out.persistence.mapper.UserMapper;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import com.arton.backend.performance.domain.PerformanceFeed;

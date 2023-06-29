@@ -3,6 +3,7 @@ package com.arton.backend.performance.adapter.out.persistence.repository;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDtoV2;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDtoV3;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ public interface CustomPerformanceRepository {
     List<PerformanceEntity> findZzimsByLimit(List<Long> ids, int offset, int limit);
     PerformanceDetailQueryDslDto getPerformanceDetails(Long id);
     PerformanceDetailQueryDslDtoV2 getPerformanceDetailsV2(Long id);
+    PerformanceDetailQueryDslDtoV3 getPerformanceDetailsV3(Long id);
     List<PerformanceDetailQueryDslDto> getPerformanceDetailsByType(Pageable pageable, PerformanceType performanceType);
 
     /**

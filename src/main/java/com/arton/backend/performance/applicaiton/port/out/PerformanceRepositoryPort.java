@@ -2,6 +2,7 @@ package com.arton.backend.performance.applicaiton.port.out;
 
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDto;
 import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDtoV2;
+import com.arton.backend.performance.applicaiton.data.PerformanceDetailQueryDslDtoV3;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +36,7 @@ public interface PerformanceRepositoryPort {
      * @return
      */
     PerformanceDetailQueryDslDtoV2 getOneWithArtistInfo(Long id);
+    PerformanceDetailQueryDslDtoV3 getOneWithArtistReviewInfo(Long id);
     List<PerformanceDetailQueryDslDto> getAllRelatedInfosByType(Pageable pageable, PerformanceType performanceType);
     List<PerformanceDetailQueryDslDtoV2> getPerformanceWithArtistInfoByType(Pageable pageable, PerformanceType performanceType);
 }

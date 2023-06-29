@@ -1,6 +1,5 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
-import com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity;
 import com.arton.backend.artist.application.data.QCommonArtistDto;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
@@ -9,9 +8,8 @@ import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceM
 import com.arton.backend.performance.applicaiton.data.*;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
-import com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity;
 import com.arton.backend.price.application.data.QPriceInfoDto;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.arton.backend.review.application.data.QReviewForPerformanceQueryDslDetailDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity.*;
+import static com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity.artistEntity;
 import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.performanceImageEntity;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
-import static com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity.*;
+import static com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity.performerEntity;
 import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.priceGradeEntity;
+import static com.arton.backend.review.adapter.out.persistence.entity.QReviewEntity.reviewEntity;
+import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.userEntity;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.set;
 import static java.util.stream.Collectors.toList;
@@ -165,6 +165,40 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)))));
         if (result.isEmpty()) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+        return result.get(id);
+    }
+
+    @Override
+    public PerformanceDetailQueryDslDtoV3 getPerformanceDetailsV3(Long id) {
+        Map<Long, PerformanceDetailQueryDslDtoV3> result = queryFactory
+                .from(performanceEntity)
+                .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
+                .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
+                .leftJoin(performerEntity).on(performanceEntity.eq(performerEntity.performance))
+                .leftJoin(artistEntity).on(performerEntity.artist.eq(artistEntity))
+                .leftJoin(reviewEntity).on(performanceEntity.eq(reviewEntity.performance))
+                .leftJoin(userEntity).on(reviewEntity.user.eq(userEntity))
+                .fetchJoin()
+                .where(performanceEntity.id.eq(id))
+                .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV3(
+                        performanceEntity.id,
+                        performanceEntity.title,
+                        performanceEntity.place,
+                        performanceEntity.musicalDateTime,
+                        performanceEntity.purchaseLimit,
+                        performanceEntity.limitAge,
+                        performanceEntity.startDate,
+                        performanceEntity.endDate,
+                        performanceEntity.ticketOpenDate,
+                        performanceEntity.ticketEndDate,
+                        set(performanceImageEntity.imageUrl),
+                        set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
+                        set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)),
+                        set(new QReviewForPerformanceQueryDslDetailDto(reviewEntity.id, userEntity.id, userEntity.nickname, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit)))));
+        if (result.isEmpty()) {
+            System.out.println("result = is empty");
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
         return result.get(id);
