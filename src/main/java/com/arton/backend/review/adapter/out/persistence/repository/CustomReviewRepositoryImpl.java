@@ -21,6 +21,11 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    /**
+     * 대댓글 제외한 댓글 정보를 가져온다.
+     * @param userId
+     * @return
+     */
     @Override
     public List<MyPageReviewQueryDSLDto> getUserReviewList(long userId) {
         return jpaQueryFactory.select(new QMyPageReviewQueryDSLDto(
@@ -39,7 +44,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                 .leftJoin(userEntity).on(userEntity.eq(reviewEntity.user))
                 .leftJoin(userImageEntity).on(userEntity.eq(userImageEntity.user))
                 .fetchJoin()
-                .where(reviewEntity.user.id.eq(userId))
+                .where(reviewEntity.user.id.eq(userId), reviewEntity.parent.isNull())
                 .groupBy(reviewEntity.id,
                         performanceEntity.id,
                         userEntity.id,
@@ -50,7 +55,6 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                         reviewEntity.createdDate,
                         reviewEntity.content,
                         reviewEntity.hit)
-                .having(reviewEntity.parent.isNull())
                 .fetch();
     }
 
