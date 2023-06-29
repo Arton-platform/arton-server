@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.arton.backend.image.adapter.out.persistence.entity.QUserImageEntity.userImageEntity;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
 import static com.arton.backend.review.adapter.out.persistence.entity.QReviewEntity.reviewEntity;
 import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.userEntity;
@@ -25,6 +26,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                 reviewEntity.id,
                 performanceEntity.id,
                 userEntity.id,
+                userImageEntity.imageUrl,
                 userEntity.nickname,
                 performanceEntity.title,
                 reviewEntity.starScore,
@@ -34,11 +36,13 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                 .from(reviewEntity)
                 .leftJoin(performanceEntity).on(performanceEntity.eq(reviewEntity.performance))
                 .leftJoin(userEntity).on(userEntity.eq(reviewEntity.user))
+                .leftJoin(userImageEntity).on(userEntity.eq(userImageEntity.user))
                 .fetchJoin()
                 .where(reviewEntity.user.id.eq(userId))
                 .groupBy(reviewEntity.id,
                         performanceEntity.id,
                         userEntity.id,
+                        userImageEntity.imageUrl,
                         userEntity.nickname,
                         performanceEntity.title,
                         reviewEntity.starScore,

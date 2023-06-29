@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ReviewListUseCase {
     List<ReviewDto> reviewList(Long id);
+
 }

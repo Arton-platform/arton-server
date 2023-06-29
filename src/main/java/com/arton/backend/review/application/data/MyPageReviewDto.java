@@ -18,6 +18,7 @@ public class MyPageReviewDto {
     private Long id;
     private Long performanceId;
     private Long userId;
+    private String profileImageUrl;
     private String nickname;
     private String title;
     private float starScore;
@@ -28,10 +29,11 @@ public class MyPageReviewDto {
     private Long reviewCount;
 
     @Builder
-    public MyPageReviewDto(Long id, Long performanceId, Long userId, String nickname, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
+    public MyPageReviewDto(Long id, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
         this.id = id;
         this.performanceId = performanceId;
         this.userId = userId;
+        this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.title = title;
         this.starScore = starScore;
@@ -41,6 +43,4 @@ public class MyPageReviewDto {
         this.hit = hit;
         this.reviewCount = reviewCount;
     }
-
-
 }
