@@ -54,7 +54,7 @@ public class CrawlerPerformanceAddTest {
         // zzim
         String zzim = "{\"id\":\"1\"}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/zzim/performance")
+        mockMvc.perform(MockMvcRequestBuilders.post("/heart/performance")
                         .header("Authorization", "Bearer " + accessToken)
                         .content(zzim)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -68,7 +68,7 @@ public class CrawlerPerformanceAddTest {
         System.out.println("result = " + result);
 
         // zzim delete
-        mockMvc.perform(MockMvcRequestBuilders.delete("/zzim/performance/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/heart/performance/1")
                         .header("Authorization", "Bearer " + accessToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
