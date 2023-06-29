@@ -78,22 +78,6 @@ public class PerformanceController {
         return ResponseEntity.ok(allPerformances);
     }
 
-//    @Operation(summary = "특정 공연 상세보기", description = "공연을 상세보기 합니다.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "상세 데이터 가져오기 성공",
-//                    content = @Content( schema = @Schema(implementation = PerformanceDetailDto.class))),
-//            @ApiResponse(responseCode = "404", description = "공연을 찾을 수 없음.",
-//                    content = @Content( schema = @Schema(implementation = ErrorResponse.class)))})
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ResponseData<PerformanceDetailDto>> getOne(@PathVariable("id") Long id){
-//        ResponseData response = new ResponseData(
-//                "SUCCESS"
-//                , HttpStatus.OK.value()
-//                , performanceService.getOne(id)
-//        );
-//        return ResponseEntity.ok().body(response);
-//    }
-
     @Operation(summary = "특정 공연 상세보기", description = "공연을 상세보기 합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "상세 데이터 가져오기 성공",
