@@ -14,6 +14,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long>, Cus
     List<ReviewEntity> findAllByUserIdOrderByCreatedDateDesc(long userId);
     Long countAllByUser_Id(Long userId);
     Long countAllByPerformance_Id(Long performanceId);
+    Long countAllByParentId(Long parentId);
     @Modifying
     @Query("DELETE from ReviewEntity review where review.user.id =: userId")
     void deleteAllByUserId(@Param("userId") long userId);

@@ -1,9 +1,7 @@
 package com.arton.backend.performance.applicaiton.service;
 
-import com.arton.backend.image.application.port.out.PerformanceImageSaveRepositoryPort;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
-import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.performance.applicaiton.data.*;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceDeleteUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSaveUseCase;
@@ -13,9 +11,7 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
-import com.arton.backend.performer.adapter.out.persistence.entity.PerformerEntity;
-import com.arton.backend.price.adapter.out.persistence.entity.PriceGradeEntity;
-import com.arton.backend.price.application.port.out.PriceGradeRepositoryPort;
+import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -36,8 +32,7 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     private final PerformanceDeletePort performanceDeletePort;
     private final PerformanceDocuemntSavePort performanceDocuemntSavePort;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
-    private final PriceGradeRepositoryPort priceGradeRepositoryPort;
-    private final PerformanceImageSaveRepositoryPort performanceImageSaveRepositoryPort;
+    private final ReviewCountPort reviewCountPort;
 
     /**
      * 공연 리스트 상세 정보를 보내주자.
@@ -123,7 +118,11 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
         if (!performanceRepositoryPort.existsById(id)) {
             throw new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND);
         }
-        return performanceRepositoryPort.getOneWithArtistReviewInfo(userId, id).toDto();
+        PerformanceDetailDtoV3 performanceDetailDto = performanceRepositoryPort.getOneWithArtistReviewInfo(userId, id).toDto();
+        performanceDetailDto.getReviews().stream().forEach(reviewForPerformanceDetailDto -> {
+            reviewForPerformanceDetailDto.setCount(reviewCountPort.getChildReviewCount(reviewForPerformanceDetailDto.getId()));
+        });
+        return performanceDetailDto;
     }
 
 }

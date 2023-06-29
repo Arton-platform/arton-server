@@ -54,6 +54,11 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     }
 
     @Override
+    public Long getChildReviewCount(Long parentId) {
+        return repository.countAllByParentId(parentId);
+    }
+
+    @Override
     public void deleteUserAllReview(long userId) {
         repository.deleteAllByUserId(userId);
     }
