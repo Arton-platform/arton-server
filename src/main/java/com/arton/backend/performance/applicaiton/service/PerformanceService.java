@@ -11,6 +11,7 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
+import com.arton.backend.review.application.data.CommonReviewDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -114,6 +115,24 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
         performanceDetailDto.getReviews().stream().forEach(reviewForPerformanceDetailDto -> {
             reviewForPerformanceDetailDto.setReviewCount(reviewCountPort.getChildReviewCount(reviewForPerformanceDetailDto.getId()));
         });
+
+        Set<CommonReviewDto> reviewResponse = new HashSet<>();
+        Map<Long, CommonReviewDto> map = new HashMap<>();
+        performanceDetailDto.getReviews().stream().forEach(c -> {
+                    CommonReviewDto reviewDto = c;
+                    if (c.getParentId() != null) {
+                        reviewDto.setParentId(c.getParentId());
+                    }
+                    map.put(reviewDto.getId(), reviewDto);
+                    if (c.getParentId() != null) {
+                        map.get(c.getParentId()).getChilds().add(reviewDto);
+                    } else {
+                        reviewResponse.add(reviewDto);
+                    }
+                }
+        );
+        performanceDetailDto.setReviews(reviewResponse);
+
         return performanceDetailDto;
     }
 

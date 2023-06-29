@@ -52,4 +52,8 @@ public class PerformanceDetailDtoV3 {
         this.reviewCount = reviewCount;
         this.isZzim = isZzim;
     }
+
+    public void setReviews(Set<CommonReviewDto> reviews) {
+        this.reviews = reviews;
+    }
 }
