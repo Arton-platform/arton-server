@@ -31,7 +31,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
         return jpaQueryFactory.selectFrom(reviewEntity)
                 .leftJoin(reviewEntity.parent)
                 .fetchJoin()
-                .where(reviewEntity.user.id.eq(userId))
+                .where(reviewEntity.user.id.eq(userId).or(reviewEntity.parent.user.id.eq(userId)))
                 .orderBy(reviewEntity.parent.id.asc().nullsFirst(), reviewEntity.createdDate.asc())
                 .fetch();
     }
