@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ReviewForPerformanceDetailDto {
     private Long id;
     private Long userId;
+    private String profileImageUrl;
     private String nickname;
     private float starScore;
     private String createdDate;
@@ -18,9 +19,10 @@ public class ReviewForPerformanceDetailDto {
     private Long count;
 
     @Builder
-    public ReviewForPerformanceDetailDto(Long id, Long userId, String nickname, float starScore, String createdDate, String content, Long hit, Long count) {
+    public ReviewForPerformanceDetailDto(Long id, Long userId, String profileImageUrl, String nickname, float starScore, String createdDate, String content, Long hit, Long count) {
         this.id = id;
         this.userId = userId;
+        this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.starScore = starScore;
         this.createdDate = createdDate;

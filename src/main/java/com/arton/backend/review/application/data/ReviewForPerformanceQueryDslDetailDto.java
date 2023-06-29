@@ -17,6 +17,7 @@ import java.util.Optional;
 public class ReviewForPerformanceQueryDslDetailDto {
     private Long id;
     private Long userId;
+    private String profileImageUrl;
     private String nickname;
     private float starScore;
     private LocalDateTime createdDate;
@@ -25,9 +26,10 @@ public class ReviewForPerformanceQueryDslDetailDto {
 
     @Builder
     @QueryProjection
-    public ReviewForPerformanceQueryDslDetailDto(Long id, Long userId, String nickname, float starScore, LocalDateTime createdDate, String content, Long hit) {
+    public ReviewForPerformanceQueryDslDetailDto(Long id, Long userId, String profileImageUrl, String nickname, float starScore, LocalDateTime createdDate, String content, Long hit) {
         this.id = id;
         this.userId = userId;
+        this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.starScore = starScore;
         this.createdDate = createdDate;
