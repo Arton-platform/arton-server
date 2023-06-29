@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 /**
  * 마이 페이지에서 보여지는 사용자가 작성한 리뷰 정보
@@ -59,6 +60,7 @@ public class MyPageReviewQueryDSLDto {
                 .createdDate(createdDate.format(formatter))
                 .content(content)
                 .hit(hit)
+                .images(new ArrayList<>())
                 .reviewCount(0L)
                 .build();
     }

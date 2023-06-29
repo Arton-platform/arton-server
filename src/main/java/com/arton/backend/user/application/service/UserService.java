@@ -120,7 +120,9 @@ public class UserService implements UserUseCase, MyPageUseCase {
         // 수정된 리뷰 수집기.
         // 대댓글 연동해서 갯수 구현 해야함.
         List<CommonReviewDto> reviews = reviewListPort.getUserReviewList(userId).stream().map(MyPageReviewQueryDSLDto::toMyPageDTO).collect(Collectors.toList());
-
+        for (CommonReviewDto review : reviews) {
+            review.setReviewCount(reviewCountPort.getChildReviewCount(review.getId()));
+        }
         return MyPageDto.builder()
                 .id(userId)
                 .nickname(nickname)
