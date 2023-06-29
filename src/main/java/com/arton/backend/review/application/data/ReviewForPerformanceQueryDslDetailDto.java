@@ -11,7 +11,6 @@ import org.springframework.util.ObjectUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -66,8 +65,8 @@ public class ReviewForPerformanceQueryDslDetailDto {
         return day;
     }
 
-    public MyPageReviewDto toDto() {
-        return MyPageReviewDto.builder()
+    public CommonReviewDto toDto() {
+        return CommonReviewDto.builder()
                 .id(id)
                 .performanceId(performanceId)
                 .userId(userId)

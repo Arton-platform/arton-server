@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MyPageReviewDto {
+public class CommonReviewDto {
     private Long id;
     private Long performanceId;
     private Long userId;
@@ -29,7 +29,7 @@ public class MyPageReviewDto {
     private Long reviewCount;
 
     @Builder
-    public MyPageReviewDto(Long id, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
+    public CommonReviewDto(Long id, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
         this.id = id;
         this.performanceId = performanceId;
         this.userId = userId;

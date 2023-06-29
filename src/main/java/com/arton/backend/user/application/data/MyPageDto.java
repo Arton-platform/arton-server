@@ -1,6 +1,6 @@
 package com.arton.backend.user.application.data;
 
-import com.arton.backend.review.application.data.MyPageReviewDto;
+import com.arton.backend.review.application.data.CommonReviewDto;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -21,10 +21,10 @@ public class MyPageDto {
     /** 리뷰 갯수 */
     private Long reviewCount;
     /** 유저의 리뷰 목록 */
-    private List<MyPageReviewDto> reviews = new ArrayList<>();
+    private List<CommonReviewDto> reviews = new ArrayList<>();
 
     @Builder
-    public MyPageDto(Long id, String nickname, String selfDescription, String profileImageUrl, Long followings, Long followers, Long reviewCount, List<MyPageReviewDto> reviews) {
+    public MyPageDto(Long id, String nickname, String selfDescription, String profileImageUrl, Long followings, Long followers, Long reviewCount, List<CommonReviewDto> reviews) {
         this.id = id;
         this.nickname = nickname;
         this.selfDescription = selfDescription;

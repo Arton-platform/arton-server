@@ -2,8 +2,7 @@ package com.arton.backend.performance.applicaiton.data;
 
 import com.arton.backend.artist.application.data.CommonArtistDto;
 import com.arton.backend.price.application.data.PriceInfoDto;
-import com.arton.backend.review.application.data.MyPageReviewDto;
-import com.arton.backend.review.application.data.ReviewForPerformanceDetailDto;
+import com.arton.backend.review.application.data.CommonReviewDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -30,12 +29,12 @@ public class PerformanceDetailDtoV3 {
     private List<String> images = new ArrayList<>();
     private Set<PriceInfoDto> prices = new LinkedHashSet<>();
     private Set<CommonArtistDto> artists = new LinkedHashSet<>();
-    private Set<MyPageReviewDto> reviews = new LinkedHashSet<>();
+    private Set<CommonReviewDto> reviews = new LinkedHashSet<>();
     private Long reviewCount;
     private Boolean isZzim;
 
     @Builder
-    public PerformanceDetailDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, String startDate, String endDate, String ticketOpenDate, String ticketEndDate, List<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<MyPageReviewDto> reviews, Long reviewCount, Boolean isZzim) {
+    public PerformanceDetailDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, String startDate, String endDate, String ticketOpenDate, String ticketEndDate, List<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<CommonReviewDto> reviews, Long reviewCount, Boolean isZzim) {
         this.id = id;
         this.title = title;
         this.place = place;

@@ -8,7 +8,7 @@ import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.review.adapter.out.persistence.mapper.ReviewMapper;
-import com.arton.backend.review.application.data.MyPageReviewDto;
+import com.arton.backend.review.application.data.CommonReviewDto;
 import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.review.application.port.out.ReviewListPort;
@@ -119,7 +119,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
         Long userReviewCount = reviewCountPort.getUserReviewCount(userId);
         // 수정된 리뷰 수집기.
         // 대댓글 연동해서 갯수 구현 해야함.
-        List<MyPageReviewDto> reviews = reviewListPort.getUserReviewList(userId).stream().map(MyPageReviewQueryDSLDto::toMyPageDTO).collect(Collectors.toList());
+        List<CommonReviewDto> reviews = reviewListPort.getUserReviewList(userId).stream().map(MyPageReviewQueryDSLDto::toMyPageDTO).collect(Collectors.toList());
 
         return MyPageDto.builder()
                 .id(userId)

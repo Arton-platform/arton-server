@@ -46,9 +46,9 @@ public class MyPageReviewQueryDSLDto {
      * my page 리뷰 화면에 맞는 DTO로 변경
      * review count는 현재 대댓글 구현을 안해서 우선 0으로 가자..
      */
-    public MyPageReviewDto toMyPageDTO() {
+    public CommonReviewDto toMyPageDTO() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
-        return MyPageReviewDto.builder()
+        return CommonReviewDto.builder()
                 .id(reviewId)
                 .performanceId(performanceId)
                 .userId(userId)
