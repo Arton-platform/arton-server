@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.bcel.generic.IF_ACMPEQ;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -72,11 +74,11 @@ public class ReviewDto {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
         return ReviewDto.builder()
                 .id(review.getId())
-                .parentId(review.getParent().getId())
+                .parentId(ObjectUtils.isEmpty(review.getParent())? null : review.getParent().getId())
                 .childs(new ArrayList<>())
                 .performanceId(review.getPerformance().getId())
                 .userId(review.getUser().getId())
-                .imageUrl(review.getUser().getUserImage().getImageUrl())
+                .imageUrl(ObjectUtils.isEmpty(review.getUser().getUserImage()) ? "이미지 없음.." : review.getUser().getUserImage().getImageUrl())
                 .nickname(review.getUser().getNickname())
                 .starScore(review.getStarScore())
                 .content(review.getContent())
