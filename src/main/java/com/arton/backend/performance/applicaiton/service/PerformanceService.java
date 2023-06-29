@@ -116,8 +116,13 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
             reviewForPerformanceDetailDto.setReviewCount(reviewCountPort.getChildReviewCount(reviewForPerformanceDetailDto.getId()));
         });
 
-        List<CommonReviewDto> reviewResponse = new ArrayList<>();
+        Set<CommonReviewDto> reviewResponse = new LinkedHashSet<>();
         Map<Long, CommonReviewDto> map = new HashMap<>();
+        // first set parent
+        performanceDetailDto.getReviews().stream().forEach(c->{
+            if (c.getParentId() == null)
+                map.put(c.getId(), c);
+        });
         performanceDetailDto.getReviews().stream().forEach(c -> {
                     CommonReviewDto reviewDto = c;
                     if (c.getParentId() != null) {
