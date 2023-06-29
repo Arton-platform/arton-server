@@ -1,9 +1,9 @@
 package com.arton.backend.performance.applicaiton.service;
 
-import com.arton.backend.performance.adapter.out.repository.PerformanceFeedEntity;
-import com.arton.backend.performance.adapter.out.repository.PerformanceFeedMapper;
+import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceFeedEntity;
+import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceFeedMapper;
 import com.arton.backend.performance.adapter.out.persistence.mapper.PerformanceMapper;
-import com.arton.backend.performance.adapter.out.repository.PerformanceTicketOpenDateFromZzimDto;
+import com.arton.backend.performance.adapter.out.persistence.repository.PerformanceTicketOpenDateFromZzimDto;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceFeedUseCase;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceFeedPort;
 import com.arton.backend.performance.domain.PerformanceFeed;

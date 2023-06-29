@@ -1,4 +1,4 @@
-package com.arton.backend.performance.adapter.out.repository;
+package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import javax.persistence.*;
 

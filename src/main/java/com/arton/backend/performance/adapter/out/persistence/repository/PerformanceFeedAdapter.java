@@ -1,4 +1,4 @@
-package com.arton.backend.performance.adapter.out.repository;
+package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.performance.applicaiton.port.out.PerformanceFeedPort;
 import com.querydsl.core.types.Projections;
