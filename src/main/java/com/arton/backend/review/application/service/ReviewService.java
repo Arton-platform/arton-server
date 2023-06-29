@@ -3,25 +3,25 @@ package com.arton.backend.review.application.service;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
+import com.arton.backend.performance.domain.Performance;
+import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.data.ReviewEditDto;
 import com.arton.backend.review.application.port.in.*;
 import com.arton.backend.review.application.port.out.*;
 import com.arton.backend.review.domain.Review;
-import com.arton.backend.reviewhit.application.port.out.ReviewHitDeletePort;
-import com.arton.backend.reviewhit.application.port.out.ReviewHitFindPort;
-import com.arton.backend.reviewhit.application.port.out.ReviewHitSavePort;
 import com.arton.backend.reviewhit.application.service.ReviewHitService;
-import com.arton.backend.reviewhit.domain.ReviewHit;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -36,9 +36,76 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final ReviewHitService reviewHitService;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
+
+    /**
+     * Post post = checkMemberUtil.isPresentPost(postId);
+     *     if (null == post) {
+     *       return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
+     *     }
+     *
+     *     List<Comment> commentList = commentCustomRepository.findAllByPost(post);
+     *
+     *     List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+     *     Map<Long, CommentResponseDto> map = new HashMap<>();
+     *
+     *     commentList.stream().forEach(c -> {
+     *               CommentResponseDto cdto = new CommentResponseDto(c);
+     *               if(c.getParent() != null){
+     *                 cdto.setParentId(c.getParent().getId());
+     *               }
+     *               map.put(cdto.getId(), cdto);
+     *               if (c.getParent() != null) map.get(c.getParent().getId()).getChildren().add(cdto);
+     *               else commentResponseDtoList.add(cdto);
+     *             }
+     *       );
+     *     return ResponseDto.success(commentResponseDtoList);
+     * @param performanceId
+     * @return
+     */
+
+
     @Override
     public List<ReviewDto> reviewList(Long performanceId) {
-        return reviewListPort.reviewList(performanceId).stream().map(ReviewDto::toDtoFromDomain).collect(Collectors.toList());
+        Performance performance = performanceRepositoryPort.findById(performanceId).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
+        List<ReviewEntity> reviews = reviewListPort.reviewList(performanceId);
+        List<ReviewDto> reviewResponse = new ArrayList<>();
+        Map<Long, ReviewDto> map = new HashMap<>();
+        reviews.stream().forEach(c -> {
+                    ReviewDto reviewDto = ReviewDto.toDtoFromEntity(c);
+                    if (c.getParent() != null) {
+                        reviewDto.setParentId(c.getParent().getId());
+                    }
+                    map.put(reviewDto.getId(), reviewDto);
+                    if (c.getParent() != null) {
+                        map.get(c.getParent().getId()).getChilds().add(reviewDto);
+                    } else {
+                        reviewResponse.add(reviewDto);
+                    }
+                }
+        );
+        return reviewResponse;
+    }
+
+    @Override
+    public List<ReviewDto> getReviewChilds(Long reviewId) {
+        reviewFindPort.findById(reviewId).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
+        List<ReviewEntity> reviews = reviewListPort.getReviewChilds(reviewId);
+        List<ReviewDto> reviewResponse = new ArrayList<>();
+        Map<Long, ReviewDto> map = new HashMap<>();
+        reviews.stream().forEach(c -> {
+                    ReviewDto reviewDto = ReviewDto.toDtoFromEntity(c);
+                    if (c.getParent() != null) {
+                        reviewDto.setParentId(c.getParent().getId());
+                    }
+                    map.put(reviewDto.getId(), reviewDto);
+                    if (c.getParent() != null) {
+                        map.get(c.getParent().getId()).getChilds().add(reviewDto);
+                    } else {
+                        reviewResponse.add(reviewDto);
+                    }
+                }
+        );
+        return reviewResponse;
     }
 
     @Override

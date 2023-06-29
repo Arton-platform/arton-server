@@ -1,5 +1,6 @@
 package com.arton.backend.review.adapter.out.persistence.repository;
 
+import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.mapper.ReviewMapper;
 import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
 import com.arton.backend.review.application.port.out.*;
@@ -18,11 +19,13 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     private final ReviewRepository repository;
     private final ReviewMapper reviewMapper;
     @Override
-    public List<Review> reviewList(long performanceId) {
-        return Optional.ofNullable(repository.findAllByPerformanceIdOrderByStarScoreDesc(performanceId))
-                .orElseGet(Collections::emptyList)
-                .stream()
-                .map(reviewMapper::toDomain).collect(Collectors.toList());
+    public List<ReviewEntity> reviewList(long performanceId) {
+        return repository.getAllReviews(performanceId);
+    }
+
+    @Override
+    public List<ReviewEntity> getReviewChilds(long reviewId) {
+        return repository.getReviewChilds(reviewId);
     }
 
     @Override

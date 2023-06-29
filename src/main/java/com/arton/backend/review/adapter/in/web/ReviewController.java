@@ -51,6 +51,20 @@ public class ReviewController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "특정 리뷰 대댓글", description = "특정 리뷰의 대댓글 정보를 반환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "리뷰 대댓글 반환 성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class))))})
+    @GetMapping("/{id}/child")
+    public ResponseEntity<ResponseData<List<ReviewDto>>> getReviewChilds(@PathVariable(value = "id" ,required = true) Long id){
+        ResponseData<List<ReviewDto>> response = new ResponseData<>(
+                "SUCCESS",
+                HttpStatus.OK.value(),
+                reviewListUseCase.getReviewChilds(id)
+        );
+        return ResponseEntity.ok().body(response);
+    }
+
     @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "공연 리뷰 등록", description = "공연 리뷰를 등록합니다.")
     @ApiResponses(value = {

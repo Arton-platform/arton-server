@@ -1,6 +1,7 @@
 package com.arton.backend.review.adapter.out.persistence.repository;
 
 
+import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import com.arton.backend.review.application.data.MyPageReviewQueryDSLDto;
 import com.arton.backend.review.application.data.QMyPageReviewQueryDSLDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -49,6 +50,26 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                         reviewEntity.createdDate,
                         reviewEntity.content,
                         reviewEntity.hit)
+                .fetch();
+    }
+
+    @Override
+    public List<ReviewEntity> getAllReviews(long performanceId) {
+        return jpaQueryFactory.selectFrom(reviewEntity)
+                .leftJoin(reviewEntity.parent)
+                .fetchJoin()
+                .where(reviewEntity.performance.id.eq(performanceId))
+                .orderBy(reviewEntity.parent.id.asc().nullsFirst(), reviewEntity.createdDate.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<ReviewEntity> getReviewChilds(long reviewId) {
+        return jpaQueryFactory.selectFrom(reviewEntity)
+                .leftJoin(reviewEntity.parent)
+                .fetchJoin()
+                .where(reviewEntity.id.eq(reviewId))
+                .orderBy(reviewEntity.parent.id.asc().nullsFirst(), reviewEntity.createdDate.asc())
                 .fetch();
     }
 }
