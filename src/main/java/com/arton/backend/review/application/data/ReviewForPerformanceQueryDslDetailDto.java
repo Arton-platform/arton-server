@@ -22,11 +22,10 @@ public class ReviewForPerformanceQueryDslDetailDto {
     private LocalDateTime createdDate;
     private String content;
     private Long hit;
-    private Long count;
 
     @Builder
     @QueryProjection
-    public ReviewForPerformanceQueryDslDetailDto(Long id, Long userId, String nickname, float starScore, LocalDateTime createdDate, String content, Long hit, Long count) {
+    public ReviewForPerformanceQueryDslDetailDto(Long id, Long userId, String nickname, float starScore, LocalDateTime createdDate, String content, Long hit) {
         this.id = id;
         this.userId = userId;
         this.nickname = nickname;
@@ -34,7 +33,6 @@ public class ReviewForPerformanceQueryDslDetailDto {
         this.createdDate = createdDate;
         this.content = content;
         this.hit = hit;
-        this.count = count;
     }
 
     @JsonIgnore
@@ -67,7 +65,7 @@ public class ReviewForPerformanceQueryDslDetailDto {
                 .createdDate(createdDate != null ? getTextYearDay(createdDate) : "미정")
                 .content(content)
                 .hit(hit)
-                .count(count)
+                .count(0L)
                 .build();
     }
 }

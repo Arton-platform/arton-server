@@ -115,6 +115,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
         if (!performanceRepositoryPort.existsById(id)) {
             throw new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND);
         }
+        PerformanceDetailDtoV3 oneWithArtistReviewInfo = performanceRepositoryPort.getOneWithArtistReviewInfo(id).toDto();
+        System.out.println("oneWithArtistReviewInfo = " + oneWithArtistReviewInfo);
         return performanceRepositoryPort.getOneWithArtistInfo(id).toDto();
     }
 

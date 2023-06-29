@@ -196,8 +196,9 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)),
-                        set(new QReviewForPerformanceQueryDslDetailDto(reviewEntity.id, userEntity.id, userEntity.nickname, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit, reviewEntity.children.size().count())))));
+                        set(new QReviewForPerformanceQueryDslDetailDto(reviewEntity.id, userEntity.id, userEntity.nickname, reviewEntity.starScore, reviewEntity.createdDate, reviewEntity.content, reviewEntity.hit)))));
         if (result.isEmpty()) {
+            System.out.println("result = is empty");
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
         return result.get(id);
