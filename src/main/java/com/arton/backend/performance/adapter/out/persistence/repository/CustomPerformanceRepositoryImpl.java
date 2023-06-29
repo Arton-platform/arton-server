@@ -187,7 +187,6 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .leftJoin(userImageEntity).on(userEntity.eq(userImageEntity.user))
                 .fetchJoin()
                 .where(performanceEntity.id.eq(id))
-                .distinct()
                 .orderBy(reviewEntity.parent.id.asc().nullsFirst(), reviewEntity.createdDate.asc())
                 .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV3(
                         performanceEntity.id,
