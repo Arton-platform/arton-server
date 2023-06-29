@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -19,6 +20,8 @@ public class CrawlerPerformanceAddTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
+
+    @Rollback(false)
     @Test
     public void test() throws Exception {
         String dto = "{\"title\":\"싸이흠뻑쇼 SUMMERSWAG2023 - 서울\",\"link\": \"https://tickets.interpark.com/goods/23007049\",\"musicalDateTime\":\"2023.06.30~2023.07.02\",\"startDate\":\"2023.06.30\",\"endDate\":\"2023.07.02\",\"ticketOpenDate\":\"\",\"ticketEndDate\":\"\",\"place\":\"잠실 종합운동장 올림픽주경기장\",\"runningTime\":\"0\",\"limitAge\":\"0\",\"description\":\"https://ticketimage.interpark.com/Play/image/etc/23/23007049-06.jpg\",\"imageUrl\":\"https://ticketimage.interpark.com/Play/image/large/23/23007049_p.gif\",\"performanceType\":\"콘서트\",\"artists\":[],\"grades\":[{\"gradeName\":\"스탠딩SR\",\"price\":\"165000\"},{\"gradeName\":\"스탠딩R\",\"price\":\"154000\"},{\"gradeName\":\"지정석SR\",\"price\":\"165000\"},{\"gradeName\":\"지정석R\",\"price\":\"154000\"},{\"gradeName\":\"지정석S\",\"price\":\"132000\"}]}";
@@ -48,12 +51,35 @@ public class CrawlerPerformanceAddTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
+        // zzim
+        String zzim = "{\"id\":\"1\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/zzim/performance")
+                        .header("Authorization", "Bearer " + accessToken)
+                        .content(zzim)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
         // get
         String result = mockMvc.perform(MockMvcRequestBuilders.get("/performance/1")
                         .header("Authorization", "Bearer " + accessToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
         System.out.println("result = " + result);
+
+        // zzim delete
+        mockMvc.perform(MockMvcRequestBuilders.delete("/zzim/performance/1")
+                        .header("Authorization", "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        // get
+        result = mockMvc.perform(MockMvcRequestBuilders.get("/performance/1")
+                        .header("Authorization", "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        System.out.println("result = " + result);
+
     }
 
 }

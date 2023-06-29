@@ -30,9 +30,11 @@ public class PerformanceDetailDtoV3 {
     private Set<PriceInfoDto> prices = new LinkedHashSet<>();
     private Set<CommonArtistDto> artists = new LinkedHashSet<>();
     private Set<ReviewForPerformanceDetailDto> reviews = new LinkedHashSet<>();
+    private Long reviewCount;
+    private Boolean isZzim;
 
     @Builder
-    public PerformanceDetailDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, String startDate, String endDate, String ticketOpenDate, String ticketEndDate, List<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<ReviewForPerformanceDetailDto> reviews) {
+    public PerformanceDetailDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, String startDate, String endDate, String ticketOpenDate, String ticketEndDate, List<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<ReviewForPerformanceDetailDto> reviews, Long reviewCount, Boolean isZzim) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -47,5 +49,7 @@ public class PerformanceDetailDtoV3 {
         this.prices = prices;
         this.artists = artists;
         this.reviews = reviews;
+        this.reviewCount = reviewCount;
+        this.isZzim = isZzim;
     }
 }

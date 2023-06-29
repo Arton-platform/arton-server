@@ -9,6 +9,7 @@ import com.arton.backend.performance.applicaiton.port.in.CrawlerPerformanceSaveU
 import com.arton.backend.performance.applicaiton.port.in.PerformanceSaveUseCase;
 import com.arton.backend.performance.applicaiton.port.in.PerformanceUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,6 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,15 +39,6 @@ public class PerformanceController {
     private final PerformanceUseCase performanceService;
     private final CrawlerPerformanceSaveUseCase crawlerPerformanceSaveUseCase;
 
-//    @Operation(summary = "회원가입시 찜에 필요한 공연 리스트 불러오기", description = "회원가입시 찜에 필요한 공연 리스트를 가져옵니다.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
-//                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = PerformanceInterestDto.class))))})
-//    @GetMapping("/zzim")
-//    public ResponseEntity<List<PerformanceInterestDto>> getPerformanceZzimList() {
-//        List<PerformanceInterestDto> allPerformances = performanceService.getZzimList();
-//        return ResponseEntity.ok(allPerformances);
-//    }
 
     @Operation(summary = "회원가입시 찜에 필요한 공연 리스트 불러오기", description = "회원가입시 찜에 필요한 공연 리스트를 가져옵니다.")
     @ApiResponses(value = {
@@ -78,18 +72,20 @@ public class PerformanceController {
         return ResponseEntity.ok(allPerformances);
     }
 
+    @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "특정 공연 상세보기", description = "공연을 상세보기 합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "상세 데이터 가져오기 성공",
-                    content = @Content( schema = @Schema(implementation = PerformanceDetailDtoV2.class))),
+                    content = @Content( schema = @Schema(implementation = PerformanceDetailDtoV3.class))),
             @ApiResponse(responseCode = "404", description = "공연을 찾을 수 없음.",
                     content = @Content( schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseData<PerformanceDetailDtoV2>> getOne(@PathVariable("id") Long id){
+    public ResponseEntity<ResponseData<PerformanceDetailDtoV3>> getOne(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") Long id){
+        long userId = Long.parseLong(userDetails.getUsername());
         ResponseData response = new ResponseData(
                 "SUCCESS"
                 , HttpStatus.OK.value()
-                , performanceService.getOneWithArtistInfo(id)
+                , performanceService.getOneWithArtistReviewInfo(userId, id)
         );
         return ResponseEntity.ok().body(response);
     }

@@ -36,7 +36,7 @@ public interface PerformanceRepositoryPort {
      * @return
      */
     PerformanceDetailQueryDslDtoV2 getOneWithArtistInfo(Long id);
-    PerformanceDetailQueryDslDtoV3 getOneWithArtistReviewInfo(Long id);
+    PerformanceDetailQueryDslDtoV3 getOneWithArtistReviewInfo(Long userId, Long id);
     List<PerformanceDetailQueryDslDto> getAllRelatedInfosByType(Pageable pageable, PerformanceType performanceType);
     List<PerformanceDetailQueryDslDtoV2> getPerformanceWithArtistInfoByType(Pageable pageable, PerformanceType performanceType);
 }

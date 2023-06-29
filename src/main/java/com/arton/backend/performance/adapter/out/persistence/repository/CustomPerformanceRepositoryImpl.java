@@ -10,6 +10,8 @@ import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.price.application.data.QPriceInfoDto;
 import com.arton.backend.review.application.data.QReviewForPerformanceQueryDslDetailDto;
+import com.arton.backend.zzim.adapter.out.persistence.entity.QPerformanceZzimEntity;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,7 @@ import static com.arton.backend.performer.adapter.out.persistence.entity.QPerfor
 import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.priceGradeEntity;
 import static com.arton.backend.review.adapter.out.persistence.entity.QReviewEntity.reviewEntity;
 import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.userEntity;
+import static com.arton.backend.zzim.adapter.out.persistence.entity.QPerformanceZzimEntity.*;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.set;
 import static java.util.stream.Collectors.toList;
@@ -171,7 +174,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     }
 
     @Override
-    public PerformanceDetailQueryDslDtoV3 getPerformanceDetailsV3(Long id) {
+    public PerformanceDetailQueryDslDtoV3 getPerformanceDetailsV3(Long userId, Long id) {
         Map<Long, PerformanceDetailQueryDslDtoV3> result = queryFactory
                 .from(performanceEntity)
                 .leftJoin(performanceImageEntity).on(performanceEntity.eq(performanceImageEntity.performance))
@@ -193,6 +196,10 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         performanceEntity.endDate,
                         performanceEntity.ticketOpenDate,
                         performanceEntity.ticketEndDate,
+                        JPAExpressions.select(performanceZzimEntity.performance.isNotNull())
+                                .from(performanceZzimEntity)
+                                .where(performanceZzimEntity.performance.id.eq(id),
+                                        performanceZzimEntity.user.id.eq(userId)),
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)),

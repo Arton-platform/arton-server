@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString
-@Schema(description = "공연 상세 페이지 QueryDSL DTO V2(아티스트 정보 포함)")
+@Schema(description = "공연 상세 페이지 QueryDSL DTO V3(아티스트 정보 포함)")
 public class PerformanceDetailQueryDslDtoV3 {
     private Long id;
     private String title;
@@ -31,6 +31,7 @@ public class PerformanceDetailQueryDslDtoV3 {
     private LocalDateTime endDate;
     private LocalDateTime ticketOpenDate;
     private LocalDateTime ticketEndDate;
+    private Boolean zzim;
     private Set<String> images = new LinkedHashSet<>();
     private Set<PriceInfoDto> prices = new LinkedHashSet<>();
     private Set<CommonArtistDto> artists = new LinkedHashSet<>();
@@ -38,7 +39,7 @@ public class PerformanceDetailQueryDslDtoV3 {
 
     @Builder
     @QueryProjection
-    public PerformanceDetailQueryDslDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<ReviewForPerformanceQueryDslDetailDto> reviews) {
+    public PerformanceDetailQueryDslDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Boolean zzim, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists, Set<ReviewForPerformanceQueryDslDetailDto> reviews) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -49,6 +50,7 @@ public class PerformanceDetailQueryDslDtoV3 {
         this.endDate = endDate;
         this.ticketOpenDate = ticketOpenDate;
         this.ticketEndDate = ticketEndDate;
+        this.zzim = zzim;
         this.images = images;
         this.prices = prices;
         this.artists = artists;
@@ -136,6 +138,8 @@ public class PerformanceDetailQueryDslDtoV3 {
                 .endDate(StringUtils.hasText(textEndDay) ? textEndDay : "미정")
                 .ticketOpenDate(StringUtils.hasText(ticketOpenDay) ? ticketOpenDay : "미정")
                 .ticketEndDate(StringUtils.hasText(ticketEndDay) ? ticketEndDay : "미정")
+                .reviewCount((long) reviews.size())
+                .isZzim(zzim == null ? false : zzim)
                 .build();
     }
 }

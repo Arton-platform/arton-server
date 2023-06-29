@@ -18,7 +18,7 @@ public interface CustomPerformanceRepository {
     List<PerformanceEntity> findZzimsByLimit(List<Long> ids, int offset, int limit);
     PerformanceDetailQueryDslDto getPerformanceDetails(Long id);
     PerformanceDetailQueryDslDtoV2 getPerformanceDetailsV2(Long id);
-    PerformanceDetailQueryDslDtoV3 getPerformanceDetailsV3(Long id);
+    PerformanceDetailQueryDslDtoV3 getPerformanceDetailsV3(Long userId, Long id);
     List<PerformanceDetailQueryDslDto> getPerformanceDetailsByType(Pageable pageable, PerformanceType performanceType);
 
     /**
