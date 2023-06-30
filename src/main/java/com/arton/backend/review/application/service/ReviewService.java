@@ -129,7 +129,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     @Override
     public void regist(long userId, ReviewCreateDto reviewCreateDto, List<MultipartFile> multipartFileList) {
         // first image count check
-        if (multipartFileList != null && multipartFileList.size() > 6) {
+        if (multipartFileList != null && multipartFileList.size() > 5) {
             throw new CustomException(ErrorCode.UPLOAD_COUNT_LIMIT.getMessage(), ErrorCode.UPLOAD_COUNT_LIMIT);
         }
         // regist revie first
