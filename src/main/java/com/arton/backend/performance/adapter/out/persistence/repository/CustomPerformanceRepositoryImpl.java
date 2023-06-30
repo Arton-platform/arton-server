@@ -1,7 +1,6 @@
 package com.arton.backend.performance.adapter.out.persistence.repository;
 
 import com.arton.backend.artist.application.data.QCommonArtistDto;
-import com.arton.backend.image.adapter.out.persistence.entity.QUserImageEntity;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
@@ -10,15 +9,12 @@ import com.arton.backend.performance.applicaiton.data.*;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.price.application.data.QPriceInfoDto;
-import com.arton.backend.review.application.data.QCommonReviewQueryDslDto;
-import com.arton.backend.zzim.adapter.out.persistence.entity.QPerformanceZzimEntity;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +22,13 @@ import java.util.Optional;
 
 import static com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity.artistEntity;
 import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.performanceImageEntity;
-import static com.arton.backend.image.adapter.out.persistence.entity.QUserImageEntity.*;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
 import static com.arton.backend.performer.adapter.out.persistence.entity.QPerformerEntity.performerEntity;
 import static com.arton.backend.price.adapter.out.persistence.entity.QPriceGradeEntity.priceGradeEntity;
 import static com.arton.backend.review.adapter.out.persistence.entity.QReviewEntity.reviewEntity;
-import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.userEntity;
-import static com.arton.backend.zzim.adapter.out.persistence.entity.QPerformanceZzimEntity.*;
-import static com.querydsl.core.group.GroupBy.*;
+import static com.arton.backend.zzim.adapter.out.persistence.entity.QPerformanceZzimEntity.performanceZzimEntity;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.set;
 import static java.util.stream.Collectors.toList;
 
 @Repository
@@ -51,7 +46,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     @Override
     public List<Performance> getPerformanceByStartDateASC(int offset, int limit) {
         return Optional.ofNullable(queryFactory.selectFrom(performanceEntity)
-                        .where(performanceEntity.startDate.goe(LocalDateTime.now()))
+//                        .where(performanceEntity.startDate.goe(LocalDateTime.now()))
                 .orderBy(performanceEntity.ticketOpenDate.asc()).offset(offset).limit(limit)
                 .fetch())
                 .orElseGet(Collections::emptyList)
@@ -70,7 +65,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     @Override
     public List<Performance> getPerformanceByEndDateASC(int offset, int limit) {
         return Optional.ofNullable(queryFactory.selectFrom(performanceEntity)
-                        .where(performanceEntity.startDate.goe(LocalDateTime.now()))
+//                        .where(performanceEntity.startDate.goe(LocalDateTime.now()))
                         .orderBy(performanceEntity.ticketEndDate.asc()).offset(offset).limit(limit)
                         .fetch())
                 .orElseGet(Collections::emptyList)
@@ -89,7 +84,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     @Override
     public List<Performance> getPopularPerformances(int offset, int limit) {
         return Optional.ofNullable(queryFactory.selectFrom(performanceEntity)
-                        .where(performanceEntity.startDate.goe(LocalDateTime.now()))
+//                        .where(performanceEntity.startDate.goe(LocalDateTime.now()))
                         .orderBy(performanceEntity.hit.desc()).offset(offset).limit(limit)
                         .fetch())
                 .orElseGet(Collections::emptyList)
