@@ -44,7 +44,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final FileUploadUtils fileUploadUtils;
     private final ReviewImageSaveRepositoryPort reviewImageSaveRepositoryPort;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
-    @Value("${review.image.dir}")
+    @Value("${spring.review.image.dir}")
     private String reviewImageDir;
 
     /**
