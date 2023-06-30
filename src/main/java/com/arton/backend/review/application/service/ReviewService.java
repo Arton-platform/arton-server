@@ -37,6 +37,11 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final ReviewHitService reviewHitService;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
+    /**
+     * 공연의 모든 댓글 정보를 반환합니다.
+     * @param performanceId
+     * @return
+     */
     @Override
     public List<CommonReviewDto> reviewList(Long performanceId) {
         Performance performance = performanceRepositoryPort.findById(performanceId).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));

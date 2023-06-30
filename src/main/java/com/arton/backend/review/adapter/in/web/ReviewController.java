@@ -35,20 +35,6 @@ public class ReviewController {
     private final ReviewHitRemoveUseCase reviewHitRemoveUseCase;
     private final ReviewHitAddUseCase reviewHitAddUseCase;
 
-    @Operation(summary = "공연 리뷰 페이지", description = "공연의 리뷰 정보를 반환합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "리뷰 반환 성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommonReviewDto.class))))})
-    @GetMapping("/list/{id}")
-    public ResponseEntity<ResponseData<List<CommonReviewDto>>> reviewList(@PathVariable(value = "id" ,required = true) Long id){
-        ResponseData<List<CommonReviewDto>> response = new ResponseData<>(
-                "SUCCESS",
-                HttpStatus.OK.value(),
-                reviewListUseCase.reviewList(id)
-        );
-        return ResponseEntity.ok().body(response);
-    }
-
     @Operation(summary = "특정 리뷰 대댓글", description = "특정 리뷰의 대댓글 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 대댓글 반환 성공",
@@ -101,7 +87,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(CommonResponse.builder().status(200).message("성공적으로 리뷰를 수정하였습니다.").build());
     }
 
-    @Operation(summary = "리뷰 정보 반환", description = "해당 리뷰의 정보(대댓글 포함)를 반환합니다.")
+    @Operation(summary = "공연 리뷰 정보 반환", description = "해당 공연의 리뷰 정보(대댓글 포함)를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 반환 성공",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommonReviewDto.class))))})

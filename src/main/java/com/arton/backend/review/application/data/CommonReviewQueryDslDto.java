@@ -86,4 +86,22 @@ public class CommonReviewQueryDslDto {
                 .reviewCount(0L)
                 .build();
     }
+
+    public CommonReviewDtoWithOutChilds toDtoWithOutChilds() {
+        return CommonReviewDtoWithOutChilds.builder()
+                .id(id)
+                .parentId(parentId)
+                .performanceId(performanceId)
+                .userId(userId)
+                .profileImageUrl(profileImageUrl)
+                .nickname(nickname)
+                .title(title)
+                .starScore(starScore)
+                .createdDate(createdDate != null ? getTextYearDay(createdDate) : "미정")
+                .content(content)
+                .images(new ArrayList<>())
+                .hit(hit)
+                .reviewCount(0L)
+                .build();
+    }
 }

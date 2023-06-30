@@ -10,6 +10,7 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import com.arton.backend.review.adapter.out.persistence.mapper.ReviewMapper;
 import com.arton.backend.review.application.data.CommonReviewDto;
+import com.arton.backend.review.application.data.CommonReviewDtoWithOutChilds;
 import com.arton.backend.review.application.data.CommonReviewQueryDslDto;
 import com.arton.backend.review.application.data.ReviewDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -124,23 +126,10 @@ public class UserService implements UserUseCase, MyPageUseCase {
         Long userReviewCount = reviewCountPort.getUserReviewCount(userId);
         // 수정된 리뷰 수집기.
         // 대댓글 연동해서 갯수 구현 해야함.
-        List<ReviewEntity> reviews = reviewListPort.getUserReviewList(userId);
-        List<CommonReviewDto> reviewResponse = new ArrayList<>();
-        Map<Long, CommonReviewDto> map = new HashMap<>();
-        reviews.stream().forEach(c -> {
-                CommonReviewDto reviewDto = CommonReviewDto.toDtoFromEntity(c);
-                    if (c.getParent() != null) {
-                        reviewDto.setParentId(c.getParent().getId());
-                    }
-                    map.put(reviewDto.getId(), reviewDto);
-                    if (c.getParent() != null) {
-                        map.get(c.getParent().getId()).getChilds().add(reviewDto);
-                    } else {
-                        reviewResponse.add(reviewDto);
-                    }
-                }
-        );
-
+        List<CommonReviewDtoWithOutChilds> reviews = reviewListPort.getUserReviewList(userId).stream().map(CommonReviewQueryDslDto::toDtoWithOutChilds).collect(Collectors.toList());
+        reviews.stream().forEach(commonReviewDtoWithOutChilds -> {
+            commonReviewDtoWithOutChilds.setReviewCount(reviewCountPort.getChildReviewCount(commonReviewDtoWithOutChilds.getId()));
+        });
         return MyPageDto.builder()
                 .id(userId)
                 .nickname(nickname)
@@ -149,7 +138,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
                 .followers(followersCount)
                 .followings(followingsCount)
                 .reviewCount(userReviewCount)
-                .reviews(reviewResponse)
+                .reviews(reviews)
                 .build();
     }
 }

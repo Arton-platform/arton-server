@@ -111,33 +111,7 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
         if (!performanceRepositoryPort.existsById(id)) {
             throw new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND);
         }
-        PerformanceDetailDtoV3 performanceDetailDto = performanceRepositoryPort.getOneWithArtistReviewInfo(userId, id).toDto();
-        performanceDetailDto.getReviews().stream().forEach(reviewForPerformanceDetailDto -> {
-            reviewForPerformanceDetailDto.setReviewCount(reviewCountPort.getChildReviewCount(reviewForPerformanceDetailDto.getId()));
-        });
-
-        Set<CommonReviewDto> reviewResponse = new LinkedHashSet<>();
-        Map<Long, CommonReviewDto> map = new HashMap<>();
-        // first set parent
-        performanceDetailDto.getReviews().stream().forEach(c->{
-            if (c.getParentId() == null)
-                map.put(c.getId(), c);
-        });
-        performanceDetailDto.getReviews().stream().forEach(c -> {
-                    CommonReviewDto reviewDto = c;
-                    if (c.getParentId() != null) {
-                        reviewDto.setParentId(c.getParentId());
-                    }
-                    map.put(reviewDto.getId(), reviewDto);
-                    if (c.getParentId() != null) {
-                        map.get(c.getParentId()).getChilds().add(reviewDto);
-                    } else {
-                        reviewResponse.add(reviewDto);
-                    }
-                }
-        );
-        performanceDetailDto.setReviews(reviewResponse);
-        return performanceDetailDto;
+        return performanceRepositoryPort.getOneWithArtistReviewInfo(userId, id).toDto();
     }
 
 }

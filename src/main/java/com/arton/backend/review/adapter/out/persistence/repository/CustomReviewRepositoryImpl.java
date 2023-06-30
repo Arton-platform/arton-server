@@ -22,17 +22,42 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     /**
-     * 대댓글 제외한 댓글 정보를 가져온다.
+     * 해당 유저가 작성한 모든 댓글 정보를 가져온다.
      * @param userId
      * @return
      */
     @Override
-    public List<ReviewEntity> getUserReviewList(long userId) {
-        return jpaQueryFactory.selectFrom(reviewEntity)
-                .leftJoin(reviewEntity.parent)
+    public List<CommonReviewQueryDslDto> getUserReviewList(long userId) {
+        return jpaQueryFactory.select(new QCommonReviewQueryDslDto(
+                        reviewEntity.id,
+                        reviewEntity.parent.id,
+                        performanceEntity.id,
+                        userEntity.id,
+                        userImageEntity.imageUrl,
+                        userEntity.nickname,
+                        performanceEntity.title,
+                        reviewEntity.starScore,
+                        reviewEntity.createdDate,
+                        reviewEntity.content,
+                        reviewEntity.hit))
+                .from(reviewEntity)
+                .leftJoin(performanceEntity).on(performanceEntity.eq(reviewEntity.performance))
+                .leftJoin(userEntity).on(userEntity.eq(reviewEntity.user))
+                .leftJoin(userImageEntity).on(userEntity.eq(userImageEntity.user))
                 .fetchJoin()
-                .where(reviewEntity.user.id.eq(userId).or(reviewEntity.parent.user.id.eq(userId)))
-                .orderBy(reviewEntity.parent.id.asc().nullsFirst(), reviewEntity.createdDate.asc())
+                .where(reviewEntity.user.id.eq(userId))
+                .orderBy(reviewEntity.createdDate.asc())
+                .groupBy(reviewEntity.id,
+                        reviewEntity.parent.id,
+                        performanceEntity.id,
+                        userEntity.id,
+                        userImageEntity.imageUrl,
+                        userEntity.nickname,
+                        performanceEntity.title,
+                        reviewEntity.starScore,
+                        reviewEntity.createdDate,
+                        reviewEntity.content,
+                        reviewEntity.hit)
                 .fetch();
     }
 
