@@ -30,13 +30,15 @@ public class PerformanceDetailQueryDslDtoV3 {
     private LocalDateTime ticketOpenDate;
     private LocalDateTime ticketEndDate;
     private Boolean zzim;
+    private Float startScore;
+    private Long reviewCount;
     private Set<String> images = new LinkedHashSet<>();
     private Set<PriceInfoDto> prices = new LinkedHashSet<>();
     private Set<CommonArtistDto> artists = new LinkedHashSet<>();
 
     @Builder
     @QueryProjection
-    public PerformanceDetailQueryDslDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Boolean zzim, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists) {
+    public PerformanceDetailQueryDslDtoV3(Long id, String title, String place, String musicalDateTime, Integer purchaseLimit, Integer limitAge, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime ticketOpenDate, LocalDateTime ticketEndDate, Boolean zzim, Float startScore, Long reviewCount, Set<String> images, Set<PriceInfoDto> prices, Set<CommonArtistDto> artists) {
         this.id = id;
         this.title = title;
         this.place = place;
@@ -48,6 +50,8 @@ public class PerformanceDetailQueryDslDtoV3 {
         this.ticketOpenDate = ticketOpenDate;
         this.ticketEndDate = ticketEndDate;
         this.zzim = zzim;
+        this.startScore = startScore;
+        this.reviewCount = reviewCount;
         this.images = images;
         this.prices = prices;
         this.artists = artists;
@@ -133,6 +137,8 @@ public class PerformanceDetailQueryDslDtoV3 {
                 .ticketOpenDate(StringUtils.hasText(ticketOpenDay) ? ticketOpenDay : "미정")
                 .ticketEndDate(StringUtils.hasText(ticketEndDay) ? ticketEndDay : "미정")
                 .isZzim(zzim == null ? false : zzim)
+                .startScore(getStartScore())
+                .reviewCount(getReviewCount())
                 .build();
     }
 }

@@ -182,6 +182,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .leftJoin(priceGradeEntity).on(performanceEntity.eq(priceGradeEntity.performance))
                 .leftJoin(performerEntity).on(performanceEntity.eq(performerEntity.performance))
                 .leftJoin(artistEntity).on(performerEntity.artist.eq(artistEntity))
+                .leftJoin(reviewEntity).on(performanceEntity.eq(reviewEntity.performance))
                 .fetchJoin()
                 .where(performanceEntity.id.eq(id))
                 .transform(groupBy(performanceEntity.id).as(new QPerformanceDetailQueryDslDtoV3(
@@ -199,6 +200,8 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                                 .from(performanceZzimEntity)
                                 .where(performanceZzimEntity.performance.id.eq(id),
                                         performanceZzimEntity.user.id.eq(userId)),
+                        reviewEntity.starScore.avg().floatValue(),
+                        reviewEntity.count(),
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)))));
