@@ -63,6 +63,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                         reviewEntity.starScore,
                         reviewEntity.createdDate,
                         reviewEntity.content,
+                        reviewImageEntity.imageUrl,
                         reviewEntity.hit)
                 .fetch();
     }
