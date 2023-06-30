@@ -42,8 +42,8 @@ public class ReviewPersistenceAdapter implements ReviewListPort, ReviewRegistPor
     }
 
     @Override
-    public void regist(Review review) {
-        repository.save(reviewMapper.toEntity(review));
+    public Review regist(Review review) {
+        return reviewMapper.toDomain(repository.save(reviewMapper.toEntity(review)));
     }
 
     @Override

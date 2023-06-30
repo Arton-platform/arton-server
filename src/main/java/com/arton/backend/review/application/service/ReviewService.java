@@ -1,5 +1,8 @@
 package com.arton.backend.review.application.service;
 
+import com.arton.backend.image.application.port.out.ReviewImageSaveRepositoryPort;
+import com.arton.backend.image.domain.PerformanceImage;
+import com.arton.backend.image.domain.ReviewImage;
 import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
@@ -17,6 +20,7 @@ import com.arton.backend.reviewhit.application.service.ReviewHitService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +42,10 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final ReviewHitService reviewHitService;
     private final FileUploadUtils fileUploadUtils;
+    private final ReviewImageSaveRepositoryPort reviewImageSaveRepositoryPort;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
+    @Value("${review.image.dir}")
+    private String reviewImageDir;
 
     /**
      * 공연의 모든 댓글 정보를 반환합니다.
@@ -120,7 +127,52 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
 
     @Override
     public void regist(long userId, ReviewCreateDto reviewCreateDto, List<MultipartFile> multipartFileList) {
+        // first image count check
+        if (multipartFileList.size() > 6) {
+            throw new CustomException(ErrorCode.UPLOAD_COUNT_LIMIT.getMessage(), ErrorCode.UPLOAD_COUNT_LIMIT);
+        }
+        // regist revie first
+        log.info("review regist {}", reviewCreateDto);
+        // validation
+        if (reviewCreateDto.getPerformanceId() == null || reviewCreateDto.getStarScore() == null){
+            throw new CustomException(ErrorCode.BAD_REQUEST.getMessage(), ErrorCode.BAD_REQUEST);
+        }
+        System.out.println("performance check start");
+        // performance check
+        performanceRepositoryPort.findById(reviewCreateDto.getPerformanceId()).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
+        System.out.println("performance check finish");
+        // parent check
+        Review parent = null;
+        if (reviewCreateDto.getParentId() != null){
+            log.info("parent review {}", reviewCreateDto.getParentId());
+            // 해당 부모아이디인 리뷰 id 가 존재하는지 체크
+            parent = reviewFindPort.findById(reviewCreateDto.getParentId()).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
+            if (parent.getPerformanceId() != reviewCreateDto.getPerformanceId()) {
+                throw new CustomException(ErrorCode.REVIEW_PERFORMANCE_NOT_MATCHED.getMessage(), ErrorCode.REVIEW_PERFORMANCE_NOT_MATCHED);
+            }
+        }
+        Review review = reviewCreateDto.toDomain();
+        review.setUserId(userId);
+        if (parent != null) {
+            review.updateParent(parent);
+        }
+        Review savedReview = reviewRegistPort.regist(review);
+        boolean isEmpty = multipartFileList.stream().filter(multipartFile -> !multipartFile.isEmpty()).count() == 0;
+        List<ReviewImage> reviewImages = new ArrayList<>();
+        // 이미지가 있다면
+        if (!isEmpty) {
+            for (MultipartFile image : multipartFileList) {
+                if (image.isEmpty())
+                    continue;
+                String upload = fileUploadUtils.upload(image, reviewImageDir + savedReview.getId());
 
+                reviewImages.add(ReviewImage.builder()
+                        .reviewId(review.getId())
+                        .imageUrl(upload)
+                        .build());
+            }
+            reviewImageSaveRepositoryPort.saveAll(reviewImages);
+        }
     }
 
     @Override

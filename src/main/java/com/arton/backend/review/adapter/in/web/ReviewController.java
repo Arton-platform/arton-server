@@ -60,7 +60,8 @@ public class ReviewController {
     public ResponseEntity<CommonResponse> regist(@AuthenticationPrincipal UserDetails userDetails, @RequestPart(required = true, name = "review") @Valid ReviewCreateDto review, @RequestPart(required = false, name = "image") List<MultipartFile> multipartFile){
         long userId = Long.parseLong(userDetails.getUsername());
         // enroll
-        reviewRegistUseCase.regist(userId, review);
+//        reviewRegistUseCase.regist(userId, review);
+        reviewRegistUseCase.regist(userId, review, multipartFile);
         return ResponseEntity.ok().body(CommonResponse.builder().status(200).message("리뷰를 성공적으로 등록하였습니다.").build());
     }
 
