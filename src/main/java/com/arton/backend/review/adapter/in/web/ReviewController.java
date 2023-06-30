@@ -6,6 +6,7 @@ import com.arton.backend.infra.shared.exception.ErrorResponse;
 import com.arton.backend.review.application.data.CommonReviewDto;
 import com.arton.backend.review.application.data.ReviewCreateDto;
 import com.arton.backend.review.application.data.ReviewEditDto;
+import com.arton.backend.review.application.data.ReviewForPerformanceDetailDto;
 import com.arton.backend.review.application.port.in.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -93,10 +94,10 @@ public class ReviewController {
     @Operation(summary = "공연 리뷰 정보 반환", description = "해당 공연의 리뷰 정보(대댓글 포함)를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 반환 성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommonReviewDto.class))))})
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewForPerformanceDetailDto.class))))})
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseData<List<CommonReviewDto>>> getSpecificReview(@PathVariable(value = "id" ,required = true) Long id){
-        ResponseData<List<CommonReviewDto>> response = new ResponseData<>(
+    public ResponseEntity<ResponseData<ReviewForPerformanceDetailDto>> getSpecificReview(@PathVariable(value = "id" ,required = true) Long id){
+        ResponseData<ReviewForPerformanceDetailDto> response = new ResponseData<>(
                 "SUCCESS",
                 HttpStatus.OK.value(),
                 reviewListUseCase.reviewList(id)

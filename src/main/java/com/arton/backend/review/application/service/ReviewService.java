@@ -1,5 +1,6 @@
 package com.arton.backend.review.application.service;
 
+import com.arton.backend.image.application.port.out.ReviewImageRepositoryPort;
 import com.arton.backend.image.application.port.out.ReviewImageSaveRepositoryPort;
 import com.arton.backend.image.domain.PerformanceImage;
 import com.arton.backend.image.domain.ReviewImage;
@@ -9,10 +10,7 @@ import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
-import com.arton.backend.review.application.data.CommonReviewDto;
-import com.arton.backend.review.application.data.ReviewCreateDto;
-import com.arton.backend.review.application.data.ReviewDto;
-import com.arton.backend.review.application.data.ReviewEditDto;
+import com.arton.backend.review.application.data.*;
 import com.arton.backend.review.application.port.in.*;
 import com.arton.backend.review.application.port.out.*;
 import com.arton.backend.review.domain.Review;
@@ -26,10 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -44,6 +40,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final ReviewHitService reviewHitService;
     private final FileUploadUtils fileUploadUtils;
     private final ReviewImageSaveRepositoryPort reviewImageSaveRepositoryPort;
+    private final ReviewImageRepositoryPort reviewImageRepositoryPort;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
     @Value("${spring.review.image.dir}")
     private String reviewImageDir;
@@ -54,12 +51,15 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
      * @return
      */
     @Override
-    public List<CommonReviewDto> reviewList(Long performanceId) {
+    public ReviewForPerformanceDetailDto reviewList(Long performanceId) {
         Performance performance = performanceRepositoryPort.findById(performanceId).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
         List<ReviewEntity> reviews = reviewListPort.reviewList(performanceId);
         List<CommonReviewDto> reviewResponse = new ArrayList<>();
+        List<String> images = new ArrayList<>();
+        Set<Long> ids = new HashSet<>();
         Map<Long, CommonReviewDto> map = new HashMap<>();
         reviews.stream().forEach(c -> {
+                    ids.add(c.getId());
                     CommonReviewDto reviewDto = CommonReviewDto.toDtoFromEntity(c);
                     if (c.getParent() != null) {
                         reviewDto.setParentId(c.getParent().getId());
@@ -72,7 +72,11 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
                     }
                 }
         );
-        return reviewResponse;
+        for (Long id : ids) {
+            List<String> reviewImages = reviewImageRepositoryPort.findByReviewId(id).stream().map(ReviewImage::getImageUrl).collect(Collectors.toList());
+            images.addAll(reviewImages);
+        }
+        return ReviewForPerformanceDetailDto.builder().reviews(reviewResponse).images(images).build();
     }
 
     @Override
