@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.util.ObjectUtils;
 
 import java.time.format.DateTimeFormatter;
@@ -18,11 +19,11 @@ import java.util.List;
  * 이 부분은 프론트와 논의가 필요.
  */
 @Data
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommonReviewDto extends CommonReviewDtoWithOutChilds{
     private List<CommonReviewDto> childs = new ArrayList<>();
 
-    @Builder
     public CommonReviewDto(Long id, Long parentId, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount, List<CommonReviewDto> childs) {
         super(id, parentId, performanceId, userId, profileImageUrl, nickname, title, starScore, createdDate, content, images, hit, reviewCount);
         this.childs = childs;

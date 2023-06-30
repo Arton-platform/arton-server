@@ -2,6 +2,7 @@ package com.arton.backend.review.application.data;
 
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.util.ObjectUtils;
 
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommonReviewDtoWithOutChilds {
     private Long id;
@@ -25,7 +27,6 @@ public class CommonReviewDtoWithOutChilds {
     private Long hit;
     private Long reviewCount;
 
-    @Builder
     public CommonReviewDtoWithOutChilds(Long id, Long parentId, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
         this.id = id;
         this.parentId = parentId;
