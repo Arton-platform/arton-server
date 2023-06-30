@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     @Override
     public void regist(long userId, ReviewCreateDto reviewCreateDto, List<MultipartFile> multipartFileList) {
         // first image count check
-        if (multipartFileList.size() > 6) {
+        if (!multipartFileList.isEmpty() && multipartFileList.size() > 6) {
             throw new CustomException(ErrorCode.UPLOAD_COUNT_LIMIT.getMessage(), ErrorCode.UPLOAD_COUNT_LIMIT);
         }
         // regist revie first
