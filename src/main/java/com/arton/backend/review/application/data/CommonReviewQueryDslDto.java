@@ -84,7 +84,7 @@ public class CommonReviewQueryDslDto {
                 .starScore(starScore)
                 .createdDate(createdDate != null ? getTextYearDay(createdDate) : "미정")
                 .content(content)
-                .images(ObjectUtils.isEmpty(images) ? new ArrayList<>() : images.stream().collect(Collectors.toList()))
+                .images(ObjectUtils.isEmpty(images) ? new ArrayList<>() :  new ArrayList<>(images))
                 .hit(hit)
                 .reviewCount(0L)
                 .build();
@@ -102,7 +102,7 @@ public class CommonReviewQueryDslDto {
                 .starScore(starScore)
                 .createdDate(createdDate != null ? getTextYearDay(createdDate) : "미정")
                 .content(content)
-                .images(ObjectUtils.isEmpty(images) ? new ArrayList<>() : images.stream().collect(Collectors.toList()))
+                .images(ObjectUtils.isEmpty(images) ? new ArrayList<>() : new ArrayList<>(images))
                 .hit(hit)
                 .reviewCount(0L)
                 .build();
