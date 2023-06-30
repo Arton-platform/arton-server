@@ -12,23 +12,23 @@ import java.time.LocalDateTime;
 public class ReviewImage {
     private Long id;
     private String imageUrl;
-    private Review review;
+    private Long reviewId;
     /** 등록일 */
     private LocalDateTime createdDate;
     /** 업데이트일 */
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
 
     @Builder
-    public ReviewImage(Long id, String imageUrl, Review review, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public ReviewImage(Long id, String imageUrl, Long reviewId, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.imageUrl = imageUrl;
-        this.review = review;
+        this.reviewId = reviewId;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
+        this.updatedDate = updatedDate;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setReview(Long reviewId) {
+        this.reviewId = reviewId;
     }
 
     public void updateImage(String imageUrl) {
