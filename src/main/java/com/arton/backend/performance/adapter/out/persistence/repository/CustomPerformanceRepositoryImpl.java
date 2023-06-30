@@ -208,7 +208,6 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)))));
         if (result.isEmpty()) {
-            System.out.println("result = is empty");
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR);
         }
         return result.get(id);

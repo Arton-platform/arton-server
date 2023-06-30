@@ -1,5 +1,6 @@
 package com.arton.backend.review.adapter.out.persistence.entity;
 
+import com.arton.backend.image.adapter.out.persistence.entity.ReviewImageEntity;
 import com.arton.backend.infra.shared.BaseEntity;
 import com.arton.backend.performance.adapter.out.persistence.entity.PerformanceEntity;
 import com.arton.backend.review.domain.Review;
@@ -37,6 +38,9 @@ public class ReviewEntity extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<ReviewEntity> children = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", orphanRemoval = true)
+    private List<ReviewImageEntity> reviewImages = new ArrayList<>();
 
     private String content;
     private float starScore;

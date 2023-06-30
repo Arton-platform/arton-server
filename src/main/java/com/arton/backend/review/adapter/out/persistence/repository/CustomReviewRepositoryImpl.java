@@ -1,19 +1,23 @@
 package com.arton.backend.review.adapter.out.persistence.repository;
 
 
+import com.arton.backend.image.adapter.out.persistence.entity.QReviewImageEntity;
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import com.arton.backend.review.application.data.CommonReviewQueryDslDto;
 import com.arton.backend.review.application.data.QCommonReviewQueryDslDto;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.arton.backend.image.adapter.out.persistence.entity.QReviewImageEntity.*;
 import static com.arton.backend.image.adapter.out.persistence.entity.QUserImageEntity.userImageEntity;
 import static com.arton.backend.performance.adapter.out.persistence.entity.QPerformanceEntity.performanceEntity;
 import static com.arton.backend.review.adapter.out.persistence.entity.QReviewEntity.reviewEntity;
 import static com.arton.backend.user.adapter.out.persistence.entity.QUserEntity.userEntity;
+import static com.querydsl.core.group.GroupBy.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,11 +43,13 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
                         reviewEntity.starScore,
                         reviewEntity.createdDate,
                         reviewEntity.content,
+                        set(reviewImageEntity.imageUrl),
                         reviewEntity.hit))
                 .from(reviewEntity)
                 .leftJoin(performanceEntity).on(performanceEntity.eq(reviewEntity.performance))
                 .leftJoin(userEntity).on(userEntity.eq(reviewEntity.user))
                 .leftJoin(userImageEntity).on(userEntity.eq(userImageEntity.user))
+                .leftJoin(reviewImageEntity).on(reviewEntity.eq(reviewImageEntity.review))
                 .fetchJoin()
                 .where(reviewEntity.user.id.eq(userId))
                 .orderBy(reviewEntity.createdDate.asc())
