@@ -1,5 +1,6 @@
 package com.arton.backend.review.application.data;
 
+import com.arton.backend.image.adapter.out.persistence.entity.ReviewImageEntity;
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -8,6 +9,7 @@ import org.springframework.util.ObjectUtils;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @SuperBuilder
@@ -56,7 +58,7 @@ public class CommonReviewDtoWithOutChilds {
                 .starScore(review.getStarScore())
                 .content(review.getContent())
                 .createdDate(review.getCreatedDate().format(formatter))
-                .images(new ArrayList<>())
+                .images(review.getReviewImages().stream().map(ReviewImageEntity::getImageUrl).collect(Collectors.toList()))
                 .hit(review.getHit())
                 .reviewCount((long) review.getChildren().size())
                 .build();

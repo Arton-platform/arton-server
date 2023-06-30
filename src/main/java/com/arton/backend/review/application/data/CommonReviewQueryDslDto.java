@@ -11,7 +11,10 @@ import org.springframework.util.ObjectUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,14 +29,13 @@ public class CommonReviewQueryDslDto {
     private float starScore;
     private LocalDateTime createdDate;
     private String content;
-//    private List<String> images = new ArrayList<>();
+    private Set<String> images = new LinkedHashSet<>();
     private Long hit;
 //    private Long reviewCount;
 
-
     @Builder
     @QueryProjection
-    public CommonReviewQueryDslDto(Long id, Long parentId, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, LocalDateTime createdDate, String content, Long hit) {
+    public CommonReviewQueryDslDto(Long id, Long parentId, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, LocalDateTime createdDate, String content, Set<String> images, Long hit) {
         this.id = id;
         this.parentId = parentId;
         this.performanceId = performanceId;
@@ -44,6 +46,7 @@ public class CommonReviewQueryDslDto {
         this.starScore = starScore;
         this.createdDate = createdDate;
         this.content = content;
+        this.images = images;
         this.hit = hit;
     }
 
@@ -81,7 +84,7 @@ public class CommonReviewQueryDslDto {
                 .starScore(starScore)
                 .createdDate(createdDate != null ? getTextYearDay(createdDate) : "미정")
                 .content(content)
-                .images(new ArrayList<>())
+                .images(images.stream().collect(Collectors.toList()))
                 .hit(hit)
                 .reviewCount(0L)
                 .build();
@@ -99,7 +102,7 @@ public class CommonReviewQueryDslDto {
                 .starScore(starScore)
                 .createdDate(createdDate != null ? getTextYearDay(createdDate) : "미정")
                 .content(content)
-                .images(new ArrayList<>())
+                .images(images.stream().collect(Collectors.toList()))
                 .hit(hit)
                 .reviewCount(0L)
                 .build();

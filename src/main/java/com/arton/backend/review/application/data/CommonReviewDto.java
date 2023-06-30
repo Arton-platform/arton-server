@@ -1,5 +1,6 @@
 package com.arton.backend.review.application.data;
 
+import com.arton.backend.image.adapter.out.persistence.entity.ReviewImageEntity;
 import com.arton.backend.review.adapter.out.persistence.entity.ReviewEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 리뷰 공통 정보
@@ -44,7 +46,7 @@ public class CommonReviewDto extends CommonReviewDtoWithOutChilds{
                 .starScore(review.getStarScore())
                 .content(review.getContent())
                 .createdDate(review.getCreatedDate().format(formatter))
-                .images(new ArrayList<>())
+                .images(review.getReviewImages().stream().map(ReviewImageEntity::getImageUrl).collect(Collectors.toList()))
                 .hit(review.getHit())
                 .reviewCount((long) review.getChildren().size())
                 .build();
