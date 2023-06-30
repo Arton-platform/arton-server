@@ -158,21 +158,23 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
             review.updateParent(parent);
         }
         Review savedReview = reviewRegistPort.regist(review);
-        boolean isEmpty = multipartFileList.stream().filter(multipartFile -> !multipartFile.isEmpty()).count() == 0;
-        List<ReviewImage> reviewImages = new ArrayList<>();
-        // 이미지가 있다면
-        if (!isEmpty) {
-            for (MultipartFile image : multipartFileList) {
-                if (image.isEmpty())
-                    continue;
-                String upload = fileUploadUtils.upload(image, reviewImageDir + savedReview.getId());
+        if (multipartFileList != null) {
+            boolean isEmpty = multipartFileList.stream().filter(multipartFile -> !multipartFile.isEmpty()).count() == 0;
+            List<ReviewImage> reviewImages = new ArrayList<>();
+            // 이미지가 있다면
+            if (!isEmpty) {
+                for (MultipartFile image : multipartFileList) {
+                    if (image.isEmpty())
+                        continue;
+                    String upload = fileUploadUtils.upload(image, reviewImageDir + savedReview.getId());
 
-                reviewImages.add(ReviewImage.builder()
-                        .reviewId(review.getId())
-                        .imageUrl(upload)
-                        .build());
+                    reviewImages.add(ReviewImage.builder()
+                            .reviewId(review.getId())
+                            .imageUrl(upload)
+                            .build());
+                }
+                reviewImageSaveRepositoryPort.saveAll(reviewImages);
             }
-            reviewImageSaveRepositoryPort.saveAll(reviewImages);
         }
     }
 
