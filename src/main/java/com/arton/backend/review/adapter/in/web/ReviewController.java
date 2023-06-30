@@ -56,7 +56,7 @@ public class ReviewController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 등록 성공",
                     content = @Content(schema = @Schema(implementation = CommonResponse.class)))})
-    @PostMapping(value = "/regist", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/regist", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<CommonResponse> regist(@AuthenticationPrincipal UserDetails userDetails, @RequestPart(required = true, name = "review") @Valid ReviewCreateDto review, @RequestPart(required = false, name = "image") List<MultipartFile> multipartFile){
         long userId = Long.parseLong(userDetails.getUsername());
         // enroll
