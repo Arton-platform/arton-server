@@ -35,6 +35,7 @@ public class CommonReviewDto extends CommonReviewDtoWithOutChilds{
         return CommonReviewDto.builder()
                 .id(review.getId())
                 .parentId(ObjectUtils.isEmpty(review.getParent())? null : review.getParent().getId())
+                .title(review.getPerformance().getTitle())
                 .childs(new ArrayList<>())
                 .performanceId(review.getPerformance().getId())
                 .userId(review.getUser().getId())
