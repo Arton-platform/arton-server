@@ -1,5 +1,6 @@
 package com.arton.backend.review.application.service;
 
+import com.arton.backend.infra.file.FileUploadUtils;
 import com.arton.backend.infra.shared.exception.CustomException;
 import com.arton.backend.infra.shared.exception.ErrorCode;
 import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryPort;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     private final ReviewFindPort reviewFindPort;
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final ReviewHitService reviewHitService;
+    private final FileUploadUtils fileUploadUtils;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
     /**
@@ -113,6 +116,11 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
             review.updateParent(parent);
         }
         reviewRegistPort.regist(review);
+    }
+
+    @Override
+    public void regist(long userId, ReviewCreateDto reviewCreateDto, List<MultipartFile> multipartFileList) {
+
     }
 
     @Override

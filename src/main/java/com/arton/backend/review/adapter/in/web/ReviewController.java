@@ -16,10 +16,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -54,11 +56,11 @@ public class ReviewController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 등록 성공",
                     content = @Content(schema = @Schema(implementation = CommonResponse.class)))})
-    @PostMapping("/regist")
-    public ResponseEntity<CommonResponse> regist(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid ReviewCreateDto reviewCreateDto){
+    @PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<CommonResponse> regist(@AuthenticationPrincipal UserDetails userDetails, @RequestPart(required = true, name = "review") @Valid ReviewCreateDto review, @RequestPart(required = false, name = "image") List<MultipartFile> multipartFile){
         long userId = Long.parseLong(userDetails.getUsername());
         // enroll
-        reviewRegistUseCase.regist(userId, reviewCreateDto);
+        reviewRegistUseCase.regist(userId, review);
         return ResponseEntity.ok().body(CommonResponse.builder().status(200).message("리뷰를 성공적으로 등록하였습니다.").build());
     }
 
