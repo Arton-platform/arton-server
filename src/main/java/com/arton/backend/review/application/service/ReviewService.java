@@ -169,7 +169,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
                     String upload = fileUploadUtils.upload(image, reviewImageDir + savedReview.getId());
 
                     reviewImages.add(ReviewImage.builder()
-                            .reviewId(review.getId())
+                            .reviewId(savedReview.getId())
                             .imageUrl(upload)
                             .build());
                 }
