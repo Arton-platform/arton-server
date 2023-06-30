@@ -137,8 +137,8 @@ public class PerformanceDetailQueryDslDtoV3 {
                 .ticketOpenDate(StringUtils.hasText(ticketOpenDay) ? ticketOpenDay : "미정")
                 .ticketEndDate(StringUtils.hasText(ticketEndDay) ? ticketEndDay : "미정")
                 .isZzim(zzim == null ? false : zzim)
-                .startScore(getStartScore())
-                .reviewCount(getReviewCount())
+                .startScore(getStartScore() == null ? 0f : getStartScore())
+                .reviewCount(getReviewCount() == null ? 0 : getReviewCount())
                 .build();
     }
 }

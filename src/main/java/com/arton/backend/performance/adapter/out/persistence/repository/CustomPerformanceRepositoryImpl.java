@@ -200,8 +200,10 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                                 .from(performanceZzimEntity)
                                 .where(performanceZzimEntity.performance.id.eq(id),
                                         performanceZzimEntity.user.id.eq(userId)),
-                        reviewEntity.starScore.avg().floatValue(),
-                        reviewEntity.count(),
+                        JPAExpressions.select(reviewEntity.starScore.avg().floatValue()).from(reviewEntity)
+                                        .where(reviewEntity.performance.id.eq(id)),
+                        JPAExpressions.select(reviewEntity.count()).from(reviewEntity)
+                                .where(reviewEntity.performance.id.eq(id)),
                         set(performanceImageEntity.imageUrl),
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)))));
