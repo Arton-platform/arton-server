@@ -32,6 +32,12 @@ public class FcmService {
                 .setNotification(notification)
                 .build();
         // send
-        firebaseMessaging.send(message);
+        try {
+            firebaseMessaging.send(message);
+        } catch (FirebaseMessagingException e) {
+            // token delete
+            fcmRepository.deleteById(fcmEntity.getId());
+            throw e;
+        }
     }
 }
