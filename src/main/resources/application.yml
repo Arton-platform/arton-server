@@ -11,6 +11,3 @@ spring:
   terms-dir: arton/terms
   password-mail-key: arton/mail/passwordResetMail.html
 
-logging:
-  level:
-    root: info
