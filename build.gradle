@@ -107,6 +107,10 @@ dependencies {
 
 	// spotify api
 	implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.0.0'
+
+	// https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+	implementation 'com.google.firebase:firebase-admin:8.1.0'
+
 }
 
 tasks.named('test') {

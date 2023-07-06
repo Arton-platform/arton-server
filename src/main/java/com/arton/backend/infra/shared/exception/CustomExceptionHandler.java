@@ -1,5 +1,6 @@
 package com.arton.backend.infra.shared.exception;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,28 +26,35 @@ public class CustomExceptionHandler {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleMediaTypeError(HttpMediaTypeNotSupportedException e) {
         log.error("HttpMediaTypeNotSupportedException {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+        return ResponseEntity.status(ErrorCode.UNSUPPORTED_MEDIA_ERROR.getStatus())
                 .body(new ErrorResponse(ErrorCode.UNSUPPORTED_MEDIA_ERROR));
     }
 
     @ExceptionHandler(FileSizeLimitExceededException.class)
     public ResponseEntity<ErrorResponse> handleFileSizeLimitExceededException(FileSizeLimitExceededException e) {
         log.error("FileSizeLimitExceededException {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(ErrorCode.EXCEED_LIMITED_SIZE_ERROR.getStatus())
                 .body(new ErrorResponse(ErrorCode.EXCEED_LIMITED_SIZE_ERROR));
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
         log.error("MaxUploadSizeExceededException {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(ErrorCode.EXCEED_LIMITED_SIZE_ERROR.getStatus())
                 .body(new ErrorResponse(ErrorCode.EXCEED_LIMITED_SIZE_ERROR));
+    }
+
+    @ExceptionHandler(FirebaseMessagingException.class)
+    public ResponseEntity<ErrorResponse> handleFirebaseMessagingException(FirebaseMessagingException e) {
+        log.error("FirebaseMessagingException {}", e.getMessage());
+        return ResponseEntity.status(ErrorCode.FCM_SEND_ERROR.getStatus())
+                .body(new ErrorResponse(ErrorCode.FCM_SEND_ERROR));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> logException(Exception e) {
         log.error("UNDEFINED ERROR!! {}" , e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
                 .body(new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR));
     }
 }

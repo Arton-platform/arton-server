@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     EMAIL_IS_EXIST(409, "DUP_ERR_409", "해당 이메일은 사용중입니다."),
+    FCM_TOKEN_ERROR(400, "FMC_TOKEN_ERROR", "토큰이 유효하지 않아 알림을 받을 수 없습니다. 관리자에게 문의하세요."),
+    FCM_SEND_ERROR(500, "FCM_SEND_ERROR", "FCM 서버에 메세지 전송을 실패했습니다."),
     ZZIM_IS_EXIST(409, "DUP_ERR_409", "이미 찜하고 있습니다."),
     ZZIM_NOT_FOUND(404, "COMMON-ERR-404", "찜 목록에 존재하지 않습니다!"),
     REVIEW_NOT_FOUND(404, "COMMON-ERR-404", "유저의 리뷰가 존재하지 않습니다!"),
