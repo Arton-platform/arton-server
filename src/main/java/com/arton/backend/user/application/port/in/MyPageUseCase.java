@@ -6,5 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface MyPageUseCase {
     MyPageDto getMyPageInfo(long userId);
+    MyPageDto getOtherUserInfo(long userId, long toId);
     void updateUserProfile(long userId, UserProfileEditDto userProfileEditDto, MultipartFile multipartFile);
 }

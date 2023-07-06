@@ -115,10 +115,11 @@ public class UserController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/profile/{id}")
     public ResponseEntity<ResponseData<MyPageDto>> getSpecificUserPage(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "id", required = true) Long id) {
+        long userId = Long.parseLong(userDetails.getUsername());
         ResponseData response = new ResponseData(
                 "SUCCESS",
                 HttpStatus.OK.value(),
-                myPageService.getMyPageInfo(id)
+                myPageService.getOtherUserInfo(userId, id)
         );
         return ResponseEntity.ok(response);
     }
