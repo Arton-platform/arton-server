@@ -17,6 +17,11 @@
     <springProfile name="aws">
         <!-- Logstash aws-->
         <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+                <level>INFO</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
             <destination>docker-elk-logstash-1:4560</destination>
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             </encoder>
