@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
@@ -59,6 +61,7 @@ public class ReviewController {
                     content = @Content(schema = @Schema(implementation = CommonResponse.class)))})
     @PostMapping(value = "/regist", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<CommonResponse> regist(@AuthenticationPrincipal UserDetails userDetails, @RequestPart(required = true, name = "review") @Valid ReviewCreateDto review, @RequestPart(required = false, name = "image") List<MultipartFile> multipartFile){
+        log.debug("Review regist request body {}", review);
         long userId = Long.parseLong(userDetails.getUsername());
         // enroll
 //        reviewRegistUseCase.regist(userId, review);

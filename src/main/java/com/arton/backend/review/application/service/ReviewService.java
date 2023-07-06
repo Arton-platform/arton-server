@@ -16,6 +16,7 @@ import com.arton.backend.review.application.port.out.*;
 import com.arton.backend.review.domain.Review;
 import com.arton.backend.reviewhit.application.service.ReviewHitService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -108,10 +109,10 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
         if (reviewCreateDto.getPerformanceId() == null || reviewCreateDto.getStarScore() == null){
             throw new CustomException(ErrorCode.BAD_REQUEST.getMessage(), ErrorCode.BAD_REQUEST);
         }
-        System.out.println("performance check start");
+        log.info("performance check start");
         // performance check
         performanceRepositoryPort.findById(reviewCreateDto.getPerformanceId()).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
-        System.out.println("performance check finish");
+        log.info("performance check finish");
         // parent check
         Review parent = null;
         if (reviewCreateDto.getParentId() != null){
@@ -142,10 +143,10 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
         if (reviewCreateDto.getPerformanceId() == null || reviewCreateDto.getStarScore() == null){
             throw new CustomException(ErrorCode.BAD_REQUEST.getMessage(), ErrorCode.BAD_REQUEST);
         }
-        System.out.println("performance check start");
+        log.info("performance check start");
         // performance check
         performanceRepositoryPort.findById(reviewCreateDto.getPerformanceId()).orElseThrow(() -> new CustomException(ErrorCode.PERFORMANCE_NOT_FOUND.getMessage(), ErrorCode.PERFORMANCE_NOT_FOUND));
-        System.out.println("performance check finish");
+        log.info("performance check finish");
         // parent check
         Review parent = null;
         if (reviewCreateDto.getParentId() != null){
