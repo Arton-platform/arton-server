@@ -1,6 +1,7 @@
 package com.arton.backend.user.application.service;
 
 import com.arton.backend.follow.applicaion.port.out.FollowRepositoryPort;
+import com.arton.backend.follow.domain.Follow;
 import com.arton.backend.image.application.port.out.UserImageRepositoryPort;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
@@ -124,6 +125,7 @@ public class UserService implements UserUseCase, MyPageUseCase {
         Long followersCount = followRepositoryPort.getFollowersCount(userId);
         Long followingsCount = followRepositoryPort.getFollowingsCount(userId);
         Long userReviewCount = reviewCountPort.getUserReviewCount(userId);
+
         // 수정된 리뷰 수집기.
         // 대댓글 연동해서 갯수 구현 해야함.
         List<CommonReviewDtoWithOutChilds> reviews = reviewListPort.getUserReviewList(userId).stream().map(CommonReviewQueryDslDto::toDtoWithOutChilds).collect(Collectors.toList());
@@ -139,6 +141,15 @@ public class UserService implements UserUseCase, MyPageUseCase {
                 .followings(followingsCount)
                 .reviewCount(userReviewCount)
                 .reviews(reviews)
+                .isFollow(false)
                 .build();
+    }
+
+    @Override
+    public MyPageDto getOtherUserInfo(long userId, long toId) {
+        boolean isFollow = followRepositoryPort.isExist(Follow.builder().fromUser(userId).toUser(toId).build());
+        MyPageDto userInfo = getMyPageInfo(toId);
+        userInfo.setIsFollow(isFollow);
+        return userInfo;
     }
 }
