@@ -33,7 +33,7 @@
         </appender>
     </springProfile>
 
-    <root level="DEBUG">
+    <root>
         <springProfile name="local,test">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="LOGSTASH-LOCAL" />

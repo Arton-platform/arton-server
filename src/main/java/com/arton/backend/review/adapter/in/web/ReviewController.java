@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
@@ -39,6 +40,7 @@ public class ReviewController {
     private final ReviewEditUseCase reviewEditUseCase;
     private final ReviewHitRemoveUseCase reviewHitRemoveUseCase;
     private final ReviewHitAddUseCase reviewHitAddUseCase;
+    private final static Logger log = LoggerFactory.getLogger("CONSOLE-AWS");
 
     @Operation(summary = "특정 리뷰 대댓글", description = "특정 리뷰의 대댓글 정보를 반환합니다.")
     @ApiResponses(value = {
