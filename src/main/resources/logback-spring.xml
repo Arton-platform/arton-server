@@ -99,11 +99,6 @@
         </appender>
     </springProfile>
 
-    <logger name="com.arton.backend" level="DEBUG" additivity="false">
-        <appender-ref ref="FILE_LOG"/>
-        <appender-ref ref="ERROR_LOG"/>
-    </logger>
-
     <root>
         <springProfile name="local,test">
             <appender-ref ref="CONSOLE"/>
