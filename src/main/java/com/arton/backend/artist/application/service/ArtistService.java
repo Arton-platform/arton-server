@@ -60,6 +60,11 @@ public class ArtistService implements ArtistUseCase, SpotifyEnrollUseCase, Crawl
     }
 
     @Override
+    public List<CommonArtistDto> findAllByPage(Pageable pageable) {
+        return artistRepositoryPort.findAllByPage(pageable).stream().map(CommonArtistDto::domainToDto).collect(Collectors.toList());
+    }
+
+    @Override
     public Artist save(Artist artist) {
         return artistRepositoryPort.save(artist);
     }

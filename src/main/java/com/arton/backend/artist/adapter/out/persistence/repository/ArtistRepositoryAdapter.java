@@ -44,6 +44,15 @@ public class ArtistRepositoryAdapter implements ArtistRepositoryPort, ArtistDele
     }
 
     @Override
+    public List<Artist> findAllByPage(Pageable pageable) {
+        return Optional.ofNullable(artistRepository.getArtistByPage(pageable))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(ArtistMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Artist> findByIds(List<Long> ids) {
         return Optional.ofNullable(artistRepository.findAllById(ids)).orElseGet(Collections::emptyList)
                 .stream().map(ArtistMapper::toDomain).collect(Collectors.toList());

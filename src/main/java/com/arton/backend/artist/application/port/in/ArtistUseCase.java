@@ -14,5 +14,6 @@ public interface ArtistUseCase {
     Page<Artist> findAll(Pageable pageable);
     List<Artist> findAll();
     List<CommonArtistDto> findByName(String name);
+    List<CommonArtistDto> findAllByPage(Pageable pageable);
     Artist save(Artist artist);
 }

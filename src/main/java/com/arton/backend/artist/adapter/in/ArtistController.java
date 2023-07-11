@@ -10,6 +10,7 @@ import com.arton.backend.artist.application.port.in.SpotifyEnrollUseCase;
 import com.arton.backend.infra.shared.common.CommonResponse;
 import com.arton.backend.infra.shared.common.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -68,6 +69,22 @@ public class ArtistController {
         crawlerEnrollUseCase.enrollArtistByCrawler(crawlerArtistRegistDTO);
         CommonResponse response = CommonResponse.builder().status(200).message("아티스트 등록에 성공하였습니다.").build();
         return ResponseEntity.ok(response);
+    }
+
+    // 메인 페이지에서 아티스트 더보기 누르면 제공할 API
+    @Operation(summary = "메인 페이지에서 아티스트 더보기 누르면 제공할 API", description = "메인 페이지에서 아티스트 더보기 누르면 제공할 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "리스트 불러오기 성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommonArtistDto.class))))})
+    @GetMapping("/artist/list")
+    public ResponseEntity<ResponseData<List<CommonArtistDto>>> showAllArtist(@PageableDefault(size = 10)Pageable pageable) {
+        List<CommonArtistDto> artists = artistUseCase.findAllByPage(pageable);
+        ResponseData response = new ResponseData(
+                "SUCCESS"
+                , HttpStatus.OK.value()
+                , artists
+        );
+        return ResponseEntity.ok().body(response);
     }
 
 
