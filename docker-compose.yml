@@ -12,6 +12,8 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 8333:8333
+    volumes:
+      - /var/log/arton:/var/log/arton
     depends_on:
       - redis
 
