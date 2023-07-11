@@ -22,7 +22,7 @@ public class GlobalExceptionLog {
 
     @AfterReturning(pointcut = "execution(* com.arton.backend.infra.shared.exception.CustomExceptionHandler.*(..))", returning = "result")
     public void log(JoinPoint joinPoint, Object result) {
-
+        log.error("GlobalExceptionLog start");
         ErrorResponse errorResponse;
 
         if (result instanceof ResponseEntity) {
@@ -45,7 +45,7 @@ public class GlobalExceptionLog {
                     .findFirst()
                     .ifPresent(this::printStackTrace);
         }
-
+        log.error("GlobalExceptionLog end");
     }
 
     private boolean isExceptionClass(Object object) {
