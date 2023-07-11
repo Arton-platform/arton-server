@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- log file path -->
-    <property name="LOG_PATH" value="/var/log/arton" />
+    <property name="LOG_PATH" value="/home/ec2-user/log/arton" />
     <!-- log file name -->
     <property name="LOG_FILE_NAME" value="arton" />
     <property name="ERROR_LOG_FILE_NAME" value="arton_error" />
