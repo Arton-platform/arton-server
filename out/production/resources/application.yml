@@ -10,7 +10,3 @@ spring:
   full-bucket: https://arton.s3.ap-northeast-2.amazonaws.com/
   terms-dir: arton/terms
   password-mail-key: arton/mail/passwordResetMail.html
-
-logging:
-  level:
-    root: info
