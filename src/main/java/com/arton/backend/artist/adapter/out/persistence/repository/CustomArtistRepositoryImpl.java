@@ -48,4 +48,9 @@ public class CustomArtistRepositoryImpl implements CustomArtistRepository{
     public List<ArtistEntity> getArtistByLimit(int offset, int limit) {
         return queryFactory.selectFrom(artistEntity).offset(offset).limit(limit).fetch();
     }
+
+    @Override
+    public List<ArtistEntity> getArtistByPage(Pageable pageable) {
+        return queryFactory.selectFrom(artistEntity).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+    }
 }

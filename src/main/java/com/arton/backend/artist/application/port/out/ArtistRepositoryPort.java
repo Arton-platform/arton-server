@@ -12,6 +12,7 @@ public interface ArtistRepositoryPort {
     List<Artist> findAll();
     Page<Artist> findAll(Pageable pageable);
     List<Artist> findAllByLimit(int offset, int limit);
+    List<Artist> findAllByPage(Pageable pageable);
     List<Artist> findByIds(List<Long> ids);
     List<Artist> findByName(String name);
     Optional<Artist> findById(Long id);
