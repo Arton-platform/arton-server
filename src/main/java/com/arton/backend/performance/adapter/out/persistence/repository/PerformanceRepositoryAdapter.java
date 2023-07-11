@@ -43,6 +43,11 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     }
 
     @Override
+    public List<Performance> findAllBySortAndPaging(Pageable pageable, List<String> sort) {
+        return performanceRepository.getPerformanceBySortAndPage(pageable, sort);
+    }
+
+    @Override
     public List<Performance> findAllPerformances() {
         return Optional.ofNullable(performanceRepository.findAll()).orElseGet(Collections::emptyList).stream().map(PerformanceMapper::toDomain).collect(Collectors.toList());
     }
