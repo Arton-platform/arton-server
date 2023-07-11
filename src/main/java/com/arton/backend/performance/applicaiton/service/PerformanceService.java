@@ -46,8 +46,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     }
 
     @Override
-    public List<PerformanceInterestDto> getZzimList() {
-        return performanceRepositoryPort.findAllPerformances().stream().map(PerformanceInterestDto::of).collect(Collectors.toList());
+    public List<CommonPerformanceDto> getPerformanceBySortAndPage(Pageable pageable, List<String> sort) {
+        return performanceRepositoryPort.findAllBySortAndPaging(pageable, sort).stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
     }
 
     /**
