@@ -11,6 +11,8 @@ import marvin.image.MarvinImage;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.marvinproject.image.transform.scale.Scale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,7 @@ public class FileUploadS3 implements FileUploadUtils {
     private final AmazonS3Client amazonS3Client;
     @Value("${image.limit.size}")
     private Long imageLimitSize;
+    private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
 
     @Override
     public String getDefaultImageUrl() {
@@ -116,8 +119,11 @@ public class FileUploadS3 implements FileUploadUtils {
     public String upload(MultipartFile multipartFile, String dirName) {
         validateImageFile(multipartFile);
         String fileName = createStoreFileName(multipartFile.getOriginalFilename());
+        log.info("image fileName {}", fileName);
         String ext = extractExt(fileName);
+        log.info("image ext {}", ext);
         String storeFileName = dirName + "/" + fileName;
+        log.info("image store name {}", storeFileName);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         MultipartFile resizeImage = resizeImage(multipartFile, fileName, ext, 768);
