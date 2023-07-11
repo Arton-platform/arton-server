@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -12,10 +14,11 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Objects;
 
-@Slf4j
 @Aspect
 @Component
 public class GlobalExceptionLog {
+
+    private final static Logger log = LoggerFactory.getLogger(GlobalExceptionLog.class);
 
     @AfterReturning(pointcut = "execution(* com.arton.backend.infra.shared.exception.CustomExceptionHandler.*(..))", returning = "result")
     public void log(JoinPoint joinPoint, Object result) {
