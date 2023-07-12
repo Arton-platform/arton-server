@@ -306,4 +306,13 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)))
                 )).values().stream().collect(toList());
     }
+
+    @Override
+    public void updatePerformanceStarScore(Long performanceId) {
+        // 리뷰 저장은 끝난 상태임
+        queryFactory.update(performanceEntity)
+                .set(performanceEntity.starScore, JPAExpressions.select(reviewEntity.starScore.avg().floatValue()).from(reviewEntity).where(reviewEntity.performance.id.eq(performanceId)))
+                .where(performanceEntity.id.eq(performanceId))
+                .execute();
+    }
 }

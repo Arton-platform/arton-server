@@ -29,4 +29,10 @@ public interface CustomPerformanceRepository {
      * @return
      */
     List<PerformanceDetailQueryDslDtoV2> getPerformanceAllDetailsByType(Pageable pageable, PerformanceType performanceType);
+
+    /**
+     * 공연 평점 업데이트
+     * 공연 평점 = 리뷰 전체 평균 평점.
+     */
+    void updatePerformanceStarScore(Long performanceId);
 }

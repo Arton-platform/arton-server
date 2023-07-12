@@ -11,5 +11,5 @@ public interface ReviewRegistUseCase {
      * @param userId
      * @param reviewCreateDto
      */
-    void regist(long userId, ReviewCreateDto reviewCreateDto, List<MultipartFile> multipartFileList);
+    Long regist(long userId, ReviewCreateDto reviewCreateDto, List<MultipartFile> multipartFileList);
 }

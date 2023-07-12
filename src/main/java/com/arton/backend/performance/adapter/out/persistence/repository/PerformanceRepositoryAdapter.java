@@ -165,4 +165,9 @@ public class PerformanceRepositoryAdapter implements PerformanceRepositoryPort, 
     public List<PerformanceDetailQueryDslDtoV2> getPerformanceWithArtistInfoByType(Pageable pageable, PerformanceType performanceType) {
         return performanceRepository.getPerformanceAllDetailsByType(pageable, performanceType);
     }
+
+    @Override
+    public void updatePerformanceStartScore(Long performanceId) {
+        performanceRepository.updatePerformanceStarScore(performanceId);
+    }
 }
