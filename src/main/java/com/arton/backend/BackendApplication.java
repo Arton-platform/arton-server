@@ -27,7 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableCaching
 @EnableJpaAuditing
 @EnableScheduling
-@SpringBootApplication(exclude = {ElastiCacheAutoConfiguration.class})
+@SpringBootApplication
 public class BackendApplication {
 
 	/**
