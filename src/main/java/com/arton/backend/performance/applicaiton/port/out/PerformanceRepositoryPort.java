@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface PerformanceRepositoryPort {
     List<Performance> findAll();
     List<Performance> findAllByLimit(int offset, int limit);
-    List<Performance> findAllBySortAndPaging(Pageable pageable, List<String> sort);
+    List<Performance> findAllBySortAndPaging(Pageable pageable, String sort);
     List<Performance> findAllPerformances();
     List<Performance> findAllMusicals();
     List<Performance> findAllMusicals(Pageable pageable);

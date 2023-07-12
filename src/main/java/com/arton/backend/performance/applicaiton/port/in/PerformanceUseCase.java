@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PerformanceUseCase {
     List<Performance> getAllPerformances();
-    List<CommonPerformanceDto> getPerformanceBySortAndPage(Pageable pageable, List<String> sort);
+    List<CommonPerformanceDto> getPerformanceBySortAndPage(Pageable pageable, String sort);
     PerformanceZzimDetailDTO getZzimListV2(Pageable pageable);
     PerformanceZzimDetailDTOV2 getZzimListAllRelatedInfos(Pageable pageable);
     List<Performance> getMusicals();

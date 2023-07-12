@@ -67,7 +67,7 @@ public class PerformanceController {
             @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
                     content = @Content( array = @ArraySchema(schema = @Schema(implementation = CommonPerformanceDto.class))))})
     @GetMapping("/list")
-    public ResponseEntity<List<CommonPerformanceDto>> getPerformanceList(@RequestParam(name = "sort", required = false) List<String> sort, @PageableDefault(size = 10)Pageable pageable) {
+    public ResponseEntity<List<CommonPerformanceDto>> getPerformanceList(@RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10)Pageable pageable) {
         List<CommonPerformanceDto> allPerformances = performanceService.getPerformanceBySortAndPage(pageable, sort);
         return ResponseEntity.ok(allPerformances);
     }

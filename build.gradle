@@ -108,7 +108,10 @@ dependencies {
 	// spotify api
 	implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.0.0'
 
+	// for distributed lock
 	implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
+	// for cache
+	implementation "org.springframework.boot:spring-boot-starter-cache"
 }
 
 tasks.named('test') {

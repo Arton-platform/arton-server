@@ -11,17 +11,15 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
-import com.arton.backend.review.application.data.CommonReviewDto;
-import com.arton.backend.review.application.port.out.ReviewCountPort;
-import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,9 +29,7 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     private final PerformanceRepositoryPort performanceRepositoryPort;
     private final PerformanceSavePort performanceSavePort;
     private final PerformanceDeletePort performanceDeletePort;
-    private final PerformanceDocuemntSavePort performanceDocuemntSavePort;
     private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
-    private final ReviewCountPort reviewCountPort;
 
     /**
      * 공연 리스트 상세 정보를 보내주자.
@@ -46,7 +42,8 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     }
 
     @Override
-    public List<CommonPerformanceDto> getPerformanceBySortAndPage(Pageable pageable, List<String> sort) {
+    @Cacheable(value = "performanceList", key = "{#sort, #pageable.pageNumber, #pageable.pageSize}")
+    public List<CommonPerformanceDto> getPerformanceBySortAndPage(Pageable pageable, String sort) {
         return performanceRepositoryPort.findAllBySortAndPaging(pageable, sort).stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
     }
 
