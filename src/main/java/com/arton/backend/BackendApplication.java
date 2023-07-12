@@ -12,8 +12,10 @@ import com.arton.backend.test.TestDataInit;
 import com.arton.backend.user.adapter.out.persistence.repository.UserRepository;
 import com.arton.backend.zzim.application.port.out.ZzimRepositoryPort;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.aws.autoconfigure.cache.ElastiCacheAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -22,10 +24,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableAsync
+@EnableCaching
 @EnableJpaAuditing
 @EnableScheduling
-@EnableCaching
-@SpringBootApplication
+@SpringBootApplication(exclude = {ElastiCacheAutoConfiguration.class})
 public class BackendApplication {
 
 	/**

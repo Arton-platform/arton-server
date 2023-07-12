@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCust
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -14,21 +16,17 @@ import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class CacheConfig {
 
-    /**
-     * GenericJackson2JsonRedisSerializer
-     * list 역직렬화시 에러 발생할 수도..?
-     * @return
-     */
     @Bean
-    public RedisCacheConfiguration redisCacheConfiguration() {
-        return RedisCacheConfiguration.defaultCacheConfig()
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
+        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofSeconds(60))
                 .disableCachingNullValues()
                 .serializeKeysWith(
@@ -37,27 +35,79 @@ public class CacheConfig {
                 .serializeValuesWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
                 );
+
+        Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
+        for (CacheType value : CacheType.values()) {
+            cacheConfigurations.put(value.name(),
+                    RedisCacheConfiguration.defaultCacheConfig()
+                            .prefixCacheNameWith("cache")
+                            .entryTtl(Duration.ofHours(value.getExpireTime()))
+                            .disableCachingNullValues()
+                            .serializeKeysWith(
+                                    RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+                            )
+                            .serializeValuesWith(
+                                    RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+                            ));
+        }
+
+        return RedisCacheManager.RedisCacheManagerBuilder
+                .fromConnectionFactory(connectionFactory)
+                .cacheDefaults(configuration)
+                .withInitialCacheConfigurations(cacheConfigurations).build();
     }
 
-    @Bean
-    public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
-        return (builder) -> builder
-                .withCacheConfiguration(CacheType.PERFORMANCE_LIST.cacheName,
-                        RedisCacheConfiguration.defaultCacheConfig()
-                                .computePrefixWith(cacheName -> "cache::" + cacheName + "::")
-                                .entryTtl(Duration.ofHours(CacheType.PERFORMANCE_LIST.getExpireTime()))
-                                .disableCachingNullValues()
-                                .serializeKeysWith(
-                                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-                                )
-                                .serializeValuesWith(
-                                        RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-                                ));
-    }
+    /**
+     * GenericJackson2JsonRedisSerializer
+     * list 역직렬화시 에러 발생할 수도..?
+     * @return
+     */
+//    @Bean
+//    public RedisCacheConfiguration redisCacheConfiguration() {
+//        return RedisCacheConfiguration.defaultCacheConfig()
+//                .entryTtl(Duration.ofSeconds(60))
+//                .disableCachingNullValues()
+//                .serializeKeysWith(
+//                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+//                )
+//                .serializeValuesWith(
+//                        RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+//                );
+//    }
+//
+//    @Bean
+//    public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
+//        System.out.println("CacheType.PERFORMANCE_LIST.cacheName = " + CacheType.PERFORMANCE_LIST.cacheName);
+//        System.out.println("CacheType.DETAIL.cacheName = " + CacheType.PERFORMANCE_DETAIL.cacheName);
+//        return (builder) -> builder
+//                .withCacheConfiguration(CacheType.PERFORMANCE_LIST.cacheName,
+//                        RedisCacheConfiguration.defaultCacheConfig()
+//                                .prefixCacheNameWith("cache")
+//                                .entryTtl(Duration.ofHours(CacheType.PERFORMANCE_LIST.getExpireTime()))
+//                                .disableCachingNullValues()
+//                                .serializeKeysWith(
+//                                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+//                                )
+//                                .serializeValuesWith(
+//                                        RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+//                                ))
+//                .withCacheConfiguration(CacheType.PERFORMANCE_DETAIL.cacheName,
+//                        RedisCacheConfiguration.defaultCacheConfig()
+//                                .prefixCacheNameWith("cache")
+//                                .entryTtl(Duration.ofHours(CacheType.PERFORMANCE_DETAIL.getExpireTime()))
+//                                .disableCachingNullValues()
+//                                .serializeKeysWith(
+//                                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+//                                )
+//                                .serializeValuesWith(
+//                                        RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+//                                ));
+//    }
 
     @Getter
     private enum CacheType{
-        PERFORMANCE_LIST("performanceList", 12);
+        PERFORMANCE_LIST("performanceList", 12),
+        PERFORMANCE_DETAIL("performanceDetail", 12);
 
         private String cacheName;
         private Integer expireTime;
