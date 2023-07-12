@@ -37,7 +37,7 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Performance> getPerformanceBySortAndPage(Pageable pageable, List<String> sort) {
+    public List<Performance> getPerformanceBySortAndPage(Pageable pageable, String sort) {
         return Optional.ofNullable(queryFactory.selectFrom(performanceEntity)
                         .orderBy(getDynamicSort(sort))
                         .offset(pageable.getOffset())
@@ -49,24 +49,21 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                 .collect(toList());
     }
 
-    private OrderSpecifier[] getDynamicSort(List<String> sort) {
+    private OrderSpecifier[] getDynamicSort(String sort) {
         ArrayList<OrderSpecifier> orderSpecifiers = new ArrayList<>();
 
         // set default
         if (ObjectUtils.isEmpty(sort)) {
             orderSpecifiers.add(new OrderSpecifier(Order.DESC, performanceEntity.createdDate));
         } else {
-            for (String s : sort) {
-                if (s.equals("start")) {
-                    orderSpecifiers.add(new OrderSpecifier(Order.ASC, performanceEntity.startDate));
-                } else if (s.equals("end")) {
-                    orderSpecifiers.add(new OrderSpecifier(Order.ASC, performanceEntity.endDate));
-                } else if (s.equals("popular")) {
-                    orderSpecifiers.add(new OrderSpecifier(Order.DESC, performanceEntity.hit));
-                }
+            if (sort.equals("start")) {
+                orderSpecifiers.add(new OrderSpecifier(Order.ASC, performanceEntity.startDate));
+            } else if (sort.equals("end")) {
+                orderSpecifiers.add(new OrderSpecifier(Order.ASC, performanceEntity.endDate));
+            } else if (sort.equals("popular")) {
+                orderSpecifiers.add(new OrderSpecifier(Order.DESC, performanceEntity.hit));
             }
         }
-
         return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);
     }
 

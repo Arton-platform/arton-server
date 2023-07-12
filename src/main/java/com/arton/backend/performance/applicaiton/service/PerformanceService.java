@@ -11,7 +11,6 @@ import com.arton.backend.performance.applicaiton.port.out.PerformanceRepositoryP
 import com.arton.backend.performance.applicaiton.port.out.PerformanceSavePort;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
-import com.arton.backend.review.application.data.CommonReviewDto;
 import com.arton.backend.review.application.port.out.ReviewCountPort;
 import com.arton.backend.search.application.port.out.PerformanceDocuemntSavePort;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +45,7 @@ public class PerformanceService implements PerformanceUseCase, PerformanceSaveUs
     }
 
     @Override
-    public List<CommonPerformanceDto> getPerformanceBySortAndPage(Pageable pageable, List<String> sort) {
+    public List<CommonPerformanceDto> getPerformanceBySortAndPage(Pageable pageable, String sort) {
         return performanceRepositoryPort.findAllBySortAndPaging(pageable, sort).stream().map(CommonPerformanceDto::domainToDto).collect(Collectors.toList());
     }
 
