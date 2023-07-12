@@ -77,7 +77,8 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
             List<String> reviewImages = reviewImageRepositoryPort.findByReviewId(id).stream().map(ReviewImage::getImageUrl).collect(Collectors.toList());
             images.addAll(reviewImages);
         }
-        return ReviewForPerformanceDetailDto.builder().reviews(reviewResponse).images(images).build();
+        Integer percent = (int)Math.floor((performance.getStarScore() * 100) / 5);
+        return ReviewForPerformanceDetailDto.builder().percent(percent).reviews(reviewResponse).images(images).build();
     }
 
     @Override
