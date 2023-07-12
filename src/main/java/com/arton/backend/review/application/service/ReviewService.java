@@ -103,7 +103,7 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     }
 
     @Override
-    public void regist(long userId, ReviewCreateDto reviewCreateDto, List<MultipartFile> multipartFileList) {
+    public Long regist(long userId, ReviewCreateDto reviewCreateDto, List<MultipartFile> multipartFileList) {
         // first image count check
         if (multipartFileList != null && multipartFileList.size() > 5) {
             throw new CustomException(ErrorCode.UPLOAD_COUNT_LIMIT.getMessage(), ErrorCode.UPLOAD_COUNT_LIMIT);
@@ -152,6 +152,8 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
                 reviewImageSaveRepositoryPort.saveAll(reviewImages);
             }
         }
+        // update performance startScore
+        return reviewCreateDto.getPerformanceId();
     }
 
     @Override
@@ -165,12 +167,11 @@ public class ReviewService implements ReviewListUseCase, ReviewRegistUseCase, Re
     }
 
     @Override
-    public void delete(long userId, long reviewId) {
-        boolean userHasReview = reviewFindPort.userHasReview(reviewId, userId);
-        if (!userHasReview) {
-            throw new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND);
-        }
+    public Long delete(long userId, long reviewId) {
+        Review review = reviewFindPort.findByIdAndUserId(reviewId, userId).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND.getMessage(), ErrorCode.REVIEW_NOT_FOUND));
         reviewDeletePort.deleteReview(reviewId);
+        // update performance startScore
+        return review.getPerformanceId();
     }
 
     @Override

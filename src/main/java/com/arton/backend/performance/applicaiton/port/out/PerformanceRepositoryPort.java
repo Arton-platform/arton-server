@@ -40,4 +40,6 @@ public interface PerformanceRepositoryPort {
     PerformanceDetailQueryDslDtoV3 getOneWithArtistReviewInfo(Long userId, Long id);
     List<PerformanceDetailQueryDslDto> getAllRelatedInfosByType(Pageable pageable, PerformanceType performanceType);
     List<PerformanceDetailQueryDslDtoV2> getPerformanceWithArtistInfoByType(Pageable pageable, PerformanceType performanceType);
+
+    void updatePerformanceStartScore(Long performanceId);
 }
