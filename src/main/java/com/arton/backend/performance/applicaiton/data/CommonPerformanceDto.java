@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Schema(description = "메인 페이지에 공통으로 사용할 공연 Dto")
 @ToString
 public class CommonPerformanceDto {
