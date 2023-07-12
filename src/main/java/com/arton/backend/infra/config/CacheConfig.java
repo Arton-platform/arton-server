@@ -45,7 +45,7 @@ public class CacheConfig {
 
         Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
         for (CacheType value : CacheType.values()) {
-            cacheConfigurations.put(value.name(),
+            cacheConfigurations.put(value.getCacheName(),
                     RedisCacheConfiguration.defaultCacheConfig()
                             .prefixCacheNameWith("cache")
                             .entryTtl(Duration.ofHours(value.getExpireTime()))
