@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     EMAIL_IS_EXIST(409, "DUP_ERR_409", "해당 이메일은 사용중입니다."),
     ZZIM_IS_EXIST(409, "DUP_ERR_409", "이미 찜하고 있습니다."),
+    LOCK_TIMEOUT(500, "TIMEOUT", "락 획득에 실패하였습니다!"),
     ZZIM_NOT_FOUND(404, "COMMON-ERR-404", "찜 목록에 존재하지 않습니다!"),
     REVIEW_NOT_FOUND(404, "COMMON-ERR-404", "유저의 리뷰가 존재하지 않습니다!"),
     REVIEW_PERFORMANCE_NOT_MATCHED(400, "REVIEW_PERFORMANCE_NOT_MATCHED", "댓글을 등록하려고 하는 공연과 요청 공연 ID가 매치하지 않습니다!"),

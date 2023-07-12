@@ -107,6 +107,8 @@ dependencies {
 
 	// spotify api
 	implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.0.0'
+
+	implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
 }
 
 tasks.named('test') {
