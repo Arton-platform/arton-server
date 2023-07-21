@@ -14,23 +14,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class OAuthService implements OAuthUseCase {
     private final AppleStrategy appleStrategy;
     private final NaverStrategy naverStrategy;
     private final KaKaoStrategy kaKaoStrategy;
     private final GoogleStrategy googleStrategy;
+    private Map<Integer, OAuthStrategy> strategyMap = new HashMap<>();
 
-    private Map<Integer, OAuthStrategy> strategyMap = new HashMap<>()
-    {
-        {
-            put(0, kaKaoStrategy);
-            put(1, naverStrategy);
-            put(2, appleStrategy);
-            put(3, googleStrategy);
+    public OAuthService(AppleStrategy appleStrategy, NaverStrategy naverStrategy, KaKaoStrategy kaKaoStrategy, GoogleStrategy googleStrategy) {
+        this.appleStrategy = appleStrategy;
+        this.naverStrategy = naverStrategy;
+        this.kaKaoStrategy = kaKaoStrategy;
+        this.googleStrategy = googleStrategy;
 
-        }
-    };
+        strategyMap.put(0, kaKaoStrategy);
+        strategyMap.put(1, naverStrategy);
+        strategyMap.put(2, appleStrategy);
+        strategyMap.put(3, googleStrategy);
+    }
 
     @Override
     @Transactional
