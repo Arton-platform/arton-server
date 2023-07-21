@@ -2,7 +2,6 @@ package com.arton.backend.auth.application.service;
 
 import com.arton.backend.auth.application.data.OAuthSignupDto;
 import com.arton.backend.auth.application.data.TokenDto;
-import com.arton.backend.auth.application.port.in.NaverUseCase;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
@@ -25,23 +24,24 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 @Transactional
-public class NaverService implements NaverUseCase {
+public class KaKaoStrategy implements OAuthStrategy{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
     private final UserImageSaveRepositoryPort userImageSaveRepository;
@@ -50,70 +50,40 @@ public class NaverService implements NaverUseCase {
     private final RedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${naver.client.id}")
+    @Value("${kakao.client.id}")
     private String clientId;
-    @Value("${naver.client.secret}")
-    private String clientSecret;
-    @Value("${naver.redirect.url}")
+    @Value("${kakao.redirect.url}")
     private String redirectURL;
     @Value("${spring.default-image}")
     private String defaultImage;
     @Value("${refresh.token.prefix}")
     private String refreshTokenPrefix;
+
+
     /**
-     *  token 발행
-     *  email, password 로 만들거임
-     *  여기서 설정하는 값이 userdetails의 id password로 넘어감
-     *  원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
-     *
+     * token 발행
+     * email, password 로 만들거임
+     * 여기서 설정하는 값이 userdetails의 id password로 넘어감
+     * 원래는 평문 password 여야 하지만 간편로그인 경우 password 입력이 없으므로.. 유일한 식별값으로 대체
+     * 기존 인가코드 받아 토큰을 생성했지만 프론트에서 한번에 액세스 토큰 발급이 가능하므로
+     * accessToken 받아서 진행으로 변경하자.
      * @return
      */
     @Override
-    public synchronized TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto) {
+    @Transactional
+    public synchronized TokenDto signup(HttpServletRequest request, OAuthSignupDto signupDto) {
         String accessToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
-        JsonNode userInfo = getUserInfo(accessToken).get("response");
+        JsonNode userInfo = getUserInfo(accessToken);
         if (!userInfo.get("id").asText().equals(signupDto.getId())) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND);
         }
-        User register = signup(signupDto);
+        User register = doSignup(signupDto);
+        // Generate ArtOn JWT
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getPlatformId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
         redisTemplate.opsForValue().set(refreshTokenPrefix+authenticate.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresIn(), TimeUnit.MILLISECONDS);
         return tokenDto;
-    }
-
-    /**
-     * https://developers.naver.com/docs/login/api/api.md
-     * 토근 받기 참조
-     * @param code
-     * @param state
-     * @return
-     */
-    private String getAccessToken(String code, String state) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "authorization_code");
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("code", code);
-        body.add("state", state);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, httpHeaders);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange("https://nid.naver.com/oauth2.0/token",
-                HttpMethod.POST,
-                request,
-                String.class);
-        String responseBody = response.getBody();
-        try {
-            return objectMapper.readTree(responseBody).get("access_token").asText();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
     /**
@@ -128,8 +98,8 @@ public class NaverService implements NaverUseCase {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me",
-                HttpMethod.GET,
+        ResponseEntity<String> response = restTemplate.exchange("https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
                 request,
                 String.class);
 
@@ -151,22 +121,21 @@ public class NaverService implements NaverUseCase {
      * @param signupDto
      * @return
      */
-
-    private User signup(OAuthSignupDto signupDto) {
+    private User doSignup(OAuthSignupDto signupDto) {
         String id = signupDto.getId();
-        User user = userRepository.findByPlatformId(id, SignupType.NAVER).orElse(null);
+        User user = userRepository.findByPlatformId(id, SignupType.KAKAO).orElse(null);
         if (user == null) {
             /** password is user's own kakao id */
-            String password = id;
+            String password = signupDto.getId();
             user = User.builder()
                     .email(hasText(signupDto.getEmail()) ? signupDto.getEmail() : "")
-                    .gender(hasText(signupDto.getGender()) ? getGender(signupDto.getGender()) : Gender.ETC)
+                    .gender(hasText(signupDto.getGender()) ? Gender.get(signupDto.getGender().toUpperCase(Locale.ROOT)) : Gender.ETC)
                     .password(passwordEncoder.encode(password))
                     .platformId(id)
                     .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
                     .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
                     .auth(UserRole.ROLE_NORMAL)
-                    .signupType(SignupType.NAVER)
+                    .signupType(SignupType.KAKAO)
                     .userStatus(true)
                     .termsAgree("Y")
                     .build();
@@ -174,16 +143,6 @@ public class NaverService implements NaverUseCase {
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
             userImageSaveRepository.save(userImage);
         }
-        return userRepository.findByPlatformId(id, SignupType.NAVER).orElseThrow(() -> new CustomException(ErrorCode.NAVER_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.NAVER_SIMPLE_LOGIN_ERROR));
+        return userRepository.findByPlatformId(id, SignupType.KAKAO).orElseThrow(()->new CustomException(ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.KAKAO_SIMPLE_LOGIN_ERROR));
     }
-
-    private Gender getGender(String gender){
-        if (gender.equals("M") || gender.equals("m"))
-            return Gender.MALE;
-        else if(gender.equals("F") || gender.equals("f"))
-            return Gender.FEMALE;
-        return Gender.ETC;
-    }
-
-
 }

@@ -4,7 +4,6 @@ import com.arton.backend.auth.application.data.KeyAlgDTO;
 import com.arton.backend.auth.application.data.KeyAlgResponseDTO;
 import com.arton.backend.auth.application.data.OAuthSignupDto;
 import com.arton.backend.auth.application.data.TokenDto;
-import com.arton.backend.auth.application.port.in.AppleUseCase;
 import com.arton.backend.image.application.port.out.UserImageSaveRepositoryPort;
 import com.arton.backend.image.domain.UserImage;
 import com.arton.backend.infra.jwt.TokenProvider;
@@ -18,7 +17,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
@@ -29,6 +29,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -47,11 +48,10 @@ import java.util.concurrent.TimeUnit;
 
 import static org.springframework.util.StringUtils.hasText;
 
-@Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 @Transactional
-public class AppleService implements AppleUseCase {
+public class GoogleStrategy implements OAuthStrategy{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepositoryPort userRepository;
     private final UserImageSaveRepositoryPort userImageSaveRepository;
@@ -59,6 +59,7 @@ public class AppleService implements AppleUseCase {
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
+    private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
     @Value("${spring.default-image}")
     private String defaultImage;
     @Value("${refresh.token.prefix}")
@@ -71,13 +72,19 @@ public class AppleService implements AppleUseCase {
      * 프론트에서 넘긴 정보가 일치하는지 비교하자
      */
     @Override
-    public synchronized TokenDto login(HttpServletRequest request, OAuthSignupDto signupDto) {
+    public synchronized TokenDto signup(HttpServletRequest request, OAuthSignupDto signupDto) {
         String identityToken = Optional.ofNullable(tokenProvider.parseBearerToken(request)).orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID));
+        log.info("google token : {}", identityToken);
         JsonNode userInfo = getUserInfo(identityToken);
+        log.info("get info success");
+        if (!userInfo.get("iss").asText().equals("https://accounts.google.com")) {
+            throw new CustomException(ErrorCode.TOKEN_INVALID.getMessage(), ErrorCode.TOKEN_INVALID);
+        }
+
         if (!userInfo.get("sub").asText().equals(signupDto.getId())) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND.getMessage(), ErrorCode.USER_NOT_FOUND);
         }
-        User register = signup(signupDto);
+        User register = doSignup(signupDto);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(register.getId(), register.getPlatformId());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenDto tokenDto = tokenProvider.generateToken(authenticate);
@@ -107,22 +114,22 @@ public class AppleService implements AppleUseCase {
         }
     }
 
-    private KeyAlgResponseDTO getAppleIdKeys() {
+    private KeyAlgResponseDTO getGoogleIdKeys() {
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<KeyAlgResponseDTO> response = restTemplate.exchange("https://appleid.apple.com/auth/keys",
+        ResponseEntity<KeyAlgResponseDTO> response = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/certs",
                 HttpMethod.GET,
                 request,
                 KeyAlgResponseDTO.class);
         if (response.getStatusCode().isError()) {
-            throw new CustomException(ErrorCode.APPLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.APPLE_SIMPLE_LOGIN_ERROR);
+            throw new CustomException(ErrorCode.GOOGLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.GOOGLE_SIMPLE_LOGIN_ERROR);
         }
         return response.getBody();
     }
 
     private PublicKey makePublicKey(String keyId, String alg) {
-        KeyAlgResponseDTO response = getAppleIdKeys();
+        KeyAlgResponseDTO response = getGoogleIdKeys();
         PublicKey publicKey = null;
         for (KeyAlgDTO value : response.getKeys()) {
             if ((value.getKid().equals(keyId)) && (value.getAlg().equals(alg))) {
@@ -157,9 +164,9 @@ public class AppleService implements AppleUseCase {
      * @return
      */
 
-    private User signup(OAuthSignupDto signupDto) {
+    private User doSignup(OAuthSignupDto signupDto) {
         String id = signupDto.getId();
-        User user = userRepository.findByPlatformId(id, SignupType.APPLE).orElse(null);
+        User user = userRepository.findByPlatformId(id, SignupType.GOOGLE).orElse(null);
         if (user == null) {
             /** password is user's own kakao id */
             String password = id;
@@ -171,7 +178,7 @@ public class AppleService implements AppleUseCase {
                     .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
                     .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
                     .auth(UserRole.ROLE_NORMAL)
-                    .signupType(SignupType.APPLE)
+                    .signupType(SignupType.GOOGLE)
                     .userStatus(true)
                     .termsAgree("Y")
                     .build();
@@ -179,7 +186,7 @@ public class AppleService implements AppleUseCase {
             UserImage userImage = UserImage.builder().imageUrl(defaultImage).user(user).build();
             userImageSaveRepository.save(userImage);
         }
-        return userRepository.findByPlatformId(id, SignupType.APPLE).orElseThrow(() -> new CustomException(ErrorCode.APPLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.APPLE_SIMPLE_LOGIN_ERROR));
+        return userRepository.findByPlatformId(id, SignupType.GOOGLE).orElseThrow(() -> new CustomException(ErrorCode.GOOGLE_SIMPLE_LOGIN_ERROR.getMessage(), ErrorCode.GOOGLE_SIMPLE_LOGIN_ERROR));
     }
 
     private Gender getGender(String gender){
