@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    private final static Logger log = LoggerFactory.getLogger("LOGSTASH");
+    private final static Logger log = LoggerFactory.getLogger(CustomExceptionHandler.class);
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {

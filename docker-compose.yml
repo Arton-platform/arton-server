@@ -12,6 +12,10 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 8333:8333
+    volumes:
+      - /var/log/arton:/var/log/arton
+    environment:
+      - TZ=Asia/Seoul
     depends_on:
       - redis
 

@@ -167,7 +167,7 @@ public class AppleStrategy implements OAuthStrategy{
                     .gender(hasText(signupDto.getGender()) ? getGender(signupDto.getGender()) : Gender.ETC)
                     .password(passwordEncoder.encode(password))
                     .platformId(id)
-                    .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : "")
+                    .nickname(hasText(signupDto.getNickname()) ? signupDto.getNickname() : signupDto.getEmail().substring(0, signupDto.getEmail().lastIndexOf('@')))
                     .ageRange(hasText(signupDto.getAge()) ? AgeRange.get(Integer.parseInt(signupDto.getAge().substring(0, 1))) : AgeRange.ETC)
                     .auth(UserRole.ROLE_NORMAL)
                     .signupType(SignupType.APPLE)

@@ -46,12 +46,13 @@ public class ZzimController {
     @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "찜취소", description = "산텍힌 리스트에 대해 찜을 취소합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "찜 취소 성공")})
+            @ApiResponse(responseCode = "200", description = "찜 취소 성공", content = @Content(schema = @Schema(implementation = CommonResponse.class)))})
     @PostMapping("/cancel")
-    public ResponseEntity deleteFavorites(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ZzimDeleteDto deleteDto) {
+    public ResponseEntity<CommonResponse> deleteFavorites(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ZzimDeleteDto deleteDto) {
         long userId = Long.parseLong(userDetails.getUsername());
         zzimService.deleteUsersFavorite(userId, deleteDto);
-        return ResponseEntity.noContent().build();
+        CommonResponse response = CommonResponse.builder().message("").status(HttpStatus.OK.value()).build();
+        return ResponseEntity.ok(response);
     }
 
 
@@ -107,7 +108,7 @@ public class ZzimController {
     @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "찜한 공연 취소", description = "해당 공연 좋아요 취소합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "공연 좋아요 취소 성공"),
+            @ApiResponse(responseCode = "200", description = "공연 좋아요 취소 성공", content = @Content(schema = @Schema(implementation = CommonResponse.class))),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 공연",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "좋아요 공연이 아닙니다.",
@@ -116,7 +117,8 @@ public class ZzimController {
     public ResponseEntity unZzimPerformance(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "performanceId") Long performanceId){
         long userId = Long.parseLong(userDetails.getUsername());
         zzimDeleteUseCase.deletePerformanceZzim(userId, performanceId);
-        return ResponseEntity.noContent().build();
+        CommonResponse response = CommonResponse.builder().message("").status(HttpStatus.OK.value()).build();
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -145,14 +147,15 @@ public class ZzimController {
     @Parameter(name = "userDetails", hidden = true)
     @Operation(summary = "좋아요 아티스트 취소", description = "해당 아티스트 좋아요 취소합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "아티스트 좋아요 취소 성공"),
+            @ApiResponse(responseCode = "200", description = "아티스트 좋아요 취소 성공", content = @Content(schema = @Schema(implementation = CommonResponse.class))),
             @ApiResponse(responseCode = "404", description = "찜한 아티스트가 아닙니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     @DeleteMapping("/artist/{artistId}")
-    public ResponseEntity unZzimArtist(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "artistId") Long artistId){
+    public ResponseEntity<CommonResponse> unZzimArtist(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(name = "artistId") Long artistId){
         long userId = Long.parseLong(userDetails.getUsername());
         zzimDeleteUseCase.deleteArtistZzim(userId, artistId);
-        return ResponseEntity.noContent().build();
+        CommonResponse response = CommonResponse.builder().message("").status(HttpStatus.OK.value()).build();
+        return ResponseEntity.ok(response);
     }
 
 }

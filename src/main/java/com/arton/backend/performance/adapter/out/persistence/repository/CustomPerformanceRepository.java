@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CustomPerformanceRepository {
+    List<Performance> getPerformanceBySortAndPage(Pageable pageable, String sort);
     List<Performance> getPerformanceByStartDateASC(int offset, int limit);
     List<Performance> getPerformanceByEndDateASC(int offset, int limit);
     List<Performance> getPopularPerformances(int offset, int limit);
@@ -28,4 +29,10 @@ public interface CustomPerformanceRepository {
      * @return
      */
     List<PerformanceDetailQueryDslDtoV2> getPerformanceAllDetailsByType(Pageable pageable, PerformanceType performanceType);
+
+    /**
+     * 공연 평점 업데이트
+     * 공연 평점 = 리뷰 전체 평균 평점.
+     */
+    void updatePerformanceStarScore(Long performanceId);
 }

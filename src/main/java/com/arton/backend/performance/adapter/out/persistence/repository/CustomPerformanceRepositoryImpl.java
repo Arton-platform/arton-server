@@ -9,16 +9,16 @@ import com.arton.backend.performance.applicaiton.data.*;
 import com.arton.backend.performance.domain.Performance;
 import com.arton.backend.performance.domain.PerformanceType;
 import com.arton.backend.price.application.data.QPriceInfoDto;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.arton.backend.artist.adapter.out.persistence.entity.QArtistEntity.artistEntity;
 import static com.arton.backend.image.adapter.out.persistence.entity.QPerformanceImageEntity.performanceImageEntity;
@@ -35,6 +35,37 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class CustomPerformanceRepositoryImpl implements CustomPerformanceRepository{
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public List<Performance> getPerformanceBySortAndPage(Pageable pageable, String sort) {
+        return Optional.ofNullable(queryFactory.selectFrom(performanceEntity)
+                        .orderBy(getDynamicSort(sort))
+                        .offset(pageable.getOffset())
+                        .limit(pageable.getPageSize())
+                        .fetch())
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(PerformanceMapper::toDomain)
+                .collect(toList());
+    }
+
+    private OrderSpecifier[] getDynamicSort(String sort) {
+        ArrayList<OrderSpecifier> orderSpecifiers = new ArrayList<>();
+
+        // set default
+        if (ObjectUtils.isEmpty(sort)) {
+            orderSpecifiers.add(new OrderSpecifier(Order.DESC, performanceEntity.createdDate));
+        } else {
+            if (sort.equals("start")) {
+                orderSpecifiers.add(new OrderSpecifier(Order.ASC, performanceEntity.startDate));
+            } else if (sort.equals("end")) {
+                orderSpecifiers.add(new OrderSpecifier(Order.ASC, performanceEntity.endDate));
+            } else if (sort.equals("popular")) {
+                orderSpecifiers.add(new OrderSpecifier(Order.DESC, performanceEntity.hit));
+            }
+        }
+        return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);
+    }
 
     /**
      * 공연 예매일 오픈이 빠른순 return
@@ -271,5 +302,14 @@ public class CustomPerformanceRepositoryImpl implements CustomPerformanceReposit
                         set(new QPriceInfoDto(priceGradeEntity.gradeName, priceGradeEntity.price)),
                         set(new QCommonArtistDto(artistEntity.id, artistEntity.name, artistEntity.profileImageUrl)))
                 )).values().stream().collect(toList());
+    }
+
+    @Override
+    public void updatePerformanceStarScore(Long performanceId) {
+        // 리뷰 저장은 끝난 상태임
+        queryFactory.update(performanceEntity)
+                .set(performanceEntity.starScore, JPAExpressions.select(reviewEntity.starScore.avg().floatValue()).from(reviewEntity).where(reviewEntity.performance.id.eq(performanceId)))
+                .where(performanceEntity.id.eq(performanceId))
+                .execute();
     }
 }

@@ -22,14 +22,14 @@ public class CommonReviewDtoWithOutChilds {
     private String profileImageUrl;
     private String nickname;
     private String title;
-    private float starScore;
+    private Integer starScore;
     private String createdDate;
     private String content;
     private List<String> images = new ArrayList<>();
     private Long hit;
     private Long reviewCount;
 
-    public CommonReviewDtoWithOutChilds(Long id, Long parentId, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, float starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
+    public CommonReviewDtoWithOutChilds(Long id, Long parentId, Long performanceId, Long userId, String profileImageUrl, String nickname, String title, Integer starScore, String createdDate, String content, List<String> images, Long hit, Long reviewCount) {
         this.id = id;
         this.parentId = parentId;
         this.performanceId = performanceId;
@@ -55,7 +55,7 @@ public class CommonReviewDtoWithOutChilds {
                 .userId(review.getUser().getId())
                 .profileImageUrl(ObjectUtils.isEmpty(review.getUser().getUserImage()) ? "이미지 없음.." : review.getUser().getUserImage().getImageUrl())
                 .nickname(review.getUser().getNickname())
-                .starScore(review.getStarScore())
+                .starScore((int) review.getStarScore())
                 .content(review.getContent())
                 .createdDate(review.getCreatedDate().format(formatter))
                 .images(review.getReviewImages().stream().map(ReviewImageEntity::getImageUrl).collect(Collectors.toList()))

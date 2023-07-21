@@ -111,6 +111,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
 	implementation 'com.google.firebase:firebase-admin:8.1.0'
 
+	// for distributed lock
+	implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
+	// for cache
+	implementation "org.springframework.boot:spring-boot-starter-cache"
 }
 
 tasks.named('test') {

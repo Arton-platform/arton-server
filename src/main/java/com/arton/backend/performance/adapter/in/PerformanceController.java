@@ -62,13 +62,13 @@ public class PerformanceController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "전체 공연 리스트 불러오기", description = "전체 공연 리스트를 가져옵니다.")
+    @Operation(summary = "전체 공연 리스트 불러오기", description = "공연 리스트를 페이징처리하여 정렬 조건에 따라 가져옵니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리스트 가져오기 성공",
-                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = PerformanceInterestDto.class))))})
+                    content = @Content( array = @ArraySchema(schema = @Schema(implementation = CommonPerformanceDto.class))))})
     @GetMapping("/list")
-    public ResponseEntity<List<PerformanceInterestDto>> getPerformanceList() {
-        List<PerformanceInterestDto> allPerformances = performanceService.getZzimList();
+    public ResponseEntity<List<CommonPerformanceDto>> getPerformanceList(@RequestParam(name = "sort", required = false) String sort, @PageableDefault(size = 10)Pageable pageable) {
+        List<CommonPerformanceDto> allPerformances = performanceService.getPerformanceBySortAndPage(pageable, sort);
         return ResponseEntity.ok(allPerformances);
     }
 

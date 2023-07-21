@@ -11,4 +11,5 @@ public interface CustomArtistRepository{
     List<ArtistEntity> getArtistByPerformanceType(PerformanceType performanceType);
     List<ArtistEntity> getArtistByPerformanceType(PerformanceType performanceType, Pageable pageable);
     List<ArtistEntity> getArtistByLimit(int offset, int limit);
+    List<ArtistEntity> getArtistByPage(Pageable pageable);
 }
